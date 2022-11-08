@@ -1,2 +1,7 @@
 <link rel="stylesheet" href="/css/user_profile.css">
     <h1>Codegram / <%= title %></h1>
+    <h2>User name: <%= user.name %></h2>
+    <form action="/users/sign-out" method="post">
+        <input type="submit" value="Sign Out">
+    </form>
+
