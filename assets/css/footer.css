@@ -1,0 +1,32 @@
+#page-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.133);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 0 0 15px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.233);
+}
+
+#page-footer .credits {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#page-footer .credits p {
+  text-align: center;
+}
+
+#page-footer .credits p:nth-child(1) {
+  font-weight: 500;
+}
+
+#page-footer .credits p:nth-child(2) {
+  font-size: 0.9rem;
+}

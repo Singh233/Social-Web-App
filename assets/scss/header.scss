@@ -1,0 +1,71 @@
+$button-color-blue: #0057D2; 
+$button-hover-color: #D1EFFF;
+
+
+#nav-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 5px;
+
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.133);
+    backdrop-filter: blur( 6px );
+    -webkit-backdrop-filter: blur( 6px );
+    border-radius: 0 0 15px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.233);
+    
+}
+
+#branding {
+    margin: 10px;
+}
+
+
+
+// Sign in/up section
+
+#nav-section {
+    justify-self: flex-end;
+    display: flex;
+    margin: 10px;
+
+    #sign-in-button, #sign-up-button {
+        background-color: $button-color-blue;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 25px;
+        margin: 0px 10px;
+        align-self: center;
+        border: 1px solid #0058d24a;
+
+        transition: 0.25s all ease-in-out;
+
+        a {
+            color: white;
+            transition: 0.25s all ease-in-out;
+            font-weight: 500;
+            i {
+                font-size: 1.2rem;
+            }
+        }
+
+        &:hover {
+            background-color: $button-hover-color;
+            
+            a {
+                color: $button-color-blue;
+            }
+        }
+
+        
+    }
+
+
+
+
+    #user-name {
+        align-self: center;
+    }
+}
+

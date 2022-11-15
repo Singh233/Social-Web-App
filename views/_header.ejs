@@ -1,25 +1,33 @@
-<header>
-    Page Header
+<header id="nav-header">
+    <div id="branding">
+        Logo and Name
+    </div>
+    
 
-    <ul>
-        <% if (locals.user) { %>
-            <a href="/users/profile"> <%= user.name %> </li>
-            <li>
+    <% if (locals.user) { %>
+        <div id="nav-section">
+            <div id="user-name">
+                <a href="/users/profile"> <%= user.name %> </li>
+            </div>
+            <div id="sign-in-button">
                 <a href="/users/sign-out">Sign Out</a>
-            </li>
+            </div>
+        </div>
+        
 
-        <%  } else { %>
-
-            <li>
+    <%  } else { %>
+        <div id="nav-section">
+            <div id="sign-in-button">
                 <a href="/users/sign-in">Sign In</a>
-            </li>
-            <li>
-                <a href="/users/sign-up">Sign Up</a>
-            </li>
+            </div>
+            <div id="sign-up-button">
+                <a href="/users/sign-up">Sign Up &nbsp;<i class="fa-solid fa-ghost"></i></a>
+            </div>
+        </div>
+        
 
-        <% } %>
+    <% } %>
 
+    
 
-
-    </ul>
 </header>
