@@ -15,11 +15,20 @@
 
 <% for (let i of posts) { %> 
     <div id="display-posts">
+        <hr>
         <p><%= i.content %></p>
         <p><%= i.user.name %></p>
-        <% for (let comment of i.comments) { %>
-        <p><%= comment.content %></p>
-        <% } %>
+        <div class="post-comments-list">
+            <ul id="post-comments-<%= i._id %>">
+                <% for (let comment of i.comments) { %>
+                    <p><%= comment.content %> - <span><%= comment.user.name %></span></p>
+                    
+                    <br>
+
+                <% } %>
+            </ul>
+        </div>
+       
         <div class="post-comments">
             <% if(locals.user) { %>
             <form action="/comments/create" method="post">

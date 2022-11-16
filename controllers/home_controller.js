@@ -17,7 +17,15 @@ module.exports.home = function(request, response) {
 
 
     // populate the user of each post
-    Post.find({}).populate('user').exec(function(error, posts) {
+    Post.find({})
+    .populate('user')
+    .populate({
+        path: 'comments',
+        populate: {
+            path: 'user'
+        }
+    })
+    .exec(function(error, posts) {
         return response.render('home.ejs', {
             title: "Home",
             posts: posts, 
