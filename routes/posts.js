@@ -5,5 +5,4 @@ const passport = require('passport');
 const postsController = require('../controllers/posts_controller');
 
 router.post('/create', passport.checkAuthentication, postsController.createPost);
-
 module.exports = router;

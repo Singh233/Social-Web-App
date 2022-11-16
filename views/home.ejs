@@ -17,9 +17,18 @@
     <div id="display-posts">
         <p><%= i.content %></p>
         <p><%= i.user.name %></p>
-        <form action="/posts/comment" method="post">
-            <textarea name="content" id="" cols="30" rows="3" placeholder="type here..."></textarea>
-            <input type="submit" value="Comment">
-        </form>
+        <% for (let comment of i.comments) { %>
+        <p><%= comment.content %></p>
+        <% } %>
+        <div class="post-comments">
+            <% if(locals.user) { %>
+            <form action="/comments/create" method="post">
+                <input type="hidden" name="postId" value="<%= i._id %>">
+                <input type="text" name="content" id=""  placeholder="type here...">
+                <input type="submit" value="Comment">
+            </form>
+            <% } %>
+        </div>
+        
     </div>
 <% } %>

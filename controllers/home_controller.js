@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const User = require('../models/user');
+const Comment = require('../models/comment');
 
 module.exports.home = function(request, response) {
     // Post.find({user: request.user._id}, function(error, post) {
@@ -19,7 +20,7 @@ module.exports.home = function(request, response) {
     Post.find({}).populate('user').exec(function(error, posts) {
         return response.render('home.ejs', {
             title: "Home",
-            posts: posts
+            posts: posts, 
         });
     })
 }
