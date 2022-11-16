@@ -1,7 +1,16 @@
+const Post = require('../models/post');
+const User = require('../models/user');
+
 module.exports.home = function(request, response) {
-    console.log(request.cookies);
-    response.cookie('user_id', 25);
-    return response.render('home.ejs', {
-        title: "Home"
+    Post.find({user: request.user._id}, function(error, post) {
+        if (error) {
+            console.log("Error finding user");
+            return;
+        }
+
+        return response.render('home.ejs', {
+            title: "Home",
+            posts: post
+        });
     });
 }
