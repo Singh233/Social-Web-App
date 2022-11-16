@@ -4,16 +4,18 @@
 
 <section id="feed-posts">
     <h3>Posts</h3>
-
+    <% if(locals.user) { %>
     <form action="/posts/create" id="new-post-form" method="post">
         <textarea name="content" id="" cols="30" rows="3" placeholder="Type here..."></textarea>
         <input type="submit" value="Post">
     </form>
+    <% } %>
+
 </section>
 
 <% for (let i of posts) { %> 
     <div id="display-posts">
         <p><%= i.content %></p>
-        <p><%= i.user %></p>
+        <p><%= i.user.name %></p>
     </div>
 <% } %>
