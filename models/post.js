@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-const { posts } = require('../controllers/posts_controller');
-const { post } = require('../routes');
-
 
 const postSchema = new mongoose.Schema({
     content: {type: String, required: true},
