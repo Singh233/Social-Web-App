@@ -10,6 +10,21 @@ module.exports.profile = function(request, response) {
     
 }
 
+
+module.exports.update = function(request, response) {
+    if (request.user.id == request.params.id) {
+        User.findByIdAndUpdate(request.params.id, request.body, function(error, user) {
+            if (error) {
+                console.log("Error in updating profile");
+                return;
+            }
+            return response.redirect('back');
+        });
+    } else {
+        return response.response.status(401).send("Unauthorized");
+    }
+}
+
 // render sign up page
 module.exports.signUp = function(request, response) {
     if (request.isAuthenticated()) {
