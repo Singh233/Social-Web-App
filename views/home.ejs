@@ -14,30 +14,14 @@
 </section>
 
 <% for (let i of posts) { %> 
-    <div id="display-posts">
-        <hr>
-        <p><%= i.content %></p>
-        <p><%= i.user.name %></p>
-        <div class="post-comments-list">
-            <ul id="post-comments-<%= i._id %>">
-                <% for (let comment of i.comments) { %>
-                    <p><%= comment.content %> - <span><%= comment.user.name %></span></p>
-                    
-                    <br>
-
-                <% } %>
-            </ul>
-        </div>
-       
-        <div class="post-comments">
-            <% if(locals.user) { %>
-            <form action="/comments/create" method="post">
-                <input type="hidden" name="postId" value="<%= i._id %>">
-                <input type="text" name="content" id=""  placeholder="type here...">
-                <input type="submit" value="Comment">
-            </form>
-            <% } %>
-        </div>
-        
-    </div>
+    <%- include('_post.ejs', {i: i}) -%>
 <% } %>
+
+<section id="user-friends">
+    <h4>Friends</h4>
+    <% for(u of all_users) {%> 
+        <p>
+            <a href="/users/profile/<%= u.id%>"><%= u.name %></a>
+        </p>
+    <% } %>
+</section>

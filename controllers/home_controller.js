@@ -26,9 +26,13 @@ module.exports.home = function(request, response) {
         }
     })
     .exec(function(error, posts) {
-        return response.render('home.ejs', {
-            title: "Home",
-            posts: posts, 
-        });
+        User.find({}, function(error, users) {
+            return response.render('home.ejs', {
+                title: "Home",
+                posts: posts, 
+                all_users: users
+            });
+        })
+        
     })
 }
