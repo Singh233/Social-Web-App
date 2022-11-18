@@ -76,7 +76,7 @@ module.exports.create = async function(request, response) {
 // get the sign in data
 
 module.exports.createSession = function(request, response) {
-    
+    request.flash('success', 'Logged in Successfully');
     return response.redirect('/');
 }
 
@@ -87,7 +87,8 @@ module.exports.destroySession = function(request, response) {
             console.log("error signing out");
             return;
         }
-        return response.redirect('/');
     });
+    request.flash('success', 'You have logged out!');
+
     return response.redirect('/');
 }

@@ -7,8 +7,10 @@ module.exports.createPost = async function(request, response) {
             content: request.body.content,
             user: request.user._id
         });
+        request.flash('success', 'Post created Successfully');
         return response.redirect('back');
     } catch(error) {
+        request.flash('error', error);
         console.log("error", error);
     }
     
@@ -23,8 +25,10 @@ module.exports.destroy = async function(request, response) {
             await Comment.deleteMany({
                 post: request.params.id
             });
+            request.flash('success', 'Post Deleted Successfully');
             return response.redirect('back');
         } else {
+            request.flash('error', error);
             return response.redirect('back');
         }
     } catch(error) {
