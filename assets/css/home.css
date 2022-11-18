@@ -1,0 +1,18 @@
+.post-friends-div {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-gap: 20px;
+  margin: 20px;
+  padding: 5px;
+  margin-bottom: 75px;
+}
+
+.post-friends-div #feed-posts, .post-friends-div #user-friends {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.133);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 35px;
+  border: 1px solid rgba(255, 255, 255, 0.233);
+}

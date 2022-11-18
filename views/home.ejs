@@ -1,27 +1,30 @@
+<link rel="stylesheet" href="/css/home.css">
+
 <h1>Codegram / <%= title %></h1>
 
+<div class="post-friends-div">
+    <section id="feed-posts">
+        <h3>Posts</h3>
+        <% if(locals.user) { %>
+        <form action="/posts/create" id="new-post-form" method="post">
+            <textarea name="content" id="" cols="30" rows="3" placeholder="Type here..."></textarea>
+            <input type="submit" value="Post">
+        </form>
+        <% } %>
+        <% for (let i of posts) { %> 
+            <%- include('_post.ejs', {i: i}) -%>
+        <% } %>
+    </section>
+    
+   
+    
+    <section id="user-friends">
+        <h4>Friends</h4>
+        <% for(u of all_users) {%> 
+            <p>
+                <a href="/users/profile/<%= u.id%>"><%= u.name %></a>
+            </p>
+        <% } %>
+    </section>
+</div>
 
-
-<section id="feed-posts">
-    <h3>Posts</h3>
-    <% if(locals.user) { %>
-    <form action="/posts/create" id="new-post-form" method="post">
-        <textarea name="content" id="" cols="30" rows="3" placeholder="Type here..."></textarea>
-        <input type="submit" value="Post">
-    </form>
-    <% } %>
-
-</section>
-
-<% for (let i of posts) { %> 
-    <%- include('_post.ejs', {i: i}) -%>
-<% } %>
-
-<section id="user-friends">
-    <h4>Friends</h4>
-    <% for(u of all_users) {%> 
-        <p>
-            <a href="/users/profile/<%= u.id%>"><%= u.name %></a>
-        </p>
-    <% } %>
-</section>

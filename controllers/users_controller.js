@@ -47,7 +47,7 @@ module.exports.signIn = function(request, response) {
 }
 
 // get the sign up data
-module.exports.create = function(request, response) {
+module.exports.create = async function(request, response) {
     if (request.body.password != request.body.confirm_password) {
         return response.redirect('back');
     }
