@@ -19,6 +19,7 @@ module.exports.home = async function(request, response) {
     // populate the user of each post
     try {
         let posts = await Post.find({})
+        .sort('-createdAt')
         .populate('user')
         .populate({
             path: 'comments',
@@ -26,6 +27,8 @@ module.exports.home = async function(request, response) {
                 path: 'user'
             }
         });
+
+        let comments = await Comment.find({}).sort('-createdAt');
     
         let users = await User.find({});
     

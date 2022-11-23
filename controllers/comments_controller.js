@@ -13,6 +13,18 @@ module.exports.create = async function(request, response) {
 
             post.comments.push(comment);
             post.save();
+            
+            if (request.xhr) {
+                console.log(post.id);
+                return response.status(200).json({
+                    data: {
+                        comment: comment,
+                        success: 'Comment created successfully!'
+                    },
+                    message: "Comment created!",
+                    post_id: post.id
+                })
+            }
             request.flash('success', 'Comment added!');
             return response.redirect('back');
         }
@@ -35,6 +47,16 @@ module.exports.destroy = async function(request, response) {
             await Post.findByIdAndUpdate(postId, {
                 $pull: {comments: request.params.id}
             });
+            if (request.xhr) {
+                return response.status(200).json({
+                    data: {
+                        comment: comment,
+                        success: 'Comment deleted successfully!'
+                    },
+                    message: "Comment deleted!",
+                    comment_id: comment.id
+                })
+            }
             request.flash('success', 'Comment Deleted Successfully');
             return response.redirect('back');
 

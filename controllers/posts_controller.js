@@ -3,11 +3,33 @@ const Comment = require('../models/comment');
 
 module.exports.createPost = async function(request, response) {
     try {
-        await Post.create({
+        
+        let post = await Post.create({
             content: request.body.content,
-            user: request.user._id
+            user: request.user._id,
         });
+
+        let posts = await Post.find({_id: post._id})
+        .populate('user')
+        .populate({
+            path: 'comments',
+            populate: {
+                path: 'user'
+            }
+        });
+    
+
+        if (request.xhr) {
+            return response.status(200).json({
+                data: {
+                    post: posts[0],
+                    success: 'Post created successfully!'
+                },
+                message: "Post created!"
+            })
+        }
         request.flash('success', 'Post created Successfully');
+        
         return response.redirect('back');
     } catch(error) {
         request.flash('error', error);
@@ -25,7 +47,15 @@ module.exports.destroy = async function(request, response) {
             await Comment.deleteMany({
                 post: request.params.id
             });
-            request.flash('success', 'Post Deleted Successfully');
+            if (request.xhr) {
+                return response.status(200).json({
+                    data: {
+                        post_id: request.params.id,
+                        success: 'Post deleted successfully!'
+                    },
+                    message: "Post deleted!"
+                });
+            }
             return response.redirect('back');
         } else {
             request.flash('error', error);
@@ -33,6 +63,8 @@ module.exports.destroy = async function(request, response) {
         }
     } catch(error) {
         console.log("Error ", error);
+        return response.status(401).send('Unauthorized');
+
     }
     
 

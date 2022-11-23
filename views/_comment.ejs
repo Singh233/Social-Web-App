@@ -1,9 +1,10 @@
-
-<p><%= comment.content %> - <span><%= comment.user.name %></span></p>
-<% if(locals.user && locals.user.id == comment.user.id) { %> 
+<div id="comment-<%= comment._id %>" class="comment-display">
+    <p><%= comment.content %> - <span><%= comment.user.name %></span></p>
+    <% if(locals.user && locals.user.id == comment.user.id) { %> 
     <small>
-        <a href="/comments/destroy/<%= comment._id %>">X</a>
+        <a class="delete-comment-button" href="/comments/destroy/<%= comment._id %>">X</a>
     </small>
     <% } %>
-    
-<br>
+    <br>
+</div>
+

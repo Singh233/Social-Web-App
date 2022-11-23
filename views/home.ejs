@@ -11,9 +11,12 @@
             <input type="submit" value="Post">
         </form>
         <% } %>
-        <% for (let i of posts) { %> 
-            <%- include('_post.ejs', {i: i}) -%>
-        <% } %>
+        <div id="posts-list-container">
+            <% for (let i of posts) { %> 
+                <%- include('_post.ejs', {post: i}) -%>
+            <% } %>
+        </div>
+        
     </section>
     
    
@@ -27,4 +30,7 @@
         <% } %>
     </section>
 </div>
+
+<script src="/js/home_post_comments.js"></script>
+<script src="/js/home_posts.js"></script>
 

@@ -1,18 +1,17 @@
 <link rel="stylesheet" href="/css/user_profile.css">
 
-    <h1>Codegram / <%= title %></h1>
-    
+<img src="<%= user.avatar %>" alt="<%= user.name %>" width="100">
 
-
-    <% if (user.id == profile_user.id) { %>
-    <!-- If user matches then show the form -->
-    <form action="/users/update/<%= profile_user.id %>" method="post">
-        <input type="text" name="name" placeholder="Your name" value="<%= profile_user.name %>" required>
-        <input type="email" name="email" placeholder="Your email" value="<%= profile_user.email %>" required>
-        <input type="submit" value="Update">
-    </form>
-    <% } else { %>
-        <!-- else show only the profile info -->
-        <h2> <%= profile_user.name %></h2>   
-        <h2> <%= profile_user.email %></h2>
-    <% }  %>
+<% if (user.id == profile_user.id) { %>
+<!-- If user matches then show the form -->
+<form action="/users/update/<%= profile_user.id %>" enctype="multipart/form-data" method="post">
+    <input type="text" name="name" placeholder="Your name" value="<%= profile_user.name %>" required>
+    <input type="email" name="email" placeholder="Your email" value="<%= profile_user.email %>" required>
+    <input type="file" name="avatar" id="" placeholder="Profile Picture">
+    <input type="submit" value="Update">
+</form>
+<% } else { %>
+    <!-- else show only the profile info -->
+    <h2> <%= profile_user.name %></h2>   
+    <h2> <%= profile_user.email %></h2>
+<% }  %>
