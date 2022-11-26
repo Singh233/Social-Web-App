@@ -2,9 +2,10 @@ $button-color-blue: #0057D2;
 $button-hover-color: #D1EFFF;
 
 
-#nav-header {
+#top-nav-header {
+    align-self: flex-start;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     padding: 5px;
 
@@ -19,7 +20,7 @@ $button-hover-color: #D1EFFF;
 
 // Sign in/up section
 
-#nav-section {
+#top-nav-section {
     justify-self: flex-end;
     display: flex;
     margin: 10px;

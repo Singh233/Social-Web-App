@@ -14,15 +14,19 @@
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/left_navigation.css">
+    <link rel="stylesheet" href="/css/right_section.css">
     <%- style %>
 </head>
 <body>
-    <%- include('_header'); %>
+    <%- include('_left_navigation'); %>
+
+    <div id="main-body">
+        <%- body %>
+    </div>
+    
 
     
-    <%- body %>
-
-    <%- include('_footer'); %>
 
     <%- script %>
 

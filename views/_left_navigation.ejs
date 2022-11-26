@@ -1,0 +1,41 @@
+
+
+<div class="left-navigation-container">
+    <header id="nav-header">
+        <div id="branding">
+            Logo and Name
+        </div>
+        
+    
+        <% if (locals.user) { %>
+            <div id="nav-section">
+                <div id="user-name">
+                    <a href="/users/profile"> <%= user.name %> </li>
+                </div>
+                <div id="sign-in-button">
+                    <a href="/users/sign-out">Sign Out</a>
+                </div>
+            </div>
+            
+    
+        <%  } else { %>
+            <div id="nav-section">
+                <div id="sign-in-button">
+                    <a href="/users/sign-in">Sign In</a>
+                </div>
+                <div id="sign-up-button">
+                    <a href="/users/sign-up">Sign Up &nbsp;<i class="fa-solid fa-ghost"></i></a>
+                </div>
+            </div>
+            
+    
+        <% } %>
+    
+        
+    
+    </header>
+    
+    <%- include('footer'); %>
+</div>
+
+

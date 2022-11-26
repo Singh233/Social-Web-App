@@ -1,0 +1,12 @@
+.left-navigation-container {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  min-height: 99vh;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 0 15px 15px 0;
+  border: 1px solid rgba(0, 0, 0, 0.233);
+}

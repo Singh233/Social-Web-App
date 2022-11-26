@@ -9,5 +9,14 @@
 }
 
 body {
-  margin: 0;
+  margin: 0px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  background: linear-gradient(45deg, #0d7ddb 0%, #181818 37%, black 100%);
+}
+
+body #main-body {
+  display: flex;
+  flex-direction: column;
 }

@@ -1,6 +1,7 @@
-#nav-header {
+#top-nav-header {
+  align-self: flex-start;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   padding: 5px;
 }
@@ -9,13 +10,13 @@
   margin: 10px;
 }
 
-#nav-section {
+#top-nav-section {
   justify-self: flex-end;
   display: flex;
   margin: 10px;
 }
 
-#nav-section #sign-in-button, #nav-section #sign-up-button {
+#top-nav-section #sign-in-button, #top-nav-section #sign-up-button {
   background-color: #0057D2;
   color: white;
   border-radius: 20px;
@@ -26,24 +27,24 @@
   transition: 0.25s all ease-in-out;
 }
 
-#nav-section #sign-in-button a, #nav-section #sign-up-button a {
+#top-nav-section #sign-in-button a, #top-nav-section #sign-up-button a {
   color: white;
   transition: 0.25s all ease-in-out;
   font-weight: 500;
 }
 
-#nav-section #sign-in-button a i, #nav-section #sign-up-button a i {
+#top-nav-section #sign-in-button a i, #top-nav-section #sign-up-button a i {
   font-size: 1.2rem;
 }
 
-#nav-section #sign-in-button:hover, #nav-section #sign-up-button:hover {
+#top-nav-section #sign-in-button:hover, #top-nav-section #sign-up-button:hover {
   background-color: #D1EFFF;
 }
 
-#nav-section #sign-in-button:hover a, #nav-section #sign-up-button:hover a {
+#top-nav-section #sign-in-button:hover a, #top-nav-section #sign-up-button:hover a {
   color: #0057D2;
 }
 
-#nav-section #user-name {
+#top-nav-section #user-name {
   align-self: center;
 }

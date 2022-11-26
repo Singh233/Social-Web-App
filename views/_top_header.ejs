@@ -1,11 +1,14 @@
-<header id="nav-header">
+<link rel="stylesheet" href="/css/top_header.css">
+
+
+<header id="top-nav-header">
     <div id="branding">
         Logo and Name
     </div>
     
 
     <% if (locals.user) { %>
-        <div id="nav-section">
+        <div id="top-nav-section">
             <div id="user-name">
                 <a href="/users/profile"> <%= user.name %> </li>
             </div>
