@@ -8,7 +8,7 @@ $button-hover-color: #D1EFFF;
     flex-direction: row;
     align-items: center;
     padding: 5px;
-
+    color: white;
     
 }
 
@@ -24,6 +24,7 @@ $button-hover-color: #D1EFFF;
     justify-self: flex-end;
     display: flex;
     margin: 10px;
+    color: white;
 
     #sign-in-button, #sign-up-button {
         background-color: $button-color-blue;

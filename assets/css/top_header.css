@@ -4,6 +4,7 @@
   flex-direction: row;
   align-items: center;
   padding: 5px;
+  color: white;
 }
 
 #branding {
@@ -14,6 +15,7 @@
   justify-self: flex-end;
   display: flex;
   margin: 10px;
+  color: white;
 }
 
 #top-nav-section #sign-in-button, #top-nav-section #sign-up-button {

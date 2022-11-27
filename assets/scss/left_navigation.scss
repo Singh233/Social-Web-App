@@ -1,14 +1,35 @@
 .left-navigation-container {
     display: grid;
     grid-template-rows: 1fr 1fr;
-    min-height: 99vh;
+    min-height: 100vh;
     margin: 0;
-    
+    color: white;
+
     background: rgba(0, 0, 0, 0.25);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    border-radius: 0 15px 15px 0;
-    border: 1px solid rgba(0, 0, 0, 0.233);
+    border: 1px solid rgba(233, 233, 233, 0.233);
+
+
+
+    #nav-header {
+        display: flex;
+        flex-direction: column;
+
+
+        #nav-section {
+            display: flex;
+            flex-direction: column;
+
+            #user-name {
+                margin: 10px;
+            }
+
+            #sign-in-button {
+                margin: 10px;
+            }
+        }
+    }
     
 }  

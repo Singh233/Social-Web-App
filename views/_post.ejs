@@ -1,29 +1,62 @@
 <div id="post-<%= post._id %>" class="display-posts">
-    <hr>
-    <% if(locals.user && locals.user.id == post.user.id) { %> 
-    <small>
-        <a class="delete-post-button" href="/posts/destroy/<%= post._id %>">X</a>
-    </small>
-    <% } %>
-    <p><%= post.content %></p>
-    <p><%= post.user.name %></p>
-    <div id="comments-list-container" class="post-comments-list">
-        <ul id="post-comments-<%= post._id %>">
-            <% for (let comment of post.comments) { %>
-                <%- include('_comment', {comment: comment}) %>
+    <div class="post-header">
+        <img src="<%= post.user.avatar %>" id="user-profile-img">
+        <p><%= post.user.name %></p>
+        <div id="post-menu-options">
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+
+            <% if(locals.user && locals.user.id == post.user.id) { %> 
+                <small>
+                    <a class="delete-post-button" href="/posts/destroy/<%= post._id %>">X</a>
+                </small>
             <% } %>
-        </ul>
+        </div>
+        
     </div>
-   
-    <div class="post-comments">
-        <% if(locals.user) { %>
-        <form id="post-<%= post._id %>-comments-form" action="/comments/create" method="POST">
-                <input type="text" name="content" placeholder="Type Here to add comment..." required>
-                <input type="hidden" name="postId" value="<%= post._id %>" >
-                <input type="submit" value="Add Comment">
-            </form>
-        <% } %>
+
+    <div class="post-img">
+        <img src="/img/1782188.jpeg">
+    </div>
+
+    <div class="post-footer">
+        <div class="post-options">
+            <div class="left">
+                <i style="margin-left: 0px" class="fa-regular fa-heart"></i>
+                <i style="transform: rotateY(180deg);" class="fa-regular fa-comment"></i>
+                <i style="font-size: 1.2rem;" class="fa-regular fa-paper-plane"></i>
+            </div>
+
+            <div class="right">
+                <i class="fa-regular fa-bookmark"></i>
+            </div>
+            
+        </div>
+        <div class="post-caption">
+            <p class="post-user-name"><%= post.user.name %> - &nbsp; </p>
+            <p class="post-user-content"><%= post.content %></p>
+        </div>
+        
+        <div id="comments-list-container" class="post-comments-list">
+            <ul id="post-comments-<%= post._id %>">
+                <% for (let comment of post.comments) { %>
+                    <%- include('_comment', {comment: comment}) %>
+                <% } %>
+            </ul>
+        </div>
+        <div class="post-comments">
+            <% if(locals.user) { %>
+                <form id="post-<%= post._id %>-comments-form" action="/comments/create" method="POST">
+                    <i  class="fa-regular fa-face-smile emoji-button"></i>
+                    <input class="input-add-comment" type="text" name="content" placeholder="add a comment..." required>
+                    <input type="hidden" name="postId" value="<%= post._id %>" >
+                    <input class="submit-button" type="submit" value="Post">
+                </form>
+            <% } %>
+        </div>
     </div>
     
+    
 </div>
+
+
 

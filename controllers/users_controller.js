@@ -10,7 +10,6 @@ module.exports.profile = function(request, response) {
             profile_user: user
         });
     })
-    
 }
 
 
@@ -24,6 +23,8 @@ module.exports.update = async function(request, response) {
                 }
                 user.name = request.body.name;
                 user.email = request.body.email;
+                console.log(request.file);
+
                 if (request.file) {
 
                     if (user.avatar) {

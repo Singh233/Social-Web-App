@@ -9,6 +9,20 @@ module.exports.createPost = async function(request, response) {
             user: request.user._id,
         });
 
+        await Post.uploadedFile(request, response, function(error) {
+            if (error) {
+                console.log('****** Multer Error: ', error);
+            }
+
+            console.log(request.file);
+            if (request.file) {
+                // this is saving the path of the uploaded file into the field in the user
+                post.file = Post.filePath + '/' + request.file.filename;
+            }
+            post.update();
+            console.log("file saved!!")
+        })
+
         let posts = await Post.find({_id: post._id})
         .populate('user')
         .populate({

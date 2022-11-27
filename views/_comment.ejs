@@ -1,10 +1,28 @@
+
 <div id="comment-<%= comment._id %>" class="comment-display">
-    <p><%= comment.content %> - <span><%= comment.user.name %></span></p>
-    <% if(locals.user && locals.user.id == comment.user.id) { %> 
-    <small>
-        <a class="delete-comment-button" href="/comments/destroy/<%= comment._id %>">X</a>
-    </small>
-    <% } %>
+    <img src="<%= comment.user.avatar %>" id="user-profile-img">
+    <div class="middle-section">
+        <div class="upper">
+            <p class="comment-user-name"><%= comment.user.name %>&nbsp;&nbsp;</p>
+            <p class="comment-user-content"> &nbsp;<%= comment.content %> </p>
+        </div>
+
+        <div class="bottom">
+            <p id="comment-time">3m</p>
+            <p id="reply-button">reply</p>
+            <% if(locals.user && locals.user.id == comment.user.id) { %> 
+                <a class="delete-comment-button" href="/comments/destroy/<%= comment._id %>"><i class="fa-regular fa-circle-xmark"></i></a>
+            <% } %>
+            
+
+        </div>
+        
+    </div>
+
+    
+   
+    <i style="margin-left: 0px" class="fa-regular fa-heart"></i>
+
     <br>
 </div>
 

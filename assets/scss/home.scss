@@ -5,24 +5,36 @@
     display: grid;
     grid-template-columns: 1fr auto;
     justify-items: center;
+    color: white;
 
 
     .post-div {
         max-width: fit-content;
-        min-width: 40vw;
+        min-width: 30vw;
         padding: 5px;
+
+        #new-post-form {
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 30px;
+            border: 1px solid rgba(231, 231, 231, 0.233);
+        }
     
         #feed-posts {
             
             padding: 20px;
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(0, 0, 0, 0.25);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
             border-radius: 35px;
-            border: 1px solid rgba(255, 255, 255, 0.233);
+            // border: 1px solid rgba(231, 231, 231, 0.233);
         }
     }
 
     
 }
+
