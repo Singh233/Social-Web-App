@@ -1,27 +1,24 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
 
+
 module.exports.createPost = async function(request, response) {
     try {
-        
         let post = await Post.create({
             content: request.body.content,
             user: request.user._id,
         });
 
-        await Post.uploadedFile(request, response, function(error) {
+        Post.uploadedFile(request, response, function(error) {
             if (error) {
                 console.log('****** Multer Error: ', error);
             }
-
             console.log(request.file);
             if (request.file) {
                 // this is saving the path of the uploaded file into the field in the user
-                post.file = Post.filePath + '/' + request.file.filename;
+                user.avatar = User.avatarPath + '/' + request.file.filename;
             }
-            post.update();
-            console.log("file saved!!")
-        })
+        });
 
         let posts = await Post.find({_id: post._id})
         .populate('user')

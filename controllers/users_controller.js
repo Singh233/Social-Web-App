@@ -16,6 +16,7 @@ module.exports.profile = function(request, response) {
 module.exports.update = async function(request, response) {
     if (request.user.id == request.params.id) {
         try {
+
             let user = await User.findById(request.params.id);
             User.uploadedAvatar(request, response, function(error) {
                 if (error) {
@@ -23,7 +24,7 @@ module.exports.update = async function(request, response) {
                 }
                 user.name = request.body.name;
                 user.email = request.body.email;
-                console.log(request.file);
+                
 
                 if (request.file) {
 

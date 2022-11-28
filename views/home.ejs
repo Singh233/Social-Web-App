@@ -5,12 +5,12 @@
     <div class="post-div">
         <%- include('_top_header'); %>
         <% if(locals.user) { %>
-            <form action="/posts/create" id="new-post-form" enctype="multipart/form-data" method="post" >
-                <input type="file" name="myFile">
-                <textarea name="content" id="" cols="30" rows="3" placeholder="Type here..."></textarea>
+            <form action="/posts/create" id="new-post-form" method="post" enctype="multipart/form-data">
+                <input type="file" name="myfile" id="my-file">
+                <textarea name="content" id="text-area" cols="30" rows="3" placeholder="Type here..."></textarea>
                 <input type="submit" value="Post">
             </form>
-            <% } %>
+        <% } %>
 
         <section id="feed-posts">
 

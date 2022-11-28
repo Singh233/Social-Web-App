@@ -8,32 +8,32 @@
     );
 
     // Filepond initialisation logic
-    const inputElement = document.querySelector('input[type="file"]');
-    const pond = FilePond.create(inputElement, {
-        imageCropAspectRatio: 1,
+    // const inputElement = document.querySelector('input[type="file"]');
+    // const pond = FilePond.create(inputElement, {
+    //     imageCropAspectRatio: 1,
 
-        imageResizeTargetWidth: 256,
+    //     imageResizeTargetWidth: 256,
 
-        // set contain resize mode
-        imageResizeMode: 'contain',
+    //     // set contain resize mode
+    //     imageResizeMode: 'contain',
 
-        // add onaddfile callback
-        onaddfile: (error, fileItem) => {
-            console.log(error, fileItem.getMetadata('resize'));
-        },
+    //     // add onaddfile callback
+    //     onaddfile: (error, fileItem) => {
+    //         console.log(error, fileItem.getMetadata('resize'));
+    //     },
 
-         // add onpreparefile callback
-        onpreparefile: (fileItem, output) => {
-            // create a new image object
-            const img = new Image();
+    //      // add onpreparefile callback
+    //     onpreparefile: (fileItem, output) => {
+    //         // create a new image object
+    //         const img = new Image();
 
-            // set the image source to the output of the Image Transform plugin
-            img.src = URL.createObjectURL(output);
+    //         // set the image source to the output of the Image Transform plugin
+    //         img.src = URL.createObjectURL(output);
 
-            // add it to the DOM so we can see the result
-            document.body.appendChild(img);
-        }
-    });
+    //         // add it to the DOM so we can see the result
+    //         document.body.appendChild(img);
+    //     }
+    // });
 
     // method to submit the form data for new post using AJAX
     let createPost = function() {
@@ -41,10 +41,13 @@
 
         newPostForm.submit(function(e) {
             e.preventDefault();
+            var data = new FormData(this);
+            
             $.ajax({
                 type: 'post',
                 url: '/posts/create',
                 data: newPostForm.serialize(), //this converts data in json objects
+
                 success: function(data) {
                     let newPost = newPostDom(data.data.post);
                     $('#posts-list-container').prepend(newPost);

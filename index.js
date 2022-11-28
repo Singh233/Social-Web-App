@@ -11,6 +11,7 @@ const passportLocal = require('./config/passport-local-strategy');
 const passportJWT = require('./config/passport-jwt-strategy');
 const passportGoogle = require('./config/passport-google-oauth2-strategy');
 
+const bodyParser = require('body-parser');
 
 const MongoStore = require('connect-mongo');
 
@@ -21,11 +22,15 @@ const customMware = require('./config/middleware');
 // sass
 const sassMiddleware = require('node-sass-middleware');
 
+
+// app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
+// app.use(bodyParser.json()); // Send JSON responses
+
 // compiles scss to css
 app.use(sassMiddleware({
     src: './assets/scss',
     dest: './assets/css',
-    debug: true,
+    // debug: true,
     outputStyle: 'expanded',
     prefix: '/css'
 }))
