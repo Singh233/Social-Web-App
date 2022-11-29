@@ -62,9 +62,41 @@
   align-items: center;
 }
 
-.display-posts .post-footer .post-options .left i {
-  font-size: 1.3rem;
+.display-posts .post-footer .post-options .left {
+  display: flex;
+  align-items: center;
+}
+
+.display-posts .post-footer .post-options .left a {
+  display: flex;
+  width: fit-content;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(231, 231, 231, 0.233);
   margin-left: 12px;
+}
+
+.display-posts .post-footer .post-options .left a i {
+  font-size: 1.3rem;
+}
+
+.display-posts .post-footer .post-options .left a span {
+  margin-left: 7px;
+  color: #9e9e9e;
+  font-size: 0.9rem;
+  font-weight: 300;
+}
+
+.display-posts .post-footer .post-options .left .toggle-like-button {
+  margin-left: 0px;
+}
+
+.display-posts .post-footer .post-options .left .toggle-like-button span {
+  margin-left: 7px;
+  color: #9e9e9e;
+  font-size: 0.9rem;
+  font-weight: 300;
 }
 
 .display-posts .post-footer .post-options .right {
@@ -73,6 +105,11 @@
 
 .display-posts .post-footer .post-options .right i {
   font-size: 1.3rem;
+}
+
+.display-posts .post-footer #likes-counter {
+  padding: 0px 20px 0px 20px;
+  margin-top: 10px;
 }
 
 .display-posts .post-footer .post-caption {
@@ -84,6 +121,7 @@
 
 .display-posts .post-footer .post-caption .post-user-content {
   font-size: 0.9rem;
+  color: #d0d0d0;
 }
 
 .display-posts .post-footer #comments-list-container {
@@ -104,6 +142,12 @@
 
 .display-posts .post-footer #comments-list-container .comment-display .middle-section .upper {
   display: flex;
+  flex-wrap: wrap;
+}
+
+.display-posts .post-footer #comments-list-container .comment-display .middle-section .upper .comment-user-content {
+  font-size: 0.9rem;
+  color: #d0d0d0;
 }
 
 .display-posts .post-footer #comments-list-container .comment-display .middle-section .bottom {
@@ -137,6 +181,24 @@
 
 .display-posts .post-footer #comments-list-container .comment-display a {
   color: #D20A0A;
+}
+
+.display-posts .post-footer #comments-list-container .comment-display .toggle-like-button {
+  display: flex;
+  align-items: center;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(231, 231, 231, 0.233);
+  margin-left: 12px;
+  transition: 1s all ease-in-out;
+}
+
+.display-posts .post-footer #comments-list-container .comment-display .toggle-like-button span {
+  margin-left: 5px;
+  font-size: 0.8rem;
+  font-weight: 100;
+  color: #a4a4a4;
 }
 
 .display-posts .post-footer .post-comments {

@@ -25,10 +25,14 @@ module.exports.home = async function(request, response) {
             path: 'comments',
             populate: {
                 path: 'user'
-            }
-        });
+            },
+            // populate: {
+            //     path: 'likes'
+            // }
 
-        let comments = await Comment.find({}).sort('-createdAt');
+        })
+        // .populate('comments')
+        .populate('likes');
     
         let users = await User.find({});
     

@@ -1,6 +1,7 @@
 $button-color-blue: #0057D2; 
 $button-hover-color: #D1EFFF;
 $button-color-red: #D20A0A; 
+$text-color-gray: #d0d0d0; 
 
 
 .display-posts {
@@ -72,10 +73,42 @@ $button-color-red: #D20A0A;
             align-items: center;
 
             .left {
+                display: flex;
+                align-items: center;
 
-                i {
-                    font-size: 1.3rem;
+                a {
+                    display: flex;
+                    width: fit-content;
+                    color: white;
+                    padding: 8px 10px;
+                    border-radius: 12px;
+                    border: 1px solid rgba(231, 231, 231, 0.233);
                     margin-left: 12px;
+                    
+                    i {
+                        font-size: 1.3rem;
+                    }
+
+                    span {
+                        margin-left: 7px;
+                        color: rgb(158, 158, 158);
+                        font-size: 0.9rem;
+                        font-weight: 300;
+                    }
+                }
+
+                
+                
+
+                .toggle-like-button {
+                    margin-left: 0px;
+
+                    span {
+                        margin-left: 7px;
+                        color: rgb(158, 158, 158);
+                        font-size: 0.9rem;
+                        font-weight: 300;
+                    }
                 }
             }
             .right {
@@ -88,6 +121,12 @@ $button-color-red: #D20A0A;
             }
         }
 
+        #likes-counter {
+            padding: 0px 20px 0px 20px;
+            margin-top: 10px;
+
+        }
+
 
         .post-caption {
             padding: 0px 20px 0px 20px;
@@ -98,6 +137,7 @@ $button-color-red: #D20A0A;
 
             .post-user-content {
                 font-size: 0.9rem;
+                color: $text-color-gray;
             }
         }
 
@@ -119,6 +159,14 @@ $button-color-red: #D20A0A;
 
                     .upper {
                         display: flex;
+                        flex-wrap: wrap;
+
+
+                        .comment-user-content {
+                            font-size: 0.9rem;
+                            color: $text-color-gray;
+
+                        }
                     }
 
                     .bottom {
@@ -157,6 +205,24 @@ $button-color-red: #D20A0A;
 
                 a {
                     color: $button-color-red;
+                }
+
+                .toggle-like-button {
+                    display: flex;
+                    align-items: center;
+                    color: white;
+                    padding: 6px 8px;
+                    border-radius: 12px;
+                    border: 1px solid rgba(231, 231, 231, 0.233);
+                    margin-left: 12px;
+                    transition: 1s all ease-in-out;
+
+                    span {
+                        margin-left: 5px;
+                        font-size: 0.8rem;
+                        font-weight: 100;
+                        color: rgb(164, 164, 164);
+                    }
                 }
             }
         }

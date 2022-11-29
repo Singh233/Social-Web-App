@@ -9,6 +9,7 @@
 
         <div class="bottom">
             <p id="comment-time">3m</p>
+
             <p id="reply-button">reply</p>
             <% if(locals.user && locals.user.id == comment.user.id) { %> 
                 <a class="delete-comment-button" href="/comments/destroy/<%= comment._id %>"><i class="fa-regular fa-circle-xmark"></i></a>
@@ -20,8 +21,9 @@
     </div>
 
     
-   
-    <i style="margin-left: 0px" class="fa-regular fa-heart"></i>
+    <a class="toggle-like-button" data-likes="<%= comment.likes.length %>" href="/likes/toggle/?id=<%= comment._id %>&type=Comment">
+        <i style="margin-left: 0px" class="fa-regular fa-heart"></i><span><%= comment.likes.length %></span>
+    </a>
 
     <br>
 </div>
