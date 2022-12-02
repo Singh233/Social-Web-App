@@ -3,6 +3,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
+$media-desktop: "only screen and (max-width : 1024px)";
+$media-tablet: "only screen and (max-width : 768px)";
+$media-mobile: "only screen and (max-width : 600px)";
+$media-mobile-sm: "only screen and (max-width : 480px)";
 
 * {
     margin: 0;
@@ -55,4 +59,13 @@ body {
 
 ::-webkit-scrollbar-thumb {
     border-radius: 8px;
+}
+
+
+
+@media #{$media-mobile-sm} {
+    body {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
 }
