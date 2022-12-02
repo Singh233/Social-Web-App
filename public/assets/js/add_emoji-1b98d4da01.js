@@ -1,0 +1,1 @@
+{const e=document.querySelector(".emoji-button"),o=new EmojiButton({theme:"dark"});e.addEventListener("click",(()=>{console.log("Clicked emoji",e),o.togglePicker(e)})),o.on("emoji",(e=>{document.querySelector("#input-add-comment").value+=e}))}

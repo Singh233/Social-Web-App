@@ -1,6 +1,7 @@
 const Post = require('../models/post');
 const User = require('../models/user');
 const Comment = require('../models/comment');
+const Friendships = require('../models/friendship');
 
 module.exports.home = async function(request, response) {
     // Post.find({user: request.user._id}, function(error, post) {
@@ -35,12 +36,26 @@ module.exports.home = async function(request, response) {
         .populate('likes');
     
         let users = await User.find({});
-    
+        let friendsArray = [];
+        if (request.user) {
+            let friends = await Friendships.find({from_user: request.user._id});
+            
+            for (let friend of friends) {
+                let currUser = await User.find({_id: friend.to_user});
+                friendsArray.push(currUser);
+            }
+            
+        }
+
+
         return response.render('home.ejs', {
             title: "Home",
             posts: posts, 
-            all_users: users
+            all_users: users,
+            friends: friendsArray
         });
+    
+        
     } catch(error) {
         console.log("Error", error);
         return;

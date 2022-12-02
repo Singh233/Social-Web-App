@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/chat_box.css">
 <link rel="stylesheet" href="/css/post_card_design.css">
 
 <div id="home-container">
@@ -6,9 +7,13 @@
         <%- include('_top_header'); %>
         <% if(locals.user) { %>
             <form action="/posts/create" id="new-post-form" method="post" enctype="multipart/form-data">
+                <div class="header">
+                    <img src="<%= locals.user.avatar %>" id="user-profile-img">
+                    <p>Hey, <%= locals.user.name %> post something new!</p>
+                </div>
                 <input type="file" name="myfile" id="my-file">
                 <textarea name="content" id="text-area" cols="30" rows="3" placeholder="Type here..."></textarea>
-                <input type="submit" value="Post">
+                <input id="submit" type="submit" value="Post">
             </form>
         <% } %>
 
@@ -25,8 +30,15 @@
     </div>
     
     <div class="right-section-div">
-        <%- include('_right_section', {all_users: all_users}); %>
+        <% if (friends != undefined) {%> 
+
+            <%- include('_right_section', {all_users: all_users, friends: friends}); %>
+        <% } else { %>
+            <%- include('_right_section', {all_users: all_users}); %>
+        <% } %>
+
     </div>
+    <%- include('_chat_box') -%>
 </div>
 
 <script src="/js/add_emoji.js"></script>
@@ -41,4 +53,13 @@
         let toggleLike = new ToggleLike(self);
     });
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" ></script>
+<script src="/js/chat_engine.js"></script>
+
+<% if (locals.user){ %>
+    <script>
+        new ChatEngine('user-chat-box', '<%= locals.user.email %>')
+    </script>
+<% } %>
 

@@ -1,0 +1,98 @@
+$button-color-blue: #0057D2; 
+$button-hover-color: #D1EFFF;
+$button-color-red: #D20A0A; 
+$text-color-gray: #d0d0d0; 
+$button-color-gray: #202020; 
+$button-color-ligth-blue: #4DB1FF; 
+
+
+#user-chat-box{
+    position: fixed;
+	z-index: 2;
+    bottom: 1px;
+    right: 1px;
+    height: 350px;
+	width: 300px;
+	
+
+	background-color: rgba(171, 171, 171, 0.103);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-radius: 30px;
+	border: 1px solid rgba(231, 231, 231, 0.233);
+
+    #chat-messages-list {
+    	list-style: none;
+	    padding: 10px;
+	    height: 88%;
+	    
+	    overflow: auto;
+
+	    .other-message{
+		    text-align: left;
+		    padding: 5px;
+		    span{
+				border-radius: 20px;
+				font-size: 1rem;
+		    	display: inline-block;
+	    		padding: 10px;
+		    	background-color: $button-color-gray;
+		    }
+		    
+	    }
+
+	    .self-message{
+		    text-align: right;
+		    padding: 5px;
+
+		    span{
+				border-radius: 20px;
+				font-size: 1rem;
+	    		display: inline-block;
+	    		padding: 10px;
+    			background-color: $button-color-blue;
+		    }
+		   
+	    }
+
+    }
+    #chat-message-input-container{
+    	    height: 24%;
+		    width: 100%;
+		    display: flex;
+		    flex-direction: row;
+
+		    #chat-message-input{
+				padding: 10px;
+	    	    height: 50%;
+    			width: 70%;
+				color: white;
+
+				background-color: $button-color-gray;
+				border-radius: 0 0 0 30px;
+				border: none;
+
+				&:focus {
+					outline: none;
+				}
+		    }
+
+		    #send-message{
+	    	    height: 50%;
+			    width: 30%;
+			    font-size: 1rem;
+			    color: white;
+			    border: none;
+			    background: $button-color-blue;
+				cursor: pointer;
+
+				border-radius: 0 0 30px 0;
+				transition: 0.3s all ease-in-out;
+
+				&:hover {
+					background-color: #1664d1;
+				}
+
+		    }
+	    }
+}

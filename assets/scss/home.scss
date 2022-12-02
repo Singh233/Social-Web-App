@@ -1,4 +1,7 @@
-
+$button-color-blue: #0057D2; 
+$button-hover-color: #D1EFFF;
+$button-color-red: #D20A0A; 
+$text-color-gray: #d0d0d0; 
 
 #home-container {
     min-height: 99vh;
@@ -6,25 +9,86 @@
     grid-template-columns: 1fr auto;
     justify-items: center;
     color: white;
+    background-color: black;
 
 
     .post-div {
-        max-width: fit-content;
+        display: flex;
+        flex-direction: column;
+        
         min-width: 30vw;
         padding: 5px;
 
         #new-post-form {
+            align-self: center;
+            max-width: 452px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
+            justify-content: center;
+
+            //box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
             border-radius: 30px;
             border: 1px solid rgba(231, 231, 231, 0.233);
+
+            .header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 15px;
+
+                img {
+                    height: 40px;
+                    width: 40px;
+                    border-radius: 50%;
+                }
+                p {
+                    font-size: 1.05rem;
+                    margin-left: 10px;
+                }
+            }
+
+            #my-file {
+                background-color: black;
+            }
+            .filepond--drop-label {
+                background-color: black;
+
+            }
+            .filepond--credits {
+                display: none;
+            }
+
+            
+
+            #text-area {
+                padding: 20px;
+                margin-bottom: 15px;
+                background-color: black;
+                color: white;
+                border: none;
+                border: 1px solid rgba(231, 231, 231, 0.233);
+                border-radius: 20px;
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            #submit {
+                padding: 8px;
+                background-color: $button-color-blue;
+                border-radius: 20px;
+                color: white;
+                border: none;
+                font-size: 1.1rem;
+            }
         }
     
         #feed-posts {
             //
+            display: flex;
+            justify-content: center;
             padding: 20px;
             background: rgba(0, 0, 0, 0.25);
             //box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);

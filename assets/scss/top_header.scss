@@ -1,67 +1,70 @@
 $button-color-blue: #0057D2; 
 $button-hover-color: #D1EFFF;
-
+$button-color-red: #D20A0A; 
+$text-color-gray: #d0d0d0; 
+$button-color-gray: #202020; 
 
 #top-nav-header {
-    align-self: flex-start;
+    position: sticky;
+    top: 0%;
+    z-index: 3;
     display: flex;
     flex-direction: row;
+    justify-content: center;
     align-items: center;
     padding: 5px;
     color: white;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 30px;
+
+
+
+    #top-nav-section {
+        align-self: center;
+        display: flex;
+        margin: 10px;
+        color: white;
+        padding: 10px;
+    
+        #search-form {
+            align-self: center;
+
+            #search-bar {
+                font-size: 1rem;
+                padding: 12px 15px;
+                background-color: $button-color-gray;
+                color: white;
+                border-radius: 20px;
+                border: none;
+                width: 30vw;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            button {
+                font-size: 1rem;
+                background-color: $button-color-blue;
+                padding: 12px 15px;
+                color: white;
+                border-radius: 20px;
+                border: none;
+
+                i {
+                    margin-right: 5px;
+                    color: white;
+                }
+
+            }
+        }
+    }
+    
     
 }
 
-#branding {
-    margin: 10px;
-}
 
 
-
-// Sign in/up section
-
-#top-nav-section {
-    justify-self: flex-end;
-    display: flex;
-    margin: 10px;
-    color: white;
-
-    #sign-in-button, #sign-up-button {
-        background-color: $button-color-blue;
-        color: white;
-        border-radius: 20px;
-        padding: 10px 25px;
-        margin: 0px 10px;
-        align-self: center;
-        border: 1px solid #0058d24a;
-
-        transition: 0.25s all ease-in-out;
-
-        a {
-            color: white;
-            transition: 0.25s all ease-in-out;
-            font-weight: 500;
-            i {
-                font-size: 1.2rem;
-            }
-        }
-
-        &:hover {
-            background-color: $button-hover-color;
-            
-            a {
-                color: $button-color-blue;
-            }
-        }
-
-        
-    }
-
-
-
-
-    #user-name {
-        align-self: center;
-    }
-}
 

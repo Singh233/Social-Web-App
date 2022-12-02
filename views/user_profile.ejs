@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/css/user_profile.css">
 <div id="profile-container">
-    <img src="<%= user.avatar %>" alt="<%= user.name %>" width="100">
+    <img src="<%= profile_user.avatar %>" alt="<%= user.name %>" width="100">
 
     <% if (user.id == profile_user.id) { %>
     <!-- If user matches then show the form -->
@@ -14,6 +14,20 @@
         <!-- else show only the profile info -->
         <h2> <%= profile_user.name %></h2>   
         <h2> <%= profile_user.email %></h2>
-    <% }  %>
+        <% if (friends != undefined) { %>
+            <% let flag = false; %>
+                <% for (friend of friends) { %>
+                    <% if (user.id == friend.to_user || user.id == friend.from_user) {  flag = true;%>
+                        <a href="/users/friends/remove/?from=<%= user.id %>">Remove</a>
+                    <% } if (flag) break; %>
+                <% } %>
+
+                <% if (!flag) { %>
+                    <a href="/users/friends/add/?from=<%= user.id %>&to=<%= profile_user.id %>">Add</a>
+                <% } %>
+        <% } else { %>
+            <a href="/users/friends/add/?from=<%= user.id %>&to=<%= profile_user.id %>">Add</a>
+        <% } %>
+    <% } %>
 </div>
 

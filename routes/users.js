@@ -10,6 +10,7 @@ router.get('/profile/:id', passport.checkAuthentication, usersController.profile
 router.post('/update/:id', passport.checkAuthentication, usersController.update);
 router.get('/sign-up', signInController.signUp);
 router.get('/sign-in', signUpController.signIn);
+router.use('/friends', require('./friends'));
 
 
 router.post('/create', usersController.create);

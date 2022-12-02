@@ -2,18 +2,13 @@
 
 
 <header id="top-nav-header">
-    <div id="branding">
-        Logo and Name
-    </div>
     
 
     <% if (locals.user) { %>
         <div id="top-nav-section">
-            <div id="user-name">
-                <a href="/users/profile"> <%= user.name %> </li>
-            </div>
-            <div id="sign-in-button">
-                <a href="/users/sign-out">Sign Out</a>
+            <div id="search-form">
+                <input type="search" name="search" id="search-bar" placeholder="Search here...">
+                <button><i class="fa-solid fa-magnifying-glass"></i>Search</button>
             </div>
         </div>
         

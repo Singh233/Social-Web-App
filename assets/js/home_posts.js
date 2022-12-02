@@ -8,43 +8,79 @@
     );
 
     // Filepond initialisation logic
-    // const inputElement = document.querySelector('input[type="file"]');
-    // const pond = FilePond.create(inputElement, {
-    //     imageCropAspectRatio: 1,
 
-    //     imageResizeTargetWidth: 256,
+    
+    const inputElement = document.querySelector('input[type="file"]');
+    const pond = FilePond.create(inputElement, {
+        imageCropAspectRatio: 1,
 
-    //     // set contain resize mode
-    //     imageResizeMode: 'contain',
+        imageResizeTargetWidth: 256,
 
-    //     // add onaddfile callback
-    //     onaddfile: (error, fileItem) => {
-    //         console.log(error, fileItem.getMetadata('resize'));
-    //     },
+        // set contain resize mode
+        imageResizeMode: 'contain',
 
-    //      // add onpreparefile callback
-    //     onpreparefile: (fileItem, output) => {
-    //         // create a new image object
-    //         const img = new Image();
+        // add onaddfile callback
+        onaddfile: (error, fileItem) => {
+            console.log(error, fileItem.getMetadata('resize'));
+        },
 
-    //         // set the image source to the output of the Image Transform plugin
-    //         img.src = URL.createObjectURL(output);
+         // add onpreparefile callback
+        onpreparefile: (fileItem, output) => {
+            // create a new image object
+            const img = new Image();
 
-    //         // add it to the DOM so we can see the result
-    //         document.body.appendChild(img);
-    //     }
-    // });
+            // set the image source to the output of the Image Transform plugin
+            img.src = URL.createObjectURL(output);
+
+            // add it to the DOM so we can see the result
+            document.body.appendChild(img);
+        }
+    });
 
     // method to submit the form data for new post using AJAX
     let createPost = function() {
         let newPostForm = $('#new-post-form');
-        
+
+        // let myFile = document.getElementById('my-file');
+
+            // let mySubmit = document.getElementById('submit');
+
+            // let files = myFile.files;
+
+            // let formData = new FormData();
+
+            // formData.append('myFile', files[0], files[0].name);
+            // console.log(formData);
+
+            // let xhr = new XMLHttpRequest();
+
+            // xhr.open('POST', '/posts/create', true);
+
+            // xhr.onload = function(data) {
+            //     if (xhr.status === 200) {
+            //         console.log(xhr.response);
+            //         alert('File successfully uploaded', xhr.response);
+                
+            //     } else {
+                
+            //         alert('File upload failed!');
+                
+            //     }
+            // };
+
+            // xhr.send(formData);
+
         newPostForm.submit(function(e) {
             e.preventDefault();
-            let data = new FormData(this);
+            
+            
             
             
             // console.log(data.serializeArray());
+
+
+            console.log(new FormData(this));
+
             $.ajax({
                 type: 'post',
                 url: '/posts/create',
@@ -54,7 +90,7 @@
                     let newPost = newPostDom(data.data.post);
                     $('#posts-list-container').prepend(newPost);
                     deletePost($(' .delete-post-button', newPost));
-                    console.log(newPost);
+                    
                     // call the create comment class
                     new PostComments(data.data.post._id);
 

@@ -1,14 +1,41 @@
 const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
+const Friendships = require('../models/friendship');
 
 
 module.exports.profile = function(request, response) {
     User.findById(request.params.id, function(error, user) {
-        return response.render('user_profile.ejs', {
-            title: "Profile",
-            profile_user: user
+        if (error) {
+            console.log("Error in finding profile");
+            return;
+        }
+
+        let friendsArray = [];
+        
+        let friends = Friendships.find({to_user: user._id}, function(error, friends) {
+            //console.log('Inside friendships', friends);
+            // for (let friend of friends) {
+            //     let currUser = User.find({_id: friend.to_user});
+            //     friendsArray.push(currUser);
+            // }
+
+            if (error) {
+                console.log("Error in finding friendships");
+                return;
+            }
+
+            return response.render('user_profile.ejs', {
+                title: "Profile",
+                profile_user: user,
+                friends: friends
+            });
         });
+        
+        
+        
+
+        
     })
 }
 
@@ -18,6 +45,8 @@ module.exports.update = async function(request, response) {
         try {
 
             let user = await User.findById(request.params.id);
+            console.log(user);
+            console.log(request.params.id);
             User.uploadedAvatar(request, response, function(error) {
                 if (error) {
                     console.log('****** Multer Error: ', error);

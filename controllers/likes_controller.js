@@ -5,7 +5,6 @@ const Post = require('../models/post');
 module.exports.toggleLike = async function(request, response) {
 
     try {
-
         // likes/toggle/?id=abcede&type=Post
         let likeable;
         let deleted = false;
