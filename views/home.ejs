@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="/css/home.css">
-<link rel="stylesheet" href="/css/chat_box.css">
-<link rel="stylesheet" href="/css/post_card_design.css">
+<link rel="stylesheet" href="<%= assetPath('css/home.css') %>">
+<link rel="stylesheet" href="<%= assetPath('css/chat_box.css') %>">
+<link rel="stylesheet" href="<%= assetPath('css/post_card_design.css') %>">
 
 <div id="home-container">
     <div class="post-div">
@@ -41,11 +41,11 @@
     <%- include('_chat_box') -%>
 </div>
 
-<script src="/js/add_emoji.js"></script>
-<script src="/js/home_post_comments.js"></script>
-<script src="/js/home_posts.js"></script>
+<script src="<%= assetPath('js/add_emoji.js') %>"></script>
+<script src="<%= assetPath('js/home_post_comments.js') %>"></script>
+<script src="<%= assetPath('js/home_posts.js') %>"></script>
 
-<script src="/js/toggle_likes.js"></script>
+<script src="<%= assetPath('js/toggle_likes.js') %>"></script>
 
 <script>
     $('.toggle-like-button').each(function() {
@@ -55,7 +55,7 @@
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" ></script>
-<script src="/js/chat_engine.js"></script>
+<script src="<%= assetPath('js/chat_engine.js') %>"></script>
 
 <% if (locals.user){ %>
     <script>
