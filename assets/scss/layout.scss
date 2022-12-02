@@ -56,3 +56,12 @@ body {
 ::-webkit-scrollbar-thumb {
     border-radius: 8px;
 }
+
+
+@media screen and (max-width: "480px") {
+    //do Smth
+    body {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+}
