@@ -9,5 +9,11 @@
   "css/right_section.css": "css/right_section-7bb9f155c2.css",
   "css/top_header.css": "css/top_header-71643c8b12.css",
   "css/user_profile.css": "css/user_profile-d41d8cd98f.css",
-  "img/1782188.jpeg": "img/1782188-406f97a38c.jpeg"
+  "img/1782188.jpeg": "img/1782188-406f97a38c.jpeg",
+  "js/add_emoji.js": "js/add_emoji-1b98d4da01.js",
+  "js/background_color_animation.js": "js/background_color_animation-d41d8cd98f.js",
+  "js/chat_engine.js": "js/chat_engine-d92c4eda5c.js",
+  "js/home_post_comments.js": "js/home_post_comments-a11daa77aa.js",
+  "js/home_posts.js": "js/home_posts-67a3aa4e3d.js",
+  "js/toggle_likes.js": "js/toggle_likes-a3cc308cb6.js"
 }

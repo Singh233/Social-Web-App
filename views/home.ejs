@@ -44,19 +44,15 @@
 <script src="<%= assetPath('js/add_emoji.js') %>"></script>
 <script src="<%= assetPath('js/home_post_comments.js') %>"></script>
 <script src="<%= assetPath('js/home_posts.js') %>"></script>
-
 <script src="<%= assetPath('js/toggle_likes.js') %>"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" ></script>
+<script src="<%= assetPath('js/chat_engine.js') %>"></script>
 <script>
     $('.toggle-like-button').each(function() {
         let self = this;
         let toggleLike = new ToggleLike(self);
     });
 </script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" ></script>
-<script src="<%= assetPath('js/chat_engine.js') %>"></script>
-
 <% if (locals.user){ %>
     <script>
         new ChatEngine('user-chat-box', '<%= locals.user.email %>')
