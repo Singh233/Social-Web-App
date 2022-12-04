@@ -272,3 +272,43 @@ $text-color-gray: #d0d0d0;
 
     }
 }
+
+
+
+
+
+
+@media screen and (max-width: "480px") {
+
+
+
+    .display-posts {
+        max-width: 100vw;
+        border: none;
+        border-top: 1px solid rgba(231, 231, 231, 0.233);
+        border-bottom: 1px solid rgba(231, 231, 231, 0.233);
+
+        .post-img {
+            img {
+                max-width: 100vw;
+            }
+        }
+
+        .post-footer {
+
+
+            .post-options  {
+                max-width: 100vw;
+            }
+
+
+            #comments-list-container {
+
+                .comment-display {
+                    max-width: 90vw;
+                }
+            }
+        }
+
+    }
+}

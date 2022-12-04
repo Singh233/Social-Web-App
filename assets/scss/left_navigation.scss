@@ -33,3 +33,32 @@
     }
     
 }  
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: "480px") {
+    //do Smth
+    .left-navigation-container {
+        grid-template-rows: 1fr;
+        min-height: auto;
+
+
+        #nav-header {
+            flex-direction: row;
+
+            #nav-section {
+                flex-direction: row;
+            }
+        }    
+
+    }
+}

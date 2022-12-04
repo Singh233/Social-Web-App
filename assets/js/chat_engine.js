@@ -3,7 +3,7 @@ class ChatEngine{
         this.chatBox = $(`#${chatBoxId}`);
         this.userEmail = userEmail;
 
-        this.socket = io.connect('http://54.91.2.241:5000', {
+        this.socket = io.connect('wss://54.91.2.241:5000', {
             transports: ["websocket"]
         });
 

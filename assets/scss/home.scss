@@ -42,6 +42,7 @@ $text-color-gray: #d0d0d0;
                     height: 40px;
                     width: 40px;
                     border-radius: 50%;
+                    object-fit: cover;
                 }
                 p {
                     font-size: 1.05rem;
@@ -101,4 +102,35 @@ $text-color-gray: #d0d0d0;
 
     
 }
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: "480px") {
+    //do Smth
+    #home-container {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+
+
+        .post-div {
+            
+            
+            #feed-posts {
+                //
+                
+            }
+        }
+    }
+}
+
+
 

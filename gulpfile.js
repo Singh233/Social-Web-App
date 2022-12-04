@@ -6,17 +6,17 @@ const rev = require('gulp-rev');
 const uglify = require('gulp-uglify-es').default;
 const imagemin = require('gulp-imagemin');
 const del = require('del');
-
+const runSequence = require('run-sequence');
 
 
 gulp.task('css', function(done){
     console.log('minifying css...');
-    gulp.src('./assets/sass/**/*.scss')
+    gulp.src('./assets/scss/**/*.scss')
     .pipe(sass())
     .pipe(cssnano())
-    .pipe(gulp.dest('./assets/'));
+    .pipe(gulp.dest('./assets/css'))
 
-    return gulp.src('./assets/**/*.css')
+    gulp.src('./assets/**/*.css')
     .pipe(rev())
     .pipe(gulp.dest('./public/assets/'))
     .pipe(rev.manifest('public/assets/rev-manifest.json', {
@@ -27,19 +27,21 @@ gulp.task('css', function(done){
     done();
 });
 
-gulp.task('js', function (done) {
+
+gulp.task('js', function(done){
     console.log('minifying js...');
     gulp.src('./assets/**/*.js')
-        .pipe(uglify())
-        .pipe(rev())
-        .pipe(gulp.dest('./public/assets/'))
-        .pipe(rev.manifest('public/assets/rev-manifest.json', {
-            base: './public/assets',
-            merge: true // merge with the existing manifest (if one exists)
-        }))
-        .pipe(gulp.dest('./public/assets/'));
-    done()
+    .pipe(uglify())
+    .pipe(rev())
+    .pipe(gulp.dest('./public/assets/'))
+    .pipe(rev.manifest('public/assets/rev-manifest.json', {
+        base: './public/assets',
+        merge: true // merge with the existing manifest (if one exists)
+     }))
+    .pipe(gulp.dest('./public/assets/'));
+    done();
 });
+
 
 gulp.task('images', function(done){
     console.log('compressing images...');
@@ -66,3 +68,8 @@ gulp.task('build', gulp.series('clean:assets', 'css', 'js', 'images'), function(
     console.log('Building assets');
     done();
 });
+
+// gulp.task('build', function(done){
+//     console.log('Building assets');
+//     runSequence('clean:assets', 'css', 'js', 'images', done);
+// });

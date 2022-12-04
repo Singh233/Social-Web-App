@@ -21,3 +21,11 @@
         }
     }
 }
+
+
+@media screen and (max-width: "480px") {
+    //do Smth
+    #page-footer {
+        display: none;
+    }
+}

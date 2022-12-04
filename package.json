@@ -135,6 +135,9 @@
   "gulp-imagemin": "^7.1.0",
   
     
+  "run-sequence": "^2.2.1",
+  
+    
   "sass": "^1.56.1"
   
   }
