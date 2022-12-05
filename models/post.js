@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
 const FILE_PATH = path.join('/uploads/users/posts');
-const express = require('express');
-const app = express();
+
 
 
 const postSchema = new mongoose.Schema({

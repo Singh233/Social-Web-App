@@ -38,6 +38,7 @@ console.log('chat server is listening on port 5000');
 
 // app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
 // app.use(bodyParser.json()); // Send JSON responses
+app.use(express.urlencoded({extended: true}));
 
 // compiles scss to css
 if(env.name == 'development') {
@@ -51,7 +52,6 @@ if(env.name == 'development') {
 }
 
 
-app.use(express.urlencoded({extended: true}));
 
 app.use(cookieParser());
 

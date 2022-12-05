@@ -8,45 +8,47 @@ module.exports.createPost = async function(request, response) {
 
         try {
             console.log("************");
-            console.log(request.body);
-            let post = await Post.create({
-                content: request.body.content,
-                user: request.user._id,
-            });
+            
 
             Post.uploadedFile(request, response, function(error) {
                 if (error) {
                     console.log('****** Multer Error: ', error);
                 }
-                // console.log(request.file);
+                
+                console.log(request.file);
                 if (request.file) {
                     // this is saving the path of the uploaded file into the field in the user
-                    post.myfile = Post.filePath + '/' + request.file.filename;
+                    Post.create({
+                        content: request.body.content,
+                        user: request.user._id,
+                        myfile: Post.filePath + '/' + request.file.filename
+                    });
+                    
                 }
+                request.flash('success', 'Post created Successfully');
+                return response.redirect('back');
             });
 
-            let posts = await Post.find({_id: post._id})
-            .populate('user')
-            .populate({
-                path: 'comments',
-                populate: {
-                    path: 'user'
-                }
-            });
+            // let posts = await Post.find({_id: post._id})
+            // .populate('user')
+            // .populate({
+            //     path: 'comments',
+            //     populate: {
+            //         path: 'user'
+            //     }
+            // });
         
 
-            if (request.xhr) {
-                return response.status(200).json({
-                    data: {
-                        post: posts[0],
-                        success: 'Post created successfully!'
-                    },
-                    message: "Post created!"
-                })
-            }
-            request.flash('success', 'Post created Successfully');
+            // if (request.xhr) {
+            //     return response.status(200).json({
+            //         data: {
+            //             post: posts[0],
+            //             success: 'Post created successfully!'
+            //         },
+            //         message: "Post created!"
+            //     })
+            // }
             
-            return response.redirect('back');
         } catch(error) {
             request.flash('error', error);
             console.log("error", error);

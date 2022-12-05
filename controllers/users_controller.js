@@ -43,7 +43,7 @@ module.exports.profile = function(request, response) {
 module.exports.update = async function(request, response) {
     if (request.user.id == request.params.id) {
         try {
-
+            console.log(request.body);
             let user = await User.findById(request.params.id);
             console.log(user);
             console.log(request.params.id);
@@ -54,6 +54,8 @@ module.exports.update = async function(request, response) {
                 user.name = request.body.name;
                 user.email = request.body.email;
                 
+                console.log(request.file);
+                console.log(request.body);
 
                 if (request.file) {
 

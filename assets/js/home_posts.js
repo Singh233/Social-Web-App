@@ -1,41 +1,46 @@
 
 {
-    FilePond.registerPlugin(
-        FilePondPluginImageCrop,
-        FilePondPluginImagePreview,
-        FilePondPluginImageResize,
-        // FilePondPluginImageTransform
-    );
+    // FilePond.registerPlugin(
+    //     FilePondPluginImageCrop,
+    //     FilePondPluginImagePreview,
+    //     FilePondPluginImageResize,
+    //     // FilePondPluginImageTransform
+    // );
 
-    // Filepond initialisation logic
+    // // Filepond initialisation logic
 
     
-    const inputElement = document.querySelector('input[type="file"]');
-    const pond = FilePond.create(inputElement, {
-        imageCropAspectRatio: 1,
+    // const inputElement = document.querySelector('input[type="file"]');
+    
+    // const pond = FilePond.create(inputElement, {
+    //     imageCropAspectRatio: 1,
 
-        imageResizeTargetWidth: 256,
+    //     imageResizeTargetWidth: 256,
 
-        // set contain resize mode
-        imageResizeMode: 'contain',
+    //     // set contain resize mode
+    //     imageResizeMode: 'contain',
 
-        // add onaddfile callback
-        onaddfile: (error, fileItem) => {
-            console.log(error, fileItem.getMetadata('resize'));
-        },
+    //     // add onaddfile callback
+    //     onaddfile: (error, fileItem) => {
+    //         const inputElement = document.querySelector('input[type="file"]');
+    //         inputElement.setAttribute('name', 'myfile');
+    //         console.log(error, fileItem.getMetadata('resize'));
+    //     },
 
-         // add onpreparefile callback
-        onpreparefile: (fileItem, output) => {
-            // create a new image object
-            const img = new Image();
+    //      // add onpreparefile callback
+    //     onpreparefile: (fileItem, output) => {
+    //         // create a new image object
+    //         const img = new Image();
 
-            // set the image source to the output of the Image Transform plugin
-            img.src = URL.createObjectURL(output);
+    //         // set the image source to the output of the Image Transform plugin
+    //         img.src = URL.createObjectURL(output);
 
-            // add it to the DOM so we can see the result
-            document.body.appendChild(img);
-        }
-    });
+    //         // add it to the DOM so we can see the result
+    //         document.body.appendChild(img);
+    //         const inputElement = document.querySelector('input[type="file"]');
+    //         inputElement.setAttribute('name', 'myfile');
+    //     }
+    // });
 
     // method to submit the form data for new post using AJAX
     let createPost = function() {

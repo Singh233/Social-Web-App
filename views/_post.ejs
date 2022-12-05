@@ -15,7 +15,11 @@
     </div>
 
     <div class="post-img">
-        <img src="<%= assetPath('img/1782188.jpeg') %>">
+        <% if(post.myfile != undefined) { %> 
+            <img src="<%= post.myfile %>">
+        <% } else { %>
+            <img src="<%= assetPath('img/1782188.jpeg') %>">
+        <% } %>
     </div>
 
     <div class="post-footer">
