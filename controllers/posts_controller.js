@@ -4,48 +4,55 @@ const Like = require('../models/like');
 
 
 module.exports.createPost = async function(request, response) {
-    try {
-        let post = await Post.create({
-            content: request.body.content,
-            user: request.user._id,
-        });
+    if (request.user.id == request.params.id) {
 
-        Post.uploadedFile(request, response, function(error) {
-            if (error) {
-                console.log('****** Multer Error: ', error);
-            }
-            console.log(request.file);
-            if (request.file) {
-                // this is saving the path of the uploaded file into the field in the user
-                user.avatar = User.avatarPath + '/' + request.file.filename;
-            }
-        });
+        try {
+            console.log("************");
+            console.log(request.body);
+            let post = await Post.create({
+                content: request.body.content,
+                user: request.user._id,
+            });
 
-        let posts = await Post.find({_id: post._id})
-        .populate('user')
-        .populate({
-            path: 'comments',
-            populate: {
-                path: 'user'
-            }
-        });
-    
+            Post.uploadedFile(request, response, function(error) {
+                if (error) {
+                    console.log('****** Multer Error: ', error);
+                }
+                // console.log(request.file);
+                if (request.file) {
+                    // this is saving the path of the uploaded file into the field in the user
+                    post.myfile = Post.filePath + '/' + request.file.filename;
+                }
+            });
 
-        if (request.xhr) {
-            return response.status(200).json({
-                data: {
-                    post: posts[0],
-                    success: 'Post created successfully!'
-                },
-                message: "Post created!"
-            })
-        }
-        request.flash('success', 'Post created Successfully');
+            let posts = await Post.find({_id: post._id})
+            .populate('user')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user'
+                }
+            });
         
-        return response.redirect('back');
-    } catch(error) {
-        request.flash('error', error);
-        console.log("error", error);
+
+            if (request.xhr) {
+                return response.status(200).json({
+                    data: {
+                        post: posts[0],
+                        success: 'Post created successfully!'
+                    },
+                    message: "Post created!"
+                })
+            }
+            request.flash('success', 'Post created Successfully');
+            
+            return response.redirect('back');
+        } catch(error) {
+            request.flash('error', error);
+            console.log("error", error);
+        }
+    } else {
+        return response.response.status(401).send("Unauthorized");
     }
     
 }

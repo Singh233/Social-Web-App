@@ -7,13 +7,15 @@
     <div class="post-div">
         <%- include('_top_header'); %>
         <% if(locals.user) { %>
-            <form action="/posts/create" id="new-post-form" method="post" enctype="multipart/form-data">
+            <form action="/posts/create/<%= locals.user._id %>" id="new-post-form" enctype="multipart/form-data" method="post">
                 <div class="header">
                     <img src="<%= locals.user.avatar %>" id="user-profile-img">
                     <p>Hey, <%= locals.user.name %> post something new!</p>
                 </div>
+                <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">
+                <input type="hidden" name="email" placeholder="Your email" value="<%= locals.user.email %>">
                 <input type="file" name="myfile" id="my-file">
-                <textarea name="content" id="text-area" cols="30" rows="3" placeholder="Type here..."></textarea>
+                <textarea type="text" name="content" id="text-area" cols="30" rows="3" placeholder="Type here..."></textarea>
                 <input id="submit" type="submit" value="Post">
             </form>
         <% } %>
@@ -49,7 +51,7 @@
 
 <script src="<%= assetPath('js/add_emoji.js') %>"></script>
 <script src="<%= assetPath('js/home_post_comments.js') %>"></script>
-<script src="<%= assetPath('js/home_posts.js') %>"></script>
+<!-- <script src="<%= assetPath('js/home_posts.js') %>"></script> -->
 <script src="<%= assetPath('js/toggle_likes.js') %>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" ></script>
 <script src="<%= assetPath('js/chat_engine.js') %>"></script>

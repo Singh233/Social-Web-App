@@ -70,52 +70,52 @@
 
             // xhr.send(formData);
 
-        newPostForm.submit(function(e) {
-            e.preventDefault();
+        // newPostForm.submit(function(e) {
+        //     e.preventDefault();
             
             
             
             
-            // console.log(data.serializeArray());
+        //     // console.log(data.serializeArray());
 
 
-            console.log(new FormData(this));
+        //     console.log(new FormData(this));
 
-            $.ajax({
-                type: 'post',
-                url: '/posts/create',
-                data: newPostForm.serialize(), //this converts data in json objects
+        //     $.ajax({
+        //         type: 'post',
+        //         url: '/posts/create',
+        //         data: newPostForm.serialize(), //this converts data in json objects
 
-                success: function(data) {
-                    let newPost = newPostDom(data.data.post);
-                    $('#posts-list-container').prepend(newPost);
-                    deletePost($(' .delete-post-button', newPost));
+        //         success: function(data) {
+        //             let newPost = newPostDom(data.data.post);
+        //             $('#posts-list-container').prepend(newPost);
+        //             deletePost($(' .delete-post-button', newPost));
                     
-                    // call the create comment class
-                    new PostComments(data.data.post._id);
+        //             // call the create comment class
+        //             new PostComments(data.data.post._id);
 
-                    //enable the functionality of the toggle liek button on the new post
-                    new ToggleLike($(' .toggle-like-button', newPost));
+        //             //enable the functionality of the toggle liek button on the new post
+        //             new ToggleLike($(' .toggle-like-button', newPost));
 
-                    new Noty({
-                        theme: 'relax',
-                        text: data.data.success,
-                        type: 'success',
-                        layout: 'topRight',
-                        timeout: 3000
-                    }).show();
-                }, error: function(error) {
-                    console.log(error.responseText);
-                    new Noty({
-                        theme: 'relax',
-                        text: 'Something went wrong!',
-                        type: 'error',
-                        layout: 'topRight',
-                        timeout: 2000
-                    }).show();
-                }
-            });
-        });
+        //             new Noty({
+        //                 theme: 'relax',
+        //                 text: data.data.success,
+        //                 type: 'success',
+        //                 layout: 'topRight',
+        //                 timeout: 3000
+        //             }).show();
+        //         }, error: function(error) {
+        //             console.log(error.responseText);
+        //             new Noty({
+        //                 theme: 'relax',
+        //                 text: 'Something went wrong!',
+        //                 type: 'error',
+        //                 layout: 'topRight',
+        //                 timeout: 2000
+        //             }).show();
+        //         }
+        //     });
+        // });
     }
 
 
@@ -262,7 +262,7 @@
         });
     }
     
-    createPost();
+    //createPost();
     convertPostsToAjax();
     
     

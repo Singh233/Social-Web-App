@@ -26,7 +26,7 @@ $text-color-gray: #d0d0d0;
         position: relative;
         z-index: 1;
         
-        backdrop-filter: blur(30px) saturate(120%);
+        backdrop-filter: blur(30px);
         -webkit-backdrop-filter: blur(30px);
 
         #user-profile-img {
@@ -49,7 +49,7 @@ $text-color-gray: #d0d0d0;
 
     .post-img {
         position: relative;
-        top: -2%;
+        top: -5px;
         img {
             height: 325px;
             width: auto;
@@ -63,7 +63,7 @@ $text-color-gray: #d0d0d0;
         position: relative;
         z-index: 1;
         top: -15px;
-        backdrop-filter: blur(40px) saturate(120%);
+        backdrop-filter: blur(40px);
         -webkit-backdrop-filter: blur(40px);
 
         .post-options {

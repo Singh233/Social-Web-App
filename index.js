@@ -30,7 +30,7 @@ const customMware = require('./config/middleware');
 const path = require('path');
 
 // setup the chat server to be used with socket.io
-const chatServer = require('https').Server(app);
+const chatServer = require('http').Server(app);
 const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
 chatServer.listen(4000);
 console.log('chat server is listening on port 5000');
@@ -44,14 +44,14 @@ if(env.name == 'development') {
     app.use(sassMiddleware({
         src: path.join(__dirname, env.asset_path, 'scss'),
         dest: path.join(__dirname, env.asset_path, 'css'),
-        debug: true,
+        debug: false,
         outputStyle: 'expanded',
         prefix: '/css'
     }));
 }
 
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 
 app.use(cookieParser());
 
@@ -60,7 +60,7 @@ app.use(express.static(env.asset_path));
 // make the uploads path avaialble to the browser
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
-app.use(logger(env.morgan.mode, env.morgan.options));
+//app.use(logger(env.morgan.mode, env.morgan.options));
 
 app.use(expressLayouts);
 // extracct style and scripts from sub pages int the layout
