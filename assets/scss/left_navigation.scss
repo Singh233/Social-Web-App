@@ -18,6 +18,19 @@
         flex-direction: column;
 
 
+        #branding {
+            display: flex;
+            align-items: center;
+            img {
+                height: 50px;
+                width: 50px;
+
+            }
+
+            p {
+                margin-left: 7px;
+            }
+        }
         #nav-section {
             display: flex;
             flex-direction: column;
@@ -50,13 +63,31 @@
     .left-navigation-container {
         grid-template-rows: 1fr;
         min-height: auto;
+        position: sticky;
+        top: 0%;
 
 
         #nav-header {
             flex-direction: row;
+            justify-content: space-between;
 
             #nav-section {
                 flex-direction: row;
+
+                a {
+                    text-decoration: none;
+                }
+
+                #user-name {
+                    margin: 0;
+                    padding: 0;
+                }
+    
+                #sign-in-button, #sign-up-button {
+                    margin: 5px;
+                    padding: 5px 15px;
+                    border-radius: 15px;
+                }
             }
         }    
 

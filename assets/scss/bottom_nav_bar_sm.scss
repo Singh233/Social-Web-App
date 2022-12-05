@@ -1,0 +1,39 @@
+
+
+.bottom-nav {
+    display: none;
+}
+
+
+
+@media screen and (max-width: "480px") {
+    .bottom-nav {
+        font-size: 1.3rem;
+        padding: 10px;
+        width: 100vw;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        justify-items: center;
+        align-items: center;
+        position: fixed;
+        bottom: 0%;
+        z-index: 4;
+
+        background: rgba(22, 22, 22, 0.25);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid rgba(233, 233, 233, 0.233);
+
+        #profile {
+            display: flex;
+            align-self: center;
+            img {
+                align-self: center;
+                height: 1.6rem;
+                width: 1.6rem;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+        }
+    }
+}

@@ -3,15 +3,20 @@
 <div class="left-navigation-container">
     <header id="nav-header">
         <div id="branding">
-            Logo and Name
+            <img src="<%= assetPath('img/logo1.png') %>">
+            <% if (locals.user) { %>
+                <p>Hi, <%= user.name %></p>
+            <%  } else { %>
+                <p>Hi, user</p>
+            <% } %>
         </div>
         
     
         <% if (locals.user) { %>
             <div id="nav-section">
-                <div id="user-name">
+                <!-- <div id="user-name">
                     <a href="/users/profile"> <%= user.name %> </li>
-                </div>
+                </div> -->
                 <div id="sign-in-button">
                     <a href="/users/sign-out">Sign Out</a>
                 </div>
@@ -24,7 +29,7 @@
                     <a href="/users/sign-in">Sign In</a>
                 </div>
                 <div id="sign-up-button">
-                    <a href="/users/sign-up">Sign Up &nbsp;<i class="fa-solid fa-ghost"></i></a>
+                    <a href="/users/sign-up">Sign Up</a>
                 </div>
             </div>
             
