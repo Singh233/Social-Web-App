@@ -9,7 +9,8 @@
 @media screen and (max-width: "480px") {
     .bottom-nav {
         font-size: 1.3rem;
-        padding: 10px;
+        padding: 6px;
+        padding-bottom: 20px;
         width: 100vw;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;

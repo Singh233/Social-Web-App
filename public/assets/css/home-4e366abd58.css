@@ -96,6 +96,9 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1fr auto;
   }
+  #home-container .post-div .post-new-card {
+    display: none;
+  }
   #home-container .post-div #new-post-form {
     display: none;
     max-width: 100vw;

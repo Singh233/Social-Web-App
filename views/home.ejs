@@ -7,6 +7,13 @@
     <div class="post-div">
         <%- include('_top_header'); %>
         <% if(locals.user) { %>
+
+            <div class="post-new-card">
+                <img src="<%= locals.user.avatar %>" id="user-profile-img">
+                <p>Hey, <%= locals.user.name %> post something new!</p>
+                <button><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            
             <form action="/posts/create/<%= locals.user._id %>" enctype="multipart/form-data" id="new-post-form"  method="post">
                 <div class="header">
                     <img src="<%= locals.user.avatar %>" id="user-profile-img">
