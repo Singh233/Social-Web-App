@@ -7,8 +7,8 @@
 
     background: rgba(0, 0, 0, 0.25);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(233, 233, 233, 0.233);
 
 
@@ -16,7 +16,7 @@
     #nav-header {
         display: flex;
         flex-direction: column;
-
+        padding: 0px;
 
         #branding {
             display: flex;
@@ -65,11 +65,20 @@
         min-height: auto;
         position: sticky;
         top: 0%;
+        z-index: 5;
+        border: none;
 
 
         #nav-header {
             flex-direction: row;
             justify-content: space-between;
+
+            #branding {
+                img {
+                    height: 40px;
+                    width: 40px;
+                }
+            }
 
             #nav-section {
                 flex-direction: row;

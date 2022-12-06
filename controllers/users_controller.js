@@ -59,9 +59,9 @@ module.exports.update = async function(request, response) {
 
                 if (request.file) {
 
-                    if (user.avatar) {
-                        fs.unlinkSync(path.join(__dirname, '..', user.avatar));
-                    }
+                    // if (user.avatar) {
+                    //     fs.unlinkSync(path.join(__dirname, '..', user.avatar));
+                    // }
                     // this is saving the path of the uploaded file into the field in the user
                     user.avatar = User.avatarPath + '/' + request.file.filename;
                 }

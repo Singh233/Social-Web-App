@@ -67,4 +67,13 @@ $button-color-gray: #202020;
 
 
 
+@media screen and (max-width: "480px") {
+
+    #top-nav-header {
+        display: none;
+    }
+
+}
+
+
 

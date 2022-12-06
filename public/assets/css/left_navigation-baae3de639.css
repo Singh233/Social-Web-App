@@ -6,14 +6,15 @@
   color: white;
   background: rgba(0, 0, 0, 0.25);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(233, 233, 233, 0.233);
 }
 
 .left-navigation-container #nav-header {
   display: flex;
   flex-direction: column;
+  padding: 0px;
 }
 
 .left-navigation-container #nav-header #branding {
@@ -49,10 +50,16 @@
     min-height: auto;
     position: sticky;
     top: 0%;
+    z-index: 5;
+    border: none;
   }
   .left-navigation-container #nav-header {
     flex-direction: row;
     justify-content: space-between;
+  }
+  .left-navigation-container #nav-header #branding img {
+    height: 40px;
+    width: 40px;
   }
   .left-navigation-container #nav-header #nav-section {
     flex-direction: row;
