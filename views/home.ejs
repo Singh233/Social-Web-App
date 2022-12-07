@@ -26,29 +26,37 @@
                 <textarea type="text" name="content" id="text-area" cols="30" rows="3" placeholder="Type here..."></textarea>
                 <input id="submit" type="submit" value="Post">
             </form>
-        <% } %>
 
-        <section id="feed-posts">
+            <section id="feed-posts">
 
-            <div id="posts-list-container">
-                <% for (let i of posts) { %> 
-                    <%- include('_post.ejs', {post: i}) -%>
-                <% } %>
-            </div>
+                <div id="posts-list-container">
+                    <% for (let i of posts) { %> 
+                        <%- include('_post.ejs', {post: i}) -%>
+                    <% } %>
+                </div>
+                
+            </section>
+        <% } else { %>
             
-        </section>
+            <%- include('user_sign_in'); %>
+
+            <%- include('user_sign_up'); %>
+            
+
+        <% } %>
         
     </div>
-    
-    <div class="right-section-div">
-        <% if (friends != undefined) {%> 
+    <% if(locals.user) { %>
+        <div class="right-section-div">
+            <% if (friends != undefined) {%> 
 
-            <%- include('_right_section', {all_users: all_users, friends: friends}); %>
-        <% } else { %>
-            <%- include('_right_section', {all_users: all_users}); %>
-        <% } %>
+                <%- include('_right_section', {all_users: all_users, friends: friends}); %>
+            <% } else { %>
+                <%- include('_right_section', {all_users: all_users}); %>
+            <% } %>
 
-    </div>
+        </div>
+    <% } %>
     <!-- <%- include('_chat_box') -%> -->
 
     <% if (locals.user){ %>
@@ -68,6 +76,38 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" ></script>
 <script src="<%= assetPath('js/chat_engine.js') %>"></script>
 <script>
+    const togglePassword = document.querySelector('#toggle-password');
+    const password = document.querySelector('#pass-input');
+
+    togglePassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+
+
+    const toggleSignInPage = document.querySelector('#toggle-sign-in-page');
+    const toggleSignUpPage = document.querySelector('#toggle-sign-up-page');
+    const signInContainer = document.querySelector('#sign-in-container');
+    const signUpContainer = document.querySelector('#sign-up-container');
+
+    toggleSignInPage.addEventListener('click', function (e) {
+        // toggle the eye slash icon
+        signInContainer.classList.toggle('remove');
+        signUpContainer.classList.toggle('remove');
+    });
+
+
+    toggleSignUpPage.addEventListener('click', function (e) {
+        // toggle the eye slash icon
+        signInContainer.classList.toggle('remove');
+        signUpContainer.classList.toggle('remove');
+    });
+
+
     $('.toggle-like-button').each(function() {
         let self = this;
         let toggleLike = new ToggleLike(self);
