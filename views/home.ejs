@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="<%= assetPath('css/chat_box.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/post_card_design.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
+<link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
 
 <div id="home-container">
     <div class="post-div">
@@ -55,6 +56,10 @@
     <% } %>
     
 </div>
+
+<% if (locals.user){ %>
+    <%- include('_post_upload_sm') -%>
+<% } %>
 
 <script src="<%= assetPath('js/add_emoji.js') %>"></script>
 <script src="<%= assetPath('js/home_post_comments.js') %>"></script>

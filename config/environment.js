@@ -55,7 +55,7 @@ const production = {
     },
     google_clientID: process.env.CODEIAL_GOOGLE_CLIENT_ID,
     google_clientSecret: process.env.CODEIAL_GOOGLE_CLIENT_SECRET,
-    google_callbackURL: process.env.CODEIAL_GOOGLE_CALLBACK_URL,
+    google_callbackURL: 'https://sanam.social/users/auth/google/callback',
     jwt_secret: process.env.CODEIAL_JWT_SECRET,
     // morgan: {
     //     mode: 'combined',

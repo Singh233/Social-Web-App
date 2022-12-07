@@ -17,9 +17,11 @@ html {
 * {
   margin: 0px;
   font-family: 'Poppins', "sans-serif";
+  max-width: 100vw;
 }
 
 body {
+  overflow-x: hidden !important;
   color: white;
   margin: 0px;
   min-height: 100vh;
