@@ -1,0 +1,20 @@
+
+<div class="post-upload-container">
+    <%- include('_top_header'); %>
+    
+    <form action="/posts/create/<%= locals.user._id %>" enctype="multipart/form-data" id="new-post-form"  method="post">
+        
+        <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">
+        <input type="hidden" name="email" placeholder="Your email" value="<%= locals.user.email %>">
+        <input type="file" name="filepond" id="myfile-sm">
+        <textarea type="text" name="content" id="text-area" cols="30" rows="3" placeholder="Type here..." required></textarea>
+        <button id="submit" type="submit">Post</button>
+    </form>
+
+    <p class="post-info"> <span>🎉</span>Post anything you wish to share with your friends and family!</p>
+
+    <% if (locals.user){ %>
+        <%- include('_bottom_nav_bar_sm') -%>
+    <% } %>
+</div>
+

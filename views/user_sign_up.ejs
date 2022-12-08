@@ -13,7 +13,7 @@
 
 
 
-<div id="sign-up-container" class="user-sign-up remove">
+<div id="sign-up-container" class="user-sign-up remove animate__animated animate__faster">
 
     <div class="welcome-div">
         <img src="<%= assetPath('img/1782188.jpeg') %>" alt="">
@@ -34,13 +34,13 @@
         <div class="input-with-icon">
             <i class="fa-solid fa-key"></i>
             <input id="pass-input" type="password" name="password" placeholder="Password" required>
-            <i class="fa-solid fa-eye" id="toggle-password"></i>
+            <i class="fa-solid fa-eye " id="toggle-password"></i>
         </div>
 
         <div class="input-with-icon">
             <i class="fa-solid fa-key"></i>
             <input id="pass-input" type="password" name="confirm_password" placeholder="Confirm Password" required>
-            <i class="fa-solid fa-eye" id="toggle-password"></i>
+            <i class="fa-solid fa-eye animate__animated animate__faster" id="toggle-password"></i>
         </div>
         
         <button id="submit-button" type="submit">Sign Up </button>
@@ -57,3 +57,7 @@
     <p class="option-text">Already have an account ? <a id="toggle-sign-up-page" href="#">Sign In <i class="fa-solid fa-arrow-right"></i></a></p>
 
 </div>
+
+
+
+<script src="<%= assetPath('js/sign_in_up.js') %>"></script>

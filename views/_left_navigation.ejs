@@ -3,9 +3,9 @@
 <div class="left-navigation-container">
     <header id="nav-header">
         <div id="branding">
-            <img src="<%= assetPath('img/logo1.png') %>">
+            <img id="logo-placeholder" src="<%= assetPath('img/logo1.png') %>">
             <% if (locals.user) { %>
-                <p>Hi, <%= user.name %></p>
+                <p id="name-placeholder">Hi, <%= user.name %></p>
             <%  } else { %>
                 <p>Hi, user</p>
             <% } %>
@@ -17,9 +17,11 @@
                 <!-- <div id="user-name">
                     <a href="/users/profile"> <%= user.name %> </li>
                 </div> -->
-                <div id="sign-in-button">
+                <!-- <div id="sign-in-button">
                     <a href="/users/sign-out">Sign Out</a>
-                </div>
+                </div> -->
+
+                <i class="fa-solid fa-paper-plane"></i>
             </div>
             
     

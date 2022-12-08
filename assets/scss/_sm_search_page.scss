@@ -1,0 +1,27 @@
+$button-color-blue: #0057D2; 
+$button-hover-color: #D1EFFF;
+$button-color-red: #D20A0A; 
+$text-color-gray: #d0d0d0; 
+$button-color-gray: #212121; 
+
+.search-page-container {
+    display: none;
+}
+
+.remove {
+    display: none;
+}
+
+@media screen and (max-width: "480px") {
+
+   
+    .search-page-container {
+        margin-top: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 100vw;
+        padding: 5px;
+
+    }
+}

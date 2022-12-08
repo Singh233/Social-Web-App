@@ -322,7 +322,19 @@ $text-color-gray: #d0d0d0;
                     max-width: 90vw;
                 }
             }
+            .post-comments {
+                margin-bottom: -17px;
+                font-size: 1rem;
+                border-top: none;
+                form {
+                    input {
+                        font-size: 0.9rem;
+                    }
+                }
+            }
         }
+
+        
 
     }
 }

@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
 
-<div id="home-container">
+<div class="home-container">
     <div class="post-div">
         <%- include('_top_header'); %>
         <% if(locals.user) { %>
@@ -12,7 +12,7 @@
             <div class="post-new-card">
                 <img src="<%= locals.user.avatar %>" id="user-profile-img">
                 <p>Hey, <%= locals.user.name %> post something new!</p>
-                <button><i class="fa-solid fa-arrow-right"></i></button>
+                <button onclick="upload()"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
             
             <form action="/posts/create/<%= locals.user._id %>" enctype="multipart/form-data" id="new-post-form"  method="post">
@@ -22,7 +22,7 @@
                 </div>
                 <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">
                 <input type="hidden" name="email" placeholder="Your email" value="<%= locals.user.email %>">
-                <input type="file" name="myfile" id="myfile">
+                <input type="file" name="filepond" id="myfile">
                 <textarea type="text" name="content" id="text-area" cols="30" rows="3" placeholder="Type here..."></textarea>
                 <input id="submit" type="submit" value="Post">
             </form>
@@ -66,53 +66,25 @@
 </div>
 
 <% if (locals.user){ %>
-    <%- include('_post_upload_sm') -%>
+    <%- include('_sm_post_upload') -%>
+    <%- include('_sm_search_page') -%>
+    <%- include('_sm_profile_page') -%>
 <% } %>
 
 <script src="<%= assetPath('js/add_emoji.js') %>"></script>
 <script src="<%= assetPath('js/home_post_comments.js') %>"></script>
-<!-- <script src="<%= assetPath('js/home_posts.js') %>"></script> -->
+<script src="<%= assetPath('js/home_posts.js') %>"></script>
 <script src="<%= assetPath('js/toggle_likes.js') %>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" ></script>
 <script src="<%= assetPath('js/chat_engine.js') %>"></script>
 <script>
-    const togglePassword = document.querySelector('#toggle-password');
-    const password = document.querySelector('#pass-input');
-
-    togglePassword.addEventListener('click', function (e) {
-        // toggle the type attribute
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        // toggle the eye slash icon
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-    });
-
-
-    const toggleSignInPage = document.querySelector('#toggle-sign-in-page');
-    const toggleSignUpPage = document.querySelector('#toggle-sign-up-page');
-    const signInContainer = document.querySelector('#sign-in-container');
-    const signUpContainer = document.querySelector('#sign-up-container');
-
-    toggleSignInPage.addEventListener('click', function (e) {
-        // toggle the eye slash icon
-        signInContainer.classList.toggle('remove');
-        signUpContainer.classList.toggle('remove');
-    });
-
-
-    toggleSignUpPage.addEventListener('click', function (e) {
-        // toggle the eye slash icon
-        signInContainer.classList.toggle('remove');
-        signUpContainer.classList.toggle('remove');
-    });
-
-
     $('.toggle-like-button').each(function() {
         let self = this;
         let toggleLike = new ToggleLike(self);
     });
 </script>
+
+<script src="<%= assetPath('js/home.js') %>"></script>
 <% if (locals.user){ %>
     <script>
         new ChatEngine('user-chat-box', '<%= locals.user.email %>')

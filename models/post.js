@@ -41,7 +41,7 @@ let storage = multer.diskStorage({
 
 // static methods
 
-postSchema.statics.uploadedFile = multer({ storage: storage}).single('myfile');
+postSchema.statics.uploadedFile = multer({ storage: storage}).single('filepond');
 postSchema.statics.filePath = FILE_PATH;
 
 

@@ -33,6 +33,7 @@ body {
     #main-body {
         display: flex;
         flex-direction: column;
+        
     }
     
 
@@ -62,6 +63,8 @@ body {
 @media screen and (max-width: "480px") {
     //do Smth
     body {
+        overflow-x: hidden !important;
+
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
     }

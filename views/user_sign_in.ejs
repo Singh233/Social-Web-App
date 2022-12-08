@@ -9,7 +9,7 @@
 <p><a href="/users/auth/google">Google Sign In/Sign Up</a></p> -->
 
 
-<div id="sign-in-container" class="user-sign-in">
+<div id="sign-in-container" class="user-sign-in animate__animated animate__faster ">
 
     <div class="welcome-div">
         <img src="<%= assetPath('img/1782188.jpeg') %>" alt="">
@@ -17,6 +17,8 @@
     </div>
 
     <form action="/users/create-session" method="post">
+        
+        
         <div class="input-with-icon">
             <i class="fa-solid fa-envelope"></i>
             <input id="email-input" type="email" name="email" placeholder="Your Email" required>
@@ -24,7 +26,7 @@
         <div class="input-with-icon">
             <i class="fa-solid fa-key"></i>
             <input id="pass-input" type="password" name="password" placeholder="Password" required>
-            <i class="fa-solid fa-eye" id="toggle-password"></i>
+            <i class="fa-solid fa-eye animate__animated animate__faster" id="toggle-password"></i>
         </div>
         
         <button id="submit-button" type="submit">Sign In </button>
@@ -41,3 +43,5 @@
     <p class="option-text">or Create an Account <a id="toggle-sign-in-page" href="#">Sign up <i class="fa-solid fa-arrow-right"></i></a></p>
 
 </div>
+
+<script src="<%= assetPath('js/sign_in_up.js') %>"></script>
