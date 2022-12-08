@@ -272,4 +272,12 @@
   .display-posts .post-footer #comments-list-container .comment-display {
     max-width: 90vw;
   }
+  .display-posts .post-footer .post-comments {
+    margin-bottom: -17px;
+    font-size: 1rem;
+    border-top: none;
+  }
+  .display-posts .post-footer .post-comments form input {
+    font-size: 0.9rem;
+  }
 }
