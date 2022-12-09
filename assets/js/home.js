@@ -6,11 +6,11 @@
 function upload() {
     const homeContainer = document.querySelector('.home-container');
     const searchContainer = document.querySelector('.search-page-container');
-    const profileContainer = document.querySelector('.profile-page-container');
+    // const profileContainer = document.querySelector('.profile-page-container');
     const postUploadContainer = document.querySelector('.post-upload-container');
     homeContainer.classList.add('remove');
     searchContainer.classList.add('remove');
-    profileContainer.classList.add('remove');
+    // profileContainer.classList.add('remove');
     postUploadContainer.classList.remove('remove');
 
     document.getElementById('logo-placeholder').src="img/upload.png";
@@ -21,11 +21,11 @@ function upload() {
 function home() {
     const homeContainer = document.querySelector('.home-container');
     const searchContainer = document.querySelector('.search-page-container');
-    const profileContainer = document.querySelector('.profile-page-container');
-    const postUploadContainer = document.querySelector('#post-upload-container');
+    // const profileContainer = document.querySelector('.profile-page-container');
+    const postUploadContainer = document.querySelector('.post-upload-container');
     homeContainer.classList.remove('remove');
     searchContainer.classList.add('remove');
-    profileContainer.classList.add('remove');
+    // profileContainer.classList.add('remove');
     postUploadContainer.classList.add('remove');
 
     document.getElementById('logo-placeholder').src="img/logo1.png";
@@ -37,11 +37,11 @@ function home() {
 function search() {
     const homeContainer = document.querySelector('.home-container');
     const searchContainer = document.querySelector('.search-page-container');
-    const profileContainer = document.querySelector('.profile-page-container');
+    // const profileContainer = document.querySelector('.profile-page-container');
     const postUploadContainer = document.querySelector('.post-upload-container');
     searchContainer.classList.remove('remove');
     homeContainer.classList.add('remove');
-    profileContainer.classList.add('remove');
+    // profileContainer.classList.add('remove');
     postUploadContainer.classList.add('remove');
 
     document.getElementById('logo-placeholder').src="img/logo1.png";
@@ -51,16 +51,18 @@ function search() {
 
 
 function profile() {
-    const homeContainer = document.querySelector('.home-container');
-    const searchContainer = document.querySelector('.search-page-container');
-    const profileContainer = document.querySelector('.profile-page-container');
-    const postUploadContainer = document.querySelector('.post-upload-container');
-    searchContainer.classList.add('remove');
-    homeContainer.classList.add('remove');
-    profileContainer.classList.remove('remove');
-    postUploadContainer.classList.add('remove');
+    // const homeContainer = document.querySelector('.home-container');
+    // const searchContainer = document.querySelector('.search-page-container');
+    // // const profileContainer = document.querySelector('.profile-page-container');
+    // const postUploadContainer = document.querySelector('.post-upload-container');
+    // searchContainer.classList.add('remove');
+    // homeContainer.classList.add('remove');
+    // // profileContainer.classList.remove('remove');
+    // postUploadContainer.classList.add('remove');
 
-    document.getElementById('logo-placeholder').src="img/logo1.png";
-    document.getElementById('name-placeholder').innerText = `Howdy,`;
+    // document.getElementById('logo-placeholder').src="img/logo1.png";
+    // document.getElementById('name-placeholder').innerText = `Howdy,`;
+
+    
 
 }

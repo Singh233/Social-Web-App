@@ -1,9 +1,76 @@
 
-<div class="profile-page-container">
-    <%- include('_top_header'); %>
+<div class="profile-page-container remove">
     
 
-    <p>Under construction we'll get back to you soon!</p>
+    <div class="profile-design">
+
+        <div class="header">
+            <div id="branding">
+                <img id="logo-placeholder" src="<%= assetPath('img/logo1.png') %>">
+                <p>Profile</p>
+            </div>
+    
+            <div id="nav-section">
+                <a href="/users/sign-out"><i class="fa-solid fa-gear"></i></a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="user-info">
+                <% if(profile_user.avatar != undefined) { %> 
+                    <img src="<%= profile_user.avatar %>" alt="">
+                <% } else { %> 
+                    <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
+                <% } %> 
+
+                <p id="user-name"><%= profile_user.name %></p>
+            </div>
+
+            <div class="stats">
+                <div class="posts">
+                    <p class="count"><%= user_posts.length %></p>
+                    <p>Posts</p>
+                </div>
+
+                <div class="followers">
+                    <p class="count">0</p>
+                    <p>Followers</p>
+                </div>
+
+                <div class="following">
+                    <% let followCount = 0; for(friend of friends) { followCount++; } %> 
+                    <p class="count"><%= followCount %></p>
+                    <p>Following</p>
+                </div>
+            </div>
+
+            <p id="about-user">
+                Hi, this is sample about 😃
+            </p>
+
+            <% if (locals.user.id == profile_user.id) { %>
+                <a class="edit-profile" href="/users/profile/edit/<%= locals.user.id%>">Edit profile</a>
+            <% } %>
+        </div>
+
+        <div class="profile-posts">
+            <div class="header">
+                <!-- <p>Uploads</p> -->
+            </div>
+
+            <div class="post-list">
+                <% for (let post of user_posts) { %> 
+                    <div class="post-img">
+                        <% if(post.myfile != undefined) { %> 
+                            <img src="<%= post.myfile %>">
+                        <% } else { %>
+                            <img src="<%= assetPath('img/1782188.jpeg') %>">
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
     
     <% if (locals.user){ %>
         <%- include('_bottom_nav_bar_sm') -%>

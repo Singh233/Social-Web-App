@@ -1,14 +1,35 @@
-<link rel="stylesheet" href="<%= assetPath('css/user_profile.css') %>">
 <div id="profile-container">
+    <div class="header">
+        <div id="nav-section">
+            <a href="/users/sign-out"><i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+        <div id="branding">
+            <p>Edit Profile</p>
+        </div>
+
+        
+    </div>
+
     <img src="<%= profile_user.avatar %>" alt="<%= user.name %>" width="100">
 
     <% if (user.id == profile_user.id) { %>
     <!-- If user matches then show the form -->
     <form action="/users/update/<%= profile_user.id %>" enctype="multipart/form-data" method="post">
-        <input type="text" name="name" placeholder="Your name" value="<%= profile_user.name %>" required>
-        <input type="email" name="email" placeholder="Your email" value="<%= profile_user.email %>" required>
-        <input type="file" name="avatar" id="" placeholder="Profile Picture">
-        <input type="submit" value="Update">
+        <input style="margin-top: 10px;" type="file" name="filepond" id="profile-file" placeholder="Profile Picture">
+        <label style="margin-left: 6px;" for="name-input">Name</label>
+
+        <div class="input-with-icon">
+            <i class="fa-solid fa-user"></i>
+            <input id="name-input" type="text" name="name" placeholder="Your name" value="<%= profile_user.name %>" required>
+        </div>
+        <label style="margin-left: 6px;" for="email-input">Email</label>
+        <div class="input-with-icon">
+            <i class="fa-solid fa-envelope"></i>
+
+            <input id="email-input" type="email" name="email" placeholder="Your email" value="<%= profile_user.email %>" required>
+        </div>
+
+        <button id="submit-button" type="submit">Update</button>
     </form>
     <% } else { %>
         <!-- else show only the profile info -->
@@ -30,4 +51,7 @@
         <% } %>
     <% } %>
 </div>
+
+
+<script src="<%= assetPath('js/home_posts.js') %>"></script>
 

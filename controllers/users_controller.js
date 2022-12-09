@@ -2,6 +2,7 @@ const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
 const Friendships = require('../models/friendship');
+const Post = require('../models/post');
 
 
 module.exports.profile = function(request, response) {
@@ -19,26 +20,62 @@ module.exports.profile = function(request, response) {
             //     let currUser = User.find({_id: friend.to_user});
             //     friendsArray.push(currUser);
             // }
-
             if (error) {
                 console.log("Error in finding friendships");
                 return;
             }
+            let posts = Post.find({user: user._id}, function (error, posts) {
+                if (error ) {
+                    console.log("error in finding user posts");
+                    return;
+                }
 
-            return response.render('user_profile.ejs', {
-                title: "Profile",
-                profile_user: user,
-                friends: friends
-            });
+                console.log(posts);
+    
+                return response.render('_sm_profile_page.ejs', {
+                    title: "Profile",
+                    profile_user: user,
+                    friends: friends,
+                    user_posts: posts
+                });
+            })
+            
         });
-        
-        
-        
-
-        
     })
 }
 
+
+module.exports.editProfile = function(request, response) {
+    User.findById(request.params.id, function(error, user) {
+        if (error) {
+            console.log("Error in finding profile");
+            return;
+        }
+
+        let friendsArray = [];
+        
+        let friends = Friendships.find({to_user: user._id}, function(error, friends) {
+            //console.log('Inside friendships', friends);
+            // for (let friend of friends) {
+            //     let currUser = User.find({_id: friend.to_user});
+            //     friendsArray.push(currUser);
+            // }
+            if (error) {
+                console.log("Error in finding friendships");
+                return;
+            }
+            
+    
+            return response.render('user_profile.ejs', {
+                title: "Profile",
+                profile_user: user,
+                friends: friends,
+            });
+          
+            
+        });
+    })
+}
 
 module.exports.update = async function(request, response) {
     if (request.user.id == request.params.id) {
@@ -96,7 +133,7 @@ module.exports.signIn = function(request, response) {
     if (request.isAuthenticated()) {
         return response.redirect('/users/profile');
     }
-    return response.render('user_sign_in.ejs', {
+    return response.render('home.ejs', {
         title: "Codeial | Sign In"
     })
 }

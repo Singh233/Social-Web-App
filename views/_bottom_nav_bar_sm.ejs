@@ -15,8 +15,13 @@
         <i onclick="upload()" class="fa-solid fa-cloud-arrow-up"></i>
     </div>
 
+    <div id="notification">
+        <i class="fa-solid fa-bell"></i>
+        </div>
+
     <div id="profile">
-        <img onclick="profile()" src="<%= locals.user.avatar %>" id="user-profile-img">
+        <a href="/users/profile/<%= locals.user.id%>"><img onclick="profile()" src="<%= locals.user.avatar %>" id="user-profile-img"></a>
+        
     </div>
     
 </div>

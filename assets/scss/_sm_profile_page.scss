@@ -3,6 +3,8 @@ $button-hover-color: #D1EFFF;
 $button-color-red: #D20A0A; 
 $text-color-gray: #d0d0d0; 
 $button-color-gray: #212121; 
+$button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba(11,73,149,1) 97%);
+
 
 .profile-page-container {
     display: none;
@@ -14,13 +16,179 @@ $button-color-gray: #212121;
 
 @media screen and (max-width: "480px") {
 
-   
+    
+
     .profile-page-container {
-        margin-top: 40px;
+        background-color: black;
         display: flex;
         flex-direction: column;
-        align-items: center;
         min-width: 100vw;
         padding: 5px;
+        position: relative;
+        top: -63px;
+        z-index: 6;
+
+        .profile-design {
+            display: flex;
+            flex-direction: column;
+
+    
+            .header {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+    
+                #branding {
+                    display: flex;
+                    align-items: center;
+                    img {
+                        height: 40px;
+                        width: 40px;
+                    }
+
+                    p {
+                        margin-left: 5px;
+                    }
+                }
+    
+                #nav-section {
+                    display: flex;
+                    flex-direction: row;
+    
+                    a {
+                        font-size: 1.3rem;
+                        text-decoration: none;
+                        color: white;
+                        margin-right: 10px;
+                    }
+    
+                    #user-name {
+                        margin: 0;
+                        padding: 0;
+                    }
+        
+                    #sign-in-button, #sign-up-button {
+                        margin: 5px;
+                        padding: 5px 15px;
+                        border-radius: 15px;
+                    }
+                }
+            }    
+
+
+            .content {
+                margin-top: 30px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .user-info {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    img {
+                        height: 105px;
+                        width: 100px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        margin: 5px;
+                    }
+
+                    #user-name {
+                        margin: 5px;
+                        font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                        font-weight: 600;
+                        font-size: 1.5rem;
+                    }
+
+                    
+                }
+
+                .stats {
+                    margin: 8px 20px;
+                    padding: 15px;
+                    width: 90vw;
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    justify-items: center;
+
+                    background-color: $button-color-gray;
+                    border-radius: 25px;
+
+                    .posts, .followers, .following {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+
+                        .count {
+                            color: white;
+                            font-weight: 600;
+                            font-size: 1.2rem;
+                        }
+
+                        p {
+                            font-weight: 500;
+                            color: $text-color-gray;
+                            font-size: 0.9rem;
+                        }
+                    }
+                }
+
+
+                #about-user {
+                    align-self: flex-start;
+                    margin: 7px 15px;
+                    font-size: 0.9rem;
+                    color: $text-color-gray;
+                    border: 1px solid $button-color-gray;
+                    padding: 8px 12px;
+                    border-radius: 15px;
+                    width: 90vw;
+                }
+
+                .edit-profile {
+                    color: white;
+                    text-decoration: none;
+                    display: flex;
+                    justify-content: center;
+                    width: 90vw;
+                    background: $button-color-gradient-blue;
+                    padding: 7px;
+                    border-radius: 15px;
+                    margin: 5px;
+                    font-weight: 500;
+                    
+                }
+
+                
+            }
+
+
+
+            .profile-posts {
+                border-top: 1px solid rgba(231, 231, 231, 0.233);
+                margin-top: 20px;
+                
+                .post-list {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    justify-items: center;
+                    margin-top: 20px;
+
+                    .post-img {
+
+                        img {
+                            height: 122px;
+                            width: 122px;
+                            border-radius: 20px;
+                            object-fit: cover;
+                        }
+                        
+                    }
+                }
+            }
+
+
+        }
     }
 }

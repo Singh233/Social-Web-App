@@ -13,15 +13,16 @@
         padding-bottom: 20px;
         width: 100vw;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
         justify-items: center;
         align-items: center;
         position: fixed;
         bottom: 0%;
         z-index: 3;
 
-        background: rgb(0, 0, 0);
-        
+        background: rgba(0, 0, 0, 0.506);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);        
         border-top: 1px solid rgba(233, 233, 233, 0.233);
 
         #home {
@@ -39,13 +40,19 @@
         #profile {
             display: flex;
             align-self: center;
-            img {
-                align-self: center;
-                height: 1.7rem;
-                width: 1.7rem;
-                border-radius: 50%;
-                object-fit: cover;
+            a {
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                img {
+                    align-self: center;
+                    height: 1.7rem;
+                    width: 1.7rem;
+                    border-radius: 50%;
+                    object-fit: cover;
+                }
             }
+            
         }
     }
 }
