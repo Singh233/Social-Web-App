@@ -287,16 +287,16 @@
                 success: function(data) {
                     $(`#post-${data.data.post_id}`).remove();
                     new Noty({
-                        theme: 'relax',
+                        theme: 'nest',
                         text: data.data.success,
                         type: 'success',
                         layout: 'topRight',
-                        timeout: 3000
+                        timeout: 2000,
                     }).show();
                 }, error: function(error) {
                     console.log(error.responseText);
                     new Noty({
-                        theme: 'relax',
+                        theme: 'nest',
                         text: 'Something went wrong!',
                         type: 'error',
                         layout: 'topRight',

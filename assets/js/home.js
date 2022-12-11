@@ -66,3 +66,29 @@ function profile() {
     
 
 }
+
+
+
+
+function closeChatWindow() {
+    console.log('close chat clicked');
+    const chatContainer = document.querySelector('.user-chat-box');
+    chatContainer.classList.add('animate__fadeInUpBig');
+    
+    chatContainer.classList.add('animate__faster');
+    chatContainer.classList.add('animate__slideOutDown');
+    
+    setTimeout(() => {
+        chatContainer.classList.add('remove');
+    }, 1000);
+    
+}
+
+function openChatWindow() {
+    const chatContainer = document.querySelector('.user-chat-box');
+    chatContainer.classList.remove('remove');
+    chatContainer.classList.remove('animate__faster');
+    chatContainer.classList.remove('animate__slideOutDown');
+    chatContainer.classList.add('animate__fadeInUpBig');
+
+}

@@ -1,22 +1,38 @@
 
 
 <% if (locals.user){ %>
-	<div id="user-chat-box">
+	<div class="user-chat-box remove animate__animated">
+		<div class="header">
+			<i id="close-chat-window" onclick="closeChatWindow()" class="fa-solid fa-arrow-left-long back-button"></i>
+			<p class="chat-room">Sanam's room</p>
+			<i class="fa-solid fa-ellipsis-vertical chat-menu"></i>
+		</div>
 		<ul id="chat-messages-list">
-			<li class="other-message">
-				<span>Other Message</span>
+			<li class="other-message animate__animated animate__faster animate__zoomIn">
+				<div class="msg-content">
+					<img src="<%= assetPath('img/1782188.jpeg') %>">
+					<span>
+						 Other Message <sup>2:04 AM</sup> 
+					</span>
+					
+				</div>
 			</li>
-			<li class="self-message">
-				<span>
-					Self Message
-				</span>
+			<li class="self-message animate__animated animate__faster animate__zoomIn">
+				<div class="msg-content">
+					<span>
+						 Self Message <sup>2:04 AM</sup> 
+					</span>
+					<img src="<%= assetPath('img/1782188.jpeg') %>">
+				</div>
+				
+				
 				
 			</li>
 
 		</ul>
 		<div id="chat-message-input-container">
 			<input id="chat-message-input" placeholder="Type message here">
-			<button id="send-message">Send</button>
+			<button id="send-message"><i class="fa-solid fa-arrow-up"></i></button>
 		</div>
 
 	</div>

@@ -89,6 +89,9 @@
   "gulp-uglify-es": "^3.0.0",
   
     
+  "izitoast": "^1.4.0",
+  
+    
   "jsonwebtoken": "^8.5.1",
   
     

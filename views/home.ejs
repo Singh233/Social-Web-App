@@ -57,7 +57,7 @@
 
         </div>
     <% } %>
-    <!-- <%- include('_chat_box') -%> -->
+    <%- include('_chat_box') -%>
 
     <% if (locals.user){ %>
         <%- include('_bottom_nav_bar_sm') -%>
@@ -87,7 +87,8 @@
 <script src="<%= assetPath('js/home.js') %>"></script>
 <% if (locals.user){ %>
     <script>
-        new ChatEngine('user-chat-box', '<%= locals.user.email %>')
+        
+        new ChatEngine('user-chat-box', '<%= locals.user.email %>', '<%= locals.user.name %>', '<%= locals.user.avatar %>');
     </script>
 <% } %>
 

@@ -103,10 +103,14 @@ module.exports.update = async function(request, response) {
                     user.avatar = User.avatarPath + '/' + request.file.filename;
                 }
                 user.save();
+                request.flash('success', 'Update successfully!');
+
                 return response.redirect('back');
             })
         } catch (error) {
             console.log("Error ", error);
+            request.flash('error', 'Something went wrong!');
+
             return response.status(401).send('Unauthorized');
         }
         
@@ -123,7 +127,7 @@ module.exports.signUp = function(request, response) {
         return response.redirect('/users/profile');
     }
     return response.render('user_sign_up.ejs', {
-        title: "Codeial | Sign Up"
+        title: "SanamSocial | Sign Up"
     })
 }
 
@@ -134,7 +138,7 @@ module.exports.signIn = function(request, response) {
         return response.redirect('/users/profile');
     }
     return response.render('home.ejs', {
-        title: "Codeial | Sign In"
+        title: "SanamSocial | Sign In"
     })
 }
 
@@ -169,6 +173,8 @@ module.exports.create = async function(request, response) {
 
 module.exports.createSession = function(request, response) {
     request.flash('success', 'Logged in Successfully');
+    
+
     return response.redirect('/');
 }
 
