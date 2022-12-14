@@ -20,10 +20,17 @@
         
     </div>
 
+    <% let flag = false; for (l of comment.likes) { if (l.user._id ==  locals.user.id) { flag = true; break; } }%> 
+    <% if (flag) { %>
+        <a class="toggle-like-button" data-likes="<%= comment.likes.length %>" href="/likes/toggle/?id=<%= comment._id %>&type=Comment">
+            <i style="margin-left: 0px" class="fa-solid fa-heart liked"></i><span><%= comment.likes.length %></span>
+        </a>
+    <% } else { %>
+        <a class="toggle-like-button" data-likes="<%= comment.likes.length %>" href="/likes/toggle/?id=<%= comment._id %>&type=Comment">
+            <i style="margin-left: 0px" class="fa-regular fa-heart"></i><span><%= comment.likes.length %></span>
+        </a>
+    <% } %>
     
-    <a class="toggle-like-button" data-likes="<%= comment.likes.length %>" href="/likes/toggle/?id=<%= comment._id %>&type=Comment">
-        <i style="margin-left: 0px" class="fa-regular fa-heart"></i><span><%= comment.likes.length %></span>
-    </a>
 
     <br>
 </div>

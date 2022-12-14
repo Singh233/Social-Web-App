@@ -79,6 +79,7 @@ $text-color-gray: #d0d0d0;
                 a {
                     text-decoration: none;
                     display: flex;
+                    align-items: center;
                     width: fit-content;
                     color: white;
                     padding: 8px 10px;
@@ -275,6 +276,15 @@ $text-color-gray: #d0d0d0;
 
     }
 }
+
+
+.liked {
+    color: $button-color-red;
+}
+
+
+
+
 
 
 

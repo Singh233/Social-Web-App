@@ -27,9 +27,9 @@ module.exports.home = async function(request, response) {
             populate: {
                 path: 'user'
             },
-            // populate: {
-            //     path: 'likes'
-            // }
+            populate: {
+                path: 'likes'
+            }
 
         })
         // .populate('comments')

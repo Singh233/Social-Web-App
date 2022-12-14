@@ -17,15 +17,18 @@ class ToggleLike {
             })
             .done(function(data) {
                 let likesCount = parseInt($(self).attr('data-likes'));
-                console.log(data.data.deleted);
                 if (data.data.deleted === true) {
                     likesCount -= 1;
+                    $(self).attr('data-likes', likesCount);
+                    $(self)
+                    .html(`<i style="margin-left: 0px" class="fa-regular fa-heart animate__animated  animate__bounceIn"></i> <span class="animate__animated  animate__fadeIn">${likesCount}</span>`);
                 } else {
                     likesCount += 1;
+                    $(self).attr('data-likes', likesCount);
+                    $(self)
+                    .html(`<i style="margin-left: 0px" class="fa-solid fa-heart animate__animated animate__flip liked"></i> <span class="animate__animated  animate__fadeIn">${likesCount}</span>`);
                 }
 
-                $(self).attr('data-likes', likesCount);
-                $(self).html(`<i style="margin-left: 0px" class="fa-regular fa-heart"></i> <span>${likesCount}</span>`);
                 
             })
             .fail(function(errorData) {

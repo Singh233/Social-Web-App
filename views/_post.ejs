@@ -25,7 +25,17 @@
     <div class="post-footer">
         <div class="post-options">
             <div class="left">
-                <a class="toggle-like-button" data-likes="<%= post.likes.length %>" href="/likes/toggle/?id=<%= post._id %>&type=Post"><i style="margin-left: 0px" class="fa-regular fa-heart"></i> <span><%= post.likes.length %></span></a>
+                    <% let flag = false; for (like of post.likes) { if (like.user._id ==  locals.user.id) { flag = true; break; } }%> 
+                    <% if (flag) { %>
+                        <a class="toggle-like-button bg-liked" data-likes="<%= post.likes.length %>" href="/likes/toggle/?id=<%= post._id %>&type=Post">
+                            <i style="margin-left: 0px" class="fa-solid fa-heart liked"></i> <span><%= post.likes.length %></span>
+                        </a>
+                    <% } else { %>
+                        <a class="toggle-like-button " data-likes="<%= post.likes.length %>" href="/likes/toggle/?id=<%= post._id %>&type=Post">
+                            <i style="margin-left: 0px" class="fa-regular fa-heart "></i> <span><%= post.likes.length %></span>
+                        </a>
+                    <% } %>
+                
                 
                 <a href="#">
                     <i  class="fa-regular fa-comment"></i><span><%= post.comments.length %></span>
