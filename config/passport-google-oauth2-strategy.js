@@ -25,8 +25,8 @@ passport.use(new GoogleStrategy({
                 //if found set this user as req.user
                 return done(null, user);
             }
+            
             User.create({
-
                 // if not found create the user and set it as req.user
                 name: profile.displayName,
                 email: profile.emails[0].value,

@@ -1,0 +1,43 @@
+#bottom-menu-options {
+  width: 95vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.402);
+  border-radius: 15px;
+  margin: 10px;
+  padding: 10px;
+  z-index: 8;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 25px;
+  border: 1px solid rgba(231, 231, 231, 0.233);
+}
+
+#bottom-menu-options .option1 {
+  margin: 10px;
+}
+
+#bottom-menu-options .option2 {
+  margin: 10px;
+  color: #D20A0A;
+  font-size: 1.1rem;
+}
+
+#bottom-menu-options .cancel-button {
+  width: 100%;
+  margin: 10px;
+  padding: 10px;
+  background-color: #0057D2;
+  border-radius: 20px;
+  color: white;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.remove {
+  display: none;
+}

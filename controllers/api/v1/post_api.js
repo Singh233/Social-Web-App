@@ -18,6 +18,7 @@ module.exports.index = async function(request, response) {
         
     return response.json(200, {
         message: "List of posts",
+        success: true,
         posts: posts
     });
 }
@@ -37,9 +38,8 @@ module.exports.destroy = async function(request, response) {
                 message: 'Post and associated comments deleted successfully!'
             });
         } else {
-            return response.json(401, {
-                message: 'You cannot delete this post!'
-            })
+            return response.status(401).send('Unauthorized');
+
         }
     } catch(error) {
         console.log("Error ", error);

@@ -92,3 +92,26 @@ function openChatWindow() {
     chatContainer.classList.add('animate__fadeInUpBig');
 
 }
+
+
+
+function toggleMenuOptions() {
+    const menu = document.querySelector('#bottom-menu-options');
+    if ($('#bottom-menu-options').hasClass('remove')) {
+        menu.classList.remove('remove');
+        menu.classList.remove('animate__faster');
+        menu.classList.remove('animate__slideOutDown');
+        menu.classList.add('animate__fadeInUpBig');
+    } else {
+
+        menu.classList.add('animate__faster');
+        menu.classList.add('animate__slideOutDown');
+        
+        setTimeout(() => {
+            menu.classList.add('remove');
+        }, 1000);
+    }
+    
+    
+    
+}

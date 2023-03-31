@@ -1,0 +1,51 @@
+$button-color-blue: #0057D2; 
+$button-hover-color: #D1EFFF;
+$button-color-red: #D20A0A; 
+$text-color-gray: #d0d0d0; 
+$button-color-gray: #212121; 
+
+#bottom-menu-options {
+    width: 95vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.402);
+    border-radius: 15px;
+    margin: 10px;
+    padding: 10px;
+    z-index: 8;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 25px;
+    border: 1px solid rgba(231, 231, 231, 0.233);
+
+    .option1 {
+        margin: 10px;
+    }
+
+    .option2 {
+        margin: 10px;
+        color: $button-color-red;
+        font-size: 1.1rem;
+
+    }
+
+    .cancel-button {
+        width: 100%;
+        margin: 10px;
+        padding: 10px;
+        background-color: $button-color-blue;
+        border-radius: 20px;
+        color: white;
+        border: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+}
+
+.remove {
+    display: none;
+}

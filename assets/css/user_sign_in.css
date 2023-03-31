@@ -1,1 +1,155 @@
-.user-sign-in{display:flex;flex-direction:column;justify-content:center;height:70vh}.user-sign-in .welcome-div{margin:20px;display:flex;flex-direction:column;align-items:center}.user-sign-in .welcome-div img{display:none;border-radius:50%;height:70px;width:70px;object-fit:cover}.user-sign-in .welcome-div p{margin-top:5px;display:flex;flex-direction:column;font-size:2rem;font-family:cursive;font-weight:700}.user-sign-in .welcome-div p span{font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif;margin-top:-4px;font-size:2.5rem;font-weight:600}.user-sign-in form{display:flex;flex-direction:column}.user-sign-in form .input-with-icon{display:flex;align-items:center;padding:10px;background-color:#212121;border-radius:10px;margin:7px;color:#fff;border:none}.user-sign-in form .input-with-icon i{margin-left:5px;font-size:1.2rem}.user-sign-in form #toggle-password{cursor:pointer;transition:all .3s ease-in-out}.user-sign-in form #email-input,.user-sign-in form #pass-input{font-size:1rem;margin-left:15px;width:90%;background-color:#212121;border-radius:10px;color:#fff;border:none}.user-sign-in form #email-input:focus,.user-sign-in form #pass-input:focus{outline:none}.user-sign-in form #email-input:-webkit-autofill,.user-sign-in form #pass-input:-webkit-autofill{background-color:#212121!important}.user-sign-in form #submit-button{margin:5px;margin-top:8px;padding:10px;background-color:#0057d2;color:#fff;font-size:1rem;border-radius:15px;border:none;font-weight:500;text-decoration:none;background:linear-gradient(130deg,#1277f3,#0b4995 97%)}.user-sign-in .option-text{color:#d0d0d0;margin:10px;align-self:center;font-size:.9rem}.user-sign-in .option-text a{text-decoration:none;font-size:1rem;font-weight:700;color:#0057d2}.user-sign-in .auth-options{display:flex;justify-content:center;margin:10px}.user-sign-in .auth-options #fb-auth,.user-sign-in .auth-options #git-auth,.user-sign-in .auth-options #google-auth{font-size:1.3rem;margin:5px;padding:10px 20px;background-color:#212121;border-radius:15px;color:#fff;text-decoration:none}.user-sign-in .auth-options #google-auth{padding:5px 15px;display:flex;align-items:center;background:#fff}.user-sign-in .auth-options #google-auth img{height:28px;width:28px}.user-sign-in .auth-options #fb-auth{background:#1277f3;background:linear-gradient(130deg,#1277f3,#0b4995 97%)}.remove{display:none}@media screen and (max-width:480px){.user-sign-in{max-width:88vw}.user-sign-in .welcome-div p span{font-size:2.3rem}}
+.user-sign-in {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 70vh;
+}
+
+.user-sign-in .welcome-div {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-sign-in .welcome-div img {
+  display: none;
+  border-radius: 50%;
+  height: 70px;
+  width: 70px;
+  object-fit: cover;
+}
+
+.user-sign-in .welcome-div p {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  font-size: 2rem;
+  font-family: cursive;
+  font-weight: 700;
+}
+
+.user-sign-in .welcome-div p span {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin-top: -4px;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.user-sign-in form {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-sign-in form .input-with-icon {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #212121;
+  border-radius: 10px;
+  margin: 7px;
+  color: white;
+  border: none;
+}
+
+.user-sign-in form .input-with-icon i {
+  margin-left: 5px;
+  font-size: 1.2rem;
+}
+
+.user-sign-in form #toggle-password {
+  cursor: pointer;
+  transition: 0.3s all ease-in-out;
+}
+
+.user-sign-in form #email-input, .user-sign-in form #pass-input {
+  font-size: 1rem;
+  margin-left: 15px;
+  width: 90%;
+  background-color: #212121;
+  border-radius: 10px;
+  color: white;
+  border: none;
+}
+
+.user-sign-in form #email-input:focus, .user-sign-in form #pass-input:focus {
+  outline: none;
+}
+
+.user-sign-in form #email-input:-webkit-autofill, .user-sign-in form #pass-input:-webkit-autofill {
+  background-color: #212121 !important;
+}
+
+.user-sign-in form #submit-button {
+  margin: 5px;
+  margin-top: 8px;
+  padding: 10px;
+  background-color: #0057D2;
+  color: white;
+  font-size: 1rem;
+  border-radius: 15px;
+  border: none;
+  font-weight: 500;
+  text-decoration: none;
+  background: linear-gradient(130deg, #1277f3 0%, #0b4995 97%);
+}
+
+.user-sign-in .option-text {
+  color: #d0d0d0;
+  margin: 10px;
+  align-self: center;
+  font-size: 0.9rem;
+}
+
+.user-sign-in .option-text a {
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0057D2;
+}
+
+.user-sign-in .auth-options {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
+.user-sign-in .auth-options #google-auth, .user-sign-in .auth-options #fb-auth, .user-sign-in .auth-options #git-auth {
+  font-size: 1.3rem;
+  margin: 5px;
+  padding: 10px 20px;
+  background-color: #212121;
+  border-radius: 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.user-sign-in .auth-options #google-auth {
+  padding: 5px 15px;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+.user-sign-in .auth-options #google-auth img {
+  height: 28px;
+  width: 28px;
+}
+
+.user-sign-in .auth-options #fb-auth {
+  background: #1277f3;
+  background: linear-gradient(130deg, #1277f3 0%, #0b4995 97%);
+}
+
+.remove {
+  display: none;
+}
+
+@media screen and (max-width: 480px) {
+  .user-sign-in {
+    max-width: 88vw;
+  }
+  .user-sign-in .welcome-div p span {
+    font-size: 2.3rem;
+  }
+}

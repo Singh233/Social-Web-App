@@ -9,7 +9,6 @@ module.exports.createPost = async function(request, response) {
         try {
             console.log("************");
             
-
             Post.uploadedFile(request, response, function(error) {
                 if (error) {
                     console.log('****** Multer Error: ', error);
