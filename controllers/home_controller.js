@@ -22,18 +22,15 @@ module.exports.home = async function(request, response) {
         let posts = await Post.find({})
         .sort('-createdAt')
         .populate('user')
-        .populate({
-            path: 'comments',
-            populate: {
-                path: 'user'
-            },
-            populate: {
-                path: 'likes'
-            }
-
-        })
-        // .populate('comments')
         .populate('likes');
+
+        // populate the comments of each post
+        for (let post of posts) {
+            let comments = await Comment.find({post: post._id})
+            .populate('user')
+            .populate('likes');
+            post.comments = comments;
+        }
     
         let users = await User.find({});
         let friendsArray = [];

@@ -20,7 +20,7 @@ gulp.task('css', function(done){
     .pipe(rev())
     .pipe(gulp.dest('./public/assets/'))
     .pipe(rev.manifest('public/assets/rev-manifest.json', {
-        base: './public/assets',
+        base: './public/assets/',
         merge: true // merge with the existing manifest (if one exists)
      }))
     .pipe(gulp.dest('./public/assets/'));
@@ -50,7 +50,7 @@ gulp.task('images', function(done){
     .pipe(rev())
     .pipe(gulp.dest('./public/assets/'))
     .pipe(rev.manifest('public/assets/rev-manifest.json', {
-        base: './public/assets',
+        base: './public/assets/',
         merge: true // merge with the existing manifest (if one exists)
      }))
     .pipe(gulp.dest('./public/assets/'));

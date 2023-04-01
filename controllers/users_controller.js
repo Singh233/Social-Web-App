@@ -30,9 +30,8 @@ module.exports.profile = function(request, response) {
                     return;
                 }
 
-                console.log(posts);
     
-                return response.render('_sm_profile_page.ejs', {
+                return response.render('user_profile.ejs', {
                     title: "Profile",
                     profile_user: user,
                     friends: friends,
