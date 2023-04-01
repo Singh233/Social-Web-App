@@ -65,7 +65,7 @@ module.exports.editProfile = function(request, response) {
             }
             
     
-            return response.render('user_profile.ejs', {
+            return response.render('user_edit_profile.ejs', {
                 title: "Profile",
                 profile_user: user,
                 friends: friends,

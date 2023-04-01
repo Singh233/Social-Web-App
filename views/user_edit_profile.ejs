@@ -1,0 +1,42 @@
+
+
+<form id="edit-profile-form" action="/users/update/<%= profile_user.id %>" enctype="multipart/form-data" method="post">
+
+    <div class="header">
+        <p><i class="fa-solid fa-arrow-left-long"></i> Edit Profile</p>
+    </div>
+
+    <% if(profile_user.avatar != undefined) { %> 
+        <img src="<%= profile_user.avatar %>" alt="">
+    <% } else { %> 
+        <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
+    <% } %> 
+
+    <input style="margin-top: 30px;" type="file" name="filepond" id="profile-file" placeholder="Profile Picture">
+
+    <div class="container">
+        
+        <label style="margin-left: 6px;" for="name-input">Name</label>
+
+        <div class="input-with-icon">
+            <i class="fa-solid fa-user"></i>
+            <input id="name-input" type="text" name="name" placeholder="Your name" value="<%= profile_user.name %>" required>
+        </div>
+        <label style="margin-left: 6px;" for="email-input">Email</label>
+        <div class="input-with-icon">
+            <i class="fa-solid fa-envelope"></i>
+    
+            <input id="email-input" type="email" name="email" placeholder="Your email" value="<%= profile_user.email %>" required>
+        </div>
+    
+        <button id="submit-button" type="submit">Update</button>
+    </div>
+    
+</form>
+
+<div class="navigate">
+    <a href="/users/profile/<%= profile_user.id %>"><i class="fa-solid fa-arrow-left-long"></i>Go back to Profile</a>
+</div>
+
+
+<script src="<%= assetPath('js/home_posts.js') %>"></script>

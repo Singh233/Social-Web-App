@@ -21,6 +21,36 @@
 
             </div>
 
+            <p id="about-user">
+                Hi, this is sample about 😃
+            </p>
+
+            
+            <div class="profile-actions">
+                <% if (locals.user.id == profile_user.id) { %>
+                    <a class="edit-profile" href="/users/profile/edit/<%= locals.user.id%>">Edit profile</a>
+                <% } else { %>
+                    
+                    <% if (friends != undefined) { %>
+                        <% let flag = false; %>
+                            <% for (friend of friends) { %>
+                                <% if (user.id == friend.to_user || user.id == friend.from_user) {  flag = true;%>
+                                    <a class="follow-button" href="/users/friends/remove/?from=<%= user.id %>">Unfollow</a>
+                                <% } if (flag) break; %>
+                            <% } %>
+                            <% if (!flag) { %>
+                                <a class="follow-button" href="/users/friends/add/?from=<%= user.id %>&to=<%= profile_user.id %>">Follow</a>
+                            <% } %>
+                    <% } else { %>
+                        <a class="follow-button" href="/users/friends/add/?from=<%= user.id %>&to=<%= profile_user.id %>">Follow</a>
+                    <% } %>
+
+                    <a class="message-button" href="#">Message</a>
+
+                    
+                <% } %>
+            </div>
+
             <div class="stats">
                 <div class="posts">
                     <p class="count"><%= user_posts.length %></p>
@@ -38,34 +68,6 @@
                     <p>Following</p>
                 </div>
             </div>
-
-            <p id="about-user">
-                Hi, this is sample about 😃
-            </p>
-
-            <% if (locals.user.id == profile_user.id) { %>
-                <a class="edit-profile" href="/users/profile/edit/<%= locals.user.id%>">Edit profile</a>
-            <% } else { %>
-                <div class="profile-actions">
-                    <% if (friends != undefined) { %>
-                        <% let flag = false; %>
-                            <% for (friend of friends) { %>
-                                <% if (user.id == friend.to_user || user.id == friend.from_user) {  flag = true;%>
-                                    <a class="follow-button" href="/users/friends/remove/?from=<%= user.id %>">Unfollow</a>
-                                <% } if (flag) break; %>
-                            <% } %>
-                            <% if (!flag) { %>
-                                <a class="follow-button" href="/users/friends/add/?from=<%= user.id %>&to=<%= profile_user.id %>">Follow</a>
-                            <% } %>
-                    <% } else { %>
-                        <a class="follow-button" href="/users/friends/add/?from=<%= user.id %>&to=<%= profile_user.id %>">Follow</a>
-                    <% } %>
-
-                    <a class="message-button" href="#">Message</a>
-
-                </div>
-            <% } %>
-            
         </div>
 
         <div class="profile-posts">
@@ -91,23 +93,7 @@
 
     <% if (user.id == profile_user.id) { %>
     <!-- If user matches then show the form -->
-    <form action="/users/update/<%= profile_user.id %>" enctype="multipart/form-data" method="post">
-        <input style="margin-top: 10px;" type="file" name="filepond" id="profile-file" placeholder="Profile Picture">
-        <label style="margin-left: 6px;" for="name-input">Name</label>
-
-        <div class="input-with-icon">
-            <i class="fa-solid fa-user"></i>
-            <input id="name-input" type="text" name="name" placeholder="Your name" value="<%= profile_user.name %>" required>
-        </div>
-        <label style="margin-left: 6px;" for="email-input">Email</label>
-        <div class="input-with-icon">
-            <i class="fa-solid fa-envelope"></i>
-
-            <input id="email-input" type="email" name="email" placeholder="Your email" value="<%= profile_user.email %>" required>
-        </div>
-
-        <button id="submit-button" type="submit">Update</button>
-    </form>
+   
     <% } else { %>
         <!-- else show only the profile info -->
         

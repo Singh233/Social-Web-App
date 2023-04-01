@@ -105,14 +105,15 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
 
 
             #about-user {
-                align-self: flex-start;
+                align-self: center;
                 margin-top: 5px;
                 font-size: 0.9rem;
                 color: $text-color-gray;
-                border: 1px solid $button-color-gray;
+                // border: 1px solid $button-color-gray;
                 padding: 8px 12px;
                 border-radius: 15px;
                 width: 100%;
+                text-align: center;
             }
 
             .profile-actions {
@@ -179,7 +180,7 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
 
 
         .profile-posts {
-            margin-top: 20px;
+            margin-top: 5px;
 
             .posts-saved-header {
                 display: flex;
@@ -290,84 +291,7 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
         align-self: center;
     }
 
-    form {
-        display: flex;
-        flex-direction: column;
-        width: 90vw;
-        margin: 0 20px;
-
-        .input-with-icon {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            background-color: $button-color-gray;
-            border-radius: 10px;
-            margin: 7px;
-            color: white;
-            border: none;
-            
-
-            i {
-                margin-left: 5px;
-                font-size: 1.2rem;
-            }
-
-
-            
-
-        
-
-            
-        }
-
-
-        .filepond--drop-label {
-            background-color: black;
-
-        }
-        .filepond--credits {
-            display: none;
-        }
-        
-        
-
-        #email-input, #name-input {
-            font-size: 1rem;
-            margin-left: 15px;
-            width: 90%;
-            background-color: $button-color-gray;
-            border-radius: 10px;
-            
-            color: white;
-            border: none;
-
-            &:focus {
-                outline: none;
-            }
-
-            &:-webkit-autofill {
-                background-color: $button-color-gray !important;
-            }
-
-            
-
-        }
-
-        #submit-button {
-            margin: 5px;
-            margin-top: 30px;
-            padding: 10px;
-            background-color: $button-color-blue;
-            color: white;
-            font-size: 1rem;
-            border-radius: 15px;
-            border: none;
-            font-weight: 500;
-            text-decoration: none;
-            background: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba(11,73,149,1) 97%);
-            
-        }
-    }
+    
 }
 
 
