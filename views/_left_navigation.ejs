@@ -36,7 +36,7 @@
     
             <div class="user-container">
                 <img src="<%= user.avatar %>" alt="">
-                <p class="user-name"> <%= user.name %></p>
+                <p class="user-name"> <%= user.name.substring(0, 14) %></p>
                 <i class="fa-solid fa-chevron-up"></i>
             </div>
     
@@ -78,10 +78,26 @@
         }
     }
 
-    if (window.location.href.includes('home')) {
+    if (window.location.href.includes('home') ||  window.location.href.includes('users/profile')) {
         // remove background image from left navigation
         let leftNav = document.querySelector('.left-navigation-container');
-        leftNav.style.backgroundImage = 'none';
+
+        if (window.innerWidth < 480) {
+                leftNav.setAttribute('style', 'background-image: none !important; height: auto !important;')
+
+        } else {
+            leftNav.setAttribute('style', 'background-image: none !important; height: 100vh !important;')
+        }
+
+        // listen for resize event
+        window.addEventListener('resize', () => {
+            if (window.innerWidth < 480) {
+                leftNav.setAttribute('style', 'background-image: none !important; height: auto !important;')
+
+            } else {
+                leftNav.setAttribute('style', 'background-image: none !important; height: 100vh !important;')
+            }
+        })
     }
 
 </script>

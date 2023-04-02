@@ -184,8 +184,7 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
         }
     }
     
-}  
-
+}
 
 
 
@@ -207,11 +206,12 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
         top: 0%;
         z-index: 5;
         border: none;
-        height: auto !important;
-        background-image: none;
-
+        height: 200px !important;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), #000000), url('../img/161.jpg');
+        background-size: cover;
 
         #nav-header {
+            align-items: flex-start;
             flex-direction: row;
             justify-content: space-between;
 
