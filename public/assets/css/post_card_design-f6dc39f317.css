@@ -10,6 +10,62 @@
   margin-top: 15px;
 }
 
+.display-posts .post-options-menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: black;
+  border-radius: 15px;
+  padding: 10px;
+  z-index: 8;
+  border-radius: 30px;
+  border: 1px solid rgba(231, 231, 231, 0.233);
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  transform: translateY(-100px);
+  transition: all 0.3s ease-in-out;
+}
+
+.display-posts .post-options-menu .option1 {
+  margin: 10px;
+}
+
+.display-posts .post-options-menu .option2 {
+  margin: 10px;
+  color: #D20A0A;
+  font-size: 1.1rem;
+}
+
+.display-posts .post-options-menu .option2 a {
+  text-decoration: none;
+  color: #D20A0A;
+}
+
+.display-posts .post-options-menu .cancel-button {
+  width: 100%;
+  margin: 10px;
+  padding: 10px;
+  background-color: #0057D2;
+  border-radius: 20px;
+  color: white;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.display-posts .animate-down {
+  transform: translateY(0px);
+}
+
+.display-posts .remove {
+  display: none;
+}
+
 .display-posts .post-header {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -33,6 +89,13 @@
 
 .display-posts .post-header #post-menu-options {
   justify-self: end;
+}
+
+.display-posts .post-header #post-menu-options i {
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
 }
 
 .display-posts .post-img {

@@ -196,5 +196,5 @@ module.exports.destroySession = function(request, response) {
     });
     request.flash('success', 'You have logged out!');
 
-    return response.redirect('/');
+    return response.redirect('/users/sign-in-up');
 }

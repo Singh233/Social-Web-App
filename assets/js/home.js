@@ -95,17 +95,15 @@ function openChatWindow() {
 
 
 
-function toggleMenuOptions() {
-    const menu = document.querySelector('#bottom-menu-options');
-    if ($('#bottom-menu-options').hasClass('remove')) {
+function toggleMenuOptions(postId) {
+    const menu = document.querySelector(`#bottom-menu-options-${postId}`);
+    if ($(`#bottom-menu-options-${postId}`).hasClass('remove')) {
         menu.classList.remove('remove');
-        menu.classList.remove('animate__faster');
-        menu.classList.remove('animate__slideOutDown');
-        menu.classList.add('animate__fadeInUpBig');
+        menu.classList.remove('animate__flipOutX');
+        menu.classList.add('animate__flipInX');
     } else {
-
-        menu.classList.add('animate__faster');
-        menu.classList.add('animate__slideOutDown');
+        menu.classList.remove('animate__flipInX');
+        menu.classList.add('animate__flipOutX');
         
         setTimeout(() => {
             menu.classList.add('remove');

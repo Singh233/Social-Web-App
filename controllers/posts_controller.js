@@ -7,14 +7,12 @@ module.exports.createPost = async function(request, response) {
     if (request.user.id == request.params.id) {
 
         try {
-            console.log("************");
             
             Post.uploadedFile(request, response, function(error) {
                 if (error) {
                     console.log('****** Multer Error: ', error);
                 }
                 
-                console.log(request.file);
                 if (request.file) {
                     // this is saving the path of the uploaded file into the field in the user
                     Post.create({
