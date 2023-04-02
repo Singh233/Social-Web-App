@@ -3,6 +3,10 @@ const User = require('../models/user');
 const Comment = require('../models/comment');
 const Friendships = require('../models/friendship');
 
+module.exports.redirectToHome = function(request, response) {
+    return response.redirect('/home');
+}
+
 module.exports.home = async function(request, response) {
     // Post.find({user: request.user._id}, function(error, post) {
     //     if (error) {
@@ -19,6 +23,8 @@ module.exports.home = async function(request, response) {
 
     // populate the user of each post
     try {
+
+        
         let posts = await Post.find({})
         .sort('-createdAt')
         .populate('user')

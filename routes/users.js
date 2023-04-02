@@ -11,6 +11,8 @@ router.get('/profile/edit/:id', passport.checkAuthentication, usersController.ed
 router.post('/update/:id', passport.checkAuthentication, usersController.update);
 router.get('/sign-up', signInController.signUp);
 router.get('/sign-in', signUpController.signIn);
+router.get('/sign-in-up', signInController.signIn);
+
 router.use('/friends', require('./friends'));
 
 

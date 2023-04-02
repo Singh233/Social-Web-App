@@ -3,47 +3,87 @@
 <div class="left-navigation-container">
     <header id="nav-header">
         <div id="branding">
-            <img id="logo-placeholder" src="<%= assetPath('img/logo1.png') %>">
-            <% if (locals.user) { %>
-                <p id="name-placeholder">Hi, <%= user.name %></p>
-            <%  } else { %>
-                <p>Hi, user</p>
-            <% } %>
+            <!-- <img id="logo-placeholder" src="<%= assetPath('img/logo1.png') %>"> -->
+                <p id="name-placeholder"><i class="fa-solid fa-cloud"></i> <span class="s">S</span>anam.<span>Social</span></p>
         </div>
-        
-    
-        <% if (locals.user) { %>
-            <div id="nav-section">
-                <!-- <div id="user-name">
-                    <a href="/users/profile"> <%= user.name %> </li>
-                </div> -->
-                <!-- <div id="sign-in-button">
-                    <a href="/users/sign-out">Sign Out</a>
-                </div> -->
+    </header>
+
+    <% if (locals.user) { %>
+        <div id="nav-section">
+            <!-- <div id="user-name">
+                <a href="/users/profile"> <%= user.name %> </li>
+            </div> -->
+            <!-- <div id="sign-in-button">
+                <a href="/users/sign-out">Sign Out</a>
+            </div> -->
+            <div class="nav-links">
+                <a href="/"><i class="fa-solid fa-house"></i> Home</a>
+                <p onclick="openChatWindow()"><i  class="fa-solid fa-paper-plane"></i> Message</p>
+                <a href="/users/sign-out"> <i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+            </div>
+            
+            <div class="sm-nav-links">
                 <i onclick="openChatWindow()" class="fa-solid fa-paper-plane"></i>
                 <a href="/users/sign-out"><i class="fa-solid fa-right-from-bracket"></i></a>
-                
             </div>
-            
-    
-        <%  } else { %>
-            <div id="nav-section">
-                <div id="sign-in-button">
-                    <a href="/users/sign-in">Sign In</a>
-                </div>
-                <div id="sign-up-button">
-                    <a href="/users/sign-up">Sign Up</a>
-                </div>
+        </div>
+
+        <div onclick="expandFooter()" class="footer">
+            <div class="expanded hide">
+                <a href="/users/profile/edit/<%= locals.user.id%>">Edit profile</a>
+                <a href="/users/profile/<%= locals.user.id%>">Go to Profile</a>
             </div>
+    
+            <div class="user-container">
+                <img src="<%= user.avatar %>" alt="">
+                <p class="user-name"> <%= user.name %></p>
+                <i class="fa-solid fa-chevron-up"></i>
+            </div>
+    
+    
             
-    
-        <% } %>
-    
+        </div>
         
+
+    <%  } else { %>
+        
+        
+
+    <% } %>
+
     
-    </header>
     
-    <%- include('footer'); %>
 </div>
+
+<script>
+    function expandFooter() {
+        let footer = document.querySelector('.footer');
+        let expanded = document.querySelector('.expanded');
+        let userContainer = document.querySelector('.user-container');
+        let chevron = document.querySelector('.fa-chevron-up');
+
+        if (expanded.classList.contains('hide')) {
+            // TODO: animate expanded using jquery from bottom to top
+
+
+
+
+            expanded.classList.remove('hide');
+            userContainer.style.borderRadius = '50%';
+            chevron.style.transform = 'rotate(0deg)';
+        } else {
+            expanded.classList.add('hide');
+            userContainer.style.borderRadius = '0';
+            chevron.style.transform = 'rotate(180deg)';
+        }
+    }
+
+    if (window.location.href.includes('home')) {
+        // remove background image from left navigation
+        let leftNav = document.querySelector('.left-navigation-container');
+        leftNav.style.backgroundImage = 'none';
+    }
+
+</script>
 
 

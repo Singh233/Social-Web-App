@@ -123,7 +123,7 @@ module.exports.update = async function(request, response) {
 // render sign up page
 module.exports.signUp = function(request, response) {
     if (request.isAuthenticated()) {
-        return response.redirect('/users/profile');
+        return response.redirect('/');
     }
     return response.render('user_sign_up.ejs', {
         title: "SanamSocial | Sign Up"
@@ -134,7 +134,7 @@ module.exports.signUp = function(request, response) {
 // render sign in page
 module.exports.signIn = function(request, response) {
     if (request.isAuthenticated()) {
-        return response.redirect('/users/profile');
+        return response.redirect('/');
     }
     return response.render('home.ejs', {
         title: "SanamSocial | Sign In"
@@ -159,7 +159,7 @@ module.exports.create = async function(request, response) {
                     console.log('Error in creating user while singing up');
                     return;
                 }
-                return response.redirect('/users/sign-in');
+                return response.redirect('/');
             })
         } else {
             return response.redirect('back');
@@ -174,7 +174,7 @@ module.exports.createSession = function(request, response) {
     request.flash('success', 'Logged in Successfully');
     
 
-    return response.redirect('/');
+    return response.redirect('/home');
 }
 
 
