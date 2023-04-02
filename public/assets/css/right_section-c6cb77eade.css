@@ -1,0 +1,20 @@
+.right-section-container {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  min-height: 100vh;
+  min-width: 250px;
+  justify-items: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.051);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-left: 1px solid rgba(236, 236, 236, 0.233);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.right-section-container #user-friends {
+  padding: 20px;
+}

@@ -98,6 +98,24 @@
                 leftNav.setAttribute('style', 'background-image: none !important; height: 100vh !important;')
             }
         })
+    } else if (window.location.href.includes('users/sign-in-up')) {
+        let leftNav = document.querySelector('.left-navigation-container');
+
+        if (window.innerWidth < 480) {
+                leftNav.setAttribute('style', "background-image: linear-gradient(rgba(0, 0, 0, 0.5), #000000), url('<%= assetPath('img/161.jpg') %>');background-size: cover;")
+
+        } else {
+            leftNav.setAttribute('style', "background-image: linear-gradient(#000000, rgba(0, 0, 0, 0.5)), url('<%= assetPath('img/161.jpg') %>');background-size: cover;")
+        }
+        // listen for resize event
+        window.addEventListener('resize', () => {
+            if (window.innerWidth < 480) {
+                leftNav.setAttribute('style', "background-image: linear-gradient(rgba(0, 0, 0, 0.5), #000000), url('<%= assetPath('img/161.jpg') %>');background-size: cover;")
+
+            } else {
+                leftNav.setAttribute('style', "background-image: linear-gradient(#000000, rgba(0, 0, 0, 0.5)), url('<%= assetPath('img/161.jpg') %>');background-size: cover;")
+            }
+        })
     }
 
 </script>

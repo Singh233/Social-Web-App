@@ -11,10 +11,10 @@ const runSequence = require('run-sequence');
 
 gulp.task('css', function(done){
     console.log('minifying css...');
-    gulp.src('./assets/scss/**/*.scss')
-    .pipe(sass())
-    .pipe(cssnano())
-    .pipe(gulp.dest('./assets/css'))
+    // gulp.src('./assets/scss/**/*.scss')
+    // .pipe(sass())
+    // .pipe(cssnano())
+    // .pipe(gulp.dest('./assets/css'))
 
     gulp.src('./assets/**/*.css')
     .pipe(rev())

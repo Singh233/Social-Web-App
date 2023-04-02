@@ -79,19 +79,19 @@ module.exports.editProfile = function(request, response) {
 module.exports.update = async function(request, response) {
     if (request.user.id == request.params.id) {
         try {
-            console.log(request.body);
             let user = await User.findById(request.params.id);
-            console.log(user);
-            console.log(request.params.id);
+
             User.uploadedAvatar(request, response, function(error) {
                 if (error) {
                     console.log('****** Multer Error: ', error);
+
+                    request.flash('error', 'Error in uploading file');
+                    return response.redirect('back');
                 }
                 user.name = request.body.name;
                 user.email = request.body.email;
                 
-                console.log(request.file);
-                console.log(request.body);
+
 
                 if (request.file) {
 
@@ -102,7 +102,7 @@ module.exports.update = async function(request, response) {
                     user.avatar = User.avatarPath + '/' + request.file.filename;
                 }
                 user.save();
-                request.flash('success', 'Update successfully!');
+                request.flash('success', 'Successfully updated profile!');
 
                 return response.redirect('back');
             })
@@ -134,7 +134,7 @@ module.exports.signUp = function(request, response) {
 // render sign in page
 module.exports.signIn = function(request, response) {
     if (request.isAuthenticated()) {
-        return response.redirect('/');
+        return response.redirect('/home');
     }
     return response.render('home.ejs', {
         title: "SanamSocial | Sign In"
@@ -144,12 +144,15 @@ module.exports.signIn = function(request, response) {
 // get the sign up data
 module.exports.create = async function(request, response) {
     if (request.body.password != request.body.confirm_password) {
+        request.flash('error', 'Passwords do not match!');
         return response.redirect('back');
     }
 
     User.findOne({email: request.body.email}, function(error, user) {
         if (error) {
             console.log("Error in finding user in singing up");
+            // flash message
+            request.flash('error', 'Something went wrong!');
             return;
         }
 
@@ -157,11 +160,17 @@ module.exports.create = async function(request, response) {
             User.create(request.body, function(error, user) {
                 if (error) {
                     console.log('Error in creating user while singing up');
+                    // flash message
+                    request.flash('error', 'Something went wrong!');
                     return;
                 }
+                // flash message
+                request.flash('success', 'Account created successfully!');
                 return response.redirect('/');
             })
         } else {
+            // flash message
+            request.flash('error', 'User already exists!');
             return response.redirect('back');
         }
     })

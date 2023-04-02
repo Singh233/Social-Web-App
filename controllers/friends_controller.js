@@ -7,13 +7,7 @@ module.exports.add = async function(req, res) {
 
 
         let user1 = await User.findById(req.query.from);
-
-
         let user2 = await User.findById(req.query.to);
-
-
-        console.log(user1);
-        console.log(user2);
 
 
         let friendship = await Friendship.create({
@@ -21,14 +15,18 @@ module.exports.add = async function(req, res) {
             to_user: user2
         });
 
-        console.log(friendship);
 
         user1.friendships.push(friendship);
         user1.save();
 
+        // flash message
+        req.flash('success', 'Following new friend!');
+
         return res.redirect('back');
         
     } catch (error) {
+        // flash message
+        req.flash('error', 'Error in following friend!');
         return res.send(500, {
             message: error
         });
@@ -45,7 +43,6 @@ module.exports.remove = async function(req, res) {
             
         let user = await User.findById(req.query.from);
 
-        console.log(user.friendships);
 
         
         const index = user.friendships.indexOf(req.query.from);
@@ -55,6 +52,9 @@ module.exports.remove = async function(req, res) {
 
 
         user.save();
+
+        // flash message
+        req.flash('success', 'Unfollowed friend!');
         
         return res.redirect('back');
         
@@ -63,6 +63,8 @@ module.exports.remove = async function(req, res) {
         
         
     } catch (error) {
+        // flash message
+        req.flash('error', 'Error in unfollowing friend!');
         return res.send(500, {
             message: error
         });

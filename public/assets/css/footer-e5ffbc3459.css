@@ -1,0 +1,31 @@
+#page-footer {
+  align-self: flex-end;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  color: white;
+}
+
+#page-footer .credits {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#page-footer .credits p {
+  text-align: center;
+}
+
+#page-footer .credits p:nth-child(1) {
+  font-weight: 500;
+}
+
+#page-footer .credits p:nth-child(2) {
+  font-size: 0.9rem;
+}
+
+@media screen and (max-width: 480px) {
+  #page-footer {
+    display: none;
+  }
+}
