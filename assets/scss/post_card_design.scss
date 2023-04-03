@@ -16,6 +16,9 @@ $text-color-gray: #d0d0d0;
 
     margin-top: 15px;
 
+    position: relative;
+
+
     .post-options-menu {
         width: 100%;
         display: flex;
@@ -122,6 +125,11 @@ $text-color-gray: #d0d0d0;
     .post-img {
         position: relative;
         top: -5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // background-image: linear-gradient(rgba(0, 0, 0, 0.9), #000000), url('../img/161.jpg');
+        // background-size: cover;
         img {
             height: 325px;
             width: auto;
