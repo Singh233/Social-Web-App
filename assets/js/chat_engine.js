@@ -1,12 +1,13 @@
 class ChatEngine{
-    constructor(chatBoxId, userEmail, userName, userProfile){
+    
+    constructor(chatBoxId, userEmail, userName, userProfile, host){
         this.chatBox = $(`#${chatBoxId}`);
         this.userEmail = userEmail;
         this.userName = userName;
         this.userProfile = userProfile;
-
+        
         // this.socket = io.connect('https://54.91.2.241:5000', {
-        this.socket = io.connect('http://localhost:4000', {
+        this.socket = io.connect(host, {
                 transports: ["websocket"],
             secure:true,
             reconnect: true,

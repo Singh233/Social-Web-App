@@ -16,8 +16,6 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 30px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), #000000), url("../img/161.jpg");
-  background-size: cover;
 }
 
 .user-chat-box .header {
