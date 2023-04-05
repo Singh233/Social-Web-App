@@ -2,7 +2,6 @@
   max-width: 452px;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border-radius: 30px;

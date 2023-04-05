@@ -22,8 +22,8 @@
                 </div>
                 <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">
                 <input type="hidden" name="email" placeholder="Your email" value="<%= locals.user.email %>">
-                <input type="file" name="filepond" id="myfile">
-                <textarea type="text" name="content" id="text-area" cols="30" rows="3" placeholder="Type here..."></textarea>
+                <input required type="file" name="filepond" id="myfile">
+                <textarea required type="text" name="content" id="text-area" cols="30" rows="3" placeholder="Type here..."></textarea>
                 <input id="submit" type="submit" value="Post">
             </form>
 

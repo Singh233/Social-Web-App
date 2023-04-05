@@ -31,9 +31,17 @@
 
 		</ul>
 		<div id="chat-message-input-container">
-			<input id="chat-message-input" placeholder="Type message here">
-			<button id="send-message"><i class="fa-solid fa-arrow-up"></i></button>
+			<input id="chat-message-input" placeholder="Type message here" required>
+			<button id="send-message"><i class="fa-solid fa-paper-plane"></i></button>
 		</div>
 
 	</div>
 <% } %>
+
+
+<script>
+	// add background image to chat window
+	let chatWindow = document.querySelector('.user-chat-box');
+	chatWindow.setAttribute('style', "background-image: linear-gradient(rgba(0, 0, 0, 0.7), #000000), url('<%= assetPath('img/161.jpg') %>');background-size: cover;")
+
+</script>

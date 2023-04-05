@@ -6,7 +6,7 @@ class ChatEngine{
         this.userProfile = userProfile;
 
         // this.socket = io.connect('https://54.91.2.241:5000', {
-        this.socket = io.connect('http://192.168.0.3:4000', {
+        this.socket = io.connect('http://localhost:4000', {
                 transports: ["websocket"],
             secure:true,
             reconnect: true,
@@ -40,7 +40,7 @@ class ChatEngine{
         });
 
 
-        // send a message on clicking the send message button
+        // send a message on clicking the send message button or pressing enter
         $('#send-message').click(function(){
             let msg = $('#chat-message-input').val();
 
@@ -56,6 +56,15 @@ class ChatEngine{
             }
         });
 
+        // send a message on pressing enter
+        $('#chat-message-input').keypress(function(e){
+            if (e.which == 13){
+                $('#send-message').click();
+            }
+        });
+
+        
+
         self.socket.on('receive_message', function(data){
             console.log('message received', data.message);
 
@@ -63,8 +72,8 @@ class ChatEngine{
             let newMessage = $('<li>');
             let profile = $('<img>');
             
-            newMessage.addClass('animate__animated  animate__bounceInUp');
-            let messageType = 'other-message animate__animated  animate__bounceInLeft';
+            newMessage.addClass('animate__animated  animate__fadeIn');
+            let messageType = 'other-message animate__animated  animate__fadeIn';
 
             if (data.user_email == self.userEmail){
                 messageType = 'self-message';
