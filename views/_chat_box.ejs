@@ -2,13 +2,19 @@
 
 <% if (locals.user){ %>
 	<div class="user-chat-box remove animate__animated">
+		<div class="animate__animated animate__faster chat-overlay chat-overlay-z-index">
+			<i onclick="toggleChatWindow()"  class="fa-solid fa-comments comment-icon"></i>
+			<p>Chat with friends</p>
+			<i onclick="toggleChatWindow()" class="fa-solid fa-chevron-up"></i>
+		</div>
 		<div class="header">
-			<i id="close-chat-window" onclick="closeChatWindow()" class="fa-solid fa-arrow-left-long back-button"></i>
-			<p class="chat-room">Sanam's room</p>
+			<i id="close-chat-window" onclick="toggleChatWindow()" class="fa-solid fa-arrow-left-long back-button"></i>
+			<p class="chat-room">Global Chat</p>
 			<i class="fa-solid fa-ellipsis-vertical chat-menu"></i>
 		</div>
 		<ul id="chat-messages-list">
-			<li class="other-message animate__animated animate__faster animate__zoomIn">
+			<p class="update-msg">New features coming soon!</p>
+			<!-- <li class="other-message animate__animated animate__faster animate__zoomIn">
 				<div class="msg-content">
 					<img src="<%= assetPath('img/1782188.jpeg') %>">
 					<span>
@@ -27,10 +33,10 @@
 				
 				
 				
-			</li>
+			</li> -->
 
 		</ul>
-		<div id="chat-message-input-container">
+		<div class="animate__animated" id="chat-message-input-container">
 			<input id="chat-message-input" placeholder="Type message here" required>
 			<button id="send-message"><i class="fa-solid fa-paper-plane"></i></button>
 		</div>

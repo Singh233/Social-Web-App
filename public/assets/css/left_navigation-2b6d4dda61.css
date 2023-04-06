@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh !important;
-  min-width: 260px;
+  min-width: 300px;
   margin: 0;
   color: white;
   background: rgba(0, 0, 0, 0.506);
@@ -74,7 +74,7 @@
   text-decoration: none;
   font-size: 1rem;
   font-weight: 600;
-  padding: 10px 30px;
+  padding: 10px 50px;
   background-color: #212121;
   border-radius: 10px;
   margin: 10px;
@@ -106,7 +106,7 @@
   margin: 20px;
   padding: 7px 5px;
   cursor: pointer;
-  width: max-content;
+  width: 260px;
   position: absolute;
   bottom: 0;
   left: 0;

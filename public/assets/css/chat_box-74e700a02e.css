@@ -1,6 +1,7 @@
 .remove {
-  display: none;
-  visibility: hidden;
+  height: 60px !important;
+  overflow: hidden !important;
+  border-radius: 15px !important;
 }
 
 .user-chat-box {
@@ -15,9 +16,37 @@
   background-color: rgba(0, 0, 0, 0.391);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 30px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), #000000), url("../img/161.jpg");
-  background-size: cover;
+  border-radius: 20px;
+  margin: 20px;
+  transition: all 0.5s ease-out;
+}
+
+.user-chat-box .chat-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: #202020;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.user-chat-box .chat-overlay .comment-icon {
+  background-color: #0057d2;
+  color: white;
+  font-size: 1.3rem;
+  border-radius: 50%;
+}
+
+.user-chat-box .chat-overlay i {
+  cursor: pointer;
+  padding: 12px 10px;
+}
+
+.user-chat-box .chat-overlay-z-index {
+  z-index: 999;
 }
 
 .user-chat-box .header {
@@ -32,7 +61,7 @@
   background-color: rgba(0, 0, 0, 0.391);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 30px 30px 0 0;
+  border-radius: 20px 20px 0 0;
 }
 
 .user-chat-box .header .back-button {
@@ -50,6 +79,14 @@
   padding: 10px;
   height: 76%;
   overflow: auto;
+}
+
+.user-chat-box #chat-messages-list .update-msg {
+  text-align: center;
+  font-size: 0.8rem;
+  background-color: rgba(0, 0, 0, 0.384);
+  border-radius: 10px;
+  padding: 5px 10px;
 }
 
 .user-chat-box #chat-messages-list .other-message {
@@ -143,8 +180,6 @@
 }
 
 .user-chat-box #chat-message-input-container {
-  position: fixed;
-  bottom: 0;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -165,7 +200,7 @@
 
 .user-chat-box #chat-message-input-container #send-message {
   padding: 10px;
-  height: 50%;
+  height: 100%;
   width: 30%;
   font-size: 1rem;
   color: white;
@@ -181,11 +216,15 @@
 }
 
 @media screen and (max-width: 480px) {
+  .remove {
+    bottom: -50%;
+  }
   .user-chat-box {
     height: 100%;
     width: 100vw;
     z-index: 7;
     border-radius: 0;
+    margin: 0;
   }
   .user-chat-box .header {
     border-radius: 0;

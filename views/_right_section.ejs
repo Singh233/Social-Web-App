@@ -1,24 +1,42 @@
 <div class="right-section-container">
     <section id="user-friends">
-        <h4>Friends</h4>
+        <h4><i class="fa-solid fa-user-group"></i> Friends <span><%= friends.length %></span> </h4>
         <% if (locals.user != undefined && friends != undefined) {%> 
 
-            <% for(friend of friends) { %> 
-                
-                <p>
-                    <a href="/users/profile/<%= friend._id%>"><%= friend[0].name %></a>
-                </p>
-            <% } %>
+            <div class="list">
+                <% for(friend of friends) { %> 
+                    <div class="user">
+                        <img src="<%= friend[0].avatar %>" alt="">
+                        <p>
+                            <a href="/users/profile/<%= friend[0]._id%>"><%= friend[0].name %></a>
+                        </p>
+                    </div>
+                <% } %>
+
+                <% if (friends.length == 0) { %>
+                    <p class="no-friends">You have no friends yet</p>
+                <% } %>
+            </div>
+            
         <% } %>
         </section>
 
     <section id="other-users">
-        <h4>Explore</h4>
-        <% for(u of all_users) {%> 
-            <p>
-                <a href="/users/profile/<%= u.id%>"><%= u.name %></a>
-            </p>
-        <% } %>
+        <h4><i class="fa-solid fa-earth-americas"></i> Explore <span><%= all_users.length %></span> </h4>
+
+        <div class="list">
+            <% for(u of all_users) {%>
+                <% if (u.id == locals.user.id) { continue; } %>
+                <div class="user">
+                    <img src="<%= u.avatar %>" alt="">
+                    <p>
+                        <a href="/users/profile/<%= u.id%>"><%= u.name %></a>
+                    </p>
+                </div> 
+                
+            <% } %>
+        </div>
+        
     </section>
 
 

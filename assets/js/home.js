@@ -70,26 +70,43 @@ function profile() {
 
 
 
-function closeChatWindow() {
+function toggleChatWindow() {
     console.log('close chat clicked');
     const chatContainer = document.querySelector('.user-chat-box');
-    chatContainer.classList.add('animate__fadeInUpBig');
+    const chatInputContainer = document.querySelector('#chat-message-input-container');
+    const chatOverlay = document.querySelector('.chat-overlay');
+    // chatContainer.classList.add('animate__fadeInUpBig');
     
-    chatContainer.classList.add('animate__faster');
-    chatContainer.classList.add('animate__slideOutDown');
-    
-    setTimeout(() => {
-        chatContainer.classList.add('remove');
-    }, 1000);
+    // chatContainer.classList.add('animate__faster');
+    // chatContainer.classList.add('animate__slideOutDown');
+
+    // add fade out animation to chat input container
+    if (chatContainer.classList.contains('remove')) {
+        chatInputContainer.classList.remove('animate__fadeOut');
+        chatInputContainer.classList.add('animate__fadeIn');
+
+        chatOverlay.classList.remove('animate__fadeIn');
+        chatOverlay.classList.add('animate__fadeOut');
+        chatOverlay.classList.toggle('chat-overlay-z-index')
+    } else {
+        chatInputContainer.classList.remove('animate__fadeIn');
+        chatInputContainer.classList.add('animate__fadeOut');
+
+        chatOverlay.classList.remove('animate__fadeOut');
+        chatOverlay.classList.add('animate__fadeIn');
+        chatOverlay.classList.toggle('chat-overlay-z-index')
+    }
+
+    chatContainer.classList.toggle('remove');
     
 }
 
 function openChatWindow() {
     const chatContainer = document.querySelector('.user-chat-box');
     chatContainer.classList.remove('remove');
-    chatContainer.classList.remove('animate__faster');
-    chatContainer.classList.remove('animate__slideOutDown');
-    chatContainer.classList.add('animate__fadeInUpBig');
+    // chatContainer.classList.remove('animate__faster');
+    // chatContainer.classList.remove('animate__slideOutDown');
+    // chatContainer.classList.add('animate__fadeInUpBig');
 
 }
 

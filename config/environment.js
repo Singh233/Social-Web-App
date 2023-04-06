@@ -50,7 +50,7 @@ const production = {
     jwt_secret: process.env.CODEIAL_JWT_SECRET,
     certificate: process.env.CODEIAL_CERTIFICATE,
     key: process.env.CODEIAL_CERTIFICATE_KEY,
-    websocket_host: `https://${process.env.SANAM_SOCIAL_AWS_MACHINE_IP}:4000`,
+    websocket_host: `https://sanam.social`,
     // morgan: {
     //     mode: 'combined',
     //     options: { stream: accessLogStream }

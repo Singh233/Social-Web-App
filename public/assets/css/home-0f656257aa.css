@@ -69,6 +69,8 @@
   border: none;
   border: 1px solid rgba(231, 231, 231, 0.233);
   border-radius: 20px;
+  resize: none;
+  resize: vertical;
 }
 
 .home-container .post-div #new-post-form #text-area:focus {

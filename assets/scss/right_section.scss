@@ -1,8 +1,16 @@
+$button-color-blue: #0057D2; 
+$button-hover-color: #D1EFFF;
+$button-color-red: #D20A0A; 
+$text-color-gray: #d0d0d0; 
+$button-color-gray: #212121; 
+$button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba(11,73,149,1) 97%);
+
+
 .right-section-container {
     display: grid;
     grid-template-rows: 1fr 1fr;
     min-height: 100vh;
-    min-width: 250px;
+    min-width: 390px;
     justify-items: center;
     color: white;
 
@@ -16,8 +24,118 @@
     top: 0;
     z-index: 1;
 
-    #user-friends {
-        padding: 20px;
+    #user-friends, #other-users {
+        
+        width: 95%;
+        h4 {
+            padding: 10px 20px;
+            background-color: $button-color-gray;
+
+            margin: 20px;
+            border-radius: 10px;
+            // text-align: center;
+            position: relative;
+
+            i {
+                margin-right: 7px;
+            }
+
+            span {
+                background-color: black;
+                position: absolute;
+                right: 15px;
+                top: 5px;
+                padding: 5px 10px;
+                border-radius: 50%;
+            }
+        }
+
+        .list {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 20px;
+            padding: 20px;
+            padding-top: 0;
+            list-style: none;
+            
+            // make the list scrollable
+            overflow-y: scroll;
+            
+
+
+            .user {
+                display: flex;
+                align-items: center;
+                padding: 5px;
+
+
+                img {
+                    height: 35px;
+                    width: 35px;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                    object-fit: cover;
+                }
+    
+                p {
+                    cursor: pointer;
+
+                    a {
+                        text-decoration: none;
+                        color: gray;
+
+                        &:hover {
+                            color: white;
+                        }
+                    }
+    
+    
+                    .user-info {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 100%;
+    
+                        .user-image {
+                            height: 50px;
+                            width: 50px;
+                            border-radius: 50%;
+                            margin-right: 10px;
+                        }
+    
+                        .user-name {
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                        }
+                    }
+    
+                    .user-status {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 100%;
+    
+                        .status {
+                            font-size: 0.9rem;
+                            font-weight: 700;
+                            margin-right: 10px;
+                        }
+    
+                        .status-circle {
+                            height: 10px;
+                            width: 10px;
+                            border-radius: 50%;
+                            background-color: $button-color-red;
+                        }
+                    }
+                }
+
+                
+            }
+
+            
+        }
         
     }
 }
