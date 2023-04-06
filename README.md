@@ -35,11 +35,12 @@ https://sanam.social 🚀
     - Comment on Post 💬
     - Like Post ❤️
     - Follow/Unfollow Users 👀
-    - Save Post (Under progress)❗️
+    - Save Post (In progress)❗️
 - User profile ⭐️
 - Edit profile 🕺
-- Search (Under progress)❗️
-- Direct Messaging (Under progress)❗️
+- Search (In progress)❗️
+- Global Messaging ✅
+- Direct Messaging (In progress)❗️
 - Optimised for 🖥️ Desktop and 📱 Mobile devices
 
 ## Run Project Locally
