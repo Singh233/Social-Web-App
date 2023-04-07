@@ -33,7 +33,8 @@ body {
     #main-body {
         display: flex;
         flex-direction: column;
-        
+                overflow-x: hidden !important;
+
     }
     
 

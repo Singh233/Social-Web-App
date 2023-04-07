@@ -1,7 +1,7 @@
 .home-container {
   min-height: 99vh;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr 0.4fr;
   justify-items: center;
   color: white;
   background-color: black;
@@ -96,6 +96,15 @@
   border-radius: 35px;
 }
 
+.home-container .right-section-div {
+  display: flex;
+  position: fixed !important;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  height: 100vh !important;
+}
+
 .remove {
   display: none;
 }
@@ -141,5 +150,8 @@
   .home-container .post-div #new-post-form {
     display: none;
     max-width: 100vw;
+  }
+  .home-container .right-section-div {
+    position: sticky !important;
   }
 }

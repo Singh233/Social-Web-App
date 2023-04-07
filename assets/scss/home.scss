@@ -7,8 +7,9 @@ $button-color-gray: #212121;
 .home-container {
     min-height: 99vh;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 0.4fr;
     justify-items: center;
+
     color: white;
     background-color: black;
 
@@ -109,6 +110,15 @@ $button-color-gray: #212121;
         }
     }
 
+    .right-section-div {
+        display: flex;
+        position: fixed !important;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        height: 100vh !important;
+    }
+
     
 }
 
@@ -179,6 +189,10 @@ $button-color-gray: #212121;
                 //
                 
             }
+        }
+
+        .right-section-div {
+            position: sticky !important;
         }
     }
 }

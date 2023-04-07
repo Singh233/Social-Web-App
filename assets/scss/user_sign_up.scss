@@ -11,8 +11,16 @@ $button-color-gray: #212121;
     flex-direction: column;
     justify-content: center;
     height: 90%;
-    position: relative;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: 30%;
+
     z-index: 999;
+    overflow: hidden !important;
+    
+
 
     .welcome-div {
         margin: 20px;
@@ -182,9 +190,11 @@ $button-color-gray: #212121;
     .user-sign-up {
         max-width: 88vw;
         margin-top: -10px;
-        position: relative;
-        z-index: 999;
-
+        margin-left: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        margin-top: -10px;
 
         .welcome-div {
             p {

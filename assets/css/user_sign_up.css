@@ -3,8 +3,12 @@
   flex-direction: column;
   justify-content: center;
   height: 90%;
-  position: relative;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin-left: 30%;
   z-index: 999;
+  overflow: hidden !important;
 }
 
 .user-sign-up .welcome-div {
@@ -150,8 +154,11 @@
   .user-sign-up {
     max-width: 88vw;
     margin-top: -10px;
-    position: relative;
-    z-index: 999;
+    margin-left: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    margin-top: -10px;
   }
   .user-sign-up .welcome-div p {
     font-size: 1.3rem;

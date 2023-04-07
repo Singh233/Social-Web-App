@@ -36,16 +36,12 @@
                 </div>
                 
             </section>
-        <% } else { %>
-            
-            <%- include('user_sign_in'); %>
-
-            <%- include('user_sign_up'); %>
-            
-
         <% } %>
+            
+            
         
     </div>
+    
     <% if(locals.user) { %>
         <div class="right-section-div">
             <% if (friends != undefined) {%> 
@@ -68,6 +64,16 @@
 
     
 </div>
+
+<% if(!locals.user) { %>
+        
+
+    <%- include('user_sign_in'); %>
+
+    <%- include('user_sign_up'); %>
+    
+
+<% } %>
 
 <% if (locals.user){ %>
     <%- include('_sm_post_upload') -%>

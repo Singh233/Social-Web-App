@@ -33,6 +33,7 @@ body {
 body #main-body {
   display: flex;
   flex-direction: column;
+  overflow-x: hidden !important;
 }
 
 body::-webkit-scrollbar {

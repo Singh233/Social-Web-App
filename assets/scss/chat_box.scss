@@ -265,7 +265,7 @@ $button-color-ligth-blue: #4db1ff;
 
 @media screen and (max-width: '480px') {
 	.remove {
-		bottom: -50%;
+        top: -100% !important;
 	}
     .user-chat-box {
         height: 100%;
@@ -273,6 +273,10 @@ $button-color-ligth-blue: #4db1ff;
         z-index: 7;
         border-radius: 0;
 		margin: 0;
+
+        .chat-overlay {
+            display: none;
+        }
 		
 
         .header {
