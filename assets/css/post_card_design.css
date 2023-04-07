@@ -192,6 +192,15 @@
   color: #d0d0d0;
 }
 
+.display-posts .post-footer .time {
+  padding-left: 20px;
+}
+
+.display-posts .post-footer .time p {
+  font-size: 0.8rem;
+  color: gray;
+}
+
 .display-posts .post-footer #comments-list-container {
   padding: 0px 20px 0px 20px;
 }
@@ -225,10 +234,15 @@
 
 .display-posts .post-footer #comments-list-container .comment-display .middle-section .bottom #comment-time {
   margin-right: 10px;
+  color: gray;
 }
 
 .display-posts .post-footer #comments-list-container .comment-display .middle-section .bottom #reply-button {
   margin-right: 10px;
+}
+
+.display-posts .post-footer #comments-list-container .comment-display .middle-section .bottom .delete-comment-button {
+  color: gray;
 }
 
 .display-posts .post-footer #comments-list-container .comment-display img {

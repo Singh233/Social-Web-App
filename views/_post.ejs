@@ -73,11 +73,15 @@
             <p class="post-user-name"><%= post.user.name %> - &nbsp; </p>
             <p class="post-user-content"><%= post.content %></p>
         </div>
+
+        <div class="time">
+            <p><%= moment(post.createdAt).fromNow() %></p>
+        </div>
         
         <div id="comments-list-container" class="post-comments-list">
             <ul id="post-comments-<%= post._id %>">
                 <% for (let comment of post.comments) { %>
-                    <%- include('_comment', {comment: comment}) %>
+                    <%- include('_comment', {comment: comment, moment}) %>
                 <% } %>
             </ul>
         </div>

@@ -8,11 +8,11 @@
         </div>
 
         <div class="bottom">
-            <p id="comment-time">3m</p>
+            <p id="comment-time"> <%= moment(comment.createdAt).fromNow() %> </p>
 
-            <p id="reply-button">reply</p>
+            <!-- <p id="reply-button">reply</p> -->
             <% if(locals.user && locals.user.id == comment.user.id) { %> 
-                <a class="delete-comment-button" href="/comments/destroy/<%= comment._id %>"><i class="fa-regular fa-circle-xmark"></i></a>
+                <a class="delete-comment-button" href="/comments/destroy/<%= comment._id %>">delete</a>
             <% } %>
             
 

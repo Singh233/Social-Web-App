@@ -3,6 +3,7 @@ const User = require('../models/user');
 const Comment = require('../models/comment');
 const Friendships = require('../models/friendship');
 const env = require('../config/environment');
+const moment = require('moment');
 
 module.exports.redirectToHome = function(request, response) {
     return response.redirect('/home');
@@ -51,13 +52,13 @@ module.exports.home = async function(request, response) {
             
         }
 
-        console.log(env.websocket_host)
         return response.render('home.ejs', {
             title: "Home",
             posts: posts, 
             all_users: users,
             friends: friendsArray,
-            websocket_host: env.websocket_host
+            websocket_host: env.websocket_host,
+            moment: moment
         });
     
         

@@ -223,9 +223,19 @@ $text-color-gray: #d0d0d0;
             }
         }
 
+        .time {
+            padding-left: 20px;
+
+            p {
+                font-size: 0.8rem;
+                color: gray;
+            }
+        }
+
 
         #comments-list-container {
             padding: 0px 20px 0px 20px;
+            // border-top: 1px solid rgba(231, 231, 231, 0.233);
 
 
 
@@ -257,6 +267,7 @@ $text-color-gray: #d0d0d0;
 
                         #comment-time {
                             margin-right: 10px;
+                            color: gray;
                         }
 
                         #reply-button {
@@ -264,7 +275,7 @@ $text-color-gray: #d0d0d0;
                         }
 
                         .delete-comment-button {
-                            
+                            color: gray;
                         }
                     }
                 }

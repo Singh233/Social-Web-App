@@ -39,7 +39,7 @@
 
                 <div id="posts-list-container">
                     <% for (let i of posts) { %> 
-                        <%- include('_post.ejs', {post: i}) -%>
+                        <%- include('_post.ejs', {post: i, moment}) -%>
                     <% } %>
                 </div>
                 
