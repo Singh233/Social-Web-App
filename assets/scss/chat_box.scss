@@ -133,12 +133,27 @@ $button-color-ligth-blue: #4db1ff;
                     border-radius: 20px;
                     font-size: 0.9rem;
                     margin-left: 6px;
+                    position: relative;
 
                     background-color: $button-color-gray;
 
                     sup {
                         align-self: flex-end;
                         padding: 2px 10px;
+                        font-size: 0.7rem;
+                        color: gray;
+                    }
+
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        z-index: -1;
+                        bottom: 0;
+                        left: 0px;
+                        height: 20px;
+                        width: 20px;
+                        background: $button-color-gray;
+                        border-bottom-right-radius: 15px;
                     }
                 }
 
@@ -174,9 +189,12 @@ $button-color-ligth-blue: #4db1ff;
                     display: flex;
                     align-items: center;
                     padding-left: 15px;
-                    border-radius: 20px;
+                    border-radius: 20px 20px 0 20px;
                     font-size: 0.9rem;
                     margin-right: 6px;
+
+                    position: relative;
+
 
                     background-color: $button-color-blue;
 
@@ -207,6 +225,21 @@ $button-color-ligth-blue: #4db1ff;
                     sup {
                         align-self: flex-end;
                         padding: 2px 10px;
+                        font-size: 0.7rem;
+                        color: rgba(255, 255, 255, 0.584);
+                    }
+
+                    // add a bubble like effect to the message for example: ios messages app
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        z-index: -1;
+                        bottom: 0;
+                        right: 46px;
+                        height: 20px;
+                        width: 20px;
+                        background: $button-color-blue;
+                        border-bottom-left-radius: 15px;
                     }
                 }
 

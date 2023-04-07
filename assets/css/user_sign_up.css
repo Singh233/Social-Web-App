@@ -157,7 +157,9 @@
     left: 0;
     right: 0;
     margin: auto;
-    margin-top: -10px;
+    overflow: hidden !important;
+    position: fixed;
+    margin-top: 80px;
   }
   .user-sign-up .welcome-div p {
     font-size: 1.3rem;

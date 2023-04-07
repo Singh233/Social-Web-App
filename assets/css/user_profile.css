@@ -209,6 +209,29 @@
   object-fit: cover;
 }
 
+#profile-container .profile-design .profile-posts .no-posts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#profile-container .profile-design .profile-posts .no-posts p {
+  font-size: 1rem;
+  color: gray;
+}
+
+#profile-container .profile-design .profile-posts .no-posts a {
+  text-decoration: none;
+  color: white;
+  background: linear-gradient(130deg, #1277f3 0%, #0b4995 97%);
+  padding: 8px 15px;
+  border-radius: 15px;
+  margin: 5px;
+  font-weight: 500;
+}
+
 #profile-container > img {
   height: 105px;
   width: 100px;

@@ -22,13 +22,17 @@
         </section>
 
     <section id="other-users">
-        <h4><i class="fa-solid fa-earth-americas"></i> Explore <span><%= all_users.length %></span> </h4>
+        <h4><i class="fa-solid fa-earth-americas"></i> Explore <span><%= all_users.length - 1 %></span> </h4>
 
         <div class="list">
             <% for(u of all_users) {%>
                 <% if (u.id == locals.user.id) { continue; } %>
                 <div class="user">
-                    <img src="<%= u.avatar %>" alt="">
+                    <% if(u.avatar != undefined) { %> 
+                        <img src="<%= u.avatar %>" alt="">
+                    <% } else { %> 
+                        <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
+                    <% } %> 
                     <p>
                         <a href="/users/profile/<%= u.id%>"><%= u.name %></a>
                     </p>

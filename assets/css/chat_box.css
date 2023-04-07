@@ -115,12 +115,27 @@
   border-radius: 20px;
   font-size: 0.9rem;
   margin-left: 6px;
+  position: relative;
   background-color: #202020;
 }
 
 .user-chat-box #chat-messages-list .other-message .msg-content span sup {
   align-self: flex-end;
   padding: 2px 10px;
+  font-size: 0.7rem;
+  color: gray;
+}
+
+.user-chat-box #chat-messages-list .other-message .msg-content span::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  left: 0px;
+  height: 20px;
+  width: 20px;
+  background: #202020;
+  border-bottom-right-radius: 15px;
 }
 
 .user-chat-box #chat-messages-list .other-message .msg-content img {
@@ -157,15 +172,30 @@
   display: flex;
   align-items: center;
   padding-left: 15px;
-  border-radius: 20px;
+  border-radius: 20px 20px 0 20px;
   font-size: 0.9rem;
   margin-right: 6px;
+  position: relative;
   background-color: #0057d2;
 }
 
 .user-chat-box #chat-messages-list .self-message .msg-content span sup {
   align-self: flex-end;
   padding: 2px 10px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.584);
+}
+
+.user-chat-box #chat-messages-list .self-message .msg-content span::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  right: 46px;
+  height: 20px;
+  width: 20px;
+  background: #0057d2;
+  border-bottom-left-radius: 15px;
 }
 
 .user-chat-box #chat-messages-list .self-message .msg-content img {

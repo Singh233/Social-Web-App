@@ -35,7 +35,11 @@
             </div>
     
             <div class="user-container">
-                <img src="<%= user.avatar %>" alt="">
+                <% if(user.avatar != undefined) { %> 
+                    <img src="<%= user.avatar %>" alt="">
+                <% } else { %> 
+                    <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
+                <% } %> 
                 <p class="user-name"> <%= user.name.substring(0, 14) %></p>
                 <i class="fa-solid fa-chevron-up"></i>
             </div>

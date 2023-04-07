@@ -10,14 +10,22 @@
         <% if(locals.user) { %>
 
             <div class="post-new-card">
-                <img src="<%= locals.user.avatar %>" id="user-profile-img">
+                <% if(locals.user.avatar != undefined) { %> 
+                    <img src="<%= locals.user.avatar %>" alt="">
+                <% } else { %> 
+                    <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
+                <% } %> 
                 <p>Hey, <%= locals.user.name %> post something new!</p>
                 <button onclick="upload()"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
             
             <form action="/posts/create/<%= locals.user._id %>" enctype="multipart/form-data" id="new-post-form"  method="post">
                 <div class="header">
-                    <img src="<%= locals.user.avatar %>" id="user-profile-img">
+                    <% if(locals.user.avatar != undefined) { %> 
+                        <img src="<%= locals.user.avatar %>" alt="">
+                    <% } else { %> 
+                        <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
+                    <% } %> 
                     <p>Hey, <%= locals.user.name %> post something new!</p>
                 </div>
                 <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">

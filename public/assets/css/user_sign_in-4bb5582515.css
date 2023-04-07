@@ -160,6 +160,8 @@
     right: 0;
     margin: auto;
     overflow: hidden !important;
+    position: fixed;
+    margin-top: 80px;
   }
   .user-sign-in .welcome-div p span {
     font-size: 2.3rem;

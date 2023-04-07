@@ -95,11 +95,31 @@ class ChatEngine{
             }
 
 
-            
+            // check if the last message was sent by the same user
+            if ($('#chat-messages-list li').length){
+                let lastMessage = $('#chat-messages-list li:last-child');
 
+                if (lastMessage.find('sub').html() == data.user_name){   
+                    lastMessage.find('sub').remove();
+                    // hide the visibility of the profile image
+                    lastMessage.find('img').css('visibility', 'hidden');
+
+                    // remove margin from the last self message
+                    if (lastMessage.hasClass('self-message')){
+                        lastMessage.css('margin-bottom', '0px');
+                    } else {
+                        lastMessage.css('margin-bottom', '0px');
+                    }
+
+                    // remove margin from the current message
+                    newMessage.css('margin-top', '0px');
+                }
+            } 
             newMessage.append($('<sub>', {
                 'html': data.user_name
             }));
+
+            
 
             newMessage.addClass(messageType);
 

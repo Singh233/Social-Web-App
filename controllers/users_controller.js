@@ -9,12 +9,11 @@ module.exports.profile = function(request, response) {
     User.findById(request.params.id, function(error, user) {
         if (error) {
             console.log("Error in finding profile");
-            return;
+            flash('error', 'Error in finding profile');
+            return response.redirect('back');
         }
-
-        let friendsArray = [];
         
-        let friends = Friendships.find({to_user: user._id}, function(error, friends) {
+        Friendships.find({to_user: user._id}, function(error, friends) {
             //console.log('Inside friendships', friends);
             // for (let friend of friends) {
             //     let currUser = User.find({_id: friend.to_user});
@@ -22,21 +21,34 @@ module.exports.profile = function(request, response) {
             // }
             if (error) {
                 console.log("Error in finding friendships");
-                return;
+                flash('error', 'Error in finding friendships');
+                return response.redirect('back');
             }
-            let posts = Post.find({user: user._id}, function (error, posts) {
+            console.log(friends);
+            Post.find({user: user._id}, function (error, posts) {
                 if (error ) {
                     console.log("error in finding user posts");
                     return;
                 }
 
-    
-                return response.render('user_profile.ejs', {
-                    title: "Profile",
-                    profile_user: user,
-                    friends: friends,
-                    user_posts: posts
-                });
+                // find following
+                Friendships.find({from_user: user._id}, function(error, following) {
+                    if (error) {
+                        console.log("Error in finding following");
+                        return;
+                    }
+                    
+
+                    return response.render('user_profile.ejs', {
+                        title: "Profile",
+                        profile_user: user,
+                        friends: friends,
+                        user_posts: posts,
+                        following: following,
+                        followers: friends
+                    });
+                    
+                })
             })
             
         });

@@ -58,13 +58,12 @@
                 </div>
 
                 <div class="followers">
-                    <p class="count">0</p>
+                    <p class="count"><%= followers.length %></p>
                     <p>Followers</p>
                 </div>
 
                 <div class="following">
-                    <% let followCount = 0; for(friend of friends) { followCount++; } %> 
-                    <p class="count"><%= followCount %></p>
+                    <p class="count"><%= following.length %></p>
                     <p>Following</p>
                 </div>
             </div>
@@ -87,7 +86,17 @@
                         <% } %>
                     </div>
                 <% } %>
+
+                
             </div>
+
+            <!-- If post length is 0 -->
+            <% if (user_posts.length == 0) { %>
+                <div class="no-posts">
+                    <p>You have no posts yet</p>
+                    <a href="/home">Add post</a>
+                </div>
+            <% } %>
         </div>
     </div>
 

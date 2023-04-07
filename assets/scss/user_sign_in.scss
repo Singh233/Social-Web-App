@@ -195,7 +195,8 @@ $button-color-gray: #212121;
         right: 0;
         margin: auto;
         overflow: hidden !important;
-
+        position: fixed;
+        margin-top: 80px;
 
         .welcome-div {
             p {
