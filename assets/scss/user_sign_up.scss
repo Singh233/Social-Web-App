@@ -189,12 +189,11 @@ $button-color-gray: #212121;
 
     .user-sign-up {
         max-width: 88vw;
-        margin-top: -10px;
         margin-left: 0;
         left: 0;
         right: 0;
         margin: auto;
-        margin-top: -10px;
+        overflow: hidden !important;
 
         .welcome-div {
             p {

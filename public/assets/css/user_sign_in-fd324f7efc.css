@@ -159,7 +159,6 @@
     left: 0;
     right: 0;
     margin: auto;
-    margin-top: -10px;
     overflow: hidden !important;
   }
   .user-sign-in .welcome-div p span {
