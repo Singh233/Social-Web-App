@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="<%= assetPath('css/home.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/chat_box.css') %>">
+<link rel="stylesheet" href="<%= assetPath('css/chat_messages.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/post_card_design.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
@@ -63,7 +64,9 @@
 
         
     <% } %>
-    <%- include('_chat_box') -%>
+    <% if(locals.user) { %>
+        <%- include('_chat_box', {friends}) -%>
+    <% } %>
 
     <% if (locals.user){ %>
         <%- include('_bottom_nav_bar_sm') -%>
@@ -106,7 +109,7 @@
 <% if (locals.user){ %>
     <script>
         
-        new ChatEngine('user-chat-box', '<%= locals.user.email %>', '<%= locals.user.name %>', '<%= locals.user.avatar %>', '<%= websocket_host %>');
+        new ChatEngine('user-chat-box','<%= locals.user._id %>', '<%= locals.user.email %>', '<%= locals.user.name %>', '<%= locals.user.avatar %>', '<%= websocket_host %>');
     </script>
 <% } %>
 

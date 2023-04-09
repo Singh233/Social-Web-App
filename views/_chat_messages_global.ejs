@@ -1,0 +1,54 @@
+
+
+<% if (locals.user){ %>
+
+	<div id="user-messages-global" class="user-messages remove  animate__animated">
+		<!-- <div class="animate__animated animate__faster chat-overlay chat-overlay-z-index">
+			<i onclick="toggleChatWindow()"  class="fa-solid fa-comments comment-icon"></i>
+			<p>Chat with friends</p>
+			<i onclick="toggleChatWindow()" class="fa-solid fa-chevron-up"></i>
+		</div> -->
+
+
+		<div class="header">
+			<i id="close-chat-window" onclick="toggleChatMessages('', '', '', 'global')" class="fa-solid fa-arrow-left-long back-button"></i>
+			<p id="chat-room-" class="chat-room">Global Chat</p>
+			<i class="fa-solid fa-ellipsis-vertical chat-menu"></i>
+		</div>
+
+		<p id="active-users"></p>
+
+		<ul id="chat-messages-list-global" class="chat-messages-list">
+			<!-- Display day -->
+
+			
+
+			<!-- <li class="other-message animate__animated animate__faster animate__zoomIn">
+				<div class="msg-content">
+					<img src="<%= assetPath('img/1782188.jpeg') %>">
+					<span>
+						 Other Message <sup>2:04 AM</sup> 
+					</span>
+					
+				</div>
+			</li>
+			<li class="self-message animate__animated animate__faster animate__zoomIn">
+				<div class="msg-content">
+					<span>
+						 Self Message <sup>2:04 AM</sup> 
+					</span>
+					<img src="<%= assetPath('img/1782188.jpeg') %>">
+				</div>
+				
+				
+				
+			</li> -->
+
+		</ul>
+		<div class="animate__animated" id="chat-message-input-container">
+			<input id="chat-message-input-global" class="chat-message-input" placeholder="Type message here" required>
+			<button id="send-message-global" class="send-message"><i class="fa-solid fa-paper-plane"></i></button>
+		</div>
+
+	</div>
+<% } %>
