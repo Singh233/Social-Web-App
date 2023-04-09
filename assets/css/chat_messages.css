@@ -98,6 +98,12 @@
 
 .user-messages .header .chat-room #chat-room-private-status i {
   margin-right: 5px;
+  text-shadow: 0 0 10px black;
+  color: greenyellow;
+}
+
+.user-messages .header .chat-room #chat-room-private-status .offline-color {
+  color: gray;
 }
 
 .user-messages .header .chat-room #chat-room-private-status #chat-room-private-status-text {

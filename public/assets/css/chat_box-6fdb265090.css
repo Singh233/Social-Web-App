@@ -62,8 +62,19 @@
 .user-chat-box .friends #friends-list {
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 15px;
   padding-top: 0;
+}
+
+.user-chat-box .friends #friends-list .no-friend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.user-chat-box .friends #friends-list .no-friend p {
+  text-align: center;
 }
 
 .user-chat-box .friends #friends-list li {
@@ -116,6 +127,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 .user-chat-box .friends .global-chat-option button {
@@ -128,6 +140,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease-out;
+  width: 92%;
 }
 
 .user-chat-box .friends .global-chat-option button:hover {

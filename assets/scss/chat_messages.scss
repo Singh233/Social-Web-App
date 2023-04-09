@@ -121,6 +121,13 @@ $button-color-ligth-blue: #4db1ff;
 
                 i {
                     margin-right: 5px;
+                    // add black ring around icon
+                    text-shadow: 0 0 10px black;
+                    color: greenyellow;
+                }
+
+                .offline-color {
+                    color: gray;
                 }
 
                 #chat-room-private-status-text {

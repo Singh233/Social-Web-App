@@ -13,7 +13,9 @@ class ChatEngine{
             secure:true,
             reconnect: true,
             rejectUnauthorized : false,
-            userId,
+            query: {
+                userId: this.userId,
+            }
         });
 
         // chat rooms array
@@ -59,7 +61,13 @@ class ChatEngine{
                 if (value.status === 'online' && statusElement.length > 0) {
                     statusElement.html('<i class="fa-solid fa-circle"></i> Active Now');
                 } else if (statusElement.length > 0) {
-                    statusElement.html('<i class="fa-solid fa-circle"></i> Offline');
+                    // console.log(value);
+                    // show last seen time using moment library
+                    if (value.moment) {
+                    statusElement.html('Active ' + value.moment);
+                    } else {
+                    statusElement.html('offline');
+                    }
                 }
             });
             
@@ -247,7 +255,10 @@ class ChatEngine{
         self.socket.on('receive_private_message', function(data){
             // console.log('message received', data.message);
             let userId = document.getElementById('chat-user-id').value;
-
+            if (userId != data.from_user && userId != data.to_user){
+                return;
+            }
+            // console.log(userId);
             let newMessage = $('<li>');
             let profile = $('<img>');
             
@@ -303,5 +314,11 @@ class ChatEngine{
             $(`#chat-messages-list-private-${userId}`).append(newMessage);
             $('#chat-message-input-private').val('');
         });
+
+
+        // close private room
+        $('#close-chat-window').click(function(){
+            $(this).parent().parent().remove();
+        } );
     }
 }
