@@ -17,7 +17,13 @@
 				<i onclick="toggleChatWindow()" class="fa-solid fa-chevron-down"></i>
 			</div>
 			<p class="update-msg">🎉 New features coming soon!</p>
-
+			<div class="global-chat-option">
+				<button id="global-chat-btn" onclick="toggleChatMessages('','','', 'global')">
+					<i class="fa-solid fa-earth-americas"></i>
+					Global Chat
+				</button>
+				<p>or</p>
+			</div>
 			<ul id="friends-list">
 				<% for(friend of friends) {  %>
 					<li id="<%= friend[0]._id %>" onclick="toggleChatMessages('<%= friend[0]._id %>', '<%= friend[0].avatar %>',  '<%= friend[0].name %>', 'private')" class="friend animate__animated animate__faster animate__fadeIn">
@@ -29,12 +35,15 @@
 						<i class="fa-solid fa-comment"></i>
 					</li>
 				<% } %>
+
+				<% if (friends.length === 0) { %>
+					<li class="no-friend animate__animated animate__faster animate__fadeIn">
+						<p><i class="fa-solid fa-user-plus"></i> Add a friend to start conversation!</p>
+					</li>
+				<% } %>
 			</ul>
 
-			<div class="global-chat-option">
-				<p>or</p>
-				<button id="global-chat-btn" onclick="toggleChatMessages('','','', 'global')">Global Chat</button>
-			</div>
+			
 		</div>
 
 		<div class="footer">

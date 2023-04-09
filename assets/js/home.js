@@ -102,7 +102,7 @@ function toggleChatWindow() {
 
 
 function toggleChatMessages(userId, profile, name, type) {
-    console.log(userId, name, type);
+    // console.log(userId, name, type);
     // using jquery
     $('.user-chat-box').toggleClass('remove');
     $(`#user-messages-${type}`).toggleClass('remove');
@@ -113,9 +113,15 @@ function toggleChatMessages(userId, profile, name, type) {
 
         // check the status of the user
         if ($(`#status-${userId}`).html() == '<i class="fa-solid fa-circle"></i> Active Now') {
+            // set the font awesome icon color to green
+            document.getElementById('chat-room-private-status-icon').classList.remove('offline-color');
+
             document.getElementById('chat-room-private-status-text').innerHTML = 'Active Now';
         } else {
-            document.getElementById('chat-room-private-status-text').innerHTML = 'offline';
+            // set the font awesome icon color to red
+            document.getElementById('chat-room-private-status-icon').classList.add('offline-color');
+
+            document.getElementById('chat-room-private-status-text').innerHTML = $('#status-' + userId).html();
         }
     
         // set the profile img of the user to the chat header
