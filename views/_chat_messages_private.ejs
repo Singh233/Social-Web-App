@@ -1,0 +1,66 @@
+
+
+<% if (locals.user){ %>
+
+	<div id="user-messages-private" class="user-messages remove  animate__animated">
+		<!-- <div class="animate__animated animate__faster chat-overlay chat-overlay-z-index">
+			<i onclick="toggleChatWindow()"  class="fa-solid fa-comments comment-icon"></i>
+			<p>Chat with friends</p>
+			<i onclick="toggleChatWindow()" class="fa-solid fa-chevron-up"></i>
+		</div> -->
+
+        <div class="info">
+            <input id="chat-user-id" type="hidden" value="">
+        </div>
+
+
+		<div class="header">
+			<i id="close-chat-window" onclick="toggleChatMessages('', '', '', 'private')" class="fa-solid fa-arrow-left-long back-button"></i>
+			<p id="chat-room-private" class="chat-room">
+                <img id="chat-room-private-profile-img" src="" alt="">
+                <span id="chat-room-private-username">Private Chat</span>
+				<span id="chat-room-private-status">
+					<i class="fa-solid fa-circle"></i>
+					<span id="chat-room-private-status-text">Active Now</span>
+				</span>
+            </p>
+			<i class="fa-solid fa-ellipsis-vertical chat-menu"></i>
+		</div>
+
+        <p class="update-msg">ℹ️ Messages are not persistent yet!</p>
+
+
+		<ul id="chat-messages-list-private-" class="chat-messages-list">
+			<!-- Display day -->
+
+			
+
+			<!-- <li class="other-message animate__animated animate__faster animate__zoomIn">
+				<div class="msg-content">
+					<img src="<%= assetPath('img/1782188.jpeg') %>">
+					<span>
+						 Other Message <sup>2:04 AM</sup> 
+					</span>
+					
+				</div>
+			</li>
+			<li class="self-message animate__animated animate__faster animate__zoomIn">
+				<div class="msg-content">
+					<span>
+						 Self Message <sup>2:04 AM</sup> 
+					</span>
+					<img src="<%= assetPath('img/1782188.jpeg') %>">
+				</div>
+				
+				
+				
+			</li> -->
+
+		</ul>
+		<div class="animate__animated" id="chat-message-input-container">
+			<input id="chat-message-input-private" class="chat-message-input" placeholder="Type message here" required>
+			<button id="send-message-private" class="send-message"><i class="fa-solid fa-paper-plane"></i></button>
+		</div>
+
+	</div>
+<% } %>
