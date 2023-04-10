@@ -91,14 +91,31 @@ class ChatEngine{
                 user_name: self.userName,
                 user_profile: self.userProfile,
                 time: new Date().toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"}),
+                from_user: self.userId,
                 chatroom: 'Global',
             });
 
-            self.socket.on('user_joined', function(data) {
-                // console.log('a user joined!', data);
-            })
+            // display notification
+            toast("Global Chat joined!", "success");
 
         });
+
+        self.socket.on('global_user_joined', async function(data) {
+            // console.log('a user joined!', data);
+
+            const response = await fetch(`/api/v1/chat/global/${data.from_user}/all`);
+            const responseData = await response.json();
+            console.log(responseData)
+
+            // if chat messages private list is empty, then add the messages to the list
+            if ($(`#chat-messages-list-global`).children().length == 0){
+                responseData.data.chatRoom.messages.forEach(function(message){
+                    addGlobalChatToDOM(message);
+                });
+            }
+
+            scrollToBottom();
+        })
 
         // connect socket on one of the user's private chat button click
         $('.friend').click(function(){
@@ -119,16 +136,30 @@ class ChatEngine{
                 chatroom: chatRoom,
             });
 
-            self.socket.on('user_joined', function(data) {
-                // console.log('a user joined!', data);
-            })
-
             // clear the chat box if the user clicks on a different friend
             if (document.getElementById('chat-user-id').value == to_user){
                 // console.log('inside if')
                 $(`#chat-messages-list-private-${to_user}`).children().remove();
             }
+
+            
         });
+
+        self.socket.on('private_user_joined', async function(data) {
+            // console.log('a user joined!', data);
+            const response = await fetch(`/api/v1/chat/private/${data.from_user}/${data.to_user}`);
+            const responseData = await response.json();
+
+            // if chat messages private list is empty, then add the messages to the list
+            if ($(`#chat-messages-list-private-${data.from_user}`).children().length == 0){
+                responseData.data.chatRoom.messages.forEach(function(message){
+                    addChatToDOM(message);
+                });
+            }
+
+            scrollToBottomPrivate();
+
+        })
 
 
         // send a message on clicking the send message button or pressing enter
@@ -146,7 +177,22 @@ class ChatEngine{
                         user_name: self.userName,
                         user_profile: self.userProfile,
                         time: new Date().toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"}),
+                        from_user: self.userId,
                         chatroom: 'Global'
+                    });
+
+                    const response = fetch(`/api/v1/chat/createmessage/${msg}/${self.userId}/all`, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                    }).then(function(response){
+                        return response.json();
+                    }).then(function(data){
+                        console.log(data);
+                    }).catch(function(err){
+                        console.log(err);
                     });
                 } 
             }
@@ -172,8 +218,23 @@ class ChatEngine{
                     chatroom: chatRoom
                 });
 
+                const response = fetch(`/api/v1/chat/createmessage/${msg}/${from_user}/${to_user}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                }).then(function(response){
+                    return response.json();
+                }).then(function(data){
+                    console.log(data);
+                }).catch(function(err){
+                    console.log(err);
+                });
+
             }
         });
+
                 
 
         // send a message on pressing enter
@@ -250,9 +311,13 @@ class ChatEngine{
 
             $('#chat-messages-list-global').append(newMessage);
             $('#chat-message-input-global').val('');
+            scrollToBottom();
         });
 
         self.socket.on('receive_private_message', function(data){
+            // post the message to the database
+            
+            
             // console.log('message received', data.message);
             let userId = document.getElementById('chat-user-id').value;
             if (userId != data.from_user && userId != data.to_user){
@@ -313,12 +378,186 @@ class ChatEngine{
 
             $(`#chat-messages-list-private-${userId}`).append(newMessage);
             $('#chat-message-input-private').val('');
+            scrollToBottomPrivate();
         });
 
+        function scrollToBottom(){
+            let chatMessages = document.getElementById('chat-messages-list-global');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
 
-        // close private room
-        $('#close-chat-window').click(function(){
-            $(this).parent().parent().remove();
-        } );
+        function scrollToBottomPrivate(){
+            let userId = document.getElementById('chat-user-id').value;
+
+            let chatMessages = document.getElementById('chat-messages-list-private-' + userId);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addChatToDOM(data) {
+            let userId = document.getElementById('chat-user-id').value;
+            if (userId != data.sender._id && userId != data.receiver._id){
+                return;
+            }
+
+            // console.log(userId);
+            let newMessage = $('<li>');
+            let profile = $('<img>');
+            
+            newMessage.addClass('animate__animated  animate__fadeIn');
+            let messageType = 'other-message animate__animated  animate__fadeIn';
+            console.log(data.sender.email, self.userEmail)
+            if (data.sender.email == self.userEmail){
+                messageType = 'self-message';
+                newMessage.append(`<div class="msg-content">
+                                <span>
+                                    ${data.message} <sup>${new Date(data.createdAt).toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"})}</sup> 
+                                </span>
+                                <img src="${data.sender.avatar ? data.sender.avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'}">
+                                
+                            </div>`);
+            } else {
+                newMessage.append(`<div class="msg-content">
+                                <img src="${data.sender.avatar ? data.sender.avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'}">
+                                <span>
+                                    ${data.message} <sup>${new Date(data.createdAt).toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"})}</sup> 
+                                </span>
+                                
+                            </div>`);
+            }
+
+            // check if the last message was sent by the same user
+            if ($(`#chat-messages-list-private-${userId} li`).length){
+                let lastMessage = $(`#chat-messages-list-private-${userId} li:last-child`);
+
+                if (lastMessage.find('sub').html() == data.sender.name){   
+                    lastMessage.find('sub').remove();
+                    // hide the visibility of the profile image
+                    lastMessage.find('img').css('visibility', 'hidden');
+
+                    // remove margin from the last self message
+                    if (lastMessage.hasClass('self-message')){
+                        lastMessage.css('margin-bottom', '0px');
+                    } else {
+                        lastMessage.css('margin-bottom', '0px');
+                    }
+
+                    // remove margin from the current message
+                    newMessage.css('margin-top', '0px');
+                }
+            } 
+            newMessage.append($('<sub>', {
+                'html': data.sender.name
+            }));
+
+            
+
+            newMessage.addClass(messageType);
+
+            $(`#chat-messages-list-private-${userId}`).append(newMessage);
+            $('#chat-message-input-private').val('');
+        }
+
+        function addGlobalChatToDOM(data) {
+            
+            let newMessage = $('<li>');
+            let profile = $('<img>');
+            
+            newMessage.addClass('animate__animated  animate__fadeIn');
+            let messageType = 'other-message animate__animated  animate__fadeIn';
+
+            if (data.sender.email == self.userEmail){
+                messageType = 'self-message';
+                newMessage.append(`<div class="msg-content">
+                                <span>
+                                    ${data.message} <sup>${new Date(data.createdAt).toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"})}</sup> 
+                                </span>
+                                <img src="${data.sender.avatar ? data.sender.avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'}">
+                            </div>`);
+            } else {
+                newMessage.append(`<div class="msg-content">
+                                <img src="${data.sender.avatar ? data.sender.avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'}">
+
+                                <span>
+                                    ${data.message} <sup>${new Date(data.createdAt).toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"})}</sup> 
+                                </span>
+                                
+                            </div>`);
+            }
+
+
+            // check if the last message was sent by the same user
+            if ($('#chat-messages-list-global li').length){
+                let lastMessage = $('#chat-messages-list-global li:last-child');
+
+                if (lastMessage.find('sub').html() == data.sender.name){   
+                    lastMessage.find('sub').remove();
+                    // hide the visibility of the profile image
+                    lastMessage.find('img').css('visibility', 'hidden');
+
+                    // remove margin from the last self message
+                    if (lastMessage.hasClass('self-message')){
+                        lastMessage.css('margin-bottom', '0px');
+                    } else {
+                        lastMessage.css('margin-bottom', '0px');
+                    }
+
+                    // remove margin from the current message
+                    newMessage.css('margin-top', '0px');
+                }
+            } 
+            newMessage.append($('<sub>', {
+                'html': data.sender.name
+            }));
+
+            
+            // console.log(newMessage)
+            newMessage.addClass(messageType);
+
+            $('#chat-messages-list-global').append(newMessage);
+            $('#chat-message-input-global').val('');
+        }
+
+        function toast(message, type) {
+            if (type == 'error'){
+                Toastify({
+                    text: "<%= flash.error %>",
+                    duration: 2000,
+                    destination: "",
+                    newWindow: true,
+                    close: true,
+                    avatar: "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
+                    gravity: "top", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "#D20A0A",
+                        borderRadius: "10px",
+                        color: "white",
+                    },
+                    onClick: function(){} // Callback after click
+                }).showToast();
+            } else if (type == 'success'){
+                Toastify({
+                    text: message,
+                    duration: 2000,
+                    destination: "",
+                    newWindow: true,
+                    close: true,
+                    avatar: "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+
+                    gravity: "top", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "#0057D2",
+                        borderRadius: "10px",
+                    },
+                    onClick: function(){} // Callback after click
+                }).showToast();
+            }
+        }
+
+
+        
     }
 }
