@@ -27,7 +27,11 @@
 			<ul id="friends-list">
 				<% for(friend of friends) {  %>
 					<li id="<%= friend[0]._id %>" onclick="toggleChatMessages('<%= friend[0]._id %>', '<%= friend[0].avatar %>',  '<%= friend[0].name %>', 'private')" class="friend animate__animated animate__faster animate__fadeIn">
-						<img src="<%= friend[0].avatar %>">
+						<% if (friend[0].avatar) { %>
+							<img src="<%= friend[0].avatar %>">
+						<% } else { %>
+							<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png">
+						<% } %>
 						<span>
 							<p><%= friend[0].name %></p>
 							<p id="status-<%= friend[0]._id %>" class="status"><%= friend[0].status %> offline</p>

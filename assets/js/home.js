@@ -106,7 +106,7 @@ function toggleChatMessages(userId, profile, name, type) {
     // using jquery
     $('.user-chat-box').toggleClass('remove');
     $(`#user-messages-${type}`).toggleClass('remove');
-    if (name) {
+    if (name != '') {
         // set the email of the user to the chat header
         document.getElementById('chat-room-private-username').innerText = name;
     
