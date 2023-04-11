@@ -8,10 +8,11 @@ module.exports.chatSockets = function (socketServer) {
     let activeUsers = new Map();
 
     io.sockets.on('connection', function (socket) {
-        console.log('new connection received', socket.id);
+        // console.log('new connection received', socket.id);
 
         activeUsers.set(socket.handshake.query.userId, {
             userId: socket.handshake.query.userId,
+            socketId: socket.id,
             status: 'online',
             timeStamp: new Date(),
             moment: moment(new Date()).fromNow(),
@@ -30,6 +31,7 @@ module.exports.chatSockets = function (socketServer) {
             if (activeUsers.has(key)) {
                 activeUsers.set(key, {
                     userId: data.user_id,
+                    socketId: socket.id,
                     status: 'online',
                     timeStamp: new Date(),
                     moment: moment(new Date()).fromNow(),
@@ -61,6 +63,7 @@ module.exports.chatSockets = function (socketServer) {
             if (activeUsers.has(key)) {
                 activeUsers.set(key, {
                     userId: activeUsers.get(key).userId,
+                    socketId: socket.id,
                     status: 'offline',
                     timeStamp: new Date(),
                     moment: moment(new Date()).fromNow(),
@@ -144,6 +147,11 @@ module.exports.chatSockets = function (socketServer) {
             }
 
             io.in(data.chatroom).emit('receive_private_message', data);
+
+            // emit notification to the receiver of the message only
+            if (activeUsers.has(data.to_user)) {
+                io.to(activeUsers.get(data.to_user).socketId).emit('receive_notification', data);
+            }
         });
     });
 };

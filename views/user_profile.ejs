@@ -91,10 +91,14 @@
             </div>
 
             <!-- If post length is 0 -->
-            <% if (user_posts.length == 0) { %>
+            <% if (user_posts.length == 0 && locals.user.id == profile_user.id) { %>
                 <div class="no-posts">
                     <p>You have no posts yet</p>
                     <a href="/home">Add post</a>
+                </div>
+            <% } else if (user_posts.length == 0) { %>
+                <div class="no-posts">
+                    <p><%= profile_user.name %> has no posts yet</p>
                 </div>
             <% } %>
         </div>
@@ -111,6 +115,8 @@
     <% if (locals.user){ %>
         <%- include('_bottom_nav_bar_sm') -%>
     <% } %>
+
+    
 </div>
 
 

@@ -35,6 +35,15 @@
   margin: 10px;
 }
 
+.display-posts .post-options-menu .option1 a {
+  text-decoration: none;
+  color: white;
+}
+
+.display-posts .post-options-menu .option1 a:hover {
+  color: #D1EFFF;
+}
+
 .display-posts .post-options-menu .option2 {
   margin: 10px;
   color: #D20A0A;
@@ -85,6 +94,17 @@
   width: 35px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.display-posts .post-header a {
+  width: max-content;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+.display-posts .post-header a:hover {
+  color: gray;
 }
 
 .display-posts .post-header #post-menu-options {

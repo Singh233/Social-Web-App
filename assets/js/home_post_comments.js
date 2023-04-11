@@ -31,22 +31,17 @@ class PostComments {
 
                      //enable the functionality of the toggle liek button on the new post
                     new ToggleLike($(' .toggle-like-button', newComment));
-                    new Noty({
-                        theme: 'relax',
-                        text: data.data.success,
-                        type: 'success',
-                        layout: 'topRight',
-                        timeout: 3000
-                    }).show();
+                    
+
                 }, error: function(error) {
-                    console.log(error.responseText);
-                    new Noty({
-                        theme: 'relax',
-                        text: 'Something went wrong!',
-                        type: 'error',
-                        layout: 'topRight',
-                        timeout: 2000
-                    }).show();
+                    // console.log(error.responseText);
+                    // new Noty({
+                    //     theme: 'relax',
+                    //     text: 'Something went wrong!',
+                    //     type: 'error',
+                    //     layout: 'topRight',
+                    //     timeout: 2000
+                    // }).show();
                 }
             });
         });
@@ -68,7 +63,7 @@ class PostComments {
                         timeout: 3000
                     }).show();
                 }, error: function(error) {
-                    console.log(error.responseText);
+                    // console.log(error.responseText);
                     new Noty({
                         theme: 'relax',
                         text: 'Something went wrong!',

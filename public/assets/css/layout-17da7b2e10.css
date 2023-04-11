@@ -46,6 +46,10 @@ body::-webkit-scrollbar-thumb {
   border-radius: 8px;
 }
 
+.stop-scrolling {
+  overflow: hidden !important;
+}
+
 ::-webkit-scrollbar {
   width: 12px;
   height: 14px;

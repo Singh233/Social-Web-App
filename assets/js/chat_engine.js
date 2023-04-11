@@ -32,7 +32,7 @@ class ChatEngine{
 
         let self = this;
         this.socket.on('connect', function(){
-            console.log('connection established using sockets...!');
+            // console.log('connection established using sockets...!');
             // join private chat room
             // self.socket.emit('join_private_room', {
             //     user_email: self.userEmail,
@@ -97,6 +97,7 @@ class ChatEngine{
 
             // display notification
             toast("Global Chat joined!", "success");
+            $(`#chat-messages-list-global`).parent().find('#messages-loader').removeClass('hide-loader');
 
         });
 
@@ -105,7 +106,7 @@ class ChatEngine{
 
             const response = await fetch(`/api/v1/chat/global/${data.from_user}/all`);
             const responseData = await response.json();
-            console.log(responseData)
+            $(`#chat-messages-list-global`).parent().find('#messages-loader').addClass('hide-loader');
 
             // if chat messages private list is empty, then add the messages to the list
             if ($(`#chat-messages-list-global`).children().length == 0){
@@ -141,14 +142,20 @@ class ChatEngine{
                 // console.log('inside if')
                 $(`#chat-messages-list-private-${to_user}`).children().remove();
             }
+            $(`#chat-messages-list-private-${to_user}`).parent().find('#messages-loader').removeClass('hide-loader');
 
             
         });
 
         self.socket.on('private_user_joined', async function(data) {
             // console.log('a user joined!', data);
+            // show loader while fetching the messages
+
             const response = await fetch(`/api/v1/chat/private/${data.from_user}/${data.to_user}`);
             const responseData = await response.json();
+
+            // hide loader after fetching the messages
+            $(`#chat-messages-list-private-${data.to_user}`).parent().find('#messages-loader').addClass('hide-loader');
 
             // if chat messages private list is empty, then add the messages to the list
             if ($(`#chat-messages-list-private-${data.from_user}`).children().length == 0){
@@ -190,9 +197,10 @@ class ChatEngine{
                     }).then(function(response){
                         return response.json();
                     }).then(function(data){
-                        console.log(data);
+                        // console.log(data);
                     }).catch(function(err){
-                        console.log(err);
+                        // console.log(err);
+                        showToast('error', 'Error sending message!', 3000, '');
                     });
                 } 
             }
@@ -227,9 +235,10 @@ class ChatEngine{
                 }).then(function(response){
                     return response.json();
                 }).then(function(data){
-                    console.log(data);
+                    // console.log(data);
                 }).catch(function(err){
-                    console.log(err);
+                    // console.log(err);
+                    showToast('error', 'Error sending message!', 3000, '');
                 });
 
             }
@@ -250,6 +259,13 @@ class ChatEngine{
         });
 
 
+        self.socket.on('receive_notification', function(data) {
+            // console.log('notification received', data);
+            if ($('#user-messages-private').hasClass('remove') && self.userId == data.to_user){
+                toast('New message from ' + data.user_name.split(' ')[0], 'success', 4000, 'https://img.freepik.com/free-icon/chat_318-561856.jpg?size=626&ext=jpg&uid=R38501345&ga=GA1.2.1154692012.1676455794&semt=ais');
+                
+            }
+        })
         
 
         self.socket.on('receive_global_message', function(data){
@@ -316,6 +332,7 @@ class ChatEngine{
 
         self.socket.on('receive_private_message', function(data){
             // post the message to the database
+            // show toast notification if the user is not in the chat window
             
             
             // console.log('message received', data.message);
@@ -405,7 +422,7 @@ class ChatEngine{
             
             newMessage.addClass('animate__animated  animate__fadeIn');
             let messageType = 'other-message animate__animated  animate__fadeIn';
-            console.log(data.sender.email, self.userEmail)
+            
             if (data.sender.email == self.userEmail){
                 messageType = 'self-message';
                 newMessage.append(`<div class="msg-content">
@@ -517,15 +534,21 @@ class ChatEngine{
             $('#chat-message-input-global').val('');
         }
 
-        function toast(message, type) {
+        function toast(message, type, duration, icon) {
+            
+                
             if (type == 'error'){
+                if (!icon){
+                    icon = 'https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9'
+                }
+
                 Toastify({
                     text: "<%= flash.error %>",
-                    duration: 2000,
+                    duration: duration,
                     destination: "",
                     newWindow: true,
                     close: true,
-                    avatar: "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
+                    avatar: icon,
                     gravity: "top", // `top` or `bottom`
                     position: "center", // `left`, `center` or `right`
                     stopOnFocus: true, // Prevents dismissing of toast on hover
@@ -537,19 +560,22 @@ class ChatEngine{
                     onClick: function(){} // Callback after click
                 }).showToast();
             } else if (type == 'success'){
+                if (!icon){
+                    icon = "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d"
+                }
                 Toastify({
                     text: message,
-                    duration: 2000,
+                    duration: duration,
                     destination: "",
                     newWindow: true,
                     close: true,
-                    avatar: "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+                    avatar: icon,
 
                     gravity: "top", // `top` or `bottom`
                     position: "center", // `left`, `center` or `right`
                     stopOnFocus: true, // Prevents dismissing of toast on hover
                     style: {
-                        background: "#0057D2",
+                        background: "#202020",
                         borderRadius: "10px",
                     },
                     onClick: function(){} // Callback after click
