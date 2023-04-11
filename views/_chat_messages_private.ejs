@@ -2,12 +2,22 @@
 
 <% if (locals.user){ %>
 
-	<div id="user-messages-private" class="user-messages remove  animate__animated">
+	<div id="user-messages-private"  class="user-messages remove  animate__animated">
 		<!-- <div class="animate__animated animate__faster chat-overlay chat-overlay-z-index">
 			<i onclick="toggleChatWindow()"  class="fa-solid fa-comments comment-icon"></i>
 			<p>Chat with friends</p>
 			<i onclick="toggleChatWindow()" class="fa-solid fa-chevron-up"></i>
 		</div> -->
+
+		<div id="messages-loader" class="hide-loader">
+			<div class="leap-frog">
+				<div class="leap-frog__dot"></div>
+				<div class="leap-frog__dot"></div>
+				<div class="leap-frog__dot"></div>
+			</div>
+			<p>loading <span>messages</span> </p>
+		</div>
+		
 
         <div class="info">
             <input id="chat-user-id" type="hidden" value="">

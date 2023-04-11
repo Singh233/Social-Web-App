@@ -43,6 +43,15 @@ $text-color-gray: #d0d0d0;
     
         .option1 {
             margin: 10px;
+
+            a {
+                text-decoration: none;
+                color: white;
+
+                &:hover {
+                    color: $button-hover-color;
+                }
+            }
         }
     
         .option2 {
@@ -106,7 +115,15 @@ $text-color-gray: #d0d0d0;
         }
 
 
-        p {
+        a {
+            width: max-content;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+
+            &:hover {
+                color: gray;
+            }
             
         }
 

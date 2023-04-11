@@ -97,7 +97,12 @@ function toggleChatWindow() {
     }
 
     chatContainer.classList.toggle('remove-box');
-    
+
+    if (!$('body').hasClass('stop-scrolling') && window.innerWidth < 468) {
+        $('body').addClass('stop-scrolling');
+    } else {
+        $('body').removeClass('stop-scrolling');
+    }
 }
 
 
@@ -166,3 +171,15 @@ function toggleMenuOptions(postId) {
     
     
 }
+
+
+
+
+// disable background scroll when cursor is on the chat box 
+function toggleScroll() {
+    $('body').toggleClass('stop-scrolling');
+
+}
+
+
+

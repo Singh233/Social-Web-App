@@ -89,10 +89,10 @@
 <% if (locals.user){ %>
     <%- include('_sm_post_upload') -%>
     <%- include('_sm_search_page') -%>
-    
+    <script src="<%= assetPath('js/add_emoji.js') %>"></script>
+
 <% } %>
 
-<script src="<%= assetPath('js/add_emoji.js') %>"></script>
 <script src="<%= assetPath('js/home_post_comments.js') %>"></script>
 <script src="<%= assetPath('js/home_posts.js') %>"></script>
 <script src="<%= assetPath('js/toggle_likes.js') %>"></script>
