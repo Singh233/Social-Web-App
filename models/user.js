@@ -12,6 +12,18 @@ const usersSchema = new mongoose.Schema({
     friendships: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Friendship'
+    }],
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
+    }],
+    followers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Friendship'
+    }],
+    following: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Friendship'
     }]
 }, {
     timestamps: true

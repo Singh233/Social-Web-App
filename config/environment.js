@@ -6,10 +6,10 @@ const development = {
     session_cookie_key: 'blahsomething',
     db: process.env.CODIEAL_DEVELOPMENT_DB,
     smtp: {
-        service: 'gmail',
-        host: 'smtp.gmail.com',
+        host: 'smtp.mail.me.com',
+        service: 'iCloud',
         port: 587,
-        secure: true,
+        secure: false,
         auth: {
             user: process.env.CODEIAL_GMAIL_USERNAME,
             pass: process.env.CODEIAL_GMAIL_PASSWORD,
@@ -35,10 +35,10 @@ const production = {
     session_cookie_key: process.env.CODEIAL_SESSION_KEY,
     db: process.env.CODIEAL_PRODUCTION_DB,
     smtp: {
-        service: 'gmail',
-        host: 'smtp.gmail.com',
+        host: 'smtp.mail.me.com',
+        service: 'iCloud',
         port: 587,
-        secure: true,
+        secure: false,
         auth: {
             user: process.env.CODEIAL_GMAIL_USERNAME,
             pass: process.env.CODEIAL_GMAIL_PASSWORD,

@@ -29,6 +29,7 @@
                     <% } %> 
                     <p>Hey, <%= locals.user.name %> post something new!</p>
                 </div>
+                <input id="local_user_id" type="hidden" name="id" placeholder="Your id" value="<%= locals.user._id %>">
                 <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">
                 <input type="hidden" name="email" placeholder="Your email" value="<%= locals.user.email %>">
                 <input required type="file" name="filepond" id="myfile">

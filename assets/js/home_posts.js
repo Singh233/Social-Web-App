@@ -21,7 +21,7 @@
         imageResizeTargetWidth: 256,
 
         // set contain resize mode
-        imageResizeMode: 'contain',
+        imageResizeMode: 'cover',
 
         // add onaddfile callback
         onaddfile: (error, fileItem) => {
@@ -49,7 +49,7 @@
         imageResizeTargetWidth: 256,
 
         // set contain resize mode
-        imageResizeMode: 'contain',
+        imageResizeMode: 'cover',
 
         // add onaddfile callback
         onaddfile: (error, fileItem) => {
@@ -76,7 +76,7 @@
         imageResizeTargetWidth: 256,
 
         // set contain resize mode
-        imageResizeMode: 'contain',
+        imageResizeMode: 'cover',
 
         // add onaddfile callback
         onaddfile: (error, fileItem) => {
@@ -178,6 +178,7 @@
         //     });
         // });
     }
+    
 
 
 //     <hr>
@@ -207,7 +208,7 @@
 
     // method to create a post in DOM
     let newPostDom = function(post) {
-        return $(`<div id="post-${post._id}" class="display-posts">
+        return $(`<div id="post-${post._id}" class="display-posts animate__animated animate__fadeIn">
                 
                 
                 
@@ -216,17 +217,13 @@
                     <img src="${post.user.avatar}" id="user-profile-img">
                     <p>${post.user.name}</p>
                     <div id="post-menu-options">
-                        <i class="fa-solid fa-ellipsis-vertical"></i>
-
-                        <small>
-                            <a class="delete-post-button" href="/posts/destroy/${post._id}">X</a>
-                        </small>
+                        <i onclick="toggleMenuOptions('${post._id}')" class="fa-solid fa-ellipsis-vertical"></i>
                     </div>
                     
                 </div>
 
                 <div class="post-img">
-                    <img src="/img/1782188.jpeg">
+                    <img src="${post.myfile ? post.myfile : ''}">
                 </div>
 
                 <div class="post-footer">
@@ -254,6 +251,10 @@
                     <div class="post-caption">
                         <p class="post-user-name">${post.user.name} - &nbsp; </p>
                         <p class="post-user-content">${post.content}</p>
+                    </div>
+
+                    <div class="time">
+                        <p>just now</p>
                     </div>
                     
                     <div id="comments-list-container" class="post-comments-list">
@@ -345,6 +346,44 @@
     
     //createPost();
     convertPostsToAjax();
+
+    // ajax call to create a post on submit of the form
+    $('#new-post-form').submit(function(e) {
+        e.preventDefault();
+        const form = document.querySelector('#new-post-form');
+        const formData = new FormData(form);
+        const id = $('#local_user_id').val();
+
+        $.ajax({
+            type: 'post',
+            url: '/posts/create/' + id,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                console.log('success');
+                let newPost = newPostDom(data.data.post);
+                $('#posts-list-container').prepend(newPost);
+                deletePost($(' .delete-post-button', newPost));
+                new PostComments(data.data.post._id);
+                console.log('form data', formData)
+
+
+                // clear the form
+                $('#new-post-form')[0].reset();
+
+                // remove the image preview of filepond
+                pond.removeFile();
+
+            }, error: function(error) {
+                console.log(error.responseText);
+            
+            }
+
+        })
+    })
+
+        
     
     
 }

@@ -1,13 +1,11 @@
-const User = require('../models/user');
-const Friendship = require('../models/friendship');
+const User = require('../../../models/user');
+const Friendship = require('../../../models/friendship');
 
 
 module.exports.add = async function(req, res) {
     try {
-
-
-        let user1 = await User.findById(req.query.from);
-        let user2 = await User.findById(req.query.to);
+        let user1 = await User.findById(req.query.from_user);
+        let user2 = await User.findById(req.query.to_user);
 
 
         let friendship = await Friendship.create({
@@ -19,10 +17,15 @@ module.exports.add = async function(req, res) {
         user1.friendships.push(friendship);
         user1.save();
 
-        // flash message
-        req.flash('success', 'Following new friend!');
 
-        return res.redirect('back');
+        return res.status(200).json({
+            data: {
+                friendship: friendship,
+                success: 'Following new friend!'
+            },
+            message: "Following new friend!",
+            success: true,
+        });
         
     } catch (error) {
         // flash message
@@ -38,7 +41,6 @@ module.exports.remove = async function(req, res) {
 
         let friendship = await Friendship.findOneAndDelete({from_user: req.query.from});
 
-            
         let user = await User.findById(req.query.from);
 
 
@@ -46,16 +48,19 @@ module.exports.remove = async function(req, res) {
         const index = user.friendships.indexOf(friendship._id);
         if (index > -1) { // only splice array when item is found
             user.friendships.splice(index, 1); // 2nd parameter means remove one item only
-            console.log('friendship removed')
         }
 
 
         user.save();
 
-        // flash message
-        req.flash('success', 'Unfollowed friend!');
-        
-        return res.redirect('back');
+        return res.status(200).json({
+            data: {
+                friendship: friendship,
+                success: 'Unfollowed friend!'
+            },
+            message: "Unfollowed friend!",
+            success: true,
+        });
         
 
         
