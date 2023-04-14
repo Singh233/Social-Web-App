@@ -1,6 +1,13 @@
 const express = require('express');
 const env = require('./config/environment');
 const logger = require('morgan');
+const cors=require("cors");
+
+const corsOptions ={
+    origin:'*', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200,
+}
 
 // Certificate and key files
 const fs = require('fs');
@@ -15,6 +22,7 @@ const options = {
 const cookieParser = require('cookie-parser');
 const app = express();
 const server = https.createServer(options, app);
+app.use(cors(corsOptions))
 
 require('./config/view_helper')(app);
 
@@ -127,6 +135,8 @@ app.use(customMware.setFlash);
 
 // use express router
 app.use('/', require('./routes'));
+
+
 
 app.listen(port, function(error) {
     if (error) {
