@@ -59,8 +59,8 @@ module.exports.profile = async function(request, response) {
     try {
         let user = await User.findById(request.params.id);
         let posts = await Post.find({user: user._id}).sort('-createdAt');
-        let followers = await Friendships.find({to_user: user._id});
-        let following = await Friendships.find({from_user: user._id});
+        let followers = await Friendships.find({to_user: user._id}).populate('from_user');
+        let following = await Friendships.find({from_user: user._id}).populate('to_user');
         user.posts = posts;
         user.followers = followers;
         user.following = following;
