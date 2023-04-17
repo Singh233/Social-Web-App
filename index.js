@@ -3,11 +3,11 @@ const env = require('./config/environment');
 const logger = require('morgan');
 const cors=require("cors");
 
-const corsOptions ={
-    origin:'*', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200,
-}
+// const corsOptions ={
+//     origin:'*', 
+//     credentials:true,            //access-control-allow-credentials:true
+//     optionSuccessStatus:200,
+// }
 
 // Certificate and key files
 const fs = require('fs');
@@ -22,7 +22,7 @@ const options = {
 const cookieParser = require('cookie-parser');
 const app = express();
 const server = https.createServer(options, app);
-app.use(cors(corsOptions))
+app.use(cors())
 
 require('./config/view_helper')(app);
 
