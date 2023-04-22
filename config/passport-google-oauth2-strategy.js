@@ -10,6 +10,7 @@ passport.use(new GoogleStrategy({
         clientID: env.google_clientID,
         clientSecret: env.google_clientSecret,
         callbackURL: env.google_callbackURL,
+        proxy: true,
     },
 
     function(accessToken, refreshToken, profile, done) {

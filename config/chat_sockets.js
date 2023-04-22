@@ -1,11 +1,29 @@
 const env = require('./environment');
 const moment = require('moment');
+const Socket = require('../models/socket');
 // const fetch = require('node-fetch');
 
 module.exports.chatSockets = function (socketServer) {
-    let io = require('socket.io')(socketServer);
+    let io = require('socket.io')(socketServer, {
+        cors: {
+            origin: '*',
+        },
+    });
     // make a map of all the users
     let activeUsers = new Map();
+    // get the map from the database
+    Socket.find({}, function (err, map) {
+        if (err) {
+            console.log('----Error in fetching sockets from db----');
+            return;
+        }
+        try {
+            activeUsers = new Map(map[0].mapData);
+        } catch (error) {
+            console.log('----Error in fetching sockets from db----');
+        }
+    });
+
 
     io.sockets.on('connection', function (socket) {
         // console.log('new connection received', socket.id);
@@ -48,6 +66,11 @@ module.exports.chatSockets = function (socketServer) {
             io.sockets.emit('update_status', {
                 map,
             });
+
+            // Searialize the activeUsers map and store it in the database
+            let mapData = [...activeUsers];
+
+            updateSocketsMap();
         });
 
         socket.on('disconnect', function () {
@@ -78,6 +101,8 @@ module.exports.chatSockets = function (socketServer) {
             io.sockets.emit('update_status', {
                 map,
             });
+
+            updateSocketsMap();
 
             // io.sockets.emit('update_status', {
             //     data
@@ -154,4 +179,25 @@ module.exports.chatSockets = function (socketServer) {
             }
         });
     });
+
+    function updateSocketsMap() {
+        // remove the map from the database
+        Socket.deleteMany({}, function (err) {
+            if (err) {
+                console.log('----Error in deleting sockets from db----');
+                return;
+            }
+        });
+
+        // add the map to the database
+        Socket.create({
+            mapData: activeUsers,
+        }, function (err, newMap) {
+            if (err) {
+                console.log('----Error in adding sockets to db----');
+                return;
+            }
+            console.log('new map added');
+        });
+    }
 };

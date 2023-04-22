@@ -109,8 +109,13 @@
 }
 
 .user-chat-box .friends #friends-list li span .status i {
+  font-size: 0.9rem;
   margin-right: 5px;
   color: greenyellow;
+  position: absolute;
+  left: 35px;
+  -webkit-text-stroke-color: #202020;
+  -webkit-text-stroke-width: 4px;
 }
 
 .user-chat-box .friends #friends-list li .fa-comment {

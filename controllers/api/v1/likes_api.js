@@ -20,7 +20,7 @@ module.exports.toggleLike = async function(request, response) {
         console.log(request.user._id);
 
         // check if a like already exists
-        let exisitingLike = await Like.findOne({
+        let exisitingLike = await Like.findOneAndRemove({
             likeable: request.query.likeable_id,
             onModel: request.query.likeable_type,
             user: request.user._id
@@ -30,7 +30,7 @@ module.exports.toggleLike = async function(request, response) {
         if (exisitingLike) {
             likeable.likes.pull(exisitingLike._id);
             likeable.save();
-            exisitingLike.remove();
+
             deleted = true;
             console.log(deleted);
         } else {
