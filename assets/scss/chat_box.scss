@@ -121,10 +121,14 @@ $button-color-ligth-blue: #4db1ff;
                         font-size: 0.7rem;
                         color: $text-color-gray;
                         i {
+                            font-size: 0.9rem;
                             margin-right: 5px;
                             color: greenyellow;
-                            // position: relative;
-                            // right: 20px;
+                            position: absolute;
+                            left: 35px;
+                            // black box shadow
+                            -webkit-text-stroke-color: $button-color-gray;
+                            -webkit-text-stroke-width: 4px;
                         }
                     }
                 }

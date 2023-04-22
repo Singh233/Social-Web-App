@@ -6,7 +6,7 @@ class ChatEngine{
         this.userId = userId;
         this.userName = userName;
         this.userProfile = userProfile;
-        
+        // console.log(host)
         // this.socket = io.connect('https://54.91.2.241:5000', {
         this.socket = io.connect(host, {
             transports: ["websocket"],
@@ -15,8 +15,11 @@ class ChatEngine{
             rejectUnauthorized : false,
             query: {
                 userId: this.userId,
-            }
+            },
+            
         });
+
+        
 
         // chat rooms array
         this.chatRooms = ['Global'];

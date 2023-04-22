@@ -1,6 +1,8 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
 const Like = require('../models/like');
+const fs = require('fs');
+const path = require('path');
 
 module.exports.createPost = async function (request, response) {
     if (request.user.id === request.params.id) {
@@ -64,12 +66,16 @@ module.exports.destroy = async function (request, response) {
             //delete teh associated likes for the post and all its comments likes too
             await Like.deleteMany({ likeable: post, onModel: 'Post' });
             await Like.deleteMany({ _id: { $in: post.comments } });
-
             post.remove();
-
             await Comment.deleteMany({
                 post: request.params.id,
             });
+
+            // delete the file associated with the post
+            if (post.myfile) {
+                fs.unlinkSync(path.join(__dirname, '..', post.myfile));
+            }
+
             if (request.xhr) {
                 return response.status(200).json({
                     data: {

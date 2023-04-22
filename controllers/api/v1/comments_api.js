@@ -1,8 +1,8 @@
 const Comment = require('../../../models/comment');
 const Post = require('../../../models/post');
-const commentsMailer = require('../../../mailers/comments_mailer');
-const queue = require('../../../config/kue');
-const commentEmailWorker = require('../../../workers/comment_email_worker');
+//const commentsMailer = require('../../../mailers/comments_mailer');
+// const queue = require('../../../config/kue');
+// const commentEmailWorker = require('../../../workers/comment_email_worker');
 const Like = require('../../../models/like');
 
 
@@ -22,15 +22,15 @@ module.exports.create = async function(request, response) {
 
             // for mail
             // commentsMailer.newComment(comment);
-            let job = queue.create('emails', comment).save(function(error) {
-                if (error) {
-                    console.log('Error in creating a queue');
-                    return;
-                }
+            // let job = queue.create('emails', comment).save(function(error) {
+            //     if (error) {
+            //         console.log('Error in creating a queue');
+            //         return;
+            //     }
 
-                console.log('job enqueue', job.id);
+            //     console.log('job enqueue', job.id);
 
-            });
+            // });
 
             
             return response.status(200).json({
@@ -58,11 +58,10 @@ module.exports.create = async function(request, response) {
 
 module.exports.destroy = async function(request, response) {
     try {
-        let comment = await Comment.findById(request.params.id);
+        let comment = await Comment.findByIdAndRemove(request.params.id);
         if (comment.user == request.user.id) {
             let postId = comment.post;
-            comment.remove();
-            console.log('postid', postId)
+            // console.log('postid', postId)
 
             await Post.findByIdAndUpdate(postId, {
                 $pull: {comments: request.params.id}

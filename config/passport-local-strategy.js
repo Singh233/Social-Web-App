@@ -4,24 +4,27 @@ const User = require('../models/user');
 
 // Authentication using passport
 passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passReqToCallback: true
-}, function (request, email, password, done) {
-    // find a user and establish the identity
-    User.findOne({email: email}, function(error, user) {
-        if (error) {
-            request.flash('error', err);
-            return done(error);
-        }
+        usernameField: 'email',
+        passReqToCallback: true
+    }, function (request, email, password, done) {
+        // find a user and establish the identity
+        User.findOne({email: email}, function(error, user) {
+            if (error) {
+                console.log('Error in finding user --> Passport', error);
+                request.flash('error', err);
+                return done(error);
+            }
 
-        if (!user || user.password != password) {
-            request.flash('error', 'Invalid Username/Password');
-            return done(null, false);
-        }
+            if (!user || user.password != password) {
+                console.log('Invalid Username/Password');
+                request.flash('error', 'Invalid Username/Password');
+                return done(null, false);
+            }
 
-        return done(null, user);
-    })
-}
+            console.log('User found')
+            return done(null, user);
+        })
+    }
 
 
 ));
@@ -53,6 +56,7 @@ passport.checkAuthentication = function(request, response, next) {
     if (request.isAuthenticated()) {
         return next();
     }
+    console.log('User is not signed in');
 
     // if the user is not signed in
     return response.redirect('/users/sign-in-up');

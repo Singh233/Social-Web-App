@@ -4,6 +4,8 @@ const Like = require('../../../models/like');
 const User = require('../../../models/user');
 const jwt = require('jsonwebtoken');
 const env = require('../../../config/environment');
+const fs = require('fs');
+const path = require('path');
 
 module.exports.index = async function (request, response) {
     let posts = await Post.find({})
@@ -45,7 +47,6 @@ module.exports.createPost = async function (request, response) {
 
                     if (error) {
                         console.log('****** Multer Error: ', error);
-                        request.flash('error', 'Error uploading file');
                         return response.status(400).json({
                             message: 'Error uploading file',
                             success: false,
@@ -104,15 +105,20 @@ module.exports.destroy = async function (request, response) {
         const user = request.user;
         // check if the user exists
         if (user) {
-            let post = await Post.findById(request.params.id);
+            let post = await Post.findByIdAndRemove(request.params.id);
             if (post.user._id == user.id) {
-                post.remove();
 
                 // delete the associated likes for the post and all its comments' likes
                 await Like.deleteMany({ likeable: post, onModel: 'Post' });
                 await Like.deleteMany({ _id: { $in: post.comments } });
-
                 await Comment.deleteMany({ post: request.params.id });
+
+                if (post.myfile) {
+                    // unlink the file from the filesystem
+                    fs.unlinkSync(path.join(__dirname, '../../..', post.myfile));
+                    console.log('file deleted successfully')
+                }
+
                 return response.status(200).json({
                     data: {
                         post: post,
