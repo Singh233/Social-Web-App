@@ -21,7 +21,9 @@ module.exports.createChatRoom = async function (req, res) {
             .exec(function (err, chatRoom) {
                 if (err) {
                     console.log('Error in finding chat room', err);
-                    return;
+                    return res.status(500).json({
+                        message: 'Internal Server Error',
+                        });
                 }
                 if (chatRoom) {
                     return res.status(200).json({
@@ -29,6 +31,7 @@ module.exports.createChatRoom = async function (req, res) {
                         data: {
                             chatRoom: chatRoom,
                         },
+                        success: true,
                     });
                 } else {
                     // create a new chat room
@@ -41,13 +44,16 @@ module.exports.createChatRoom = async function (req, res) {
                         function (err, chatRoom) {
                             if (err) {
                                 console.log('Error in creating chat room', err);
-                                return;
+                                return res.status(500).json({
+                                    message: 'Internal Server Error',
+                                    });
                             }
                             return res.status(200).json({
                                 message: 'Chat room created',
                                 data: {
                                     chatRoom: chatRoom,
                                 },
+                                success: true,
                             });
                         }
                     );
@@ -75,7 +81,9 @@ module.exports.createChatRoom = async function (req, res) {
             .exec(function (err, chatRoom) {
                 if (err) {
                     console.log('Error in finding chat room');
-                    return;
+                    return res.status(500).json({
+                        message: 'Internal Server Error',
+                        });
                 }
                 if (chatRoom) {
                     return res.status(200).json({
@@ -83,6 +91,7 @@ module.exports.createChatRoom = async function (req, res) {
                         data: {
                             chatRoom: chatRoom,
                         },
+                        success: true,
                     });
                 } else {
                     // try to find the chat room in the reverse order
@@ -103,7 +112,9 @@ module.exports.createChatRoom = async function (req, res) {
                         .exec(function (err, chatRoom) {
                             if (err) {
                                 console.log('Error in finding chat room');
-                                return;
+                                return res.status(500).json({
+                                    message: 'Internal Server Error',
+                                    });
                             }
                             if (chatRoom) {
                                 return res.status(200).json({
@@ -111,6 +122,7 @@ module.exports.createChatRoom = async function (req, res) {
                                     data: {
                                         chatRoom: chatRoom,
                                     },
+                                    success: true,
                                 });
                             } else {
                                 // create a new chat room
@@ -123,13 +135,16 @@ module.exports.createChatRoom = async function (req, res) {
                                     function (err, chatRoom) {
                                         if (err) {
                                             console.log('Error in creating chat room');
-                                            return;
+                                            return  res.status(500).json({
+                                                message: 'Internal Server Error',
+                                                });
                                         }
                                         return res.status(200).json({
                                             message: 'Chat room created',
                                             data: {
                                                 chatRoom: chatRoom,
                                             },
+                                            success: true,
                                         });
                                     }
                                 );
@@ -210,6 +225,7 @@ module.exports.createChat = async function (req, res) {
                                             data: {
                                                 chat: chat,
                                             },
+                                            success: true,
                                         });
                                     }); 
                             }
@@ -271,6 +287,7 @@ module.exports.createChat = async function (req, res) {
                                         data: {
                                             chat: chat,
                                         },
+                                        success: true,
                                     });
                                 }); 
                         }
@@ -329,6 +346,7 @@ module.exports.createChat = async function (req, res) {
                                                     data: {
                                                         chat: chat,
                                                     },
+                                                    success: true,
                                                 });
                                             }); 
                                     }

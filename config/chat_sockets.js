@@ -20,7 +20,7 @@ module.exports.chatSockets = function (socketServer) {
         try {
             activeUsers = new Map(map[0].mapData);
         } catch (error) {
-            console.log('----Error in fetching sockets from db----');
+            console.log('----Sockets map is empty----');
         }
     });
 
@@ -31,7 +31,7 @@ module.exports.chatSockets = function (socketServer) {
         activeUsers.set(socket.handshake.query.userId, {
             userId: socket.handshake.query.userId,
             socketId: socket.id,
-            status: 'online',
+            status: 'Active now',
             timeStamp: new Date(),
             moment: moment(new Date()).fromNow(),
         });
@@ -41,8 +41,13 @@ module.exports.chatSockets = function (socketServer) {
             count: io.engine.clientsCount,
         });
 
+        // For react users to get the active users
+        io.sockets.emit('get_users', {
+            users: [...activeUsers.values()],
+        });
+
         // update status of user
-        socket.on('user_online', function (data) {
+        socket.on('user_online', async function (data) {
             let key = socket.handshake.query.userId;
 
             // check if activeUsers map has the userid
@@ -50,7 +55,7 @@ module.exports.chatSockets = function (socketServer) {
                 activeUsers.set(key, {
                     userId: data.user_id,
                     socketId: socket.id,
-                    status: 'online',
+                    status: 'Active now',
                     timeStamp: new Date(),
                     moment: moment(new Date()).fromNow(),
                 });
@@ -70,10 +75,10 @@ module.exports.chatSockets = function (socketServer) {
             // Searialize the activeUsers map and store it in the database
             let mapData = [...activeUsers];
 
-            updateSocketsMap();
+            await updateSocketsMap();
         });
 
-        socket.on('disconnect', function () {
+        socket.on('disconnect', async function () {
             console.log('socket disconnected!');
 
             io.sockets.emit('connections', {
@@ -102,11 +107,8 @@ module.exports.chatSockets = function (socketServer) {
                 map,
             });
 
-            updateSocketsMap();
+            await updateSocketsMap();
 
-            // io.sockets.emit('update_status', {
-            //     data
-            // })
         });
 
         // public chat room
@@ -180,24 +182,13 @@ module.exports.chatSockets = function (socketServer) {
         });
     });
 
-    function updateSocketsMap() {
+    async function updateSocketsMap() {
         // remove the map from the database
-        Socket.deleteMany({}, function (err) {
-            if (err) {
-                console.log('----Error in deleting sockets from db----');
-                return;
-            }
-        });
+        await Socket.deleteMany({});
 
         // add the map to the database
-        Socket.create({
+        await Socket.create({
             mapData: activeUsers,
-        }, function (err, newMap) {
-            if (err) {
-                console.log('----Error in adding sockets to db----');
-                return;
-            }
-            console.log('new map added');
         });
     }
 };
