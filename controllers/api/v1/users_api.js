@@ -47,12 +47,23 @@ module.exports.profile = async function (request, response) {
     try {
         let user = await User.findById(request.params.id);
         let posts = await Post.find({ user: user._id }).sort('-createdAt');
+
+
         let followers = await Friendships.find({ to_user: user._id }).populate(
             'from_user'
         );
+
+
         let following = await Friendships.find({
             from_user: user._id,
-        }).populate('to_user');
+        }).populate(
+            {
+                path: 'to_user',
+                
+            }
+        );
+
+
         user.posts = posts;
         user.followers = followers;
         user.following = following;
@@ -166,4 +177,40 @@ module.exports.destroySession = function(request, response) {
         success: true,
         message: "Sign out successfull"
     });
+}
+
+// fetch user friends
+module.exports.fetchUserFriends = async function (request, response) {
+    try {
+        let user = await User.findById(request.user.id);
+        
+        // find all the friendships where the user is the from_user and populate the posts, followers and following of the to_user
+        let friendships = await Friendships.find({from_user: user._id}).populate({
+            path: 'to_user',
+        });
+        for (let i = 0; i < friendships.length; i++) {
+            let posts = await Post.find({user: friendships[i].to_user._id}).sort('-createdAt');
+            let followers = await Friendships.find({to_user: friendships[i].to_user._id}).populate('from_user');
+            let following = await Friendships.find({from_user: friendships[i].to_user._id}).populate('to_user');
+
+            friendships[i].to_user.posts = posts;
+            friendships[i].to_user.followers = followers;
+            friendships[i].to_user.following = following;
+        }
+
+        // console.log('friends: ', friendships)
+
+        return response.json(200, {
+            message: 'User friends',
+            success: true,
+            data: {
+                friends: friendships,
+            },
+        });
+    } catch (error) {
+        console.log('******* ', error);
+        return response.json(500, {
+            message: 'Internal Server Error',
+        });
+    }
 }

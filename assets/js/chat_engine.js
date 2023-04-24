@@ -61,7 +61,7 @@ class ChatEngine{
             // iterate over the map and update the status of the user
             data.map.forEach(function(value, key) {
                 let statusElement = $(`#status-${value.userId}`);
-                if (value.status === 'online' && statusElement.length > 0) {
+                if (value.status === 'Active now' && statusElement.length > 0) {
                     statusElement.html('<i class="fa-solid fa-circle"></i> Active Now');
                 } else if (statusElement.length > 0) {
                     // console.log(value);
