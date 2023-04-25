@@ -169,7 +169,7 @@ $button-color-ligth-blue: #4db1ff;
     .chat-messages-list {
         list-style: none;
         padding: 10px;
-        height: 76%;
+        height: 70%;
 
         overflow: auto;
 
@@ -183,8 +183,8 @@ $button-color-ligth-blue: #4db1ff;
             text-align: right;
             padding: 5px;
             height: 40px;
-            margin-top: 20px;
-            margin-bottom: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
             padding-bottom: 20px;
 
             .msg-content {
@@ -243,8 +243,8 @@ $button-color-ligth-blue: #4db1ff;
             text-align: right;
             padding: 5px;
             height: 40px;
-            margin-top: 20px;
-            margin-bottom: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
             padding-bottom: 20px;
 
             .msg-content {
@@ -322,6 +322,75 @@ $button-color-ligth-blue: #4db1ff;
             }
         }
     }
+    .typing-status {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+
+        img {
+            border-radius: 50%;
+            height: 35px;
+            width: 35px;
+            object-fit: cover;
+        }
+
+        .animation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 10px;
+            background-color: #202020;
+            border-radius: 30px;
+            border: none;
+            margin-left: 10px;
+
+            .animation__dot1 {
+                height: 10px;
+                width: 10px;
+                border-radius: 50%;
+                background-color: gray;
+                margin: 0 3px;
+                animation: pulse 1s infinite;
+            }
+
+            .animation__dot2 {
+                height: 10px;
+                width: 10px;
+                border-radius: 50%;
+                background-color: gray;
+                margin: 0 3px;
+                animation: pulse 1s infinite;
+                animation-delay: 0.2s;
+            }
+
+            .animation__dot3 {
+                height: 10px;
+                width: 10px;
+                border-radius: 50%;
+                background-color: gray;
+                margin: 0 3px;
+                animation: pulse 1s infinite;
+                animation-delay: 0.4s;
+            }
+
+            @keyframes pulse {
+                0% {
+                    transform: scale(0.8);
+                    opacity: 0.5;
+                }
+                70% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(0.8);
+                    opacity: 0.5;
+                }
+            }
+        }
+    }
+
     #chat-message-input-container {
         width: 100%;
         display: flex;
@@ -384,7 +453,7 @@ $button-color-ligth-blue: #4db1ff;
 
         .chat-messages-list {
             height: auto;
-            min-height: 85vh;
+            min-height: 76vh;
         }
 
         #chat-message-input-container {

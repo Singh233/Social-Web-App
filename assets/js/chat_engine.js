@@ -169,7 +169,150 @@ class ChatEngine{
 
             scrollToBottomPrivate();
 
-        })
+        });
+
+        
+
+
+
+        // listen to keypress event on the chat message input private and show the typing status
+        $('#chat-message-input-private').keypress(function(event){
+            const to_user = document.getElementById('chat-user-id').value;
+            const from_user = self.userId;
+            let chatRoom = to_user + from_user;
+
+            // if key is not enter key
+            if (event.which != 13){
+
+                self.socket.emit('typingPrivate', {
+                    user_email: self.userEmail,
+                    user_name: self.userName,
+                    user_profile: self.userProfile,
+                    time: new Date().toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"}),
+                    from_user,
+                    to_user,
+
+                    chatroom: chatRoom,
+                });
+            }
+            
+
+        });
+
+        let typing = false;
+        let timeout = undefined;
+        let animationTimeout = undefined;
+
+        function timeoutFunction(){
+            typing = false;
+            $('#typing-status-private').addClass('animate__fadeOut');
+            animationTimeout = setTimeout(function(){
+                $('#typing-status-private').html('');
+            }, 700);
+        }
+
+        // listen to typing event and show the typing status
+        self.socket.on('typingResponsePrivate', function(data){
+            // console.log(data)
+            // console.log('typing')
+            const to_user = document.getElementById('chat-user-id').value;
+            const from_user = self.userId;
+            let chatRoomOne = to_user + from_user;
+            let chatRoomTwo = from_user + to_user;
+
+            if (data.chatroom == chatRoomOne || data.chatroom == chatRoomTwo){
+
+                if (data.from_user !== from_user){
+
+                    if (typing === false) {
+                        clearTimeout(animationTimeout);
+                        $('#typing-status-private').removeClass('animate__fadeOut');
+
+                        typing = true;
+                        $('#typing-status-private').html(`
+                            <img class='animate__animated animate__fadeIn' src="${data.user_profile}">
+                            <div class="animation animate__animated animate__fadeIn">
+                                <div class="animation__dot1"></div>
+                                <div class="animation__dot2"></div>
+                                <div class="animation__dot3"></div>
+                            </div>
+                        `);
+                        // console.log('typed')
+                        timeout = setTimeout(timeoutFunction, 1000);
+                    } else {
+                        clearTimeout(timeout);
+                        timeout = setTimeout(timeoutFunction, 1000);
+                    }
+                    
+                }
+            }
+        });
+
+
+        // listen to keypress event on the chat message input global and show the typing status
+        $('#chat-message-input-global').keypress(function(event){
+            const from_user = self.userId;
+            
+            // if key is not enter key
+            if (event.which != 13){
+
+                self.socket.emit('typingGlobal', {
+                    user_email: self.userEmail,
+                    user_name: self.userName,
+                    user_profile: self.userProfile,
+                    time: new Date().toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"}),
+                    from_user,
+                    chatroom: 'Global',
+                });
+            }
+
+        });
+
+
+        let typingGlobal = false;
+        let timeoutGlobal = undefined;
+        let animationTimeoutGlobal = undefined;
+
+        function timeoutFunctionGlobal(){
+            typingGlobal = false;
+            $('#typing-status-global').addClass('animate__fadeOut');
+            animationTimeoutGlobal = setTimeout(function(){
+                $('#typing-status-global').html('');
+            }, 700);
+        }
+
+        // listen to typing event and show the typing status
+        self.socket.on('typingResponseGlobal', function(data){
+            // console.log(data)
+            // console.log('typing')
+            const from_user = self.userId;
+
+            if (data.chatroom == 'Global'){
+                if (data.from_user !== from_user){
+
+                    if (typingGlobal === false) {
+                        clearTimeout(animationTimeoutGlobal);
+                        $('#typing-status-global').removeClass('animate__fadeOut');
+
+                        typingGlobal = true;
+                        $('#typing-status-global').html(`
+                            <img class='animate__animated animate__fadeIn' src="${data.user_profile}">
+                            <div class="animation animate__animated animate__fadeIn">
+                                <div class="animation__dot1"></div>
+                                <div class="animation__dot2"></div>
+                                <div class="animation__dot3"></div>
+                            </div>
+                        `);
+                        // console.log('typed')
+                        timeoutGlobal = setTimeout(timeoutFunctionGlobal, 1000);
+                    } else {
+                        clearTimeout(timeoutGlobal);
+                        timeoutGlobal = setTimeout(timeoutFunctionGlobal, 1000);
+                    }
+
+                }
+            }
+        });
 
 
         // send a message on clicking the send message button or pressing enter
@@ -372,7 +515,7 @@ class ChatEngine{
             if ($(`#chat-messages-list-private-${userId} li`).length){
                 let lastMessage = $(`#chat-messages-list-private-${userId} li:last-child`);
 
-                if (lastMessage.find('sub').html() == data.user_name){   
+                if (lastMessage.find('img').attr('src') == data.user_profile){
                     lastMessage.find('sub').remove();
                     // hide the visibility of the profile image
                     lastMessage.find('img').css('visibility', 'hidden');
@@ -388,9 +531,9 @@ class ChatEngine{
                     newMessage.css('margin-top', '0px');
                 }
             } 
-            newMessage.append($('<sub>', {
-                'html': data.user_name
-            }));
+            // newMessage.append($('<sub>', {
+            //     'html': data.user_name
+            // }));
 
             
 
@@ -449,7 +592,7 @@ class ChatEngine{
             if ($(`#chat-messages-list-private-${userId} li`).length){
                 let lastMessage = $(`#chat-messages-list-private-${userId} li:last-child`);
 
-                if (lastMessage.find('sub').html() == data.sender.name){   
+                if (lastMessage.find('img').attr('src') == data.sender.avatar){
                     lastMessage.find('sub').remove();
                     // hide the visibility of the profile image
                     lastMessage.find('img').css('visibility', 'hidden');
@@ -465,9 +608,9 @@ class ChatEngine{
                     newMessage.css('margin-top', '0px');
                 }
             } 
-            newMessage.append($('<sub>', {
-                'html': data.sender.name
-            }));
+            // newMessage.append($('<sub>', {
+            //     'html': data.sender.name
+            // }));
 
             
 

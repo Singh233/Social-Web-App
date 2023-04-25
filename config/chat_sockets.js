@@ -117,12 +117,15 @@ module.exports.chatSockets = function (socketServer) {
 
             socket.join(data.chatroom);
             io.in(data.chatroom).emit('global_user_joined', data);
+
         });
 
         // detect send_message and broadcast toe everyone in the room
         socket.on('send_global_message', function (data) {
             console.log('message received___-----', data);
             io.in(data.chatroom).emit('receive_global_message', data);
+
+            
         });
 
         // Join private chat room
@@ -141,12 +144,12 @@ module.exports.chatSockets = function (socketServer) {
                 // leave the room
                 socket.leave(chatRoom);
             } else if (io.sockets.adapter.rooms.get(reverseChatRoom)) {
-                console.log(reverseChatRoom, 'already exists');
+                console.log(reverseChatRoom, 'reverse already exists');
                 data.chatroom = reverseChatRoom;
                 // leave the room
                 socket.leave(reverseChatRoom);
             } else {
-                console.log('new room created');
+                console.log(chatRoom, 'new room created');
                 data.chatroom = chatRoom;
             }
 
@@ -180,6 +183,22 @@ module.exports.chatSockets = function (socketServer) {
                 io.to(activeUsers.get(data.to_user).socketId).emit('receive_notification', data);
             }
         });
+
+        // listen for typing event
+        socket.on('typingPrivate', function (data) {
+            // console.log('typing event received')
+            if (io.sockets.adapter.rooms.get(data.from_user + data.to_user)) {
+                io.in(data.from_user + data.to_user).emit('typingResponsePrivate', data);
+            } else if (io.sockets.adapter.rooms.get(data.to_user + data.from_user)) {
+                io.in(data.to_user + data.from_user).emit('typingResponsePrivate', data);
+            }
+        });
+
+        // listen for typing event
+        socket.on('typingGlobal', function (data) {
+
+            io.in(data.chatroom).emit('typingResponseGlobal', data);
+        } );
     });
 
     async function updateSocketsMap() {

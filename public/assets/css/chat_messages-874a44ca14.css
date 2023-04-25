@@ -135,7 +135,7 @@
 .user-messages .chat-messages-list {
   list-style: none;
   padding: 10px;
-  height: 76%;
+  height: 70%;
   overflow: auto;
 }
 
@@ -147,8 +147,8 @@
   text-align: right;
   padding: 5px;
   height: 40px;
-  margin-top: 20px;
-  margin-bottom: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   padding-bottom: 20px;
 }
 
@@ -207,8 +207,8 @@
   text-align: right;
   padding: 5px;
   height: 40px;
-  margin-top: 20px;
-  margin-bottom: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   padding-bottom: 20px;
 }
 
@@ -257,6 +257,75 @@
 
 .user-messages .chat-messages-list .self-message sub {
   margin: 5px;
+}
+
+.user-messages .typing-status {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.user-messages .typing-status img {
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+  object-fit: cover;
+}
+
+.user-messages .typing-status .animation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 10px;
+  background-color: #202020;
+  border-radius: 30px;
+  border: none;
+  margin-left: 10px;
+}
+
+.user-messages .typing-status .animation .animation__dot1 {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: gray;
+  margin: 0 3px;
+  animation: pulse 1s infinite;
+}
+
+.user-messages .typing-status .animation .animation__dot2 {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: gray;
+  margin: 0 3px;
+  animation: pulse 1s infinite;
+  animation-delay: 0.2s;
+}
+
+.user-messages .typing-status .animation .animation__dot3 {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: gray;
+  margin: 0 3px;
+  animation: pulse 1s infinite;
+  animation-delay: 0.4s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  70% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
 }
 
 .user-messages #chat-message-input-container {
@@ -314,7 +383,7 @@
   }
   .user-messages .chat-messages-list {
     height: auto;
-    min-height: 85vh;
+    min-height: 76vh;
   }
   .user-messages #chat-message-input-container {
     position: fixed;
