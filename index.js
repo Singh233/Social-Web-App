@@ -3,8 +3,8 @@ const env = require('./config/environment');
 const logger = require('morgan');
 const cors=require("cors");
 
-const corsOptions ={
-    origin: ['http://localhost:3000', 'https://chillsaname.me'], 
+const corsOptions = {
+    origin: ['http://localhost:3000', 'https://chillsaname.me', 'http://127.0.0.1:5173'], 
 }
 
 // Certificate and key files
@@ -58,7 +58,7 @@ console.log('chat server is listening on port 4000');
 app.use(express.urlencoded({extended: true}));
 
 app.use(cors({
-    origin: ['https://chillsanam.me', 'http://localhost:3000']
+    origin: ['https://chillsanam.me', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://localhost:5173', 'http://192.168.0.5:5173', 'http://192.168.0.8:5173']
 }))
 
 // compiles scss to css
