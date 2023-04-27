@@ -34,6 +34,7 @@ module.exports.chatSockets = function (socketServer) {
             status: 'Active now',
             timeStamp: new Date(),
             moment: moment(new Date()).fromNow(),
+
         });
 
         // UPDATE connection counter on the home page
@@ -58,22 +59,23 @@ module.exports.chatSockets = function (socketServer) {
                     status: 'Active now',
                     timeStamp: new Date(),
                     moment: moment(new Date()).fromNow(),
+
+                    
                 });
             }
             // Update the moment of all the users
             for (let [key, value] of activeUsers) {
                 value.moment = moment(value.timeStamp).fromNow();
-                console.log(value.moment);
+
             }
 
-            console.log(activeUsers);
+
+
+
             let map = [...activeUsers.values()];
             io.sockets.emit('update_status', {
                 map,
             });
-
-            // Searialize the activeUsers map and store it in the database
-            let mapData = [...activeUsers];
 
             await updateSocketsMap();
         });
@@ -95,13 +97,15 @@ module.exports.chatSockets = function (socketServer) {
                     status: 'offline',
                     timeStamp: new Date(),
                     moment: moment(new Date()).fromNow(),
+
+
                 });
             }
             // Update the moment of all the users
             for (let [key, value] of activeUsers) {
                 value.moment = moment(value.timeStamp).fromNow();
             }
-            console.log(activeUsers);
+
             let map = [...activeUsers.values()];
             io.sockets.emit('update_status', {
                 map,
@@ -157,6 +161,7 @@ module.exports.chatSockets = function (socketServer) {
             io.in(data.chatroom).emit('private_user_joined', data);
         });
 
+
         // Send private message to a user
         socket.on('send_private_message', function (data) {
             console.log('message received___-----', data);
@@ -180,8 +185,11 @@ module.exports.chatSockets = function (socketServer) {
 
             // emit notification to the receiver of the message only
             if (activeUsers.has(data.to_user)) {
+                // emit notification to the receiver of the message only
                 io.to(activeUsers.get(data.to_user).socketId).emit('receive_notification', data);
+
             }
+
         });
 
         // listen for typing event
