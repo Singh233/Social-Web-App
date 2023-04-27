@@ -98,7 +98,7 @@ $button-color-ligth-blue: #4db1ff;
                 cursor: pointer;
                 position: relative;
                 background-color: $button-color-gray;
-                padding: 5px 10px;
+                padding: 8px 10px;
                 border-radius: 10px;
                 transition: all 0.2s ease-out;
 
@@ -118,9 +118,9 @@ $button-color-ligth-blue: #4db1ff;
                         display: flex;
                         align-items: center;
                         width: max-content;
-                        font-size: 0.7rem;
+                        font-size: 0.8rem;
                         color: $text-color-gray;
-                        i {
+                        .fa-circle {
                             font-size: 0.9rem;
                             margin-right: 5px;
                             color: greenyellow;
@@ -130,12 +130,44 @@ $button-color-ligth-blue: #4db1ff;
                             -webkit-text-stroke-color: $button-color-gray;
                             -webkit-text-stroke-width: 4px;
                         }
+
+                        
                     }
                 }
 
-                .fa-comment {
+                .time {
                     position: absolute;
                     right: 20px;
+                    top: 10px;
+                    font-size: 0.9rem;
+                    
+                }
+
+                .icon {
+                    position: absolute;
+                    right: 20px;
+                }
+
+                .circle {
+                    color: #0057d2;
+                    font-size: 0.7rem;
+                    margin-top: 25px;
+                }
+
+                .singleTick {
+                    color: gray;
+                }
+
+                .doubleTick {
+                    color: gray;
+                }
+
+                .seen {
+                    color: #0057d2;
+                }
+
+                .remove {
+                    display: none !important;
                 }
 
                 &:hover {

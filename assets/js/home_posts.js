@@ -361,12 +361,12 @@
             processData: false,
             contentType: false,
             success: function(data) {
-                console.log('success');
+
                 let newPost = newPostDom(data.data.post);
                 $('#posts-list-container').prepend(newPost);
                 deletePost($(' .delete-post-button', newPost));
                 new PostComments(data.data.post._id);
-                console.log('form data', formData)
+
 
 
                 // clear the form

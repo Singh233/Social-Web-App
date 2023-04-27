@@ -36,7 +36,12 @@
 							<p><%= friend[0].name %></p>
 							<p id="status-<%= friend[0]._id %>" class="status"><%= friend[0].status %> offline</p>
 						</span>
-						<i class="fa-solid fa-comment"></i>
+						<i id="message-icon-<%= friend[0]._id %>" class="icon remove fa-solid fa-comment"></i>
+						<i id="tick-icon-<%= friend[0]._id %>" class="icon singleTick remove fa-solid fa-check"></i>
+						<i id="double-tick-icon-<%= friend[0]._id %>" class="icon doubleTick remove fa-solid fa-check-double"></i>
+						<i id="seen-icon-<%= friend[0]._id %>" class="icon seen remove fa-solid fa-check-double"></i>
+						<i id="circle-icon-<%= friend[0]._id %>" class="icon circle remove fa-solid fa-circle"></i>
+						<p id="last-message-time-<%= friend[0]._id %>" class="time remove">10:21 PM</p>
 					</li>
 				<% } %>
 

@@ -10,7 +10,7 @@ class ChatEngine{
         // this.socket = io.connect('https://54.91.2.241:5000', {
         this.socket = io.connect(host, {
             transports: ["websocket"],
-            secure:true,
+            secure: true,
             reconnect: true,
             rejectUnauthorized : false,
             query: {
@@ -61,16 +61,25 @@ class ChatEngine{
             // iterate over the map and update the status of the user
             data.map.forEach(function(value, key) {
                 let statusElement = $(`#status-${value.userId}`);
-                if (value.status === 'Active now' && statusElement.length > 0) {
-                    statusElement.html('<i class="fa-solid fa-circle"></i> Active Now');
-                } else if (statusElement.length > 0) {
-                    // console.log(value);
-                    // show last seen time using moment library
-                    if (value.moment) {
-                    statusElement.html('Active ' + value.moment);
-                    } else {
-                    statusElement.html('offline');
+                if (statusElement.length > 0 && value.userId != self.userId) {
+
+                    if (value.status === 'Active now') {
+                        statusElement.html('<i class="fa-solid fa-circle"></i> Active now');
+
+                        $(`#message-icon-${value.userId}`).removeClass('remove');
+                        $(`#circle-icon-${value.userId}`).addClass('remove');
+                        $(`#last-message-time-${value.userId}`).addClass('remove');
+
+                    } else{
+                        // console.log(value);
+                        // show last seen time using moment library
+                        if (value.moment) {
+                            statusElement.html('Active ' + value.moment);
+                        } else {
+                            statusElement.html('offline');
+                        }
                     }
+                    
                 }
             });
             
@@ -144,6 +153,9 @@ class ChatEngine{
             if (document.getElementById('chat-user-id').value == to_user){
                 // console.log('inside if')
                 $(`#chat-messages-list-private-${to_user}`).children().remove();
+                $(`#chat-messages-list-private-${to_user}`).html(`
+                    <p class="update-msg">Send hi 👋 to your friend!</p>
+                `)
             }
             $(`#chat-messages-list-private-${to_user}`).parent().find('#messages-loader').removeClass('hide-loader');
 
@@ -161,13 +173,25 @@ class ChatEngine{
             $(`#chat-messages-list-private-${data.to_user}`).parent().find('#messages-loader').addClass('hide-loader');
 
             // if chat messages private list is empty, then add the messages to the list
-            if ($(`#chat-messages-list-private-${data.from_user}`).children().length == 0){
+            if ($(`#chat-messages-list-private-${data.from_user}`).children().length <= 1){
                 responseData.data.chatRoom.messages.forEach(function(message){
                     addChatToDOM(message);
                 });
             }
 
             scrollToBottomPrivate();
+
+            // emit the event to update that the user has seen the messages
+            // self.socket.emit('update_seen', {
+            //     user_email: self.userEmail,
+            //     user_name: self.userName,
+            //     user_profile: self.userProfile,
+            //     time: new Date().toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"}),
+            //     from_user: data.from_user,
+            //     to_user: data.to_user,
+            //     chatroom: data.chatroom,
+            // });
+
 
         });
 
@@ -211,6 +235,7 @@ class ChatEngine{
             }, 700);
         }
 
+
         // listen to typing event and show the typing status
         self.socket.on('typingResponsePrivate', function(data){
             // console.log(data)
@@ -229,7 +254,7 @@ class ChatEngine{
                         $('#typing-status-private').removeClass('animate__fadeOut');
 
                         typing = true;
-                        $('#typing-status-private').html(`
+                        const element = $('#typing-status-private').html(`
                             <img class='animate__animated animate__fadeIn' src="${data.user_profile}">
                             <div class="animation animate__animated animate__fadeIn">
                                 <div class="animation__dot1"></div>
@@ -237,6 +262,9 @@ class ChatEngine{
                                 <div class="animation__dot3"></div>
                             </div>
                         `);
+
+                        
+
                         // console.log('typed')
                         timeout = setTimeout(timeoutFunction, 1000);
                     } else {
@@ -295,7 +323,7 @@ class ChatEngine{
                         $('#typing-status-global').removeClass('animate__fadeOut');
 
                         typingGlobal = true;
-                        $('#typing-status-global').html(`
+                        const element = $('#typing-status-global').html(`
                             <img class='animate__animated animate__fadeIn' src="${data.user_profile}">
                             <div class="animation animate__animated animate__fadeIn">
                                 <div class="animation__dot1"></div>
@@ -303,6 +331,10 @@ class ChatEngine{
                                 <div class="animation__dot3"></div>
                             </div>
                         `);
+
+                        // append the typing status to the chat messages list
+                        $('#chat-messages-list-global').append(element);
+
                         // console.log('typed')
                         timeoutGlobal = setTimeout(timeoutFunctionGlobal, 1000);
                     } else {
@@ -412,6 +444,9 @@ class ChatEngine{
                 
             }
         })
+
+
+
         
 
         self.socket.on('receive_global_message', function(data){
@@ -728,6 +763,10 @@ class ChatEngine{
                 }).showToast();
             }
         }
+
+
+
+
 
 
         
