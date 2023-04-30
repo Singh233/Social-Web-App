@@ -6,7 +6,11 @@
             <div class="list">
                 <% for(friend of friends) { %> 
                     <div class="user">
-                        <img src="<%= friend[0].avatar %>" alt="">
+                        <% if(friend[0].avatar != undefined) { %> 
+                            <img src="<%= friend[0].avatar %>" alt="">
+                        <% } else { %> 
+                            <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
+                        <% } %> 
                         <p>
                             <a href="/users/profile/<%= friend[0]._id%>"><%= friend[0].name %></a>
                         </p>
@@ -16,6 +20,8 @@
                 <% if (friends.length == 0) { %>
                     <p class="no-friends">You have no friends yet</p>
                 <% } %>
+
+                
             </div>
             
         <% } %>
@@ -39,6 +45,8 @@
                 </div> 
                 
             <% } %>
+
+            
         </div>
         
     </section>

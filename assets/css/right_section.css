@@ -20,6 +20,7 @@
   padding: 10px 20px;
   background-color: #212121;
   margin: 20px;
+  margin-bottom: 0px;
   border-radius: 10px;
   position: relative;
 }
@@ -40,12 +41,22 @@
 .right-section-container #user-friends .list, .right-section-container #other-users .list {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   margin: 20px;
+  margin-top: 0px;
   padding: 20px;
-  padding-top: 0;
   list-style: none;
+  max-height: 290px;
   overflow-y: scroll;
+}
+
+.right-section-container #user-friends .list::-webkit-scrollbar, .right-section-container #other-users .list::-webkit-scrollbar {
+  margin: 2px;
+  background-color: black;
+}
+
+.right-section-container #user-friends .list::-webkit-scrollbar-thumb, .right-section-container #other-users .list::-webkit-scrollbar-thumb {
+  background-color: #6e6e6e;
+  border-radius: 8px;
 }
 
 .right-section-container #user-friends .list .user, .right-section-container #other-users .list .user {

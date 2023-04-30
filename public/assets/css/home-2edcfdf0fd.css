@@ -84,6 +84,12 @@
   color: white;
   border: none;
   font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.home-container .post-div #new-post-form #submit:hover {
+  background-color: #398bff;
 }
 
 .home-container .post-div #feed-posts {

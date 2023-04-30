@@ -30,6 +30,7 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
             background-color: $button-color-gray;
 
             margin: 20px;
+            margin-bottom: 0px;
             border-radius: 10px;
             // text-align: center;
             position: relative;
@@ -51,15 +52,29 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
         .list {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+
             margin: 20px;
+            margin-top: 0px;
             padding: 20px;
-            padding-top: 0;
             list-style: none;
+
+            max-height: 290px;
             
             // make the list scrollable
             overflow-y: scroll;
             
+            
+            &::-webkit-scrollbar {
+                margin: 2px;
+                background-color: black;
+            }
+        
+            &::-webkit-scrollbar-thumb {
+                background-color:#6e6e6e;
+                border-radius: 8px;
+            }
+
+
 
 
             .user {

@@ -45,6 +45,26 @@
 					</li>
 				<% } %>
 
+				<% for(friend of friends) {  %>
+					<li id="<%= friend[0]._id %>" onclick="toggleChatMessages('<%= friend[0]._id %>', '<%= friend[0].avatar %>',  '<%= friend[0].name %>', 'private')" class="friend animate__animated animate__faster animate__fadeIn">
+						<% if (friend[0].avatar) { %>
+							<img src="<%= friend[0].avatar %>">
+						<% } else { %>
+							<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png">
+						<% } %>
+						<span>
+							<p><%= friend[0].name %></p>
+							<p id="status-<%= friend[0]._id %>" class="status"><%= friend[0].status %> offline</p>
+						</span>
+						<i id="message-icon-<%= friend[0]._id %>" class="icon remove fa-solid fa-comment"></i>
+						<i id="tick-icon-<%= friend[0]._id %>" class="icon singleTick remove fa-solid fa-check"></i>
+						<i id="double-tick-icon-<%= friend[0]._id %>" class="icon doubleTick remove fa-solid fa-check-double"></i>
+						<i id="seen-icon-<%= friend[0]._id %>" class="icon seen remove fa-solid fa-check-double"></i>
+						<i id="circle-icon-<%= friend[0]._id %>" class="icon circle remove fa-solid fa-circle"></i>
+						<p id="last-message-time-<%= friend[0]._id %>" class="time remove">10:21 PM</p>
+					</li>
+				<% } %>
+
 				<% if (friends.length === 0) { %>
 					<li class="no-friend animate__animated animate__faster animate__fadeIn">
 						<p><i class="fa-solid fa-user-plus"></i> Add a friend to start conversation!</p>
