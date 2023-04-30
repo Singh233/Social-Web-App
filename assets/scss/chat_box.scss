@@ -39,6 +39,19 @@ $button-color-ligth-blue: #4db1ff;
         height: 100%;
         width: 100%;
 
+        max-height: 470px;
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background-color:#6e6e6e;
+            border-radius: 8px;
+        }
+        
+
         .header {
             width: 100%;
             background-color: #202020;
@@ -50,6 +63,10 @@ $button-color-ligth-blue: #4db1ff;
             flex-direction: row;
             align-items: center;
             justify-content: space-around;
+
+            position: sticky;
+            top: 0;
+            z-index: 999;
 
             .comment-icon {
                 background-color: #0057d2;
@@ -80,6 +97,7 @@ $button-color-ligth-blue: #4db1ff;
             flex-direction: column;
             padding: 15px;
             padding-top: 0;
+           
 
             .no-friend {
                 display: flex;

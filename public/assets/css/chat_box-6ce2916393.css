@@ -25,6 +25,17 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  max-height: 470px;
+  overflow-y: scroll;
+}
+
+.user-chat-box .friends::-webkit-scrollbar {
+  display: none;
+}
+
+.user-chat-box .friends::-webkit-scrollbar-thumb {
+  background-color: #6e6e6e;
+  border-radius: 8px;
 }
 
 .user-chat-box .friends .header {
@@ -36,6 +47,9 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
 
 .user-chat-box .friends .header .comment-icon {
@@ -84,7 +98,7 @@
   cursor: pointer;
   position: relative;
   background-color: #202020;
-  padding: 5px 10px;
+  padding: 8px 10px;
   border-radius: 10px;
   transition: all 0.2s ease-out;
 }
@@ -104,11 +118,11 @@
   display: flex;
   align-items: center;
   width: max-content;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: #d0d0d0;
 }
 
-.user-chat-box .friends #friends-list li span .status i {
+.user-chat-box .friends #friends-list li span .status .fa-circle {
   font-size: 0.9rem;
   margin-right: 5px;
   color: greenyellow;
@@ -118,9 +132,38 @@
   -webkit-text-stroke-width: 4px;
 }
 
-.user-chat-box .friends #friends-list li .fa-comment {
+.user-chat-box .friends #friends-list li .time {
   position: absolute;
   right: 20px;
+  top: 10px;
+  font-size: 0.9rem;
+}
+
+.user-chat-box .friends #friends-list li .icon {
+  position: absolute;
+  right: 20px;
+}
+
+.user-chat-box .friends #friends-list li .circle {
+  color: #0057d2;
+  font-size: 0.7rem;
+  margin-top: 25px;
+}
+
+.user-chat-box .friends #friends-list li .singleTick {
+  color: gray;
+}
+
+.user-chat-box .friends #friends-list li .doubleTick {
+  color: gray;
+}
+
+.user-chat-box .friends #friends-list li .seen {
+  color: #0057d2;
+}
+
+.user-chat-box .friends #friends-list li .remove {
+  display: none !important;
 }
 
 .user-chat-box .friends #friends-list li:hover {

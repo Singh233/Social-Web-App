@@ -1,4 +1,5 @@
 
+
 {
     FilePond.registerPlugin(
         FilePondPluginImageCrop,
@@ -210,7 +211,22 @@
     let newPostDom = function(post) {
         return $(`<div id="post-${post._id}" class="display-posts animate__animated animate__fadeIn">
                 
-                
+
+
+                <div id="bottom-menu-options-${post._id}" class="post-options-menu animate__animated remove">
+                    <button onclick="toggleMenuOptions('${post._id}')" class="cancel-button">
+                        Cancel
+                    </button>
+
+                    <div class="option1">
+                        <a href="/users/profile/${ post.user._id }"> <i class="fa-solid fa-user"></i> Go to profile</a>
+                    </div>
+
+                    <div class="option2">
+                        <a class="delete-post-button" href="/posts/destroy/${post._id}"><i class="fa-solid fa-trash"></i> Delete</a>
+                    </div>
+                    
+                </div>
                 
 
                 <div class="post-header">
@@ -229,8 +245,10 @@
                 <div class="post-footer">
                     <div class="post-options">
                         <div class="left">
-                        <a class="toggle-like-button" data-likes="0" href="/likes/toggle/?id=${post._id}&type=Post"><i style="margin-left: 0px" class="fa-regular fa-heart"></i> <span>0</span></a>
-                
+                        
+                        <a class="toggle-like-button " data-likes="0" href="/likes/toggle/?id=${post._id}&type=Post">
+                            <i style="margin-left: 0px" class="fa-regular fa-heart "></i> <span>0</span>
+                        </a>
                         <a href="#">
                             <i style="transform: rotateY(180deg);" class="fa-regular fa-comment"></i><span>0</span>
                         </a>
@@ -332,20 +350,25 @@
     // and call the delete post method on each post
 
     let convertPostsToAjax = function() {
-        $('#posts-list-container').each(function() {
+        // iterate over all posts
+        $('#posts-list-container>div').each(function() {
             let self = $(this);
             let deleteButton = $(' .delete-post-button', self);
             deletePost(deleteButton);
 
             // get the post's id by splitting the id attribute
-            let postId = self.prop('id').split('-')[1];
-            
+            let postId = self.prop('id').split("-")[1]
             new PostComments(postId);
+
+         
         });
+        
     }
     
     //createPost();
-    convertPostsToAjax();
+
+        convertPostsToAjax();
+
 
     // ajax call to create a post on submit of the form
     $('#new-post-form').submit(function(e) {
@@ -362,10 +385,14 @@
             contentType: false,
             success: function(data) {
 
+                // console.log(data.data.post)
                 let newPost = newPostDom(data.data.post);
                 $('#posts-list-container').prepend(newPost);
                 deletePost($(' .delete-post-button', newPost));
+                
                 new PostComments(data.data.post._id);
+                //enable the functionality of the toggle liek button on the new post
+                new ToggleLike($(' .toggle-like-button', newPost));
 
 
 
@@ -375,9 +402,45 @@
                 // remove the image preview of filepond
                 pond.removeFile();
 
+
+                Toastify({
+                    text: data.data.success,
+                    duration: 2000,
+                    destination: "",
+                    newWindow: true,
+                    close: true,
+                    avatar: "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+    
+                    gravity: "top", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "#0057D2",
+                        borderRadius: "10px",
+                    },
+                    onClick: function(){} // Callback after click
+                }).showToast();
+
             }, error: function(error) {
                 console.log(error.responseText);
             
+                Toastify({
+                    text: 'Something went wrong!',
+                    duration: 2000,
+                    destination: "",
+                    newWindow: true,
+                    close: true,
+                    avatar: "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
+                    gravity: "top", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "#D20A0A",
+                        borderRadius: "10px",
+                        color: "white",
+                    },
+                    onClick: function(){} // Callback after click
+                }).showToast();
             }
 
         })
