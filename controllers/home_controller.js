@@ -68,3 +68,16 @@ module.exports.home = async function(request, response) {
     }
     
 }
+
+module.exports.search = async function(request, response) {
+    try {
+        let users = await User.find({});
+        return response.render('search.ejs', {
+            title: "Search",
+            all_users: users
+        });
+    } catch(error) {
+        console.log("Error", error);
+        return;
+    }
+}

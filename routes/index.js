@@ -10,6 +10,7 @@ console.log('router loaded');
 
 router.get('/', homeController.redirectToHome);
 router.get('/home', passport.checkAuthentication, homeController.home);
+router.get('/search', passport.checkAuthentication, homeController.search);
 router.use('/users', require('./users'));
 router.use('/posts', require('./posts'));
 router.use('/comments', require('./comments'));

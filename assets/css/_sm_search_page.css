@@ -8,11 +8,104 @@
 
 @media screen and (max-width: 480px) {
   .search-page-container {
-    margin-top: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
     min-width: 100vw;
     padding: 5px;
+  }
+  .search-page-container .search-header {
+    position: fixed;
+    top: 0;
+    background-color: #212121;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+  }
+  .search-page-container .search-header i {
+    margin-left: 15px;
+  }
+  .search-page-container .search-header #search-form-mobile {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  .search-page-container .search-header #search-form-mobile #user-search-bar-mobile {
+    font-size: 1rem;
+    padding: 9px 15px;
+    background-color: black;
+    color: white;
+    border-radius: 20px;
+    border: none;
+    width: 73%;
+  }
+  .search-page-container .search-header #search-form-mobile #user-search-bar-mobile::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+  .search-page-container .search-header #search-form-mobile #user-search-bar-mobile:focus {
+    outline: none;
+  }
+  .search-page-container .search-header #search-form-mobile .cancel-button {
+    margin-left: 10px;
+    font-size: 0.9rem;
+  }
+  .search-page-container #search-results-mobile {
+    width: 95vw;
+    border-radius: 20px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  .search-page-container #search-results-mobile .info {
+    margin-top: 50px;
+  }
+  .search-page-container #search-results-mobile .user-result {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 20px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  .search-page-container #search-results-mobile .user-result a {
+    text-decoration: none;
+    color: white;
+  }
+  .search-page-container #search-results-mobile .user-result img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .search-page-container #search-results-mobile .user-result p {
+    margin-left: 10px;
+  }
+  .search-page-container #search-results-mobile .user-result i {
+    position: absolute;
+    right: 30px;
+    color: rgba(255, 255, 255, 0.749);
+  }
+  .search-page-container #search-results-mobile .no-user-found {
+    padding: 35px;
+  }
+  .search-page-container #search-results-mobile .no-user-found i {
+    margin-right: 10px;
+  }
+  .search-page-container #search-results-mobile .divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.179);
+    margin: 10px 0;
   }
 }

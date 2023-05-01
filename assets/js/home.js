@@ -5,11 +5,11 @@
 
 function upload() {
     const homeContainer = document.querySelector('.home-container');
-    const searchContainer = document.querySelector('.search-page-container');
+
     // const profileContainer = document.querySelector('.profile-page-container');
     const postUploadContainer = document.querySelector('.post-upload-container');
     homeContainer.classList.add('remove');
-    searchContainer.classList.add('remove');
+
     // profileContainer.classList.add('remove');
     postUploadContainer.classList.remove('remove');
 
@@ -20,11 +20,9 @@ function upload() {
 
 function home() {
     const homeContainer = document.querySelector('.home-container');
-    const searchContainer = document.querySelector('.search-page-container');
     // const profileContainer = document.querySelector('.profile-page-container');
     const postUploadContainer = document.querySelector('.post-upload-container');
     homeContainer.classList.remove('remove');
-    searchContainer.classList.add('remove');
     // profileContainer.classList.add('remove');
     postUploadContainer.classList.add('remove');
 
@@ -243,5 +241,64 @@ function searchUser(input, type) {
         $('#search-results').css('padding', '0');
     }
 }
+
+// for mobile search bar
+$('#user-search-bar-mobile').on('keyup', function() {
+    let userSearchResultDOM = (user) => `
+    <div class="user-result animate__animated animate__fadeIn">
+        <a href="/users/profile/${user._id}">
+            ${ user.avatar != undefined ?
+                `<img src="${user.avatar}" alt="">` :
+                `<img id="logo-placeholder" src="img/dummy-profile.jpeg">`
+            }
+        </a>
+        <a href="/users/profile/${user._id}">
+            <p>${user.name}</p>
+        </a>
+
+        <i class="fa-solid fa-caret-right"></i>
+    </div>
+
+`
+    let searchValue = $(this).val();
+
+    if (searchValue != '') {
+        $.ajax({
+            url: '/users/search?search=' + searchValue,
+            type: 'GET',
+            success: function(data) {
+                // clear the search results
+                $('#search-results-mobile').html('');
+                $('#search-results-mobile').css('padding', '10px');
+
+                // append the search results
+                data.users.forEach(user => {
+                    if (user._id != $('#search-user-id').val())
+                        $('#search-results-mobile').append(userSearchResultDOM(user));
+                    // add padding to the search results
+                })
+
+                // check if search results is empty
+                
+
+                // if no user is found
+                if (data.users.length == 0 || $('#search-results').html() == '') {
+                    $('#search-results-mobile').append('<p class="no-user-found animate__animated animate__fadeIn"><i class="fa-regular fa-circle-xmark"></i>No user found</p>');
+                    // remove padding from the search results
+                    $('#search-results-mobile').css('padding', '0');
+                }
+
+            }
+        })
+    } else {
+        $('#search-results-mobile').html(`
+        <p class="info animate__animated animate__fadeIn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search for people
+        </p>
+        `);
+        $('#search-results-mobile').css('padding', '0');
+    }
+})
 
 
