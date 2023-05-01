@@ -1,57 +1,96 @@
 
 
 <% if (locals.user){ %>
-	<div class="user-chat-box remove animate__animated">
+
+	<div id="chat-box"  class="user-chat-box remove-box animate__animated">
 		<div class="animate__animated animate__faster chat-overlay chat-overlay-z-index">
 			<i onclick="toggleChatWindow()"  class="fa-solid fa-comments comment-icon"></i>
 			<p>Chat with friends</p>
 			<i onclick="toggleChatWindow()" class="fa-solid fa-chevron-up"></i>
 		</div>
-		<div class="header">
-			<i id="close-chat-window" onclick="toggleChatWindow()" class="fa-solid fa-arrow-left-long back-button"></i>
-			<p class="chat-room">Global Chat</p>
-			<i class="fa-solid fa-ellipsis-vertical chat-menu"></i>
-		</div>
-		<ul id="chat-messages-list">
-			<p class="update-msg">New features coming soon!</p>
-			<!-- Display day -->
+
+		<div class="friends">
+
+			<div class="header">
+				<i onclick="toggleChatWindow()"  class="fa-solid fa-comments comment-icon"></i>
+				<p>Chat with friends</p>
+				<i onclick="toggleChatWindow()" class="fa-solid fa-chevron-down"></i>
+			</div>
+			<p class="update-msg">🎉 New features coming soon!</p>
+			<div class="global-chat-option">
+				<button id="global-chat-btn" onclick="toggleChatMessages('','','', 'global')">
+					<i class="fa-solid fa-earth-americas"></i>
+					Global Chat
+				</button>
+				<p>or</p>
+			</div>
+			<ul id="friends-list">
+				<% for(friend of friends) {  %>
+					<li id="<%= friend[0]._id %>" onclick="toggleChatMessages('<%= friend[0]._id %>', '<%= friend[0].avatar %>',  '<%= friend[0].name %>', 'private')" class="friend animate__animated animate__faster animate__fadeIn">
+						<% if (friend[0].avatar) { %>
+							<img src="<%= friend[0].avatar %>">
+						<% } else { %>
+							<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png">
+						<% } %>
+						<span>
+							<p><%= friend[0].name %></p>
+							<p id="status-<%= friend[0]._id %>" class="status"><%= friend[0].status %> offline</p>
+						</span>
+						<i id="message-icon-<%= friend[0]._id %>" class="icon remove fa-solid fa-comment"></i>
+						<i id="tick-icon-<%= friend[0]._id %>" class="icon singleTick remove fa-solid fa-check"></i>
+						<i id="double-tick-icon-<%= friend[0]._id %>" class="icon doubleTick remove fa-solid fa-check-double"></i>
+						<i id="seen-icon-<%= friend[0]._id %>" class="icon seen remove fa-solid fa-check-double"></i>
+						<i id="circle-icon-<%= friend[0]._id %>" class="icon circle remove fa-solid fa-circle"></i>
+						<p id="last-message-time-<%= friend[0]._id %>" class="time remove">10:21 PM</p>
+					</li>
+				<% } %>
+
+				<% for(friend of friends) {  %>
+					<li id="<%= friend[0]._id %>" onclick="toggleChatMessages('<%= friend[0]._id %>', '<%= friend[0].avatar %>',  '<%= friend[0].name %>', 'private')" class="friend animate__animated animate__faster animate__fadeIn">
+						<% if (friend[0].avatar) { %>
+							<img src="<%= friend[0].avatar %>">
+						<% } else { %>
+							<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png">
+						<% } %>
+						<span>
+							<p><%= friend[0].name %></p>
+							<p id="status-<%= friend[0]._id %>" class="status"><%= friend[0].status %> offline</p>
+						</span>
+						<i id="message-icon-<%= friend[0]._id %>" class="icon remove fa-solid fa-comment"></i>
+						<i id="tick-icon-<%= friend[0]._id %>" class="icon singleTick remove fa-solid fa-check"></i>
+						<i id="double-tick-icon-<%= friend[0]._id %>" class="icon doubleTick remove fa-solid fa-check-double"></i>
+						<i id="seen-icon-<%= friend[0]._id %>" class="icon seen remove fa-solid fa-check-double"></i>
+						<i id="circle-icon-<%= friend[0]._id %>" class="icon circle remove fa-solid fa-circle"></i>
+						<p id="last-message-time-<%= friend[0]._id %>" class="time remove">10:21 PM</p>
+					</li>
+				<% } %>
+
+				<% if (friends.length === 0) { %>
+					<li class="no-friend animate__animated animate__faster animate__fadeIn">
+						<p><i class="fa-solid fa-user-plus"></i> Add a friend to start conversation!</p>
+					</li>
+				<% } %>
+			</ul>
 
 			
+		</div>
 
-			<!-- <li class="other-message animate__animated animate__faster animate__zoomIn">
-				<div class="msg-content">
-					<img src="<%= assetPath('img/1782188.jpeg') %>">
-					<span>
-						 Other Message <sup>2:04 AM</sup> 
-					</span>
-					
-				</div>
-			</li>
-			<li class="self-message animate__animated animate__faster animate__zoomIn">
-				<div class="msg-content">
-					<span>
-						 Self Message <sup>2:04 AM</sup> 
-					</span>
-					<img src="<%= assetPath('img/1782188.jpeg') %>">
-				</div>
-				
-				
-				
-			</li> -->
-
-		</ul>
-		<div class="animate__animated" id="chat-message-input-container">
-			<input id="chat-message-input" placeholder="Type message here" required>
-			<button id="send-message"><i class="fa-solid fa-paper-plane"></i></button>
+		<div class="footer">
+			<p>Start a conversation!</p>
 		</div>
 
 	</div>
+    <%- include('_chat_messages_global') -%>
+    <%- include('_chat_messages_private') -%>
+
 <% } %>
 
 
 <script>
+	let previousId = '';
+
 	// add background image to chat window
-	let chatWindow = document.querySelector('.user-chat-box');
+	let chatWindow = document.querySelector('.user-messages');
 	chatWindow.setAttribute('style', "background-image: linear-gradient(rgba(0, 0, 0, 0.7), #000000), url('<%= assetPath('img/161.jpg') %>');background-size: cover;")
 
 </script>

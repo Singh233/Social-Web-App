@@ -35,19 +35,18 @@ module.exports.add = async function(req, res) {
 
 module.exports.remove = async function(req, res) {
     try {
-        console.log(req.query.from);
 
         let friendship = await Friendship.findOneAndDelete({from_user: req.query.from});
 
-        console.log(friendship);
             
         let user = await User.findById(req.query.from);
 
 
         
-        const index = user.friendships.indexOf(req.query.from);
+        const index = user.friendships.indexOf(friendship._id);
         if (index > -1) { // only splice array when item is found
             user.friendships.splice(index, 1); // 2nd parameter means remove one item only
+            console.log('friendship removed')
         }
 
 

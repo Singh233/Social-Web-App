@@ -1,6 +1,11 @@
 const express = require('express');
 const env = require('./config/environment');
 const logger = require('morgan');
+const cors=require("cors");
+
+const corsOptions = {
+    origin: ['http://localhost:3000', 'https://chillsaname.me', 'http://127.0.0.1:5173'], 
+}
 
 // Certificate and key files
 const fs = require('fs');
@@ -52,6 +57,10 @@ console.log('chat server is listening on port 4000');
 // app.use(bodyParser.json()); // Send JSON responses
 app.use(express.urlencoded({extended: true}));
 
+app.use(cors({
+    origin: ['https://chillsanam.me', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://localhost:5173', 'http://192.168.0.5:5173', 'http://192.168.0.8:5173']
+}))
+
 // compiles scss to css
 if(env.name == 'development') {
     // app.use(sassMiddleware({
@@ -86,6 +95,8 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 
 //app.use(logger(env.morgan.mode, env.morgan.options));
 
+
+
 app.use(expressLayouts);
 // extracct style and scripts from sub pages int the layout
 app.set('layout extractStyles', true);
@@ -99,34 +110,54 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 // mongo store is use to store the session cookie in the db
-app.use(session({
+const sessionMiddleware = session({
     name: 'codeial',
     // TODO change the secret before deployment in production mode
     secret: env.session_cookie_key,
     saveUninitialized: false,
     resave: false,
     cookie: {
-        maxAge: (1000 * 60 * 100)
+        maxAge: (1000 * 60 * 100),
     },
     store: MongoStore.create({
         mongoUrl: env.db,
-        autoRemove: 'disabled'
+        autoRemove: 'enabled'
     },
     function(error) {
         console.log(error || "---connect-mongodb setup ok---")
     })
-}));
+});
 
-app.use(passport.initialize());
-app.use(passport.session());
+let isApiRequest = false;
+// Dynamically set the session middleware
+app.use(function(req, res, next) {
+    if (req.url.startsWith('/api')) {
+        // console.log('Skipping session middleware for API requests')
+        isApiRequest = true;
+    } else {
+        // console.log('Using session middleware for non-API requests')
+        isApiRequest = false;
+    }
+    next();
 
-app.use(passport.setAuthenticatedUser);
+});
 
-app.use(flash());
-app.use(customMware.setFlash);
+if (!isApiRequest) {
+    app.use(sessionMiddleware);
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    app.use(passport.setAuthenticatedUser);
+
+    app.use(flash());
+    app.use(customMware.setFlash);
+} else {
+    app.use(passport.initialize());
+}
 
 // use express router
 app.use('/', require('./routes'));
+
 
 app.listen(port, function(error) {
     if (error) {

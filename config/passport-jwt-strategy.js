@@ -18,6 +18,7 @@ passport.use(new JWTStrategy(opts, function(jwtPayLoad, done) {
         }
 
         if (user) {
+            console.log("user found", user);
             return done(null, user);
         } else {
             return done(null, false);

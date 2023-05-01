@@ -31,22 +31,17 @@ class PostComments {
 
                      //enable the functionality of the toggle liek button on the new post
                     new ToggleLike($(' .toggle-like-button', newComment));
-                    new Noty({
-                        theme: 'relax',
-                        text: data.data.success,
-                        type: 'success',
-                        layout: 'topRight',
-                        timeout: 3000
-                    }).show();
+                    
+
                 }, error: function(error) {
-                    console.log(error.responseText);
-                    new Noty({
-                        theme: 'relax',
-                        text: 'Something went wrong!',
-                        type: 'error',
-                        layout: 'topRight',
-                        timeout: 2000
-                    }).show();
+                    // console.log(error.responseText);
+                    // new Noty({
+                    //     theme: 'relax',
+                    //     text: 'Something went wrong!',
+                    //     type: 'error',
+                    //     layout: 'topRight',
+                    //     timeout: 2000
+                    // }).show();
                 }
             });
         });
@@ -60,22 +55,43 @@ class PostComments {
                 url: $(deleteLink).prop('href'),
                 success: function(data) {
                     $(`#comment-${data.comment_id}`).remove();
-                    new Noty({
-                        theme: 'relax',
-                        text: data.data.success,
-                        type: 'success',
-                        layout: 'topRight',
-                        timeout: 3000
-                    }).show();
+
+                    Toastify({
+                        text: 'Comment added!',
+                        duration: 2000,
+                        destination: "",
+                        newWindow: true,
+                        close: true,
+                        avatar: "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+        
+                        gravity: "top", // `top` or `bottom`
+                        position: "center", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                            background: "#0057D2",
+                            borderRadius: "10px",
+                        },
+                        onClick: function(){} // Callback after click
+                    }).showToast();
                 }, error: function(error) {
-                    console.log(error.responseText);
-                    new Noty({
-                        theme: 'relax',
+                    // console.log(error.responseText);
+                    Toastify({
                         text: 'Something went wrong!',
-                        type: 'error',
-                        layout: 'topRight',
-                        timeout: 2000
-                    }).show();
+                        duration: 2000,
+                        destination: "",
+                        newWindow: true,
+                        close: true,
+                        avatar: "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
+                        gravity: "top", // `top` or `bottom`
+                        position: "center", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                            background: "#D20A0A",
+                            borderRadius: "10px",
+                            color: "white",
+                        },
+                        onClick: function(){} // Callback after click
+                    }).showToast();
                 }
             })
         })
@@ -104,10 +120,10 @@ class PostComments {
                         </div>
                 
                         <div class="bottom">
-                            <p id="comment-time">3m</p>
+                            <p id="comment-time">Just now</p>
                             <p id="reply-button">reply</p>
                             
-                                <a class="delete-comment-button" href="/comments/destroy/${comment._id}"><i class="fa-regular fa-circle-xmark"></i></a>
+                                <a class="delete-comment-button" href="/comments/destroy/${comment._id}">delete</a>
                             
                             
                 

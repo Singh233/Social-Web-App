@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="<%= assetPath('css/home.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/chat_box.css') %>">
+<link rel="stylesheet" href="<%= assetPath('css/chat_messages.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/post_card_design.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
 <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
@@ -28,6 +29,7 @@
                     <% } %> 
                     <p>Hey, <%= locals.user.name %> post something new!</p>
                 </div>
+                <input id="local_user_id" type="hidden" name="id" placeholder="Your id" value="<%= locals.user._id %>">
                 <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">
                 <input type="hidden" name="email" placeholder="Your email" value="<%= locals.user.email %>">
                 <input required type="file" name="filepond" id="myfile">
@@ -63,7 +65,9 @@
 
         
     <% } %>
-    <%- include('_chat_box') -%>
+    <% if(locals.user) { %>
+        <%- include('_chat_box', {friends}) -%>
+    <% } %>
 
     <% if (locals.user){ %>
         <%- include('_bottom_nav_bar_sm') -%>
@@ -86,10 +90,10 @@
 <% if (locals.user){ %>
     <%- include('_sm_post_upload') -%>
     <%- include('_sm_search_page') -%>
-    
+    <script src="<%= assetPath('js/add_emoji.js') %>"></script>
+
 <% } %>
 
-<script src="<%= assetPath('js/add_emoji.js') %>"></script>
 <script src="<%= assetPath('js/home_post_comments.js') %>"></script>
 <script src="<%= assetPath('js/home_posts.js') %>"></script>
 <script src="<%= assetPath('js/toggle_likes.js') %>"></script>
@@ -106,7 +110,7 @@
 <% if (locals.user){ %>
     <script>
         
-        new ChatEngine('user-chat-box', '<%= locals.user.email %>', '<%= locals.user.name %>', '<%= locals.user.avatar %>', '<%= websocket_host %>');
+        new ChatEngine('user-chat-box','<%= locals.user._id %>', '<%= locals.user.email %>', '<%= locals.user.name %>', '<%= locals.user.avatar %>', '<%= websocket_host %>');
     </script>
 <% } %>
 

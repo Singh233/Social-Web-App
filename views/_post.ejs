@@ -6,7 +6,7 @@
         </button>
 
         <div class="option1">
-            <i class="fa-solid fa-user"></i> Go to profile
+            <a href="/users/profile/<%= post.user.id %>"> <i class="fa-solid fa-user"></i> Go to profile</a>
         </div>
         <% if(locals.user && locals.user.id == post.user.id) { %> 
             <div class="option2">
@@ -18,9 +18,11 @@
     </div>
     
     <div class="post-header">
-        <img src="<%= post.user.avatar %>" id="user-profile-img">
         
-        <p><%= post.user.name %></p>
+        <a href="/users/profile/<%= post.user.id %>"> <img src="<%= post.user.avatar %>" id="user-profile-img"> </a>
+
+        <a href="/users/profile/<%= post.user.id %>"> <%= post.user.name %></a>
+
         <div id="post-menu-options">
             <i onclick="toggleMenuOptions('<%= post._id %>')" class="fa-solid fa-ellipsis-vertical"></i>
 
@@ -70,8 +72,7 @@
 
 
         <div class="post-caption">
-            <p class="post-user-name"><%= post.user.name %> - &nbsp; </p>
-            <p class="post-user-content"><%= post.content %></p>
+            <p class="post-user-name"><%= post.user.name %> - <span class="post-user-content"><%= post.content %></span> </p>
         </div>
 
         <div class="time">

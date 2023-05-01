@@ -93,6 +93,12 @@ $button-color-gray: #212121;
                 color: white;
                 border: none;
                 font-size: 1.1rem;
+                cursor: pointer;
+                transition: all 0.2s ease-in-out;
+
+                &:hover {
+                    background-color: lighten($color: $button-color-blue, $amount: 20%);
+                }
             }
         }
     

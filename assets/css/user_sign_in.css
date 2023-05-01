@@ -99,6 +99,7 @@
   font-weight: 500;
   text-decoration: none;
   background: linear-gradient(130deg, #1277f3 0%, #0b4995 97%);
+  cursor: pointer;
 }
 
 .user-sign-in .option-text {
@@ -129,6 +130,7 @@
   border-radius: 15px;
   color: white;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .user-sign-in .auth-options #google-auth {

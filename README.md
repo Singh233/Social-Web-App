@@ -40,8 +40,14 @@ https://sanam.social 🚀
 - Edit profile 🕺
 - Search (In progress)❗️
 - Global Messaging ✅
-- Direct Messaging (In progress)❗️
-- Optimised for 🖥️ Desktop and 📱 Mobile devices
+- Direct Messaging ✅
+  - Online/offline status 🌐
+  - Receive incoming message notification 🔔
+  - Email of message request (In progress) ❗️
+- Responsivity
+  - 🖥️ Desktop 
+  - 📱 Mobile
+  - 💻 Tablet (In progress) ❗️
 
 ## Run Project Locally
 
@@ -120,6 +126,9 @@ To run this project, you will need to add the following environment variables to
 `CODEIAL_DB`
 `CODIEAL_DEVELOPMENT_DB`
 `CODIEAL_PRODUCTION_DB`
+`CODEIAL_CERTIFICATE`
+`CODEIAL_CERTIFICATE_KEY`
+`SANAM_SOCIAL_AWS_MACHINE_IP`
 
 
 
@@ -128,7 +137,9 @@ To run this project, you will need to add the following environment variables to
 ## Screenshots
 
 <img width="1532" alt="Screenshot 2023-04-03 at 4 24 46 PM" src="https://user-images.githubusercontent.com/37498067/229543548-5f8f7b6f-6952-4874-804f-8b052b615347.png">
-<img width="1532" alt="Screenshot 2023-04-03 at 4 53 54 PM" src="https://user-images.githubusercontent.com/37498067/229543599-49920cdc-9571-44cf-9463-2737d1a8683c.png">
+<img width="1532" alt="Screenshot 2023-04-11 at 4 17 04 PM" src="https://user-images.githubusercontent.com/37498067/231139096-13f2d151-f1ad-49f6-be27-2b71c116653e.png">
+<img width="1532" alt="Screenshot 2023-04-11 at 4 17 17 PM" src="https://user-images.githubusercontent.com/37498067/231139116-bef5b523-3c8a-4f98-884f-b00e43dfe55b.png">
+
 <img width="1532" alt="Screenshot 2023-04-03 at 4 40 35 PM" src="https://user-images.githubusercontent.com/37498067/229543639-0420da15-f306-42e1-b522-1d2767a3a700.png">
 <img width="1532" alt="Screenshot 2023-04-03 at 4 54 13 PM" src="https://user-images.githubusercontent.com/37498067/229543683-d2470df3-6fd3-49af-a4ec-e67512b5d09b.png">
 
