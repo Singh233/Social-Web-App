@@ -7,12 +7,15 @@
     <% if (locals.user) { %>
         <div id="top-nav-section">
             <div id="search-form">
-                <input type="search" name="search" id="search-bar" placeholder="Search here...">
-                <button><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+                <input type="hidden" id="search-user-id" name="id" value="<%= locals.user._id %>">
+                <input type="search" name="search" id="user-search-bar" placeholder="Search here...">
+                <button onclick="searchUser('', 'click')"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+            </div>
+            <div id="search-results">
+                
             </div>
         </div>
         
-
     <%  } %>
 
     

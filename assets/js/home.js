@@ -182,4 +182,66 @@ function toggleScroll() {
 }
 
 
+// jquery to listen to user-search-bar input field
+$('#user-search-bar').on('keyup', function() {
+    searchUser($(this), 'keyUp');
+})
+
+function searchUser(input, type) {
+    let userSearchResultDOM = (user) => `
+    <div class="user-result animate__animated animate__fadeIn">
+        <a href="/users/profile/${user._id}">
+            ${ user.avatar != undefined ?
+                `<img src="${user.avatar}" alt="">` :
+                `<img id="logo-placeholder" src="img/dummy-profile.jpeg">`
+            }
+        </a>
+        <a href="/users/profile/${user._id}">
+            <p>${user.name}</p>
+        </a>
+
+        <i class="fa-solid fa-caret-right"></i>
+    </div>
+
+`
+    let searchValue = null;
+    if (type == 'keyUp') {
+        searchValue = $(input).val();
+    } else {
+        searchValue = $('#user-search-bar').val();
+    }
+    if (searchValue != '') {
+        $.ajax({
+            url: '/users/search?search=' + searchValue,
+            type: 'GET',
+            success: function(data) {
+                // clear the search results
+                $('#search-results').html('');
+                $('#search-results').css('padding', '10px');
+
+                // append the search results
+                data.users.forEach(user => {
+                    if (user._id != $('#search-user-id').val())
+                        $('#search-results').append(userSearchResultDOM(user));
+                    // add padding to the search results
+                })
+
+                // check if search results is empty
+                
+
+                // if no user is found
+                if (data.users.length == 0 || $('#search-results').html() == '') {
+                    $('#search-results').append('<p class="no-user-found animate__animated animate__fadeIn"><i class="fa-regular fa-circle-xmark"></i>No user found</p>');
+                    // remove padding from the search results
+                    $('#search-results').css('padding', '0');
+                }
+
+            }
+        })
+    } else {
+        $('#search-results').html('');
+        $('#search-results').css('padding', '0');
+    }
+}
+
 

@@ -211,3 +211,25 @@ module.exports.destroySession = function(request, response) {
 
     return response.redirect('/users/sign-in-up');
 }
+
+
+// controller for search users
+module.exports.search = function(request, response) {
+    let search = request.query.search;
+    let regex = new RegExp(search, 'i'); // i is for case insensitive search 
+    console.log(regex)
+
+    User.find({name: regex}, function(error, users) {
+        if (error) {
+            console.log("Error in finding users");
+            return;
+        }
+
+        return response.status(200).json({
+            message: "List of users",
+            users: users,
+            success: true
+        })
+
+    })
+}

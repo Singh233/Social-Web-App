@@ -8,6 +8,9 @@ router.post('/login', usersApi.createSession);
 router.get('/profile/:id', passport.authenticate('jwt', {session: false}), usersApi.profile);
 router.post('/create', usersApi.create);
 
+// route to search users
+// router.get('/search', passport.authenticate('jwt', {session: false}), usersApi.search);
+
 router.get('/fetch_user_friends', passport.authenticate('jwt', {session: false}), usersApi.fetchUserFriends);
 
 router.post(
