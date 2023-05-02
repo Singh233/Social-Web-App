@@ -26,6 +26,10 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+  .bottom-nav a {
+    text-decoration: none;
+    color: white;
+  }
   .bottom-nav #profile {
     display: flex;
     align-self: center;

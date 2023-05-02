@@ -19,10 +19,17 @@ module.exports.add = async function(req, res) {
         user1.friendships.push(friendship);
         user1.save();
 
-        // flash message
-        req.flash('success', 'Following new friend!');
-
-        return res.redirect('back');
+        // find the to user name
+        let toUserName = await User.findById(req.query.to);
+        
+        return res.status(200).json({
+            message: "Request successful",
+            success: true,
+            data: {
+                toUserName: toUserName.name,
+            }
+            
+        });
         
     } catch (error) {
         // flash message
@@ -36,31 +43,37 @@ module.exports.add = async function(req, res) {
 module.exports.remove = async function(req, res) {
     try {
 
-        let friendship = await Friendship.findOneAndDelete({from_user: req.query.from});
+        let friendship = await Friendship.findOneAndDelete({
+            from_user: req.query.from,
+            to_user: req.query.to
+        });
 
             
         let user = await User.findById(req.query.from);
 
 
-        
-        const index = user.friendships.indexOf(friendship._id);
-        if (index > -1) { // only splice array when item is found
-            user.friendships.splice(index, 1); // 2nd parameter means remove one item only
-            console.log('friendship removed')
+        if (friendship) {
+            const index = user.friendships.indexOf(friendship._id);
+            if (index > -1) { // only splice array when item is found
+                user.friendships.splice(index, 1); // 2nd parameter means remove one item only
+                console.log('friendship removed')
+            }
         }
 
 
         user.save();
 
-        // flash message
-        req.flash('success', 'Unfollowed friend!');
+        // find the to user name
+        let toUserName = await User.findById(req.query.to);
         
-        return res.redirect('back');
-        
-
-        
-        
-        
+        return res.status(200).json({
+            message: "Request successful",
+            success: true,
+            data: {
+                toUserName: toUserName.name,
+            }
+            
+        });
     } catch (error) {
         // flash message
         req.flash('error', 'Error in unfollowing friend!');

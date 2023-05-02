@@ -130,11 +130,17 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
                     display: flex;
                     justify-content: center;
                     width: 90vw;
-                    background: $button-color-gradient-blue;
+                    background: $button-color-blue;
                     padding: 7px;
                     border-radius: 15px;
                     margin: 5px;
                     font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.2s ease-in-out;
+
+                    &:hover {
+                        background: lighten($color: $button-color-blue, $amount: 20%);
+                    }
                     
                 }
 

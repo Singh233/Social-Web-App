@@ -120,11 +120,17 @@
   display: flex;
   justify-content: center;
   width: 90vw;
-  background: linear-gradient(130deg, #1277f3 0%, #0b4995 97%);
+  background: #0057D2;
   padding: 7px;
   border-radius: 15px;
   margin: 5px;
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#profile-container .profile-design .content .profile-actions .follow-button:hover {
+  background: #398bff;
 }
 
 #profile-container .profile-design .content .profile-actions .message-button {

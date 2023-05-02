@@ -35,14 +35,14 @@
                         <% let flag = false; %>
                             <% for (friend of friends) { %>
                                 <% if (user.id == friend.to_user || user.id == friend.from_user) {  flag = true;%>
-                                    <a class="follow-button" href="/users/friends/remove/?from=<%= user.id %>">Unfollow</a>
+                                    <p class="follow-button" data-from="<%= user.id %>" data-to="<%= profile_user.id %>" onclick="toggleFollow(event)">Unfollow</p>
                                 <% } if (flag) break; %>
                             <% } %>
                             <% if (!flag) { %>
-                                <a class="follow-button" href="/users/friends/add/?from=<%= user.id %>&to=<%= profile_user.id %>">Follow</a>
+                                <p onclick="toggleFollow(event)" data-from="<%= user.id %>" data-to="<%= profile_user.id %>" class="follow-button">Follow</p>
                             <% } %>
                     <% } else { %>
-                        <a class="follow-button" href="/users/friends/add/?from=<%= user.id %>&to=<%= profile_user.id %>">Follow</a>
+                        <p class="follow-button" data-from="<%= user.id %>" data-to="<%= profile_user.id %>" onclick="toggleFollow(event)">Follow</p>
                     <% } %>
 
                     <a class="message-button" href="#">Message</a>
@@ -58,12 +58,12 @@
                 </div>
 
                 <div class="followers">
-                    <p class="count"><%= followers.length %></p>
+                    <p id="followers-count" class="count"><%= followers.length %></p>
                     <p>Followers</p>
                 </div>
 
                 <div class="following">
-                    <p class="count"><%= following.length %></p>
+                    <p id="following-count" class="count"><%= following.length %></p>
                     <p>Following</p>
                 </div>
             </div>
@@ -121,4 +121,5 @@
 
 
 <script src="<%= assetPath('js/home_posts.js') %>"></script>
+<script src="<%= assetPath('js/user_profile.js') %>"></script>
 

@@ -217,7 +217,7 @@ module.exports.destroySession = function(request, response) {
 module.exports.search = function(request, response) {
     let search = request.query.search;
     let regex = new RegExp(search, 'i'); // i is for case insensitive search 
-    console.log(regex)
+    // console.log(regex)
 
     User.find({name: regex}, function(error, users) {
         if (error) {
