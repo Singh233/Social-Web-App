@@ -214,3 +214,20 @@ module.exports.fetchUserFriends = async function (request, response) {
         });
     }
 }
+
+// controller for search users
+module.exports.search = async function(request, response) {
+    let search = request.query.search;
+    let regex = new RegExp(search, 'i'); // i is for case insensitive search 
+    // console.log(regex)
+
+    let users = await User.find({name: regex});
+
+    return response.json(200, {
+        message: 'Users found',
+        success: true,
+        data: {
+            users: users
+        }
+    })
+}

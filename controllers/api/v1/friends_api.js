@@ -39,7 +39,10 @@ module.exports.add = async function(req, res) {
 module.exports.remove = async function(req, res) {
     try {
 
-        let friendship = await Friendship.findOneAndDelete({from_user: req.query.from});
+        let friendship = await Friendship.findOneAndDelete({
+            from_user: req.query.from,
+            to_user: req.query.to
+        });
 
         let user = await User.findById(req.query.from);
 
