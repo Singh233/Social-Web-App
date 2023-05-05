@@ -1,29 +1,24 @@
-const passport = require('passport');
-const JWTStrategy = require('passport-jwt').Strategy;
-const ExtractJWT = require('passport-jwt').ExtractJwt;
-const env = require('./environment');
-const User = require('../models/user');
+const passport = require("passport");
+const JWTStrategy = require("passport-jwt").Strategy;
+const ExtractJWT = require("passport-jwt").ExtractJwt;
 
-let opts = {
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: env.jwt_secret
-}
+const env = require("./environment");
+const User = require("../models/user");
 
-passport.use(new JWTStrategy(opts, function(jwtPayLoad, done) {
+const opts = {
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey: env.jwt_secret,
+};
 
-    User.findById(jwtPayLoad._id, function(error, user) {
-        if (error) {
-            console.log("error in finding user from JWT");
-            return;
-        }
+passport.use(
+  new JWTStrategy(opts, async function (jwtPayLoad, done) {
+    const user = await User.findById(jwtPayLoad._id);
 
-        if (user) {
-            console.log("user found", user);
-            return done(null, user);
-        } else {
-            return done(null, false);
-        }
-    })
-}));
+    if (!user) {
+      return done(null, false);
+    }
+    return done(null, user);
+  })
+);
 
 module.exports = passport;

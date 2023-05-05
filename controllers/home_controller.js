@@ -1,83 +1,78 @@
-const Post = require('../models/post');
-const User = require('../models/user');
-const Comment = require('../models/comment');
-const Friendships = require('../models/friendship');
-const env = require('../config/environment');
-const moment = require('moment');
+/* eslint-disable node/no-unsupported-features/es-syntax */
+/* eslint-disable no-undef */
+/* eslint-disable no-restricted-syntax */
+const moment = require("moment");
 
-module.exports.redirectToHome = function(request, response) {
-    return response.redirect('/home');
-}
+const Post = require("../models/post");
+const User = require("../models/user");
+const Friendships = require("../models/friendship");
+const env = require("../config/environment");
 
-module.exports.home = async function(request, response) {
-    // Post.find({user: request.user._id}, function(error, post) {
-    //     if (error) {
-    //         console.log("Error finding user");
-    //         return;
-    //     }
+module.exports.redirectToHome = function (request, response) {
+  return response.redirect("/home");
+};
 
-    //     return response.render('home.ejs', {
-    //         title: "Home",
-    //         posts: post
-    //     });
-    // });
-
-
-    // populate the user of each post
-    try {
-
-        
-        let posts = await Post.find({})
-        .sort('-createdAt')
-        .populate('user')
-        .populate('likes');
-
-        // populate the comments of each post
-        for (let post of posts) {
-            let comments = await Comment.find({post: post._id})
-            .populate('user')
-            .populate('likes');
-            post.comments = comments;
-        }
-    
-        let users = await User.find({});
-        let friendsArray = [];
-        if (request.user) {
-            let friends = await Friendships.find({from_user: request.user._id});
-            
-            for (let friend of friends) {
-                let currUser = await User.find({_id: friend.to_user});
-                friendsArray.push(currUser);
-            }
-            
-        }
-
-        return response.render('home.ejs', {
-            title: "Home",
-            posts: posts, 
-            all_users: users,
-            friends: friendsArray,
-            websocket_host: env.websocket_host,
-            moment: moment
-        });
-    
-        
-    } catch(error) {
-        console.log("Error", error);
-        return;
+module.exports.home = async function (request, response) {
+  // populate user likes and comments of each post
+  try {
+    if (!request.user) {
+      return response.redirect("/users/sign-in");
     }
-    
-}
 
-module.exports.search = async function(request, response) {
-    try {
-        let users = await User.find({});
-        return response.render('search.ejs', {
-            title: "Search",
-            all_users: users
-        });
-    } catch(error) {
-        console.log("Error", error);
-        return;
+    const posts = await Post.find({})
+      .sort("-createdAt")
+      .populate("user")
+      .populate("likes")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user likes",
+        },
+      });
+
+    const users = await User.find({});
+    let followingCount = 0;
+
+    const friends = await Friendships.find({
+      from_user: request.user._id,
+    }).populate("to_user");
+
+    const friendsArray = [];
+
+    for (const friend of friends) {
+      followingCount =
+        friend.status === "accepted" ? followingCount + 1 : followingCount;
+      friendsArray.push({
+        ...friend.to_user._doc,
+        status: friend.status,
+        chatRoomId: friend.chat_room,
+      });
     }
-}
+
+    return response.render("home.ejs", {
+      title: "Home",
+      posts: posts,
+      all_users: users,
+      friends: friendsArray,
+      followingCount: followingCount,
+      websocket_host: env.websocket_host,
+      moment: moment,
+    });
+  } catch (error) {
+    flash("error", "Internal Server Error");
+    return response.redirect("back");
+  }
+};
+
+module.exports.search = async function (request, response) {
+  try {
+    const users = await User.find({});
+    return response.render("search.ejs", {
+      title: "Search",
+      all_users: users,
+    });
+  } catch (error) {
+    flash("error", "Internal Server Error");
+    return response.redirect("back");
+  }
+};

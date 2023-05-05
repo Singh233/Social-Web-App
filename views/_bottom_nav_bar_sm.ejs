@@ -1,9 +1,7 @@
-
-
 <div class="bottom-nav">
     <div id="home">
         <a href="/home"><i onclick="home()" class="fa-solid fa-play"></i></a>
-        
+
         <!-- <i onclick="home()" class="fa-solid fa-house"></i> -->
     </div>
 
@@ -11,7 +9,6 @@
         <a href="/search">
             <i class="fa-solid fa-magnifying-glass"></i>
         </a>
-        
     </div>
 
     <div id="upload">
@@ -20,16 +17,16 @@
 
     <div id="notification">
         <i class="fa-solid fa-bell"></i>
-        </div>
+    </div>
 
     <div id="profile">
-        <a href="/users/profile/<%= locals.user.id%>"><img onclick="profile()" src="<%= locals.user.avatar %>" id="user-profile-img"></a>
-        
+        <a href="/users/profile/<%= locals.user.id%>"
+            ><img
+                onclick="profile()"
+                src="<%= locals.user.avatar %>"
+                id="user-profile-img"
+        /></a>
     </div>
-    
 </div>
 
-<script>
-
-    
-</script>
+<script></script>

@@ -1,367 +1,185 @@
-const Chat = require('../../../models/chat');
-const ChatRoom = require('../../../models/chatRoom');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const Joi = require("joi");
 
-module.exports.createChatRoom = async function (req, res) {
-    try {
-        const data = req.params;
-        console.log(data);
-        let chatRoomId = data.sender + data.receiver;
-        let reverseChatRoomId = data.receiver + data.sender;
+const Chat = require("../../../models/chat");
+const ChatRoom = require("../../../models/chatRoom");
 
-        if (data.type == 'global') {
-            chatRoomId = data.type;
-            ChatRoom.findOne({ chatRoomId: chatRoomId })
-            .populate('messages')
-            .populate({
-                path: 'messages',
-                populate: {
-                    path: 'sender',
-                },
-            })
-            .exec(function (err, chatRoom) {
-                if (err) {
-                    console.log('Error in finding chat room', err);
-                    return res.status(500).json({
-                        message: 'Internal Server Error',
-                        });
-                }
-                if (chatRoom) {
-                    return res.status(200).json({
-                        message: 'Global Chat room exists',
-                        data: {
-                            chatRoom: chatRoom,
-                        },
-                        success: true,
-                    });
-                } else {
-                    // create a new chat room
-                    ChatRoom.create(
-                        {
-                            chatRoomId: 'global',
-                            type: data.type,
-                            users: [data.sender],
-                        },
-                        function (err, chatRoom) {
-                            if (err) {
-                                console.log('Error in creating chat room', err);
-                                return res.status(500).json({
-                                    message: 'Internal Server Error',
-                                    });
-                            }
-                            return res.status(200).json({
-                                message: 'Chat room created',
-                                data: {
-                                    chatRoom: chatRoom,
-                                },
-                                success: true,
-                            });
-                        }
-                    );
-                }
-            });
+const paramsValidator = Joi.object({
+  sender: Joi.string().required(),
+  receiver: Joi.string().required(),
+  type: Joi.string().valid("global", "private").required(),
+  message: Joi.string(),
+  chatRoomId: Joi.string(),
+});
 
-        } else {
+function handleResponse(res, status, message, data, success) {
+  const response = {
+    message,
+    data,
+    success,
+  };
+  return res.status(status).json(response);
+}
 
-        
-        // if the chat room already exists then return the chat room
-        ChatRoom.findOne({ chatRoomId: data.receiver + data.sender })
-            .populate('messages')
-            .populate({
-                path: 'messages',
-                populate: {
-                    path: 'sender',
-                },
-            })
-            .populate({
-                path: 'messages',
-                populate: {
-                    path: 'receiver',
-                },
-            })
-            .exec(function (err, chatRoom) {
-                if (err) {
-                    console.log('Error in finding chat room');
-                    return res.status(500).json({
-                        message: 'Internal Server Error',
-                        });
-                }
-                if (chatRoom) {
-                    return res.status(200).json({
-                        message: 'Chat room already exists',
-                        data: {
-                            chatRoom: chatRoom,
-                        },
-                        success: true,
-                    });
-                } else {
-                    // try to find the chat room in the reverse order
-                    ChatRoom.findOne({ chatRoomId: data.sender + data.receiver })
-                        .populate('messages')
-                        .populate({
-                            path: 'messages',
-                            populate: {
-                                path: 'sender',
-                            },
-                        })
-                        .populate({
-                            path: 'messages',
-                            populate: {
-                                path: 'receiver',
-                            },
-                        })
-                        .exec(function (err, chatRoom) {
-                            if (err) {
-                                console.log('Error in finding chat room');
-                                return res.status(500).json({
-                                    message: 'Internal Server Error',
-                                    });
-                            }
-                            if (chatRoom) {
-                                return res.status(200).json({
-                                    message: 'Chat room already exists',
-                                    data: {
-                                        chatRoom: chatRoom,
-                                    },
-                                    success: true,
-                                });
-                            } else {
-                                // create a new chat room
-                                ChatRoom.create(
-                                    {
-                                        chatRoomId: data.sender + data.receiver,
-                                        type: data.type,
-                                        users: [data.sender, data.receiver],
-                                    },
-                                    function (err, chatRoom) {
-                                        if (err) {
-                                            console.log('Error in creating chat room');
-                                            return  res.status(500).json({
-                                                message: 'Internal Server Error',
-                                                });
-                                        }
-                                        return res.status(200).json({
-                                            message: 'Chat room created',
-                                            data: {
-                                                chatRoom: chatRoom,
-                                            },
-                                            success: true,
-                                        });
-                                    }
-                                );
-                            }
+async function joinGlobalChatRoom(chatRoomId, data, res) {
+  // find the chat room
+  const chatRoom = await ChatRoom.findOne({ chatRoomId: chatRoomId })
+    .populate("messages")
+    .populate({
+      path: "messages",
+      populate: {
+        path: "sender",
+      },
+    });
 
-                        });
+  // if the chat room already exists then return the chat room
+  if (chatRoom) {
+    return handleResponse(
+      res,
+      200,
+      "Global Chat room exists",
+      { chatRoom },
+      true
+    );
+  }
 
-                    
-                }
-            });
-        }
-            
-    } catch (error) {
-        console.log('Error', error);
-        return res.status(500).json({
-            message: 'Internal Server Error',
-        });
-    }
+  // else create a new chat room and return it
+  const newChatRoom = await ChatRoom.create({
+    chatRoomId: chatRoomId,
+    type: data.type,
+    users: [data.sender],
+  });
+
+  return handleResponse(
+    res,
+    200,
+    "Global Chat room created",
+    { chatRoom: newChatRoom },
+    true
+  );
+}
+
+async function joinPrivateChatRoom(data, res) {
+  const { chatRoomId } = data;
+
+  // find the chat room
+  const chatRoom = await ChatRoom.findById(chatRoomId)
+    .populate("messages")
+    .populate({
+      path: "messages",
+      populate: {
+        path: "sender",
+      },
+    })
+    .populate({
+      path: "messages",
+      populate: {
+        path: "receiver",
+      },
+    });
+
+  return handleResponse(res, 200, "Chat room exists", { chatRoom }, true);
+}
+
+async function createGlobalMessage(data, res) {
+  const { sender, message } = data;
+  const chatRoomId = "global";
+  // find the chat room
+  const chatRoom = await ChatRoom.findOne({ chatRoomId });
+
+  // create a new chat message
+  const chat = await Chat.create({
+    sender: sender,
+    receiver: sender,
+    message: message,
+    chatRoomId: chatRoomId,
+  });
+
+  // push the chat message to the chatRoom
+  chatRoom.messages.push(chat);
+  await chatRoom.save();
+
+  return handleResponse(res, 200, "Message sent", { chat }, true);
+}
+
+async function createPrivateMessage(data, res) {
+  const { sender, receiver, message, chatRoomId } = data;
+
+  // find the chat room
+  const chatRoom = await ChatRoom.findById(chatRoomId);
+
+  // create a new chat message
+  const chat = await Chat.create({
+    sender: sender,
+    receiver: receiver,
+    message: message,
+    chatRoomId: chatRoomId,
+  });
+
+  // push the chat message to the chatRoom
+  chatRoom.messages.push(chat);
+  await chatRoom.save();
+
+  return handleResponse(res, 200, "Message sent", { chat }, true);
+}
+
+module.exports.joinChatRoom = async function (req, res) {
+  // validate the request params
+  const { error, value } = paramsValidator.validate(req.params);
+
+  // if the request params are invalid then return the error
+  if (error) {
+    return handleResponse(res, 400, error.message, null, false);
+  }
+
+  const data = value;
+
+  // join a chat room based on the type
+  switch (data.type) {
+    case "global":
+      try {
+        const chatRoomId = data.type; // In case of global chat room, chat room id is "global"
+        return await joinGlobalChatRoom(chatRoomId, data, res);
+      } catch (exceptionError) {
+        return handleResponse(res, 500, "Internal server error!", null, false);
+      }
+    case "private":
+      try {
+        return await joinPrivateChatRoom(data, res);
+      } catch (exceptionError) {
+        return handleResponse(res, 500, "Internal server error!", null, false);
+      }
+    default:
+      return handleResponse(res, 400, "Invalid chat room type", null, false);
+  }
 };
 
 // controller for creating a chat message
-module.exports.createChat = async function (req, res) {
-    try {
-        const data = req.params;
-        const body = req.body;
-        let chatRoomId = null;
-        console.log(data, body);
+module.exports.createMessage = async function (req, res) {
+  // validate the request params
+  const { error, value } = paramsValidator.validate(req.params);
 
-        if (data.receiver == 'all') {
-            // find the chat room
-            ChatRoom.findOne(
-                { chatRoomId: 'global' },
-                function (err, chatRoom) {
-                    if (err) {
-                        console.log('Error in finding chat room');
-                        return;
-                    }
+  if (error) {
+    return handleResponse(res, 400, error.message, null, false);
+  }
 
-                    if (chatRoom) {
-                        // create a new chat message
-                        chatRoomId = 'global';
-                        Chat.create(
-                            {
-                                sender: data.sender,
-                                receiver: data.sender,
-                                message: data.message,
-                                chatRoomId: chatRoomId,
-                            },
-                            function (err, chat) {
-                                if (err) {
-                                    console.log(
-                                        'Error in creating chat message',
-                                        err
-                                    );
-                                    return;
-                                }
-                                ChatRoom.findOneAndUpdate(
-                                    {
-                                        chatRoomId: chatRoomId,
-                                    },
-                                    {
-                                        $push: {
-                                            messages: chat._id,
-                                        },
-                                    },
-                                    function (err, chatRoom) {  
-                                        if (err) {
-                                            console.log( 
-                                                'Error in finding chat room'
-                                            );
-                                            return;
-                                        }
+  const data = value;
 
-                                        
-
-                                        return res.status(200).json({
-                                            message: 'Chat message created',
-                                            data: {
-                                                chat: chat,
-                                            },
-                                            success: true,
-                                        });
-                                    }); 
-                            }
-                        );
-                    }
-                }
-            );
-        }
-
-
-        // find the chat room
-        ChatRoom.findOne(
-            { chatRoomId: data.sender + data.receiver },
-            function (err, chatRoom) {
-                if (err) {
-                    console.log('Error in finding chat room');
-                    return;
-                }
-
-                if (chatRoom) {
-                    // create a new chat message
-                    chatRoomId = chatRoom.chatRoomId;
-                    Chat.create(
-                        {
-                            sender: data.sender,
-                            receiver: data.receiver,
-                            message: data.message,
-                            chatRoomId: chatRoomId,
-                        },
-                        function (err, chat) {
-                            if (err) {
-                                console.log(
-                                    'Error in creating chat message',
-                                    err
-                                );
-                                return;
-                            }
-                            ChatRoom.findOneAndUpdate(
-                                {
-                                    chatRoomId: chatRoomId,
-                                },
-                                {
-                                    $push: {
-                                        messages: chat._id,
-                                    },
-                                },
-                                function (err, chatRoom) {  
-                                    if (err) {
-                                        console.log( 
-                                            'Error in finding chat room'
-                                        );
-                                        return;
-                                    }
-
-                                    
-
-                                    return res.status(200).json({
-                                        message: 'Chat message created',
-                                        data: {
-                                            chat: chat,
-                                        },
-                                        success: true,
-                                    });
-                                }); 
-                        }
-                    );
-                } else {
-                    // try to find the chat room in the reverse order
-                    ChatRoom.findOne(
-                        { chatRoomId: data.receiver + data.sender },
-                        function (err, chatRoom) {
-                            if (err) {
-                                console.log('Error in finding chat room');
-                                return;
-                            }
-
-                            if (chatRoom) {
-                                // create a new chat message
-                                chatRoomId = chatRoom.chatRoomId;
-                                Chat.create(
-                                    {
-                                        sender: data.sender,
-                                        receiver: data.receiver,
-                                        message: data.message,
-                                        chatRoomId: chatRoomId,
-                                    },
-                                    function (err, chat) {
-                                        if (err) {
-                                            console.log(
-                                                'Error in creating chat message',
-                                                err
-                                            );
-                                            return;
-                                        }
-
-                                        // find the chat room and push the message
-                                        ChatRoom.findOneAndUpdate(
-                                            {
-                                                chatRoomId: chatRoomId,
-                                            },
-                                            {
-                                                $push: {
-                                                    messages: chat._id,
-                                                },
-                                            },
-                                            function (err, chatRoom) {  
-                                                if (err) {
-                                                    console.log( 
-                                                        'Error in finding chat room'
-                                                    );
-                                                    return;
-                                                }
-
-                                                
-
-                                                return res.status(200).json({
-                                                    message: 'Chat message created',
-                                                    data: {
-                                                        chat: chat,
-                                                    },
-                                                    success: true,
-                                                });
-                                            }); 
-                                    }
-                                );
-                            }
-                            return;
-                        }
-                    );
-                }
-            }
-        );
-    } catch (error) {
-        console.log('Error', error);
-        return res.status(500).json({
-            message: 'Internal Server Error',
-        });
-    }
+  // create a new chat message based on the type
+  switch (data.type) {
+    case "global":
+      try {
+        return await createGlobalMessage(data, res);
+      } catch (exceptionError) {
+        return handleResponse(res, 500, "Internal server error!", null, false);
+      }
+    case "private":
+      try {
+        return await createPrivateMessage(data, res);
+      } catch (exceptionError) {
+        return handleResponse(res, 500, "Internal server error!", null, false);
+      }
+    default:
+      return handleResponse(res, 400, "Invalid chat room type", null, false);
+  }
 };

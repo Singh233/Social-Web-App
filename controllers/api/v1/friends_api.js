@@ -54,7 +54,7 @@ module.exports.remove = async function(req, res) {
         }
 
 
-        user.save();
+        user.save()
 
         return res.status(200).json({
             data: {

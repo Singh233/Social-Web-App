@@ -1,18 +1,19 @@
 <div class="right-section-container">
     <section id="user-friends">
-        <h4><i class="fa-solid fa-user-group"></i> Friends <span><%= friends.length %></span> </h4>
+        <h4><i class="fa-solid fa-user-group"></i> Friends <span><%= followingCount %></span> </h4>
         <% if (locals.user != undefined && friends != undefined) {%> 
 
             <div class="list">
                 <% for(friend of friends) { %> 
+                    <% if (friend.status !== 'accepted') { continue; } %>
                     <div class="user">
-                        <% if(friend[0].avatar != undefined) { %> 
-                            <img src="<%= friend[0].avatar %>" alt="">
+                        <% if(friend.avatar != undefined) { %> 
+                            <img src="<%= friend.avatar %>" alt="">
                         <% } else { %> 
                             <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
                         <% } %> 
                         <p>
-                            <a href="/users/profile/<%= friend[0]._id%>"><%= friend[0].name %></a>
+                            <a href="/users/profile/<%= friend._id%>"><%= friend.name %></a>
                         </p>
                     </div>
                 <% } %>

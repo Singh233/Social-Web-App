@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<%= assetPath('css/user_profile.css') %>">
+<link rel="stylesheet" href="<%= assetPath('scss/user_profile.css') %>">
 
 
 <div id="profile-container">
@@ -27,6 +27,7 @@
 
             
             <div class="profile-actions">
+                <% let followers = 0; let following = 0; %>
                 <% if (locals.user.id == profile_user.id) { %>
                     <a class="edit-profile" href="/users/profile/edit/<%= locals.user.id%>">Edit profile</a>
                 <% } else { %>
@@ -34,7 +35,7 @@
                     <% if (friends != undefined) { %>
                         <% let flag = false; %>
                             <% for (friend of friends) { %>
-                                <% if (user.id == friend.to_user || user.id == friend.from_user) {  flag = true;%>
+                                <% if (user.id == friend.to_user || user.id == friend.from_user && friend.status === 'accepted') {  flag = true;%>
                                     <p class="follow-button" data-from="<%= user.id %>" data-to="<%= profile_user.id %>" onclick="toggleFollow(event)">Unfollow</p>
                                 <% } if (flag) break; %>
                             <% } %>
@@ -58,12 +59,12 @@
                 </div>
 
                 <div class="followers">
-                    <p id="followers-count" class="count"><%= followers.length %></p>
+                    <p id="followers-count" class="count"><%= followersCount %></p>
                     <p>Followers</p>
                 </div>
 
                 <div class="following">
-                    <p id="following-count" class="count"><%= following.length %></p>
+                    <p id="following-count" class="count"><%= followingCount %></p>
                     <p>Following</p>
                 </div>
             </div>

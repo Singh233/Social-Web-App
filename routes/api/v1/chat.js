@@ -1,9 +1,13 @@
-const express = require('express');
+const express = require("express");
+
 const router = express.Router();
-const chatApi = require('../../../controllers/api/v1/chat_api');
+const chatApi = require("../../../controllers/api/v1/chat_api");
 
-router.get('/:type/:sender/:receiver', chatApi.createChatRoom);
+router.get("/:type/:sender/:receiver/:chatRoomId", chatApi.joinChatRoom);
 
-router.post('/createmessage/:message/:sender/:receiver', chatApi.createChat);
+router.post(
+  "/createmessage/:message/:type/:sender/:receiver/:chatRoomId",
+  chatApi.createMessage
+);
 
 module.exports = router;

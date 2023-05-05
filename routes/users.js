@@ -1,54 +1,55 @@
-const express = require('express');
-const router = express.Router();
-const passport = require('passport');
+const express = require("express");
 
-const usersController = require('../controllers/users_controller');
-const signInController = require('../controllers/users_controller');
-const signUpController = require('../controllers/users_controller');
+const router = express.Router();
+const passport = require("passport");
+
+const usersController = require("../controllers/users_controller");
+const signInController = require("../controllers/users_controller");
+const signUpController = require("../controllers/users_controller");
 
 router.get(
-    '/profile/:id',
-    passport.checkAuthentication,
-    usersController.profile
+  "/profile/:id",
+  passport.checkAuthentication,
+  usersController.profile
 );
 router.get(
-    '/profile/edit/:id',
-    passport.checkAuthentication,
-    usersController.editProfile
+  "/profile/edit/:id",
+  passport.checkAuthentication,
+  usersController.editProfile
 );
 router.post(
-    '/update/:id',
-    passport.checkAuthentication,
-    usersController.update
+  "/update/:id",
+  passport.checkAuthentication,
+  usersController.update
 );
-router.get('/sign-up', signInController.signUp);
-router.get('/sign-in', signUpController.signIn);
-router.get('/sign-in-up', signInController.signIn);
+router.get("/sign-up", signInController.signUp);
+router.get("/sign-in", signUpController.signIn);
+router.get("/sign-in-up", signInController.signIn);
 
-router.use('/friends', require('./friends'));
+router.use("/friends", require("./friends"));
 
-router.post('/create', usersController.create);
+router.post("/create", usersController.create);
 
 // route to search users
-router.get('/search', usersController.search);
+router.get("/search", usersController.search);
 
 // user passport as a middleware to authenticate
 router.post(
-    '/create-session',
-    passport.authenticate('local', { failureRedirect: '/users/sign-in-up' }),
-    usersController.createSession
+  "/create-session",
+  passport.authenticate("local", { failureRedirect: "/users/sign-in-up" }),
+  usersController.createSession
 );
 
-router.get('/sign-out', usersController.destroySession);
+router.get("/sign-out", usersController.destroySession);
 
 router.get(
-    '/auth/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] })
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
 );
 router.get(
-    '/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/users/sign-in' }),
-    usersController.createSession
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/users/sign-in" }),
+  usersController.createSession
 );
 
 module.exports = router;
