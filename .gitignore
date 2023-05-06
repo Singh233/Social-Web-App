@@ -1,3 +1,5 @@
 /node_modules
 /production_logs
 /uploads
+/public
+/assets/css

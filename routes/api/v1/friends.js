@@ -1,11 +1,19 @@
-const express = require('express');
+const express = require("express");
+
 const router = express.Router();
-const passport = require('passport');
+const passport = require("passport");
 
-const friendsApi = require('../../../controllers/api/v1/friends_api');
+const friendsApi = require("../../../controllers/api/v1/friends_api");
 
-router.post('/add', passport.authenticate('jwt', {session: false}), friendsApi.add);
-router.post('/remove', passport.authenticate('jwt', {session: false}), friendsApi.remove);
-
+router.post(
+  "/add",
+  passport.authenticate("jwt", { session: false }),
+  friendsApi.add
+);
+router.post(
+  "/remove",
+  passport.authenticate("jwt", { session: false }),
+  friendsApi.remove
+);
 
 module.exports = router;

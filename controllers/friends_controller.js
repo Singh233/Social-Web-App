@@ -16,7 +16,7 @@ module.exports.add = async function (req, res) {
     if (findFromUserFriendship) {
       // update the status of the friendship
       findFromUserFriendship.status = "accepted";
-      findFromUserFriendship.save();
+      await findFromUserFriendship.save();
 
       return res.status(200).json({
         message: "Request successful",
@@ -65,11 +65,11 @@ module.exports.add = async function (req, res) {
 
     // push the friendship to the from user
     fromUser.friendships.push(fromUserFriendship);
-    fromUser.save();
+    await fromUser.save();
 
     // push the friendship to the to user
     toUser.friendships.push(toUserFriendship);
-    toUser.save();
+    await toUser.save();
 
     return res.status(200).json({
       message: "Request successful",

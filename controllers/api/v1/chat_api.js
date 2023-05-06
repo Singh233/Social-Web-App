@@ -177,6 +177,8 @@ module.exports.createMessage = async function (req, res) {
       try {
         return await createPrivateMessage(data, res);
       } catch (exceptionError) {
+        console.log(exceptionError)
+
         return handleResponse(res, 500, "Internal server error!", null, false);
       }
     default:
