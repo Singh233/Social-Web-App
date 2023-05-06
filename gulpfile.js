@@ -1,6 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-console */
 const gulp = require("gulp");
-
+const rename = require("gulp-rename");
 const sass = require("gulp-sass")(require("sass"));
 const cssnano = require("gulp-cssnano");
 const rev = require("gulp-rev");
@@ -9,7 +10,6 @@ const imagemin = require("gulp-imagemin");
 const del = require("del");
 
 gulp.task("css", function (done) {
-  // eslint-disable-next-line no-console
   console.log("minifying css...");
   // gulp.src('./assets/scss/**/*.scss')
   // .pipe(sass())
@@ -21,6 +21,7 @@ gulp.task("css", function (done) {
     .pipe(sass())
     .pipe(cssnano())
     .pipe(rev())
+    .pipe(rename({ dirname: "css" }))
     .pipe(gulp.dest("./public/assets/"))
     .pipe(
       rev.manifest("public/assets/rev-manifest.json", {
