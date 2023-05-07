@@ -19,7 +19,7 @@ gulp.task("css", function (done) {
   gulp
     .src("./assets/**/*.scss")
     .pipe(sass())
-    .pipe(cssnano())
+    .pipe(cssnano({ zindex: false }))
     .pipe(rev())
     .pipe(rename({ dirname: "css" }))
     .pipe(gulp.dest("./public/assets/"))
