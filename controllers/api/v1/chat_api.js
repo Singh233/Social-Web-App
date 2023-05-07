@@ -23,7 +23,7 @@ function handleResponse(res, status, message, data, success) {
 
 async function joinGlobalChatRoom(chatRoomId, data, res) {
   // find the chat room
-  const chatRoom = await ChatRoom.findOne({ chatRoomId: chatRoomId })
+  const chatRoom = await ChatRoom.findOne({ type: data.type })
     .populate("messages")
     .populate({
       path: "messages",
@@ -34,6 +34,17 @@ async function joinGlobalChatRoom(chatRoomId, data, res) {
 
   // if the chat room already exists then return the chat room
   if (chatRoom) {
+    // check if the user is already present in the chat room
+    const userExists = chatRoom.users.find(
+      (user) => user.toString() === data.sender
+    );
+
+    // if user is not present then add the user to the chat room
+    if (!userExists) {
+      chatRoom.users.push(data.sender);
+      await chatRoom.save();
+    }
+
     return handleResponse(
       res,
       200,
@@ -45,7 +56,6 @@ async function joinGlobalChatRoom(chatRoomId, data, res) {
 
   // else create a new chat room and return it
   const newChatRoom = await ChatRoom.create({
-    chatRoomId: chatRoomId,
     type: data.type,
     users: [data.sender],
   });
@@ -83,16 +93,15 @@ async function joinPrivateChatRoom(data, res) {
 
 async function createGlobalMessage(data, res) {
   const { sender, message } = data;
-  const chatRoomId = "global";
   // find the chat room
-  const chatRoom = await ChatRoom.findOne({ chatRoomId });
+  const chatRoom = await ChatRoom.findOne({ type: data.type });
 
   // create a new chat message
   const chat = await Chat.create({
     sender: sender,
     receiver: sender,
     message: message,
-    chatRoomId: chatRoomId,
+    chatRoomId: chatRoom._id,
   });
 
   // push the chat message to the chatRoom
@@ -177,8 +186,6 @@ module.exports.createMessage = async function (req, res) {
       try {
         return await createPrivateMessage(data, res);
       } catch (exceptionError) {
-        console.log(exceptionError)
-
         return handleResponse(res, 500, "Internal server error!", null, false);
       }
     default:

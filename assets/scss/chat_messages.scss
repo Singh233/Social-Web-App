@@ -352,13 +352,14 @@ $button-color-ligth-blue: #4db1ff;
 
 
         border-radius: 30px;
-        padding: 5px;
+        height: 40px;
 
         img {
             border-radius: 50%;
             height: 30px;
             width: 30px;
             object-fit: cover;
+            margin-left: 5px;
         }
 
         .animation {

@@ -49,7 +49,7 @@ const customMware = require("./config/middleware");
 const path = require("path");
 
 // setup the chat server to be used with socket.io
-const chatServer = require("http").Server(app);
+const chatServer = require("https").Server(server);
 const chatSockets = require("./config/chat_sockets").chatSockets(chatServer);
 
 chatServer.listen(4000);

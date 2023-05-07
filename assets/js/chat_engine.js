@@ -9,7 +9,7 @@ class ChatEngine {
     this.userProfile = userProfile;
     // console.log(host)
     // this.socket = io.connect('https://54.91.2.241:5000', {
-    this.socket = io.connect("http://localhost:4000", {
+    this.socket = io.connect(host, {
       transports: ["websocket"],
       secure: true,
       reconnect: true,
@@ -140,7 +140,6 @@ class ChatEngine {
       const to_user = $(this).attr("id");
       const from_user = self.userId;
       const chatRoom = $(this).attr("data-chatRoomId");
-      console.log("chatRoom", chatRoom);
 
       // join private chat room
       self.socket.emit("join_private_room", {
@@ -286,7 +285,7 @@ class ChatEngine {
       const from_user = self.userId;
 
       // if key is not enter key
-      if (event.which != 13) {
+      if (event.which !== 13) {
         self.socket.emit("typingGlobal", {
           user_email: self.userEmail,
           user_name: self.userName,
@@ -374,13 +373,16 @@ class ChatEngine {
           chatroom: "Global",
         });
 
-        fetch(`/api/v1/chat/createmessage/${msg}/${self.userId}/all`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        })
+        fetch(
+          `/api/v1/chat/createmessage/${msg}/global/${self.userId}/all/global`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        )
           .then(function (response) {
             return response.json();
           })
