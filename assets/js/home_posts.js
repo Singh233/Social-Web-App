@@ -4,7 +4,9 @@
   FilePond.registerPlugin(
     FilePondPluginImageCrop,
     FilePondPluginImagePreview,
-    FilePondPluginImageResize
+    FilePondPluginImageResize,
+    FilePondPluginFileValidateType
+
     // FilePondPluginImageTransform
   );
 
@@ -17,9 +19,14 @@
   const pond = FilePond.create(inputElement, {
     imageCropAspectRatio: 1,
     storeAsFile: true,
-
+    acceptedFileTypes: ["image/png", "image/jpeg"],
     imageResizeTargetWidth: 256,
+    fileValidateTypeDetectType: (source, type) =>
+      new Promise((resolve, reject) => {
+        // Do custom type detection here and return with promise
 
+        resolve(type);
+      }),
     // set contain resize mode
     imageResizeMode: "cover",
 

@@ -165,11 +165,10 @@ module.exports.search = async function (request, response) {
   }
 
   const regex = new RegExp(search, "i"); // i is for case insensitive search
-  const user = await User.find({ name: regex });
+  const users = await User.find({ name: regex });
 
-  return response.render("search.ejs", {
-    title: "SanamSocial | Search",
-    search,
-    user,
+  return response.status(200).json({
+    message: "List of users",
+    users,
   });
 };

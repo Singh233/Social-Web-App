@@ -151,4 +151,31 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
         }
         
     }
+
+    #user-friends {
+        margin-top: 50px;
+    }
+}
+
+.section-visible {
+    display: grid !important;
+    position: relative;
+    z-index: 9999;
+}
+
+
+
+
+@media screen and (max-width: 1400px) {
+    .right-section-container {
+        display: none;
+    }
+
+    
+}
+
+@media screen and (max-width: 480px) {
+    .right-section-container {
+        display: grid;
+    }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 // logic for sm screen devices
 
@@ -52,6 +53,35 @@ function profile() {
   // postUploadContainer.classList.add('remove');
   // document.getElementById('logo-placeholder').src="img/logo1.png";
   // document.getElementById('name-placeholder').innerText = `Howdy,`;
+}
+
+function menuButtonClicked() {
+  // add animation to the menu button
+  // document.getElementById("menu-button").classList.toggle("change");
+
+  // add animation to the right section container
+  if ($(".right-section-container").hasClass("animate__slideInRight")) {
+    $(".fa-xmark").toggleClass("remove");
+    $(".fa-bars").toggleClass("remove");
+
+    $(".right-section-container").removeClass("animate__slideInRight");
+    $(".right-section-container").addClass("animate__slideOutRight");
+
+    setTimeout(() => {
+      $(".right-section-container").toggleClass("section-visible");
+    }, 700);
+  } else {
+    $(".fa-xmark").toggleClass("remove");
+    $(".fa-bars").toggleClass("remove");
+    $(".right-section-container").toggleClass("section-visible");
+
+    $(".right-section-container").removeClass("animate__slideOutRight");
+
+    $(".right-section-container").addClass("animate__slideInRight");
+  }
+
+  // add visible class to right section container using jquery
+  
 }
 
 function toggleChatWindow() {

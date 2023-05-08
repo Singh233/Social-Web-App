@@ -28,6 +28,7 @@
         "express-ejs-layouts": "^2.5.1",
         "express-session": "^1.17.3",
         "filepond": "^4.30.4",
+        "filepond-plugin-file-validate-type": "^1.2.8",
         "filepond-plugin-image-preview": "^4.6.11",
         "google-auth-library": "^8.7.0",
         "google-oauth": "^0.0.2",

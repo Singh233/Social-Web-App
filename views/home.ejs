@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
 
 <div class="home-container">
+    <i onclick="menuButtonClicked()" class="fa-solid fa-bars menu-button"></i>
+    <i onclick="menuButtonClicked()" class="fa-solid fa-xmark menu-button remove"></i>
     <div class="post-div">
         <%- include('_top_header'); %>
         <% if(locals.user) { %>
@@ -28,6 +30,7 @@
                         <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
                     <% } %> 
                     <p>Hey, <%= locals.user.name %> post something new!</p>
+                    <p class="date" style="margin-left: 20px"><%= new Date().toLocaleDateString("en-US", {year: 'numeric', month: 'long', day:'numeric'}) %></p>
                 </div>
                 <input id="local_user_id" type="hidden" name="id" placeholder="Your id" value="<%= locals.user._id %>">
                 <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">

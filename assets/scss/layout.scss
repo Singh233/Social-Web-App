@@ -36,6 +36,43 @@ body {
                 overflow-x: hidden !important;
 
     }
+
+    .css-blurry-gradient1, .css-blurry-gradient2, .css-blurry-gradient3 {
+        position: fixed;
+        
+        width: 400px;
+        height: 300px;
+          border-radius: 50% 22% 40% 80%;  
+          filter: blur(50px);
+        // background: radial-gradient(circle at 50% 50%,rgba(76, 0, 255, 1), rgba(76, 0, 255, 0));
+        opacity: 0.3;
+      }
+
+      .css-blurry-gradient1 {
+        height: 400px;
+        top: -100px;
+        left: -100px;
+        background: radial-gradient(circle at 50% 50%,#b73aff, rgba(76, 0, 255, 0));
+        opacity: 0.3;
+      }
+
+      .css-blurry-gradient2 {
+        top: -100px;
+        right: -100px;
+        filter: blur(70px);
+
+        background: radial-gradient(circle at 50% 50%,rgba(76, 0, 255, 1), rgba(76, 0, 255, 0));
+
+      }
+
+      .css-blurry-gradient3 {
+        bottom: -100px;
+        right: -100px;
+        filter: blur(70px);
+
+        background: radial-gradient(circle at 50% 50%, #7605ee, rgba(76, 0, 255, 0));
+        // background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+      }
     
 
     &::-webkit-scrollbar {
@@ -74,5 +111,10 @@ body {
 
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
+
+        .css-blurry-gradient1, .css-blurry-gradient2, .css-blurry-gradient3 {
+
+            display: none;
+        }
     }
 }
