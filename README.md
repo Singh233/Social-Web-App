@@ -1,6 +1,3 @@
-<div style="background-color:rgba(0, 0, 0, 0.0470588); width: 100%;" align="center">
-  <img src="https://i.ibb.co/LQTZGNs/sslogo.png" alt="Image-03-04-23-at-3-56-PM" border="0">
-</div>
 
 
 # 🌍 Social Media Web Application
@@ -24,7 +21,9 @@ https://sanam.social 🚀
 
 **Build-tool:** Sass Middleware (development), Gulp (Production)
 
+## API Reference
 
+https://github.com/Singh233/Social-Media-API
 
 
 ## Features
@@ -38,7 +37,7 @@ https://sanam.social 🚀
     - Save Post (In progress)❗️
 - User profile ⭐️
 - Edit profile 🕺
-- Search (In progress)❗️
+- Search people 🔍
 - Global Messaging ✅
 - Direct Messaging ✅
   - Online/offline status 🌐
