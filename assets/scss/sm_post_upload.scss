@@ -23,6 +23,39 @@ $button-color-gray: #212121;
         min-width: 100vw;
         padding: 5px;
 
+        .upload-header {
+            position: fixed;
+            top: 0;
+            background-color: black;
+            z-index: 999;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 70px;
+
+            p {
+                font-size: 1.2rem;
+                margin-left: 20px;
+                color: white;
+                font-weight: 600;
+            }
+
+            img {
+                height: 35px;
+                width: 35px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-right: 20px;
+
+            }
+
+        
+            
+
+        }
+
         .post-info {
             max-width: 70vw;
             margin-top: 70px;

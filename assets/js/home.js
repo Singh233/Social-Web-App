@@ -5,15 +5,19 @@
 function upload() {
   const homeContainer = document.querySelector(".home-container");
 
-  // const profileContainer = document.querySelector('.profile-page-container');
-  const postUploadContainer = document.querySelector(".post-upload-container");
-  homeContainer.classList.add("remove");
+  if (homeContainer) {
+    // const profileContainer = document.querySelector('.profile-page-container');
+    const postUploadContainer = document.querySelector(
+      ".post-upload-container"
+    );
+    homeContainer.classList.add("remove");
 
-  // profileContainer.classList.add('remove');
-  postUploadContainer.classList.remove("remove");
+    // profileContainer.classList.add('remove');
+    postUploadContainer.classList.remove("remove");
 
-  document.getElementById("logo-placeholder").src = "img/upload.png";
-  document.getElementById("name-placeholder").innerText = "Create new post";
+    document.getElementById("logo-placeholder").src = "img/upload.png";
+    document.getElementById("name-placeholder").innerText = "Create new post";
+  }
 }
 
 function home() {
@@ -81,7 +85,6 @@ function menuButtonClicked() {
   }
 
   // add visible class to right section container using jquery
-  
 }
 
 function toggleChatWindow() {
@@ -205,7 +208,7 @@ function searchUser(input, type) {
     <div class="user-result animate__animated animate__fadeIn">
         <a href="/users/profile/${user._id}">
             ${
-              user.avatar != undefined
+              user.avatar !== undefined
                 ? `<img src="${user.avatar}" alt="">`
                 : `<img id="logo-placeholder" src="img/dummy-profile.jpeg">`
             }
@@ -316,4 +319,16 @@ $("#user-search-bar-mobile").on("keyup", function () {
         `);
     $("#search-results-mobile").css("padding", "0");
   }
+});
+
+// for mobile search bar when user clicks on cancel button
+$("#cancel-search-mobile").on("click", function () {
+  $("#user-search-bar-mobile").val("");
+  $("#search-results-mobile").html(`
+        <p class="info animate__animated animate__fadeIn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search for people
+        </p>
+        `);
+  $("#search-results-mobile").css("padding", "0");
 });

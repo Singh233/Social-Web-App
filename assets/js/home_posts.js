@@ -49,6 +49,7 @@
   const pond2 = FilePond.create(inputElement2, {
     imageCropAspectRatio: 1,
     storeAsFile: true,
+    acceptedFileTypes: ["image/png", "image/jpeg"],
 
     imageResizeTargetWidth: 256,
 

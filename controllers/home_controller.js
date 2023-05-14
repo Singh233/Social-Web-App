@@ -76,3 +76,9 @@ module.exports.search = async function (request, response) {
     return response.redirect("back");
   }
 };
+
+module.exports.upload = function (request, response) {
+  return response.render("_sm_post_upload.ejs", {
+    title: "Upload",
+  });
+};

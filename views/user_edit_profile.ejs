@@ -3,7 +3,7 @@
 <form id="edit-profile-form" action="/users/update/<%= profile_user.id %>" enctype="multipart/form-data" method="post">
 
     <div class="header">
-        <p><i class="fa-solid fa-arrow-left-long"></i> Edit Profile</p>
+        <a href="/users/profile/<%= profile_user.id %>"><i class="fa-solid fa-arrow-left-long"></i> Profile</a>
     </div>
 
     <% if(profile_user.avatar != undefined) { %> 

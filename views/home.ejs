@@ -19,7 +19,7 @@
                     <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
                 <% } %> 
                 <p>Hey, <%= locals.user.name %> post something new!</p>
-                <button onclick="upload()"><i class="fa-solid fa-arrow-right"></i></button>
+                <button onclick="window.location.href='/upload'"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
             
             <form action="/posts/create/<%= locals.user._id %>" enctype="multipart/form-data" id="new-post-form"  method="post">
@@ -91,7 +91,6 @@
 <% } %>
 
 <% if (locals.user){ %>
-    <%- include('_sm_post_upload') -%>
     <script src="<%= assetPath('js/add_emoji.js') %>"></script>
 
 <% } %>

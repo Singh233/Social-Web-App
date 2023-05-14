@@ -30,6 +30,7 @@
         "filepond": "^4.30.4",
         "filepond-plugin-file-validate-type": "^1.2.8",
         "filepond-plugin-image-preview": "^4.6.11",
+        "filepond-plugin-image-transform": "^3.8.7",
         "google-auth-library": "^8.7.0",
         "google-oauth": "^0.0.2",
         "gulp-cssnano": "^2.1.3",

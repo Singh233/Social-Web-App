@@ -62,6 +62,7 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
             
             // make the list scrollable
             overflow-y: scroll;
+            overscroll-behavior: none;
             
             
             &::-webkit-scrollbar {

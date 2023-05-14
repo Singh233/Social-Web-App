@@ -1,12 +1,15 @@
 
-<div class="post-upload-container remove">
-    <%- include('_top_header'); %>
+<div class="post-upload-container">
+    <div class="upload-header">
+        <p>Create Post</p>
+        <a href="/users/profile/<%= locals.user.id %>"><img src="<%= locals.user.avatar %>" alt=""> </a>
+    </div>
     
     <form action="/posts/create/<%= locals.user._id %>" enctype="multipart/form-data" id="new-post-form"  method="post">
         
         <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">
         <input type="hidden" name="email" placeholder="Your email" value="<%= locals.user.email %>">
-        <input type="file" name="filepond" id="myfile-sm">
+        <input required type="file" name="filepond" id="myfile-sm">
         <textarea type="text" name="content" id="text-area" cols="30" rows="3" placeholder="Type here..." required></textarea>
         <button id="submit" type="submit">Post</button>
     </form>
@@ -17,4 +20,40 @@
         <%- include('_bottom_nav_bar_sm') -%>
     <% } %>
 </div>
+
+<script>
+    FilePond.registerPlugin(
+        FilePondPluginImagePreview,
+        FilePondPluginFileValidateType
+        // FilePondPluginImageTransform
+    );
+    const inputElement2 = document.querySelector("#myfile-sm");
+
+
+  const pond2 = FilePond.create(inputElement2, {
+    imageCropAspectRatio: 1,
+    storeAsFile: true,
+    acceptedFileTypes: ["image/png", "image/jpeg"],
+
+    imageResizeTargetWidth: 256,
+
+    // set contain resize mode
+    imageResizeMode: "cover",
+
+    // add onaddfile callback
+    onaddfile: (error, fileItem) => {},
+
+    // add onpreparefile callback
+    onpreparefile: (fileItem, output) => {
+      // create a new image object
+      const img = new Image();
+
+      // set the image source to the output of the Image Transform plugin
+      img.src = URL.createObjectURL(output);
+
+      // add it to the DOM so we can see the result
+      document.body.appendChild(img);
+    },
+  });
+</script>
 

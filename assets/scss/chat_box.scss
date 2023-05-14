@@ -41,6 +41,8 @@ $button-color-ligth-blue: #4db1ff;
 
         max-height: 470px;
         overflow-y: scroll;
+        overscroll-behavior: none;
+
 
         &::-webkit-scrollbar {
             display: none;

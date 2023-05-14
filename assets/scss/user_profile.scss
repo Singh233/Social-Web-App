@@ -29,8 +29,18 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
             justify-content: space-between;
             margin-top: 20px;
 
-            p {
+            a {
+                text-decoration: none;
+                color: white;
+                font-weight: 600;
+
                 font-size: 1.3rem;
+                cursor: pointer;
+                transition: all 0.2s ease-in-out;
+
+                &:hover {
+                    color: $button-color-blue;
+                }
 
                 i {
                     margin-right: 5px;

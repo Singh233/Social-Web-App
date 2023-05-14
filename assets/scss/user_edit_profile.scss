@@ -26,9 +26,17 @@ $button-color-gradient-blue: linear-gradient(
         margin-top: 20px;
         margin-bottom: 20px;
 
-        p {
-            font-size: 1.2rem;
+        a {
+            text-decoration: none;
+            color: white;
+
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
             font-weight: 600;
+            &:hover {
+                color: $button-color-blue;
+            }
 
             i {
                 margin-right: 5px;

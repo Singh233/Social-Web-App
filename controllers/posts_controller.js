@@ -28,15 +28,20 @@ module.exports.createPost = async function (request, response) {
       // populate the user of newPost
       await newPost.populate("user");
 
-      // the request is an AJAX request return the response in JSON format
-      return response.status(200).json({
-        data: {
-          post: newPost,
-          success: "Post created successfully!",
-        },
-        success: true,
-        message: "Post created!",
-      });
+      if (request.xhr) {
+        // the request is an AJAX request return the response in JSON format
+        return response.status(200).json({
+          data: {
+            post: newPost,
+            success: "Post created successfully!",
+          },
+          success: true,
+          message: "Post created!",
+        });
+      }
+
+      request.flash("success", "Post published!");
+      return response.redirect("/");
     });
   } catch (error) {
     request.flash("error", "Error creating post");

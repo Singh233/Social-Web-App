@@ -119,9 +119,8 @@ class PostComments {
                 
                         <div class="bottom">
                             <p id="comment-time">Just now</p>
-                            <p id="reply-button">reply</p>
                             
-                                <a class="delete-comment-button" href="/comments/destroy/${comment._id}">delete</a>
+                            <a class="delete-comment-button" href="/comments/destroy/${comment._id}">delete</a>
                             
                             
                 

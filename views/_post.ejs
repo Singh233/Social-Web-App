@@ -19,7 +19,13 @@
     
     <div class="post-header">
         
-        <a href="/users/profile/<%= post.user.id %>"> <img src="<%= post.user.avatar %>" id="user-profile-img"> </a>
+        <a href="/users/profile/<%= post.user.id %>"> 
+            <% if(post.user.avatar != undefined) { %> 
+                <img src="<%= post.user.avatar %>" id="user-profile-img">
+            <% } else { %> 
+                <img src="<%= assetPath('img/dummy-profile.jpeg') %>" id="user-profile-img">
+            <% } %>
+        </a>
 
         <a href="/users/profile/<%= post.user.id %>"> <%= post.user.name %></a>
 
