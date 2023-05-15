@@ -76,14 +76,29 @@ $button-color-gray: #202020;
             top: 80%;
             left: 25px;
             width: 30vw;
+            max-height: 70vh;
             background-color: $button-color-gray;
             border-radius: 20px;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             z-index: 999;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+            overscroll-behavior: none;
+
+            // &::-webkit-scrollbar {
+            //     margin: 2px;
+            //     background-color: black;
+            // }
+        
+            // &::-webkit-scrollbar-thumb {
+            //     background-color:#6e6e6e;
+            //     border-radius: 8px;
+            // }
+
 
             .user-result {
                 display: flex;
@@ -116,15 +131,29 @@ $button-color-gray: #202020;
                     object-fit: cover;
                 }
 
+                .no-avatar {
+                    height: 40px;
+                    width: 40px;
+                    border-radius: 50%;
+                    // blue gradient background
+                    background: dodgerblue;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                }
+
                 p {
                     margin-left: 10px;
                 }
 
-                i {
+                .arrow-left {
                     position: absolute;
                     right: 20px;
                     color: #202020;
                 }
+
+                
             }
 
             .no-user-found {

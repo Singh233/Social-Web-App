@@ -210,14 +210,15 @@ function searchUser(input, type) {
             ${
               user.avatar !== undefined
                 ? `<img src="${user.avatar}" alt="">`
-                : `<img id="logo-placeholder" src="img/dummy-profile.jpeg">`
+                : // : `<img id="logo-placeholder" src="img/dummy-profile.jpeg">`
+                  `<div class="no-avatar"><i class="fa-solid fa-user"></i></div>`
             }
         </a>
         <a href="/users/profile/${user._id}">
             <p>${user.name}</p>
         </a>
 
-        <i class="fa-solid fa-caret-right"></i>
+        <i class="fa-solid fa-caret-right arrow-left"></i>
     </div>
 
 `;
@@ -269,14 +270,15 @@ $("#user-search-bar-mobile").on("keyup", function () {
             ${
               user.avatar != undefined
                 ? `<img src="${user.avatar}" alt="">`
-                : `<img id="logo-placeholder" src="img/dummy-profile.jpeg">`
+                : // : `<img id="logo-placeholder" src="img/dummy-profile.jpeg">`
+                  `<div class="no-avatar"><i class="fa-solid fa-user"></i></div>`
             }
         </a>
         <a href="/users/profile/${user._id}">
             <p>${user.name}</p>
         </a>
 
-        <i class="fa-solid fa-caret-right"></i>
+        <i class="fa-solid fa-caret-right arrow-left"></i>
     </div>
 
 `;

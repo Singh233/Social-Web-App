@@ -120,14 +120,26 @@ $button-color-gray: #212121;
                     object-fit: cover;
                 }
 
+                .no-avatar {
+                    height: 40px;
+                    width: 40px;
+                    border-radius: 50%;
+                    // blue gradient background
+                    background: dodgerblue;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                }
+
                 p {
                     margin-left: 10px;
                 }
 
-                i {
+                .arrow-left {
                     position: absolute;
-                    right: 30px;
-                    color: rgba(255, 255, 255, 0.749);
+                    right: 20px;
+                    color: #202020;
                 }
             }
 
