@@ -38,7 +38,9 @@ module.exports.createSession = async function (request, response) {
       return handleResponse(response, 422, "Invalid fields", { error }, false);
     }
 
-    const user = await User.findOne({ email: request.body.email });
+    const user = await User.findOne({ email: request.body.email }).select(
+      "+password"
+    );
 
     if (!user || user.password !== request.body.password) {
       return handleResponse(
@@ -49,6 +51,9 @@ module.exports.createSession = async function (request, response) {
         false
       );
     }
+
+    // remove the password from the user object
+    user.password = undefined;
 
     // expires in 11 days
     const expiresIn = 11 * 24 * 60 * 60 * 1000;

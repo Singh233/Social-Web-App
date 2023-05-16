@@ -11,7 +11,7 @@ passport.use(
     },
     async function (request, email, password, done) {
       // find a user and establish the identity
-      const user = await User.findOne({ email: email });
+      const user = await User.findOne({ email: email }).select("+password");
 
       if (!user || user.password !== password) {
         request.flash("error", "Invalid Username/Password");

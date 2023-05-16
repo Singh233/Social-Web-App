@@ -22,12 +22,14 @@ $button-color-gray: #212121;
         align-items: center;
         min-width: 100vw;
         padding: 5px;
+        position: relative;
+        padding-bottom: 50px;
 
         .search-header {
             position: fixed;
             top: 0;
             background-color: #212121;
-            z-index: 999;
+            z-index: 9999;
 
             display: flex;
             align-items: center;
@@ -89,7 +91,8 @@ $button-color-gray: #212121;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 999;
+            position: relative;
+
 
             .info {
                 margin-top: 50px;
