@@ -23,6 +23,13 @@ const postSchema = new mongoose.Schema(
         ref: "Like",
       },
     ],
+
+    savedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,

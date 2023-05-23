@@ -44,7 +44,14 @@
 
                 <div id="posts-list-container">
                     <% for (let i of posts) { %> 
-                        <%- include('_post.ejs', {post: i, moment}) -%>
+                        <% let isSaved = false; %>
+                        <% for (let j of locals.user.savedPosts) { %>
+                            <% if (j._id.toString() === i._id.toString()) { %>
+                                <% isSaved = true; %>
+                            <% } %>
+                        <% } %>
+
+                        <%- include('_post.ejs', {post: i, moment, isSaved}) -%>
                     <% } %>
                 </div>
                 

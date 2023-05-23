@@ -16,4 +16,18 @@ router.get(
   postsController.destroy
 );
 
+// router to save post
+router.post(
+  "/save/:id",
+  passport.checkAuthentication,
+  postsController.savePost
+);
+
+// router to unsave post
+router.post(
+  "/unsave/:id",
+  passport.checkAuthentication,
+  postsController.unsavePost
+);
+
 module.exports = router;

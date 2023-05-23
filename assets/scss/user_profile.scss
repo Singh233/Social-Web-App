@@ -199,7 +199,7 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
         .profile-posts {
             margin-top: 5px;
 
-            .posts-saved-header {
+            .posts-and-saved-header {
                 display: flex;
                 align-items: center;
                 justify-content: space-around;
@@ -256,6 +256,8 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
                 }
             }
 
+            
+
             .no-posts {
                 display: flex;
                 flex-direction: column;
@@ -277,6 +279,9 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
                     margin: 5px;
                     font-weight: 500;
                 }
+            }
+            .remove {
+                display: none;
             }
         }
 

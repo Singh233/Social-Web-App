@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 /* eslint-disable no-undef */
 const User = require("../models/user");
 const Friendships = require("../models/friendship");
@@ -13,7 +14,18 @@ module.exports.profile = async function (request, response) {
 
   const followers = await Friendships.find({ to_user: user._id });
   const following = await Friendships.find({ from_user: user._id });
-  const posts = await Post.find({ user: user._id });
+  const posts = await Post.find({ user: user._id }).sort("-createdAt");
+  const savedPosts = [];
+  // check if the user is same as the logged in user
+  if (request.user.id === user.id) {
+    await Promise.all(
+      user.savedPosts.map(async (savedPost) => {
+        savedPosts.push(await Post.findById(savedPost));
+      })
+    );
+    // sort the posts in descending order of time
+    savedPosts.sort((a, b) => b.createdAt - a.createdAt);
+  }
 
   const followersCount = followers.reduce(
     (acc, follower) => (follower.status === "accepted" ? acc + 1 : acc),
@@ -33,6 +45,7 @@ module.exports.profile = async function (request, response) {
     friends: followers,
     followersCount: followersCount,
     followingCount: followingCount,
+    savedPosts,
   });
 };
 

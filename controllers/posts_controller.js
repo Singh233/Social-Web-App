@@ -81,3 +81,55 @@ module.exports.destroy = async function (request, response) {
     return response.status(401).send("Unauthorized");
   }
 };
+
+// save post
+module.exports.savePost = async function (request, response) {
+  try {
+    const { user } = request;
+
+    // add the post id to the user's saved posts array
+    user.savedPosts.push(request.params.id);
+    user.save();
+
+    // add the user id to the post's saved by array
+    const post = await Post.findById(request.params.id);
+    post.savedBy.push(user._id);
+    post.save();
+
+    return response.status(200).json({
+      data: {
+        success: "Post saved successfully!",
+      },
+      message: "Post saved!",
+    });
+  } catch (error) {
+    request.flash("error", "Unauthorized");
+    return response.status(401).send("Unauthorized");
+  }
+};
+
+// unsave post
+module.exports.unsavePost = async function (request, response) {
+  try {
+    const { user } = request;
+
+    // remove the post id from the user's saved posts array
+    user.savedPosts.pull(request.params.id);
+    user.save();
+
+    // remove the user id from the post's saved by array
+    const post = await Post.findById(request.params.id);
+    post.savedBy.pull(user._id);
+    post.save();
+
+    return response.status(200).json({
+      data: {
+        success: "Post unsaved successfully!",
+      },
+      message: "Post unsaved!",
+    });
+  } catch (error) {
+    request.flash("error", "Unauthorized");
+    return response.status(401).send("Unauthorized");
+  }
+};

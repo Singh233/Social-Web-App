@@ -71,15 +71,32 @@
         </div>
 
         <div class="profile-posts">
-            <div class="posts-saved-header">
-                <p class="active"><i class="fa-solid fa-border-all"></i> Posts </p>
-                <div class="vertical-border"></div>
-                <p><i class="fa-solid fa-bookmark"></i> Saved </p>
+            <div class="posts-and-saved-header">
+                <p id="user-posts-header" class="active"><i class="fa-solid fa-border-all"></i> Posts </p>
+                <% if (locals.user.id == profile_user.id) { %>
+                    <div class="vertical-border"></div>
+                    <p id="posts-saved-header" class=""><i class="fa-solid fa-bookmark"></i> Saved <%= savedPosts.length %> </p>
+                <% } %>
+                
             </div>
 
-            <div class="post-list">
+            <div id="user-posts-list" class="post-list">
                 <% for (let post of user_posts) { %> 
-                    <div class="post-img">
+                    <div onclick="showNotification()" class="post-img">
+                        <% if(post.myfile != undefined) { %> 
+                            <img src="<%= post.myfile %>">
+                        <% } else { %>
+                            <img src="<%= assetPath('img/1782188.jpeg') %>">
+                        <% } %>
+                    </div>
+                <% } %>
+
+                
+            </div>
+
+            <div id="saved-posts-list" class="post-list remove">
+                <% for (let post of savedPosts) { %> 
+                    <div onclick="showNotification()" class="post-img">
                         <% if(post.myfile != undefined) { %> 
                             <img src="<%= post.myfile %>">
                         <% } else { %>
@@ -102,6 +119,13 @@
                     <p><%= profile_user.name %> has no posts yet</p>
                 </div>
             <% } %>
+
+            <!-- If saved post length is 0 -->
+            <% if (savedPosts.length == 0 && locals.user.id == profile_user.id) { %>
+                <div class="no-posts remove">
+                    <p>You have no saved posts yet</p>
+                </div>
+            <% } %>
         </div>
     </div>
 
@@ -120,6 +144,57 @@
     
 </div>
 
+<script>
+    // handle the active class on posts saved header and show the respective posts
+    const postsSavedHeader = document.querySelector('.posts-and-saved-header');
+    const userPostsList = document.querySelector('#user-posts-list');
+    const savedPostsList = document.querySelector('#saved-posts-list');
+
+    const userPostsHeader = postsSavedHeader.children[0];
+    const savedPostsHeader = postsSavedHeader.children[2];
+
+    if (savedPostsHeader) {
+        userPostsHeader.addEventListener('click', (e) => {
+            userPostsHeader.classList.add('active');
+            postsSavedHeader.children[2].classList.remove('active');
+            userPostsList.classList.remove('remove');
+            savedPostsList.classList.add('remove');
+            userPostsList.classList.add('animate__animated', 'animate__fadeIn')
+            $('.no-posts').addClass('remove');
+        })
+
+        savedPostsHeader.addEventListener('click', (e) => {
+            savedPostsHeader.classList.add('active');
+            postsSavedHeader.children[0].classList.remove('active');
+            savedPostsList.classList.remove('remove');
+            userPostsList.classList.add('remove');
+            savedPostsList.classList.add('animate__animated', 'animate__fadeIn')
+            $('.no-posts').removeClass('remove');
+        })
+    }
+
+    function showNotification() {
+        // show work in progress notification
+        Toastify({
+          text: 'Update coming soon!',
+          duration: 2000,
+          destination: "",
+          newWindow: true,
+          close: true,
+          avatar:
+            "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+
+          gravity: "top", // `top` or `bottom`
+          position: "center", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "#0057D2",
+            borderRadius: "10px",
+          },
+          onClick: function () {}, // Callback after click
+        }).showToast();
+    }
+</script>
 
 <script src="<%= assetPath('js/home_posts.js') %>"></script>
 <script src="<%= assetPath('js/user_profile.js') %>"></script>

@@ -70,9 +70,15 @@
                 </a>
             </div>
 
-            <div class="right">
-                <i class="fa-regular fa-bookmark"></i>
-            </div>
+            <% if (isSaved) { %>
+                <div onclick="toggleSavePost('<%= post._id %>', 'unsave')" class="right">
+                    <i id="icon-<%= post._id %>" class="fa-solid fa-bookmark"></i>
+                </div>
+            <% } else { %>
+                <div onclick="toggleSavePost('<%= post._id %>', 'save')" class="right">
+                    <i id="icon-<%= post._id %>" class="fa-regular fa-bookmark"></i>
+                </div>
+            <% } %>
             
         </div>
 
