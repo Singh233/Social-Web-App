@@ -87,6 +87,17 @@ module.exports.profile = async function (request, response) {
 
     const user = await User.findById(request.params.id);
     const posts = await Post.find({ user: user._id }).sort("-createdAt");
+    const savedPosts = [];
+    // check if the user is same as the logged in user
+    if (request.user.id === user.id) {
+      await Promise.all(
+        user.savedPosts.map(async (savedPost) => {
+          savedPosts.push(await Post.findById(savedPost));
+        })
+      );
+      // sort the posts in descending order of time
+      savedPosts.sort((a, b) => b.createdAt - a.createdAt);
+    }
 
     const followers = await Friendships.find({ to_user: user._id }).populate(
       "from_user"
@@ -101,6 +112,7 @@ module.exports.profile = async function (request, response) {
     user.posts = posts;
     user.followers = followers;
     user.following = following;
+    user.savedPosts = savedPosts;
 
     return handleResponse(response, 200, "User profile", { user }, true);
   } catch (error) {
