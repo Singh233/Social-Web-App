@@ -18,4 +18,18 @@ router.post(
   postsApi.destroy
 );
 
+// router to save post
+router.post(
+  "/save/:id",
+  passport.authenticate("jwt", { session: false }),
+  postsApi.savePost
+);
+
+// router to unsave post
+router.post(
+  "/unsave/:id",
+  passport.authenticate("jwt", { session: false }),
+  postsApi.unsavePost
+);
+
 module.exports = router;

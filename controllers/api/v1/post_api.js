@@ -138,3 +138,73 @@ module.exports.destroy = async function (request, response) {
     return handleResponse(response, 500, "Internal server error", {}, false);
   }
 };
+
+// save post
+module.exports.savePost = async function (request, response) {
+  try {
+    // validate the request params
+    const { error } = Joi.object({
+      id: Joi.string().required().min(1).max(100),
+    }).validate(request.params);
+
+    if (error) {
+      return handleResponse(response, 422, "Invalid fields", { error }, false);
+    }
+
+    const { user } = request;
+
+    // add the post id to the user's saved posts array
+    user.savedPosts.push(request.params.id);
+    user.save();
+
+    // add the user id to the post's saved by array
+    const post = await Post.findById(request.params.id);
+    post.savedBy.push(user._id);
+    post.save();
+
+    return handleResponse(
+      response,
+      200,
+      "Post saved successfully",
+      { post },
+      true
+    );
+  } catch (error) {
+    return handleResponse(response, 500, "Internal server error", {}, false);
+  }
+};
+
+// unsave post
+module.exports.unsavePost = async function (request, response) {
+  try {
+    // validate the request params
+    const { error } = Joi.object({
+      id: Joi.string().required().min(1).max(100),
+    }).validate(request.params);
+
+    if (error) {
+      return handleResponse(response, 422, "Invalid fields", { error }, false);
+    }
+
+    const { user } = request;
+
+    // remove the post id from the user's saved posts array
+    user.savedPosts.pull(request.params.id);
+    user.save();
+
+    // remove the user id from the post's saved by array
+    const post = await Post.findById(request.params.id);
+    post.savedBy.pull(user._id);
+    post.save();
+
+    return handleResponse(
+      response,
+      200,
+      "Post unsaved successfully",
+      { post },
+      true
+    );
+  } catch (error) {
+    return handleResponse(response, 500, "Internal server error", {}, false);
+  }
+};
