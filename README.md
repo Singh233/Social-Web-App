@@ -34,7 +34,7 @@ https://github.com/Singh233/Social-Media-API
     - Comment on Post 💬
     - Like Post ❤️
     - Follow/Unfollow Users 👀
-    - Save Post (In progress)❗️
+    - Save Post 🔖
 - User profile ⭐️
 - Edit profile 🕺
 - Search people 🔍
@@ -42,11 +42,17 @@ https://github.com/Singh233/Social-Media-API
 - Direct Messaging ✅
   - Online/offline status 🌐
   - Receive incoming message notification 🔔
-  - Email of message request (In progress) ❗️
 - Responsivity
   - 🖥️ Desktop 
   - 📱 Mobile
-  - 💻 Tablet (In progress) ❗️
+
+### In progress 🚧
+- Video/Voice calling 📞
+- Video uploads 🎥
+- Email of message request ✉️
+- Share images in chat 🎆
+- Tablet responsivness 🟦
+
 
 ## Run Project Locally
 
@@ -135,12 +141,12 @@ To run this project, you will need to add the following environment variables to
 
 ## Screenshots
 
-<img width="1532" alt="Screenshot 2023-04-03 at 4 24 46 PM" src="https://user-images.githubusercontent.com/37498067/229543548-5f8f7b6f-6952-4874-804f-8b052b615347.png">
-<img width="1532" alt="Screenshot 2023-04-11 at 4 17 04 PM" src="https://user-images.githubusercontent.com/37498067/231139096-13f2d151-f1ad-49f6-be27-2b71c116653e.png">
-<img width="1532" alt="Screenshot 2023-04-11 at 4 17 17 PM" src="https://user-images.githubusercontent.com/37498067/231139116-bef5b523-3c8a-4f98-884f-b00e43dfe55b.png">
+![912shots_so](https://github.com/Singh233/Social-Web-App/assets/37498067/fd1fed85-c7e8-4eae-9346-107597031e3d)
+![160shots_so](https://github.com/Singh233/Social-Web-App/assets/37498067/76ba6efa-78b2-4e6e-9b73-1cf420542ec4)
+![444shots_so](https://github.com/Singh233/Social-Web-App/assets/37498067/3a94d9da-dcb5-4226-854a-ea8dbfda478d)
+![81shots_so](https://github.com/Singh233/Social-Web-App/assets/37498067/51b0a6c3-3b82-4c2b-a813-3e64d7fcda4c)
+![982shots_so](https://github.com/Singh233/Social-Web-App/assets/37498067/4c2ebda9-fbf2-4ba2-8feb-5004d7c68238)
 
-<img width="1532" alt="Screenshot 2023-04-03 at 4 40 35 PM" src="https://user-images.githubusercontent.com/37498067/229543639-0420da15-f306-42e1-b522-1d2767a3a700.png">
-<img width="1532" alt="Screenshot 2023-04-03 at 4 54 13 PM" src="https://user-images.githubusercontent.com/37498067/229543683-d2470df3-6fd3-49af-a4ec-e67512b5d09b.png">
 
 
 ## Related
