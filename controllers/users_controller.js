@@ -96,9 +96,6 @@ module.exports.update = async function (request, response) {
       request.flash("success", "Successfully updated profile!");
       return response.redirect("back");
     });
-
-    request.flash("success", "Something went wrong!");
-    return response.redirect("back");
   } catch (error) {
     request.flash("error", "Something went wrong!");
     return response.status(401).send("Unauthorized");

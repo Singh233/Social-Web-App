@@ -8,7 +8,7 @@ module.exports.create = async function (request, response) {
   try {
     const post = await Post.findById(request.body.postId);
     if (!post) {
-      flash("error", "Post not found");
+      request.flash("error", "Post not found");
       return response.redirect("back");
     }
     let comment = await Comment.create({
@@ -24,7 +24,7 @@ module.exports.create = async function (request, response) {
     // parallel job to send email for comment creation to the comment creator
     queue.create("emails", comment).save(function (error) {
       if (error) {
-        flash("error", "Error in creating a queue");
+        request.flash("error", "Error in creating a queue");
       }
     });
 
@@ -44,7 +44,7 @@ module.exports.create = async function (request, response) {
     request.flash("success", "Comment added!");
     return response.redirect("back");
   } catch (error) {
-    flash("error", "Internal Server Error");
+    request.flash("error", "Internal Server Error");
     return response.redirect("back");
   }
 };
@@ -77,7 +77,7 @@ module.exports.destroy = async function (request, response) {
     request.flash("success", "Comment Deleted Successfully");
     return response.redirect("back");
   } catch (error) {
-    flash("error", "Internal Server Error");
+    request.flash("error", "Internal Server Error");
     return response.redirect("back");
   }
 };

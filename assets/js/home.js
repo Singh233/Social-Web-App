@@ -334,3 +334,4 @@ $("#cancel-search-mobile").on("click", function () {
         `);
   $("#search-results-mobile").css("padding", "0");
 });
+

@@ -32,6 +32,7 @@ class PostComments {
 
           //enable the functionality of the toggle liek button on the new post
           new ToggleLike($(" .toggle-like-button", newComment));
+          self.reset();
         },
         error: function (error) {
           // console.log(error.responseText);
@@ -109,7 +110,7 @@ class PostComments {
 
   newCommentDom(comment) {
     // I've added a class 'delete-comment-button' to the delete comment link and also id to the comment's li
-    return $(`<div id="comment-${comment._id}" class="comment-display">
+    return $(`<div id="comment-${comment._id}" class="comment-display animate__animated animate__fadeIn">
                     <img src="${comment.user.avatar}" id="user-profile-img">
                     <div class="middle-section">
                         <div class="upper">

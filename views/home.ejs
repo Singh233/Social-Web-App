@@ -11,6 +11,8 @@
     <div class="post-div">
         <%- include('_top_header'); %>
         <% if(locals.user) { %>
+            <input type="hidden" value="<%= locals.user._id %>" name="user" id="user-id" />
+            <input type="hidden" value="<%= locals.user.savedPosts %>" id="user-saved-posts" />
 
             <div class="post-new-card">
                 <% if(locals.user.avatar != undefined) { %> 
@@ -108,6 +110,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" ></script>
 <script src="<%= assetPath('js/chat_engine.js') %>"></script>
 <script>
+
     $('.toggle-like-button').each(function() {
         let self = this;
         let toggleLike = new ToggleLike(self);

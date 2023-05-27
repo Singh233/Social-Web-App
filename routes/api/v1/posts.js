@@ -6,6 +6,8 @@ const postsApi = require("../../../controllers/api/v1/post_api");
 
 router.get("/", postsApi.index);
 
+router.get("/index", postsApi.getPosts);
+
 router.post(
   "/create",
   passport.authenticate("jwt", { session: false }),

@@ -208,3 +208,41 @@ module.exports.unsavePost = async function (request, response) {
     return handleResponse(response, 500, "Internal server error", {}, false);
   }
 };
+
+// get posts
+module.exports.getPosts = async (request, response) => {
+  try {
+    // verify query parameters
+    const { value, error } = Joi.object({
+      offset: Joi.string().required(),
+      limit: Joi.string().required(),
+    }).validate(request.query);
+
+    if (error) {
+      return handleResponse(response, 404, "Invalid fields!", { error }, false);
+    }
+
+    const { offset, limit } = value;
+
+    const posts = await Post.find({})
+      .sort("-createdAt")
+      .skip(offset)
+      .limit(limit)
+      .populate("user likes")
+      .populate({
+        path: "comments",
+        options: {
+          sort: {
+            createdAt: -1,
+          },
+        },
+        populate: {
+          path: "user likes",
+        },
+      });
+
+    return handleResponse(response, 200, "All posts", { posts }, true);
+  } catch (error) {
+    return handleResponse(response, 500, "Server error!", { error }, false);
+  }
+};

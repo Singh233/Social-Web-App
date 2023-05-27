@@ -21,10 +21,16 @@ module.exports.home = async function (request, response) {
 
     const posts = await Post.find({})
       .sort("-createdAt")
+      .limit(5)
       .populate("user")
       .populate("likes")
       .populate({
         path: "comments",
+        options: {
+          sort: {
+            createdAt: -1,
+          },
+        },
         populate: {
           path: "user likes",
         },
@@ -59,7 +65,7 @@ module.exports.home = async function (request, response) {
       moment: moment,
     });
   } catch (error) {
-    flash("error", "Internal Server Error");
+    request.flash("error", "Internal Server Error");
     return response.redirect("back");
   }
 };
@@ -72,7 +78,7 @@ module.exports.search = async function (request, response) {
       all_users: users,
     });
   } catch (error) {
-    flash("error", "Internal Server Error");
+    request.flash("error", "Internal Server Error");
     return response.redirect("back");
   }
 };

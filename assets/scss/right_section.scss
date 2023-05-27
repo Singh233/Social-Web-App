@@ -177,6 +177,7 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
 
 @media screen and (max-width: 480px) {
     .right-section-container {
-        display: grid;
+        // display: grid;
+        display: none;
     }
 }

@@ -62,10 +62,14 @@ $button-color-gray: #212121;
         right: 0;
         bottom: 0;
         left: 0;
-        background: linear-gradient(-45deg, rgba(255, 60, 0, 0.482) 0%, rgba(4, 0, 255, 0.485) 69% );
-    transform: translate3d(0px, 0px, 0) scale(0.95);
-    filter: blur(50px);
-    opacity: var(0.21);
+        background: linear-gradient(
+          -45deg,
+          rgba(255, 60, 0, 0.482) 0%,
+          rgba(4, 0, 255, 0.485) 69%
+        );
+        transform: translate3d(0px, 0px, 0) scale(0.95);
+        filter: blur(50px);
+        opacity: var(0.21);
         transition: opacity 0.3s;
         border-radius: inherit;
       }
@@ -161,6 +165,86 @@ $button-color-gray: #212121;
       -webkit-backdrop-filter: blur(6px);
       border-radius: 35px;
       // border: 1px solid rgba(231, 231, 231, 0.233);
+
+      // THE CARD
+      .card {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        flex-basis: 300px;
+        flex-shrink: 0;
+        flex-grow: 0;
+        max-width: 452px;
+        height: 678px;
+        background-color: #292929;
+        box-shadow: 0 5px 10px 0 rgba(#000, 0.15);
+        border-radius: 30px;
+        overflow: hidden;
+        margin: 0;
+        margin-top: 15px;
+      }
+
+      .card-img {
+        position: relative;
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 325px;
+        width: auto;
+        max-width: 450px;
+      }
+
+      .card-footer {
+        padding: 1.5rem;
+      }
+
+      .card-header {
+        position: relative;
+        width: auto;
+        margin: 20px;
+        max-width: 450px;
+        font-size: 1.25rem;
+        line-height: 1.33;
+        font-weight: 700;
+        &.skeleton {
+          // NOTICE THIS
+          min-height: 28px;
+          border-radius: 4px;
+        }
+      }
+
+      .card-intro {
+        margin-top: 0.75rem;
+        line-height: 1.5;
+        &.skeleton {
+          // NOTICE THIS
+          min-height: 72px;
+          border-radius: 4px;
+        }
+      }
+
+      // THE LOADING EFFECT
+      .skeleton {
+        background-color: #3b3b3b;
+        // The shine that's going to move across the skeleton:
+        background-image: linear-gradient(
+          90deg,
+          rgba(#505050, 0),
+          rgba(#505050, 0.5),
+          rgba(#505050, 0)
+        );
+        background-size: 40px 100%; // width of the shine
+        background-repeat: no-repeat; // No need to repeat the shine effect
+        background-position: left -40px top 0; // Place shine on the left side, with offset on the left based on the width of the shine - see background-size
+        animation: shine 1s ease infinite; // increase animation time to see effect in 'slow-mo'
+      }
+
+      @keyframes shine {
+        to {
+          // Move shine from left to right, with offset on the right based on the width of the shine - see background-size
+          background-position: right -40px top 0;
+        }
+      }
     }
   }
 
@@ -231,6 +315,11 @@ $button-color-gray: #212121;
 
       #feed-posts {
         //
+
+        .card {
+          border-radius: 0;
+          height: 587px;
+        }
       }
     }
 
@@ -239,7 +328,6 @@ $button-color-gray: #212121;
     }
   }
 }
-
 
 @media screen and (max-width: 1400px) {
   .home-container {
@@ -262,6 +350,4 @@ $button-color-gray: #212121;
       }
     }
   }
-
-  
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-inner-declarations */
 /* eslint-disable no-new */
 /* eslint-disable no-undef */
@@ -199,6 +200,45 @@
   //     </div>
 
   // </div>
+  let renderCommentDom = function (comment, isLiked) {
+    return `<div id="comment-${comment._id}" class="comment-display">
+          <img src="${comment.user.avatar}" id="user-profile-img">
+          <div class="middle-section">
+              <div class="upper">
+                  <p class="comment-user-name">${
+                    comment.user.name
+                  }&nbsp;&nbsp;</p>
+                  <p class="comment-user-content"> &nbsp;${comment.content} </p>
+              </div>
+      
+              <div class="bottom">
+                  <p id="comment-time">${moment(
+                    comment.createdAt
+                  ).fromNow()}</p>
+                  
+                  ${
+                    $("#user-id").val() === comment.user._id
+                      ? `<a class="delete-comment-button" href="/comments/destroy/${comment._id}">delete</a>`
+                      : ""
+                  }
+              </div>
+              
+          </div>
+          
+
+          ${
+            isLiked
+              ? `<a class="toggle-like-button" data-likes="${comment.likes.length}" href="/likes/toggle/?id=${comment._id}&type=Comment">
+                  <i style="margin-left: 0px" class="fa-solid fa-heart liked"></i><span>${comment.likes.length}</span>
+              </a>`
+              : `<a class="toggle-like-button" data-likes="${comment.likes.length}" href="/likes/toggle/?id=${comment._id}&type=Comment">
+                <i style="margin-left: 0px" class="fa-regular fa-heart"></i>
+                <span> ${comment.likes.length} </span>
+              </a>`
+          }
+          <br>
+      </div>`;
+  };
 
   // method to create a post in DOM
   let newPostDom = function (post) {
@@ -244,7 +284,9 @@
                 </div>
 
                 <div class="post-img">
-                    <img src="${post.myfile ? post.myfile : ""}">
+                    <img src="${
+                      post.myfile ? post.myfile : "../img/1782188.jpeg"
+                    }">
                 </div>
 
                 <div class="post-footer">
@@ -264,9 +306,9 @@
                         </a>
                         </div>
 
-                        <div class="right">
-                            <i class="fa-regular fa-bookmark"></i>
-                        </div>
+                        <div onclick="toggleSavePost('${post._id}', 'save')" class="right">
+                              <i id="icon-${post._id}" class="fa-regular fa-bookmark"></i>
+                          </div>
                         
                     </div>
 
@@ -286,7 +328,139 @@
                     
                     <div id="comments-list-container" class="post-comments-list">
                         <ul id="post-comments-${post._id}">
-                            
+                        </ul>
+                    </div>
+                    <div class="post-comments">
+                        
+                            <form id="post-${
+                              post._id
+                            }-comments-form" action="/comments/create" method="POST">
+                                <i  class="fa-regular fa-face-smile emoji-button"></i>
+                                <input class="input-add-comment" type="text" name="content" placeholder="add a comment..." required>
+                                <input type="hidden" name="postId" value="${
+                                  post._id
+                                }" >
+                                <input class="submit-button" type="submit" value="Post">
+                            </form>
+                
+                    </div>`);
+  };
+
+  let renderPostDom = function (post, isLiked, isSaved) {
+    return $(`<div id="post-${
+      post._id
+    }" class="display-posts animate__animated animate__fadeIn">
+                
+
+
+                <div id="bottom-menu-options-${
+                  post._id
+                }" class="post-options-menu animate__animated remove">
+                    <button onclick="toggleMenuOptions('${
+                      post._id
+                    }')" class="cancel-button">
+                        Cancel
+                    </button>
+
+                    <div class="option1">
+                        <a href="/users/profile/${
+                          post.user._id
+                        }"> <i class="fa-solid fa-user"></i> Go to profile</a>
+                    </div>
+                    ${
+                      $("#user-id").val() === post.user.id
+                        ? `<div class="option2">
+                            <a class="delete-post-button" href="/posts/destroy/${post._id}">
+                              <i class="fa-solid fa-trash"></i> Delete
+                            </a>
+                          </div>`
+                        : ""
+                    }
+                    
+                </div>
+                
+
+                <div class="post-header">
+                    <img src="${post.user.avatar}" id="user-profile-img">
+                    <p>${post.user.name}</p>
+                    <div id="post-menu-options">
+                        <i onclick="toggleMenuOptions('${
+                          post._id
+                        }')" class="fa-solid fa-ellipsis-vertical"></i>
+                    </div>
+                    
+                </div>
+
+                <div class="post-img">
+                    <img src="${
+                      post.myfile ? post.myfile : "../img/1782188.jpeg"
+                    }">
+                </div>
+
+                <div class="post-footer">
+                    <div class="post-options">
+                        <div class="left">
+                        
+                        ${
+                          isLiked
+                            ? `<a class="toggle-like-button bg-liked" data-likes="${post.likes.length}" href="/likes/toggle/?id=${post._id}&type=Post">
+                                <i style="margin-left: 0px" class="fa-solid fa-heart liked"></i> <span>${post.likes.length}</span>
+                            </a>`
+                            : `<a class="toggle-like-button " data-likes="${post.likes.length}" href="/likes/toggle/?id=${post._id}&type=Post">
+                                <i style="margin-left: 0px" class="fa-regular fa-heart "></i> <span>${post.likes.length}</span>
+                            </a>`
+                        }
+
+                        <a href="#">
+                            <i style="transform: rotateY(180deg);" class="fa-regular fa-comment"></i><span>${
+                              post.comments.length
+                            }</span>
+                        </a>
+                        <a class="share-button" href="#">
+                            <i style="font-size: 1.2rem;" class="fa-regular fa-paper-plane"></i>
+                        </a>
+                        </div>
+
+                        ${
+                          isSaved
+                            ? `<div onclick="toggleSavePost('${post._id}', 'unsave')" class="right">
+                              <i id="icon-${post._id}" class="fa-solid fa-bookmark"></i>
+                          </div>`
+                            : `<div onclick="toggleSavePost('${post._id}', 'save')" class="right">
+                              <i id="icon-${post._id}" class="fa-regular fa-bookmark"></i>
+                          </div>`
+                        }
+                        
+                    </div>
+
+                    
+
+
+                    <div class="post-caption">
+                        <p class="post-user-name">${
+                          post.user.name
+                        } - &nbsp; </p>
+                        <p class="post-user-content">${post.content}</p>
+                    </div>
+
+                    <div class="time">
+                        <p>${moment(post.createdAt).fromNow()}</p>
+                    </div>
+                    
+                    <div id="comments-list-container" class="post-comments-list">
+                        <ul id="post-comments-${post._id}">
+                            ${post.comments
+                              .map((comment) => {
+                                let flag = false;
+                                for (like of comment.likes) {
+                                  if (like.user === $("#user-id").val()) {
+                                    flag = true;
+                                    break;
+                                  }
+                                }
+                                return renderCommentDom(comment, flag);
+                              })
+                              .join("")}
                         </ul>
                     </div>
                     <div class="post-comments">
@@ -450,7 +624,6 @@
 
   // function to save posts
   function toggleSavePost(postId, type) {
-
     // check if the icon is solid or regular
     let icon = $(`#icon-${postId}`).hasClass("fa-solid");
     if (icon) {
@@ -513,6 +686,91 @@
       },
     });
   }
+  const skeletonCard = function () {
+    return `
+    <div class="card animate__animated animate__fadeIn">
+      <h2 class="card-header skeleton">
+          <!-- wating for title to load from javascript -->
+      </h2>
+      <div class="card-img skeleton">
+        <!-- waiting for img to load from javascript -->
+      </div>
+      
+      <div class="card-footer">
+        
+        <p class="card-intro skeleton">
+          <!-- waiting for intro to load from Javascript -->
+        </p>
+      </div>
+	</div>
+    `;
+  };
+  let scroll = false;
+
+  window.onscroll = (event) => {
+    if (scroll) return;
+    // Check if the user is 200 pixels away from the bottom of the page
+    if (
+      window.innerHeight + window.pageYOffset >=
+      document.body.offsetHeight - 100
+    ) {
+      // make ajax call to get posts
+      scroll = true;
+      const offset = document.querySelectorAll("#posts-list-container")[0]
+        .children.length;
+      const limit = 5;
+      for (let i = 0; i < 5; i++) {
+        $("#posts-list-container").append(skeletonCard);
+      }
+      $.ajax({
+        type: "GET",
+        url: `/api/v1/posts/index?offset=${offset}&limit=${limit}`,
+        success: (data) => {
+          // remove skeleton loading
+          for (let i = 0; i < 5; i++) {
+            if ($("#posts-list-container").children().last().hasClass("card")) {
+              $("#posts-list-container").children().last().remove();
+            }
+          }
+          data.data.posts.forEach((post) => {
+            // check if the post is liked by the current user
+            const userId = $("#user-id").val();
+            let flag = false;
+            for (like of post.likes) {
+              if (like.user === userId) {
+                flag = true;
+                break;
+              }
+            }
+
+            // check if the post is saved by the current user
+            const savedPosts = $("#user-saved-posts").val().split(",");
+            let isSaved = false;
+            for (const savedPostId of savedPosts) {
+              if (savedPostId === post._id) {
+                isSaved = true;
+                break;
+              }
+            }
+
+            const newPost = renderPostDom(post, flag, isSaved);
+            $("#posts-list-container").append(newPost);
+            deletePost($(" .delete-post-button", newPost));
+
+            new PostComments(post._id);
+            // enable the functionality of the toggle liek button on the new post
+            new ToggleLike($(" .toggle-like-button", newPost));
+          });
+
+          if (data.data.posts.length !== 0) {
+            scroll = false;
+          }
+        },
+        error: (error) => {
+          console.log(error);
+          scroll = false;
+        },
+      });
+    }
+  };
 }
-
-
