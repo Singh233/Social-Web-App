@@ -306,8 +306,12 @@
                         </a>
                         </div>
 
-                        <div onclick="toggleSavePost('${post._id}', 'save')" class="right">
-                              <i id="icon-${post._id}" class="fa-regular fa-bookmark"></i>
+                        <div onclick="toggleSavePost('${
+                          post._id
+                        }', 'save')" class="right">
+                              <i id="icon-${
+                                post._id
+                              }" class="fa-regular fa-bookmark"></i>
                           </div>
                         
                     </div>
@@ -368,7 +372,7 @@
                         }"> <i class="fa-solid fa-user"></i> Go to profile</a>
                     </div>
                     ${
-                      $("#user-id").val() === post.user.id
+                      $("#user-id").val() === post.user._id
                         ? `<div class="option2">
                             <a class="delete-post-button" href="/posts/destroy/${post._id}">
                               <i class="fa-solid fa-trash"></i> Delete
@@ -626,10 +630,14 @@
   function toggleSavePost(postId, type) {
     // check if the icon is solid or regular
     let icon = $(`#icon-${postId}`).hasClass("fa-solid");
+    const saveButton = $(`#icon-${postId}`);
+    
     if (icon) {
       type = "unsave";
+      saveButton.toggleClass("fa-solid fa-regular");
     } else {
       type = "save";
+      saveButton.toggleClass("fa-regular fa-solid");
     }
 
     // make ajax call to save post
@@ -637,14 +645,6 @@
       type: "post",
       url: `/posts/${type}/${postId}`,
       success: function (data) {
-        // change the icon of the save button
-        const saveButton = $(`#icon-${postId}`);
-        if (type === "save") {
-          saveButton.toggleClass("fa-regular fa-solid");
-        } else {
-          saveButton.toggleClass("fa-solid fa-regular");
-        }
-
         Toastify({
           text: data.data.success,
           duration: 2000,
@@ -712,7 +712,10 @@
     // Check if the user is 200 pixels away from the bottom of the page
     if (
       window.innerHeight + window.pageYOffset >=
-      document.body.offsetHeight - 100
+        document.body.offsetHeight - 200 ||
+      (window.innerWidth <= 480 &&
+        window.innerHeight + window.pageYOffset >=
+          document.body.offsetHeight - 900)
     ) {
       // make ajax call to get posts
       scroll = true;

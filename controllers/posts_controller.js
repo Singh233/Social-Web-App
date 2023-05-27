@@ -4,6 +4,7 @@ const path = require("path");
 const Post = require("../models/post");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
+const User = require("../models/user");
 
 // eslint-disable-next-line consistent-return
 module.exports.createPost = async function (request, response) {
@@ -52,10 +53,13 @@ module.exports.createPost = async function (request, response) {
 module.exports.destroy = async function (request, response) {
   try {
     const post = await Post.findByIdAndRemove(request.params.id);
-    // if (post.user !== request.user.id) {
-    //   request.flash("error", "You cannot delete this post!");
-    //   return response.redirect("back");
-    // }
+    const user = await User.findById(request.user.id);
+    // remove post id from the savedPosts array
+    const newSavedPosts = user.savedPosts.filter(
+      (postId) => postId.toString() !== request.params.id
+    );
+    user.savedPosts = newSavedPosts;
+    await user.save();
 
     // delete the associated likes for the post and all its comments likes too
     await Like.deleteMany({ likeable: post, onModel: "Post" });
