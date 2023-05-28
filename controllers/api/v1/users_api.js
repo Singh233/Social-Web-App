@@ -86,7 +86,9 @@ module.exports.profile = async function (request, response) {
     }
 
     const user = await User.findById(request.params.id);
-    const posts = await Post.find({ user: user._id }).sort("-createdAt");
+    const posts = await Post.find({ user: user._id })
+      .limit(5)
+      .sort("-createdAt");
     const savedPosts = [];
     // check if the user is same as the logged in user
     if (request.user.id === user.id) {

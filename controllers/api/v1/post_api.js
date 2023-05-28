@@ -22,6 +22,7 @@ const handleResponse = (res, status, message, data, success) => {
 
 module.exports.index = async function (request, response) {
   const posts = await Post.find({})
+    .limit(5)
     .sort("-createdAt")
     .populate("user")
     .populate("likes")

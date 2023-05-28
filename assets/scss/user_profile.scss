@@ -258,7 +258,29 @@ $button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba
 
             
 
-            .no-posts {
+            .user-no-posts {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+
+
+                p {
+                    font-size: 1rem;
+                    color: gray;
+                }
+                a {
+                    text-decoration: none;
+                    color: white;
+                    background: $button-color-gradient-blue;
+                    padding: 8px 15px;
+                    border-radius: 15px;
+                    margin: 5px;
+                    font-weight: 500;
+                }
+            }
+            .saved-no-posts {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
