@@ -1,59 +1,65 @@
-
 <div class="post-upload-container">
-    <div class="upload-header">
-        <p>Create Post</p>
-        <a href="/users/profile/<%= locals.user.id %>"><img src="<%= locals.user.avatar %>" alt=""> </a>
-    </div>
-    
-    <form action="/posts/create/<%= locals.user._id %>" enctype="multipart/form-data" id="new-post-form"  method="post">
-        
-        <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">
-        <input type="hidden" name="email" placeholder="Your email" value="<%= locals.user.email %>">
-        <input required type="file" name="filepond" id="myfile-sm">
-        <textarea type="text" name="content" id="text-area" cols="30" rows="3" placeholder="Type here..." required></textarea>
-        <button id="submit" type="submit">Post</button>
-    </form>
+  <div class="upload-header">
+    <p>Create Post</p>
+    <a href="/users/profile/<%= locals.user.id %>"
+      ><img src="<%= locals.user.avatar %>" alt="" />
+    </a>
+  </div>
 
-    <p class="post-info"> <span>🎉</span>Post anything you wish to share with your friends and family!</p>
+  <form
+    action="/posts/create/<%= locals.user._id %>"
+    enctype="multipart/form-data"
+    id="new-post-form"
+    method="post"
+  >
+    <input
+      id="local_user_id"
+      type="hidden"
+      name="id"
+      placeholder="Your id"
+      value="<%= locals.user._id %>"
+    />
 
-    <% if (locals.user){ %>
-        <%- include('_bottom_nav_bar_sm') -%>
-    <% } %>
+    <input
+      type="hidden"
+      name="name"
+      placeholder="Your name"
+      value="<%= locals.user.name %>"
+    />
+    <input
+      type="hidden"
+      name="email"
+      placeholder="Your email"
+      value="<%= locals.user.email %>"
+    />
+    <input
+      required
+      type="file"
+      name="filepond"
+      id="myfile-sm"
+      data-max-file-size="5MB"
+      class="filepond"
+    />
+    <textarea
+      type="text"
+      name="content"
+      id="text-area"
+      cols="30"
+      rows="3"
+      placeholder="Type here..."
+      required
+    ></textarea>
+    <input id="submit" type="submit" value="Post" />
+  </form>
+
+  <p class="post-info">
+    <span>🎉</span>Post anything you wish to share with your friends and family!
+  </p>
+
+  <% if (locals.user){ %> <%- include('_bottom_nav_bar_sm') -%> <% } %>
 </div>
 
-<script>
-    FilePond.registerPlugin(
-        FilePondPluginImagePreview,
-        FilePondPluginFileValidateType
-        // FilePondPluginImageTransform
-    );
-    const inputElement2 = document.querySelector("#myfile-sm");
 
-
-  const pond2 = FilePond.create(inputElement2, {
-    imageCropAspectRatio: 1,
-    storeAsFile: true,
-    acceptedFileTypes: ["image/png", "image/jpeg"],
-
-    imageResizeTargetWidth: 256,
-
-    // set contain resize mode
-    imageResizeMode: "cover",
-
-    // add onaddfile callback
-    onaddfile: (error, fileItem) => {},
-
-    // add onpreparefile callback
-    onpreparefile: (fileItem, output) => {
-      // create a new image object
-      const img = new Image();
-
-      // set the image source to the output of the Image Transform plugin
-      img.src = URL.createObjectURL(output);
-
-      // add it to the DOM so we can see the result
-      document.body.appendChild(img);
-    },
-  });
-</script>
-
+<script src="<%= assetPath('js/home_post_comments.js') %>"></script>
+<script src="<%= assetPath('js/home_posts.js') %>"></script>
+<script src="<%= assetPath('js/toggle_likes.js') %>"></script>

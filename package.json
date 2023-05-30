@@ -15,6 +15,8 @@
     "author": "Sanambir Singh",
     "license": "ISC",
     "dependencies": {
+        "@pqina/filepond-plugin-image-editor": "^9.0.2",
+        "@pqina/pintura": "^8.58.2",
         "animate.css": "^4.1.1",
         "body-parser": "^1.20.1",
         "connect-flash": "^0.1.1",
@@ -28,6 +30,7 @@
         "express-ejs-layouts": "^2.5.1",
         "express-session": "^1.17.3",
         "filepond": "^4.30.4",
+        "filepond-plugin-file-poster": "^2.5.1",
         "filepond-plugin-file-validate-type": "^1.2.8",
         "filepond-plugin-image-preview": "^4.6.11",
         "filepond-plugin-image-transform": "^3.8.7",

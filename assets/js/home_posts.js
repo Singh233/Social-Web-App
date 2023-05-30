@@ -2,14 +2,20 @@
 /* eslint-disable no-inner-declarations */
 /* eslint-disable no-new */
 /* eslint-disable no-undef */
+
 {
   FilePond.registerPlugin(
     FilePondPluginImageCrop,
     FilePondPluginImagePreview,
+    FilePondPluginFileValidateType,
+    FilePondPluginImageTransform,
     FilePondPluginImageResize,
-    FilePondPluginFileValidateType
+    // corrects mobile image orientation
+    FilePondPluginImageExifOrientation,
 
-    // FilePondPluginImageTransform
+    // validates the size of the file
+    FilePondPluginFileValidateSize,
+    FilePondPluginImageEdit
   );
 
   // Filepond initialisation logic
@@ -19,18 +25,19 @@
   const inputElement3 = document.querySelector("#profile-file");
 
   const pond = FilePond.create(inputElement, {
-    imageCropAspectRatio: 1,
     storeAsFile: true,
     acceptedFileTypes: ["image/png", "image/jpeg"],
-    imageResizeTargetWidth: 256,
+    allowImageTransform: true,
+    imageTransformOutputQuality: 75,
+    allowImageExifOrientation: true,
+    allowImageEdit: true,
+    allowImageEditor: true,
     fileValidateTypeDetectType: (source, type) =>
       new Promise((resolve, reject) => {
         // Do custom type detection here and return with promise
 
         resolve(type);
       }),
-    // set contain resize mode
-    imageResizeMode: "cover",
 
     // add onaddfile callback
     onaddfile: (error, fileItem) => {},
@@ -44,19 +51,17 @@
       img.src = URL.createObjectURL(output);
 
       // add it to the DOM so we can see the result
-      document.body.appendChild(img);
+      // document.body.appendChild(img);
     },
   });
 
+
   const pond2 = FilePond.create(inputElement2, {
-    imageCropAspectRatio: 1,
     storeAsFile: true,
     acceptedFileTypes: ["image/png", "image/jpeg"],
-
-    imageResizeTargetWidth: 256,
-
-    // set contain resize mode
-    imageResizeMode: "cover",
+    allowImageTransform: true,
+    imageTransformOutputQuality: 75,
+    allowImageExifOrientation: true,
 
     // add onaddfile callback
     onaddfile: (error, fileItem) => {},
@@ -70,136 +75,19 @@
       img.src = URL.createObjectURL(output);
 
       // add it to the DOM so we can see the result
-      document.body.appendChild(img);
+      // document.body.appendChild(img);
     },
   });
 
   const profilePond = FilePond.create(inputElement3, {
-    imageCropAspectRatio: 1,
     storeAsFile: true,
-
-    imageResizeTargetWidth: 256,
-
-    // set contain resize mode
-    imageResizeMode: "cover",
-
-    // add onaddfile callback
-    onaddfile: (error, fileItem) => {},
-
-    // add onpreparefile callback
-    onpreparefile: (fileItem, output) => {
-      // create a new image object
-      const img = new Image();
-
-      // set the image source to the output of the Image Transform plugin
-      img.src = URL.createObjectURL(output);
-
-      // add it to the DOM so we can see the result
-      document.body.appendChild(img);
-    },
+    acceptedFileTypes: ["image/png", "image/jpeg"],
+    allowImageTransform: true,
+    imageTransformOutputQuality: 75,
+    allowImageExifOrientation: true,
+    allowImageEdit: true,
   });
 
-  // method to submit the form data for new post using AJAX
-  let createPost = function () {
-    let newPostForm = $("#new-post-form");
-
-    // let myFile = document.getElementById('my-file');
-
-    // let mySubmit = document.getElementById('submit');
-
-    // let files = myFile.files;
-
-    // let formData = new FormData();
-
-    // formData.append('myFile', files[0], files[0].name);
-    // console.log(formData);
-
-    // let xhr = new XMLHttpRequest();
-
-    // xhr.open('POST', '/posts/create', true);
-
-    // xhr.onload = function(data) {
-    //     if (xhr.status === 200) {
-    //         console.log(xhr.response);
-    //         alert('File successfully uploaded', xhr.response);
-
-    //     } else {
-
-    //         alert('File upload failed!');
-
-    //     }
-    // };
-
-    // xhr.send(formData);
-
-    // newPostForm.submit(function(e) {
-    //     e.preventDefault();
-
-    //     // console.log(data.serializeArray());
-
-    //     console.log(new FormData(this));
-
-    //     $.ajax({
-    //         type: 'post',
-    //         url: '/posts/create',
-    //         data: newPostForm.serialize(), //this converts data in json objects
-
-    //         success: function(data) {
-    //             let newPost = newPostDom(data.data.post);
-    //             $('#posts-list-container').prepend(newPost);
-    //             deletePost($(' .delete-post-button', newPost));
-
-    //             // call the create comment class
-    //             new PostComments(data.data.post._id);
-
-    //             //enable the functionality of the toggle liek button on the new post
-    //             new ToggleLike($(' .toggle-like-button', newPost));
-
-    //             new Noty({
-    //                 theme: 'relax',
-    //                 text: data.data.success,
-    //                 type: 'success',
-    //                 layout: 'topRight',
-    //                 timeout: 3000
-    //             }).show();
-    //         }, error: function(error) {
-    //             console.log(error.responseText);
-    //             new Noty({
-    //                 theme: 'relax',
-    //                 text: 'Something went wrong!',
-    //                 type: 'error',
-    //                 layout: 'topRight',
-    //                 timeout: 2000
-    //             }).show();
-    //         }
-    //     });
-    // });
-  };
-
-  //     <hr>
-
-  //     <small>
-  //         <a class="delete-post-button" href="/posts/destroy/${post._id}">X</a>
-  //     </small>
-
-  //     <p>${post.content}</p>
-  //     <p>${post.user.name}</p>
-  //     <div class="post-comments-list">
-  //         <ul id="post-comments-${post._id}">
-  //         </ul>
-  //     </div>
-
-  //     <div class="post-comments">
-
-  //         <form action="/comments/create" method="post">
-  //             <input type="hidden" name="postId" value="${post._id}">
-  //             <input type="text" name="content" id=""  placeholder="type here...">
-  //             <input type="submit" value="Comment">
-  //         </form>
-
-  //     </div>
-
-  // </div>
   let renderCommentDom = function (comment, isLiked) {
     return `<div id="comment-${comment._id}" class="comment-display">
           <img src="${comment.user.avatar}" id="user-profile-img">
@@ -397,7 +285,9 @@
 
                 <div class="post-img">
                     <img src="${
-                      post.myfile ? post.myfile : "../img/1782188.jpeg"
+                      post.myfile
+                        ? post.myfile
+                        : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
                     }">
                 </div>
 
@@ -562,6 +452,11 @@
     const formData = new FormData(form);
     const id = $("#local_user_id").val();
 
+    // disable submit button
+    const submitButton = $("#submit");
+    submitButton.val("Uploading...");
+    submitButton.prop("disabled", true);
+
     $.ajax({
       type: "post",
       url: `/posts/create/${id}`,
@@ -583,6 +478,10 @@
 
         // remove the image preview of filepond
         pond.removeFile();
+        pond2.removeFile();
+
+        submitButton.val("Post");
+        submitButton.prop("disabled", false);
 
         Toastify({
           text: data.data.success,
@@ -631,7 +530,7 @@
     // check if the icon is solid or regular
     let icon = $(`#icon-${postId}`).hasClass("fa-solid");
     const saveButton = $(`#icon-${postId}`);
-    
+
     if (icon) {
       type = "unsave";
       saveButton.toggleClass("fa-solid fa-regular");

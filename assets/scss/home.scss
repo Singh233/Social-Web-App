@@ -113,14 +113,24 @@ $button-color-gray: #212121;
         }
       }
 
-      #my-file {
-        background-color: black;
+      #myfile {
+        align-self: center;
+        max-width: 320px;
+        min-width: 320px;
       }
       .filepond--drop-label {
-        background-color: black;
+        background-color: #101010;
+        // border: 1px solid rgba(231, 231, 231, 0.233);
+        border-radius: 12px;
+
       }
       .filepond--credits {
         display: none;
+      }
+      .filepond--panel-root {
+        border-radius: 2em;
+        background-color: #060606;
+        height: 1em;
       }
 
       #text-area {

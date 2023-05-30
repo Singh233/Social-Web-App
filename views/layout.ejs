@@ -1,130 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title><%= title %></title>
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"/>
+    <title><%= title %></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
     <!-- File Pond -->
-    <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
+    <link
+      href="https://unpkg.com/filepond@^4/dist/filepond.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <link
+      href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css"
+      rel="stylesheet"
+    />
     <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.js"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <link rel="stylesheet" href="<%= assetPath('css/layout.css') %>">
-    <link rel="stylesheet" href="<%= assetPath('css/header.css') %>">
-    <link rel="stylesheet" href="<%= assetPath('css/footer.css') %>">
-    <link rel="stylesheet" href="<%= assetPath('css/left_navigation.css') %>">
-    <link rel="stylesheet" href="<%= assetPath('css/right_section.css') %>">
-    <link rel="stylesheet" href="<%= assetPath('css/user_sign_in.css') %>">
-    <link rel="stylesheet" href="<%= assetPath('css/user_sign_up.css') %>">
-    <link rel="stylesheet" href="<%= assetPath('css/sm_post_upload.css') %>">
-    <link rel="stylesheet" href="<%= assetPath('css/sm_search_page.css') %>">
-    <link rel="stylesheet" href="<%= assetPath('css/loader.css') %>">
+    <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"
+      integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link rel="stylesheet" href="<%= assetPath('css/layout.css') %>" />
+    <link rel="stylesheet" href="<%= assetPath('css/header.css') %>" />
+    <link rel="stylesheet" href="<%= assetPath('css/footer.css') %>" />
+    <link rel="stylesheet" href="<%= assetPath('css/left_navigation.css') %>" />
+    <link rel="stylesheet" href="<%= assetPath('css/right_section.css') %>" />
+    <link rel="stylesheet" href="<%= assetPath('css/user_sign_in.css') %>" />
+    <link rel="stylesheet" href="<%= assetPath('css/user_sign_up.css') %>" />
+    <link rel="stylesheet" href="<%= assetPath('css/sm_post_upload.css') %>" />
+    <link rel="stylesheet" href="<%= assetPath('css/sm_search_page.css') %>" />
+    <link rel="stylesheet" href="<%= assetPath('css/loader.css') %>" />
     <!-- <link rel="stylesheet" href="<%= assetPath('css/sm_profile_page.css') %>"> -->
-    <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
+    <link
+      rel="stylesheet"
+      href="<%= assetPath('css/bottom_nav_bar_sm.css') %>"
+    />
     <!-- <link rel="stylesheet" href="<%= assetPath('css/sm_bottom_menu_options.css') %>"> -->
-    <link rel="stylesheet" href="<%= assetPath('css/user_edit_profile.css') %>">
+    <link
+      rel="stylesheet"
+      href="<%= assetPath('css/user_edit_profile.css') %>"
+    />
     <%- style %>
-</head>
-<body>
+  </head>
+  <body>
     <%- include('_left_navigation'); %>
 
-    <div id="main-body">
-        <%- body %>
-    </div>
-    
-    <div class="css-blurry-gradient1">
+    <div id="main-body"><%- body %></div>
 
-    </div>
+    <div class="css-blurry-gradient1"></div>
 
-    <div class="css-blurry-gradient2">
-        
-    </div>
+    <div class="css-blurry-gradient2"></div>
 
-    <div class="css-blurry-gradient3">
-        
-    </div>
+    <div class="css-blurry-gradient3"></div>
 
-    <div class="css-blurry-gradient4">
-        
-    </div>
-
-    
-
+    <div class="css-blurry-gradient4"></div>
 
     <%- script %>
     <script src="<%= assetPath('js/background_color_animation.js') %>"></script>
 
     <script>
-        
-        
-        <% if (flash.success && flash.success.length > 0) { %> 
-            
 
-            Toastify({
-                text: "<%= flash.success %>",
-                duration: 2000,
-                destination: "",
-                newWindow: true,
-                close: true,
-                avatar: "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
 
-                gravity: "top", // `top` or `bottom`
-                position: "center", // `left`, `center` or `right`
-                stopOnFocus: true, // Prevents dismissing of toast on hover
-                style: {
-                    background: "#0057D2",
-                    borderRadius: "10px",
-                },
-                onClick: function(){} // Callback after click
-            }).showToast();
-        <% } %>
+      <% if (flash.success && flash.success.length > 0) { %>
 
-        <% if (flash.error && flash.error.length > 0) { %> 
-            Toastify({
-                text: "<%= flash.error %>",
-                duration: 2000,
-                destination: "",
-                newWindow: true,
-                close: true,
-                avatar: "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
-                gravity: "top", // `top` or `bottom`
-                position: "center", // `left`, `center` or `right`
-                stopOnFocus: true, // Prevents dismissing of toast on hover
-                style: {
-                    background: "#D20A0A",
-                    borderRadius: "10px",
-                    color: "white",
-                },
-                onClick: function(){} // Callback after click
-            }).showToast();
-        <% } %>
 
-        
+          Toastify({
+              text: "<%= flash.success %>",
+              duration: 2000,
+              destination: "",
+              newWindow: true,
+              close: true,
+              avatar: "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+
+              gravity: "top", // `top` or `bottom`
+              position: "center", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                  background: "#0057D2",
+                  borderRadius: "10px",
+              },
+              onClick: function(){} // Callback after click
+          }).showToast();
+      <% } %>
+
+      <% if (flash.error && flash.error.length > 0) { %>
+          Toastify({
+              text: "<%= flash.error %>",
+              duration: 2000,
+              destination: "",
+              newWindow: true,
+              close: true,
+              avatar: "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
+              gravity: "top", // `top` or `bottom`
+              position: "center", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                  background: "#D20A0A",
+                  borderRadius: "10px",
+                  color: "white",
+              },
+              onClick: function(){} // Callback after click
+          }).showToast();
+      <% } %>
     </script>
     <script src="
     https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js
     "></script>
-<script src="<%= assetPath('js/home.js') %>"></script>
-
-
-</body>
+    <script src="<%= assetPath('js/home.js') %>"></script>
+  </body>
 </html>

@@ -18,6 +18,27 @@ $button-color-gradient-blue: linear-gradient(
     min-width: 500px;
     margin: 0 20px;
 
+    #profile-file {
+        align-self: center;
+        max-width: 320px;
+        min-width: 320px;
+    }
+
+    .filepond--drop-label {
+        background-color: #101010;
+        // border: 1px solid rgba(231, 231, 231, 0.233);
+        border-radius: 12px;
+
+      }
+      .filepond--credits {
+        display: none;
+      }
+      .filepond--panel-root {
+        border-radius: 2em;
+        background-color: #060606;
+        height: 1em;
+      }
+
     .header {
         display: flex;
         flex-direction: row;
