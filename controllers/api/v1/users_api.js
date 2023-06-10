@@ -94,11 +94,12 @@ module.exports.profile = async function (request, response) {
     if (request.user.id === user.id) {
       await Promise.all(
         user.savedPosts.map(async (savedPost) => {
-          savedPosts.push(await Post.findById(savedPost));
+          const post = await Post.findById(savedPost);
+          if (post) {
+            savedPosts.push(post);
+          }
         })
       );
-      // sort the posts in descending order of time
-      savedPosts.sort((a, b) => b.createdAt - a.createdAt);
     }
 
     const followers = await Friendships.find({ to_user: user._id }).populate(
