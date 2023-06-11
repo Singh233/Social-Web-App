@@ -15,6 +15,7 @@
     "author": "Sanambir Singh",
     "license": "ISC",
     "dependencies": {
+        "@google-cloud/storage": "^6.11.0",
         "@pqina/filepond-plugin-image-editor": "^9.0.2",
         "@pqina/pintura": "^8.58.2",
         "animate.css": "^4.1.1",
@@ -58,8 +59,10 @@
         "passport-jwt": "^4.0.0",
         "passport-local": "^1.0.0",
         "rotating-file-stream": "^3.0.4",
+        "sharp": "^0.32.1",
         "socket.io": "^4.5.4",
-        "toastify-js": "^1.12.0"
+        "toastify-js": "^1.12.0",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
         "eslint": "^8.39.0",

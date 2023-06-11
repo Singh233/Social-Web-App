@@ -2,6 +2,7 @@ const express = require("express");
 const env = require("./config/environment");
 const logger = require("morgan");
 const cors = require("cors");
+const multer = require("multer");
 
 const corsOptions = {
   origin: [
@@ -54,6 +55,16 @@ const chatSockets = require("./config/chat_sockets").chatSockets(chatServer);
 
 chatServer.listen(4000);
 console.log("chat server is listening on port 4000");
+
+const multerMid = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    // no larger than 5mb.
+    fileSize: 5 * 1024 * 1024,
+  },
+});
+
+app.use(multerMid.single("filepond"));
 
 // app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
 // app.use(bodyParser.json()); // Send JSON responses

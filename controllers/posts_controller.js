@@ -1,10 +1,13 @@
-const fs = require("fs");
-const path = require("path");
-
+/* eslint-disable import/no-extraneous-dependencies */
 const Post = require("../models/post");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
 const User = require("../models/user");
+const {
+  uploadImage,
+  generateThumbnail,
+  deleteFile,
+} = require("../helper/imageUpload");
 
 // eslint-disable-next-line consistent-return
 module.exports.createPost = async function (request, response) {
@@ -12,38 +15,65 @@ module.exports.createPost = async function (request, response) {
     if (request.user.id !== request.params.id) {
       return response.status(401).send("Unauthorized");
     }
+    const { file } = request;
 
-    Post.uploadedFile(request, response, async function (error) {
-      if (error) {
-        request.flash("error", "Error uploading file");
-        return response.status(422).send("Error uploading file");
-      }
-
-      // this is saving the path of the uploaded file into the field in the user
-      const newPost = await Post.create({
-        content: request.body.content,
-        user: request.user._id,
-        myfile: `${Post.filePath}/${request.file.filename}`,
+    if (!file) {
+      return response.status(401).json({
+        data: {},
+        success: false,
+        message: "File not found!",
       });
+    }
 
-      // populate the user of newPost
-      await newPost.populate("user");
+    let imageUrl = null;
+    try {
+      imageUrl = await uploadImage(file);
+    } catch (error) {
+      return response.status(401).json({
+        data: {},
+        success: false,
+        message: "Error in uploading file!",
+      });
+    }
 
-      if (request.xhr) {
-        // the request is an AJAX request return the response in JSON format
-        return response.status(200).json({
-          data: {
-            post: newPost,
-            success: "Post created successfully!",
-          },
-          success: true,
-          message: "Post created!",
-        });
-      }
+    // generate thumbnail
+    let thumbnailUrl = null;
 
-      request.flash("success", "Post published!");
-      return response.redirect("/");
+    try {
+      thumbnailUrl = await generateThumbnail(file, imageUrl);
+    } catch (error) {
+      return response.status(401).json({
+        data: {},
+        success: false,
+        message: "Error in uploading file!",
+      });
+    }
+
+    // this is saving the path of the uploaded file into the field in the user
+    const newPost = await Post.create({
+      content: request.body.content,
+      user: request.user._id,
+      myfile: imageUrl,
+      thumbnail: thumbnailUrl,
     });
+
+    // populate the user of newPost
+    await newPost.populate("user");
+
+    if (request.xhr) {
+      // the request is an AJAX request return the response in JSON format
+      return response.status(200).json({
+        data: {
+          post: newPost,
+          success: "Post created successfully!",
+        },
+        success: true,
+        message: "Post created!",
+      });
+    }
+
+    request.flash("success", "Post published!");
+    return response.redirect("/");
   } catch (error) {
     request.flash("error", "Error creating post");
     return response.redirect("back");
@@ -68,9 +98,14 @@ module.exports.destroy = async function (request, response) {
       post: request.params.id,
     });
 
-    // delete the file associated with the post
+    // delete the file from cloud storage
     if (post.myfile) {
-      fs.unlinkSync(path.join(__dirname, "..", post.myfile));
+      await deleteFile("users_posts_bucket", post.myfile, false);
+    }
+
+    // delete the thumbnail from cloud storage
+    if (post.thumbnail) {
+      await deleteFile("users_posts_bucket", post.thumbnail, true);
     }
 
     return response.status(200).json({
