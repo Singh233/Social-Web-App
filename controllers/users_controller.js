@@ -3,6 +3,7 @@
 const User = require("../models/user");
 const Friendships = require("../models/friendship");
 const Post = require("../models/post");
+const { deleteFile, uploadImage } = require("../helper/imageUpload");
 
 module.exports.profile = async function (request, response) {
   const user = await User.findById(request.params.id);
@@ -81,24 +82,31 @@ module.exports.update = async function (request, response) {
       return response.redirect("back");
     }
 
+    const { file } = request;
     const user = await User.findById(request.params.id);
 
-    User.uploadedAvatar(request, response, function (error) {
-      if (error) {
-        request.flash("error", "Error in uploading file");
-        return response.redirect("back");
-      }
-      user.name = request.body.name;
-      user.email = request.body.email;
+    user.name = request.body.name;
+    user.email = request.body.email;
 
-      if (request.file && user.avatar) {
-        // this is saving the path of the uploaded file into the field in the user
-        user.avatar = `${User.avatarPath}/${request.file.filename}`;
+    let imageUrl = null;
+    try {
+      imageUrl = await uploadImage("sanam_users_avatar", file);
+      // check and delete the previous avatar of user
+      if (user.avatar) {
+        await deleteFile("sanam_users_avatar", user.avatar);
       }
-      user.save();
-      request.flash("success", "Successfully updated profile!");
-      return response.redirect("back");
-    });
+    } catch (error) {
+      console.log(error);
+    }
+
+    if (imageUrl) {
+      // this is saving the path of the uploaded file into the field in the user
+      user.avatar = imageUrl;
+    }
+    user.save();
+
+    request.flash("success", "Successfully updated profile!");
+    return response.redirect("back");
   } catch (error) {
     request.flash("error", "Something went wrong!");
     return response.status(401).send("Unauthorized");

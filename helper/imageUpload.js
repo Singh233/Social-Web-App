@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 /* eslint-disable arrow-body-style */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prefer-promise-reject-errors */
@@ -7,8 +6,6 @@ const fs = require("fs");
 const sharp = require("sharp");
 const Post = require("../models/post");
 const googleCloudStorage = require("../config/googleCloudStorage");
-
-const bucket = googleCloudStorage.bucket("users_posts_bucket"); // bucket name
 
 /**
  *
@@ -40,9 +37,10 @@ const getFileNameFromUrl = (fileUrl) => {
   return fileName;
 };
 
-const uploadImage = (file) =>
+const uploadImage = (bucketName, file) =>
   new Promise((resolve, reject) => {
     const { originalname, buffer } = file;
+    const bucket = googleCloudStorage.bucket(bucketName);
 
     const uniquePrefix = generateUniquePrefix(); // Generate unique prefix
     const fileName = `${uniquePrefix}-${originalname.replace(/ /g, "_")}`; // Append prefix to file name
@@ -75,14 +73,18 @@ const deleteFile = async (bucketName, fileUrl, isThumbnail) => {
 
     // Delete the file
     await file.delete();
+
+    return;
   } catch (err) {
     // console.error("Error deleting file:", err);
     return err;
   }
 };
 
-const uploadThumbnail = (fileData, fileName) =>
+const uploadThumbnail = (bucketName, fileData, fileName) =>
   new Promise((resolve, reject) => {
+    const bucket = googleCloudStorage.bucket(bucketName);
+
     const blob = bucket.file(fileName);
     const blobStream = blob.createWriteStream({
       resumable: false,
@@ -98,14 +100,18 @@ const uploadThumbnail = (fileData, fileName) =>
       .end(fileData);
   });
 
-const generateThumbnail = async (file, fileName) => {
+const generateThumbnail = async (bucketName, file, fileName) => {
   try {
     const thumbnailBuffer = await sharp(file.buffer).resize(20, 20).toBuffer();
 
     const thumbnailFileName = `thumbnails/thumbnail-${getFileNameFromFilePath(
       fileName
     )}`;
-    const publicUrl = await uploadThumbnail(thumbnailBuffer, thumbnailFileName);
+    const publicUrl = await uploadThumbnail(
+      bucketName,
+      thumbnailBuffer,
+      thumbnailFileName
+    );
     return publicUrl;
   } catch (error) {
     return error;

@@ -27,7 +27,7 @@ module.exports.createPost = async function (request, response) {
 
     let imageUrl = null;
     try {
-      imageUrl = await uploadImage(file);
+      imageUrl = await uploadImage("users_posts_bucket", file);
     } catch (error) {
       return response.status(401).json({
         data: {},
@@ -40,7 +40,11 @@ module.exports.createPost = async function (request, response) {
     let thumbnailUrl = null;
 
     try {
-      thumbnailUrl = await generateThumbnail(file, imageUrl);
+      thumbnailUrl = await generateThumbnail(
+        "users_posts_bucket",
+        file,
+        imageUrl
+      );
     } catch (error) {
       return response.status(401).json({
         data: {},
