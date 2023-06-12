@@ -184,7 +184,7 @@ $button-color-gray: #212121;
         flex-shrink: 0;
         flex-grow: 0;
         max-width: 452px;
-        height: 678px;
+        height: 550px;
         background-color: #292929;
         box-shadow: 0 5px 10px 0 rgba(#000, 0.15);
         border-radius: 30px;
@@ -285,6 +285,7 @@ $button-color-gray: #212121;
     }
 
     .post-div {
+      padding: 0px;
       .post-new-card {
         align-self: center;
         max-width: 95vw;
@@ -325,6 +326,7 @@ $button-color-gray: #212121;
 
       #feed-posts {
         //
+        padding: 0px;
 
         .card {
           border-radius: 0;

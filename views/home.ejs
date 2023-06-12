@@ -1,127 +1,171 @@
-<link rel="stylesheet" href="<%= assetPath('css/home.css') %>">
-<link rel="stylesheet" href="<%= assetPath('css/chat_box.css') %>">
-<link rel="stylesheet" href="<%= assetPath('css/chat_messages.css') %>">
-<link rel="stylesheet" href="<%= assetPath('css/post_card_design.css') %>">
-<link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
-<link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>">
+<link rel="stylesheet" href="<%= assetPath('css/home.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/chat_box.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/chat_messages.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/post_card_design.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>" />
 
 <div class="home-container">
-    <i onclick="menuButtonClicked()" class="fa-solid fa-bars menu-button"></i>
-    <i onclick="menuButtonClicked()" class="fa-solid fa-xmark menu-button remove"></i>
-    <div class="post-div">
-        <%- include('_top_header'); %>
-        <% if(locals.user) { %>
-            <input type="hidden" value="<%= locals.user._id %>" name="user" id="user-id" />
-            <input type="hidden" value="<%= locals.user.savedPosts %>" id="user-saved-posts" />
+  <i onclick="menuButtonClicked()" class="fa-solid fa-bars menu-button"></i>
+  <i
+    onclick="menuButtonClicked()"
+    class="fa-solid fa-xmark menu-button remove"
+  ></i>
+  <div class="post-div">
+    <%- include('_top_header'); %> <% if(locals.user) { %>
+    <input
+      type="hidden"
+      value="<%= locals.user._id %>"
+      name="user"
+      id="user-id"
+    />
+    <input
+      type="hidden"
+      value="<%= locals.user.savedPosts %>"
+      id="user-saved-posts"
+    />
 
-            <div class="post-new-card">
-                <% if(locals.user.avatar != undefined) { %> 
-                    <img src="<%= locals.user.avatar %>" alt="">
-                <% } else { %> 
-                    <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
-                <% } %> 
-                <p>Hey, <%= locals.user.name %> post something new!</p>
-                <button onclick="window.location.href='/upload'"><i class="fa-solid fa-arrow-right"></i></button>
-            </div>
-            
-            <form action="/posts/create/<%= locals.user._id %>" enctype="multipart/form-data" id="new-post-form"  method="post">
-                <div class="header">
-                    <% if(locals.user.avatar != undefined) { %> 
-                        <img src="<%= locals.user.avatar %>" alt="">
-                    <% } else { %> 
-                        <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
-                    <% } %> 
-                    <p>Hey, <%= locals.user.name %> post something new!</p>
-                    <p class="date" style="margin-left: 20px"><%= new Date().toLocaleDateString("en-US", {year: 'numeric', month: 'long', day:'numeric'}) %></p>
-                </div>
-                <input id="local_user_id" type="hidden" name="id" placeholder="Your id" value="<%= locals.user._id %>">
-                <input type="hidden" name="name" placeholder="Your name" value="<%= locals.user.name %>">
-                <input type="hidden" name="email" placeholder="Your email" value="<%= locals.user.email %>">
-                <input required type="file" name="filepond" id="myfile" data-max-file-size="5MB" class="filepond">
-                <textarea required type="text" name="content" id="text-area" cols="30" rows="3" placeholder="Type here..."></textarea>
-                <input id="submit" type="submit" value="Post">
-            </form>
-
-            <section id="feed-posts">
-
-                <div id="posts-list-container">
-                    <% for (let i of posts) { %> 
-                        <% let isSaved = false; %>
-                        <% for (let j of locals.user.savedPosts) { %>
-                            <% if (j._id.toString() === i._id.toString()) { %>
-                                <% isSaved = true; %>
-                            <% } %>
-                        <% } %>
-
-                        <%- include('_post.ejs', {post: i, moment, isSaved}) -%>
-                    <% } %>
-                </div>
-                
-            </section>
-        <% } %>
-            
-            
-        
+    <div class="post-new-card">
+      <% if(locals.user.avatar != undefined) { %>
+      <img src="<%= locals.user.avatar %>" alt="" />
+      <% } else { %>
+      <img
+        id="logo-placeholder"
+        src="<%= assetPath('img/dummy-profile.jpeg') %>"
+      />
+      <% } %>
+      <p>Hey, <%= locals.user.name %> post something new!</p>
+      <button onclick="window.location.href='/upload'">
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
     </div>
-    
-    <% if(locals.user) { %>
-        <div class="right-section-div">
-            <% if (friends != undefined) {%> 
 
-                <%- include('_right_section', {all_users: all_users, friends: friends}); %>
-            <% } else { %>
-                <%- include('_right_section', {all_users: all_users}); %>
-            <% } %>
+    <form
+      action="/posts/create/<%= locals.user._id %>"
+      enctype="multipart/form-data"
+      id="new-post-form"
+      method="post"
+    >
+      <div class="header">
+        <% if(locals.user.avatar != undefined) { %>
+        <img src="<%= locals.user.avatar %>" alt="" />
+        <% } else { %>
+        <img
+          id="logo-placeholder"
+          src="<%= assetPath('img/dummy-profile.jpeg') %>"
+        />
+        <% } %>
+        <p>Hey, <%= locals.user.name %> post something new!</p>
+        <p class="date" style="margin-left: 20px">
+          <%= new Date().toLocaleDateString("en-US", {year: 'numeric', month:
+          'long', day:'numeric'}) %>
+        </p>
+      </div>
+      <input
+        id="local_user_id"
+        type="hidden"
+        name="id"
+        placeholder="Your id"
+        value="<%= locals.user._id %>"
+      />
+      <input
+        type="hidden"
+        name="name"
+        placeholder="Your name"
+        value="<%= locals.user.name %>"
+      />
+      <input
+        type="hidden"
+        name="email"
+        placeholder="Your email"
+        value="<%= locals.user.email %>"
+      />
+      <input
+        required
+        type="file"
+        name="filepond"
+        id="myfile"
+        data-max-file-size="5MB"
+        class="filepond"
+      />
+      <textarea
+        required
+        type="text"
+        name="content"
+        id="text-area"
+        cols="30"
+        rows="3"
+        placeholder="Type here..."
+      ></textarea>
+      <input id="submit" type="submit" value="Post" />
+    </form>
 
-        </div>
-
-        
+    <section id="feed-posts">
+      <div id="posts-list-container">
+        <% for (let i of posts) { %> <% let isSaved = false; %> <% for (let j of
+        locals.user.savedPosts) { %> <% if (j._id.toString() ===
+        i._id.toString()) { %> <% isSaved = true; %> <% } %> <% } %> <%-
+        include('_post.ejs', {post: i, moment, isSaved}) -%> <% } %>
+      </div>
+    </section>
     <% } %>
-    <% if(locals.user) { %>
-        <%- include('_chat_box', {friends}) -%>
-    <% } %>
+  </div>
 
-    <% if (locals.user){ %>
-        <%- include('_bottom_nav_bar_sm') -%>
-    <% } %>
+  <% if(locals.user) { %>
+  <div class="right-section-div">
+    <% if (friends != undefined) {%> <%- include('_right_section', {all_users:
+    all_users, friends: friends}); %> <% } else { %> <%-
+    include('_right_section', {all_users: all_users}); %> <% } %>
+  </div>
 
-
-    
+  <% } %> <% if(locals.user) { %> <%- include('_chat_box', {friends}) -%> <% }
+  %> <% if (locals.user){ %> <%- include('_bottom_nav_bar_sm') -%> <% } %>
 </div>
 
-<% if(!locals.user) { %>
-        
-
-    <%- include('user_sign_in'); %>
-
-    <%- include('user_sign_up'); %>
-    
-
-<% } %>
-
-<% if (locals.user){ %>
-    <script src="<%= assetPath('js/add_emoji.js') %>"></script>
+<% if(!locals.user) { %> <%- include('user_sign_in'); %> <%-
+include('user_sign_up'); %> <% } %> <% if (locals.user){ %>
+<script src="<%= assetPath('js/add_emoji.js') %>"></script>
 
 <% } %>
 
 <script src="<%= assetPath('js/home_post_comments.js') %>"></script>
 <script src="<%= assetPath('js/home_posts.js') %>"></script>
 <script src="<%= assetPath('js/toggle_likes.js') %>"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
 <script src="<%= assetPath('js/chat_engine.js') %>"></script>
 <script>
-
-    $('.toggle-like-button').each(function() {
-        let self = this;
-        let toggleLike = new ToggleLike(self);
-    });
+  $(".toggle-like-button").each(function () {
+    let self = this;
+    let toggleLike = new ToggleLike(self);
+  });
 </script>
 
 <script src="<%= assetPath('js/home.js') %>"></script>
 <% if (locals.user){ %>
-    <script>
-        
-        new ChatEngine('user-chat-box','<%= locals.user._id %>', '<%= locals.user.email %>', '<%= locals.user.name %>', '<%= locals.user.avatar %>', '<%= websocket_host %>');
-    </script>
-<% } %>
+<script>
+  new ChatEngine(
+    "user-chat-box",
+    "<%= locals.user._id %>",
+    "<%= locals.user.email %>",
+    "<%= locals.user.name %>",
+    "<%= locals.user.avatar %>",
+    "<%= websocket_host %>"
+  );
 
+  const blurDivs = document.querySelectorAll(".blur-load");
+
+  blurDivs.forEach((div) => {
+    const img = div.querySelector("img");
+    function loaded() {
+      // show img
+      div.classList.add("loaded");
+    }
+
+    if (img.complete) {
+      loaded();
+    } else {
+      img.addEventListener("load", loaded);
+    }
+  });
+</script>
+<% } %>

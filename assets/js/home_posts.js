@@ -55,7 +55,6 @@
     },
   });
 
-
   const pond2 = FilePond.create(inputElement2, {
     storeAsFile: true,
     acceptedFileTypes: ["image/png", "image/jpeg"],
@@ -171,10 +170,19 @@
                     
                 </div>
 
+                
                 <div class="post-img">
-                    <img src="${
-                      post.myfile ? post.myfile : "../img/1782188.jpeg"
-                    }">
+                    <div class="blur-load" style="background-image: url(${
+                      post.thumbnail
+                        ? post.thumbnail
+                        : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
+                    })">
+                      <img src="${
+                        post.myfile
+                          ? post.myfile
+                          : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
+                      }" loading="lazy" />
+                    </div>
                 </div>
 
                 <div class="post-footer">
@@ -228,7 +236,9 @@
                               post._id
                             }-comments-form" action="/comments/create" method="POST">
                                 <i  class="fa-regular fa-face-smile emoji-button"></i>
-                                <input class="input-add-comment" type="text" name="content" placeholder="add a comment..." required>
+                                <input id="input-add-comment-${
+                                  post._id
+                                } class="input-add-comment" type="text" name="content" placeholder="add a comment..." required>
                                 <input type="hidden" name="postId" value="${
                                   post._id
                                 }" >
@@ -284,11 +294,17 @@
                 </div>
 
                 <div class="post-img">
-                    <img src="${
-                      post.myfile
-                        ? post.myfile
+                    <div class="blur-load" style="background-image: url(${
+                      post.thumbnail
+                        ? post.thumbnail
                         : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
-                    }">
+                    })">
+                      <img src="${
+                        post.myfile
+                          ? post.myfile
+                          : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
+                      }" loading="lazy" />
+                    </div>
                 </div>
 
                 <div class="post-footer">
@@ -362,8 +378,12 @@
                             <form id="post-${
                               post._id
                             }-comments-form" action="/comments/create" method="POST">
-                                <i  class="fa-regular fa-face-smile emoji-button"></i>
-                                <input class="input-add-comment" type="text" name="content" placeholder="add a comment..." required>
+                                <i onclick="emojiClicked(event, '${
+                                  post._id
+                                }')" class="fa-regular fa-face-smile emoji-button"></i>
+                                <input id="input-add-comment-${
+                                  post._id
+                                }" class="input-add-comment" type="text" name="content" placeholder="add a comment..." required>
                                 <input type="hidden" name="postId" value="${
                                   post._id
                                 }" >
@@ -482,6 +502,21 @@
 
         submitButton.val("Post");
         submitButton.prop("disabled", false);
+        const blurDivs = document.querySelectorAll(".blur-load");
+
+        blurDivs.forEach((div) => {
+          const img = div.querySelector("img");
+          function loaded() {
+            // show img
+            div.classList.add("loaded");
+          }
+
+          if (img.complete) {
+            loaded();
+          } else {
+            img.addEventListener("load", loaded);
+          }
+        });
 
         Toastify({
           text: data.data.success,
@@ -662,6 +697,22 @@
             new PostComments(post._id);
             // enable the functionality of the toggle liek button on the new post
             new ToggleLike($(" .toggle-like-button", newPost));
+
+            const blurDivs = document.querySelectorAll(".blur-load");
+
+            blurDivs.forEach((div) => {
+              const img = div.querySelector("img");
+              function loaded() {
+                // show img
+                div.classList.add("loaded");
+              }
+
+              if (img.complete) {
+                loaded();
+              } else {
+                img.addEventListener("load", loaded);
+              }
+            });
           });
 
           if (data.data.posts.length !== 0) {

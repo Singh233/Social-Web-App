@@ -1,117 +1,147 @@
 <div id="post-<%= post._id %>" class="display-posts">
+  <div
+    id="bottom-menu-options-<%= post._id %>"
+    class="post-options-menu animate__animated remove"
+  >
+    <button
+      onclick="toggleMenuOptions('<%= post._id %>')"
+      class="cancel-button"
+    >
+      Cancel
+    </button>
 
-    <div id="bottom-menu-options-<%= post._id %>" class="post-options-menu animate__animated remove">
-        <button onclick="toggleMenuOptions('<%= post._id %>')" class="cancel-button">
-            Cancel
-        </button>
-
-        <div class="option1">
-            <a href="/users/profile/<%= post.user.id %>"> <i class="fa-solid fa-user"></i> Go to profile</a>
-        </div>
-        <% if(locals.user && locals.user.id == post.user.id) { %> 
-            <div class="option2">
-                <a class="delete-post-button" href="/posts/destroy/<%= post._id %>"><i class="fa-solid fa-trash"></i> Delete</a>
-            </div>
-        <% } %>
-
-        
+    <div class="option1">
+      <a href="/users/profile/<%= post.user.id %>">
+        <i class="fa-solid fa-user"></i> Go to profile</a
+      >
     </div>
-    
-    <div class="post-header">
-        
-        <a href="/users/profile/<%= post.user.id %>"> 
-            <% if(post.user.avatar != undefined) { %> 
-                <img src="<%= post.user.avatar %>" id="user-profile-img">
-            <% } else { %> 
-                <img src="<%= assetPath('img/dummy-profile.jpeg') %>" id="user-profile-img">
-            <% } %>
+    <% if(locals.user && locals.user.id == post.user.id) { %>
+    <div class="option2">
+      <a class="delete-post-button" href="/posts/destroy/<%= post._id %>"
+        ><i class="fa-solid fa-trash"></i> Delete</a
+      >
+    </div>
+    <% } %>
+  </div>
+
+  <div class="post-header">
+    <a href="/users/profile/<%= post.user.id %>">
+      <% if(post.user.avatar != undefined) { %>
+      <img src="<%= post.user.avatar %>" id="user-profile-img" />
+      <% } else { %>
+      <img
+        src="<%= assetPath('img/dummy-profile.jpeg') %>"
+        id="user-profile-img"
+      />
+      <% } %>
+    </a>
+
+    <a href="/users/profile/<%= post.user.id %>"> <%= post.user.name %></a>
+
+    <div id="post-menu-options">
+      <i
+        onclick="toggleMenuOptions('<%= post._id %>')"
+        class="fa-solid fa-ellipsis-vertical"
+      ></i>
+    </div>
+  </div>
+
+  <div class="post-img">
+    <% if(post.myfile) { %>
+    <div class="blur-load" style="background-image: url(<%= post.thumbnail %>)">
+      <img src="<%= post.myfile %>" loading="lazy" />
+    </div>
+    <% } else { %>
+    <img src="<%= assetPath('img/1782188.jpeg') %>" />
+    <% } %>
+  </div>
+
+  <div class="post-footer">
+    <div class="post-options">
+      <div class="left">
+        <% let flag = false; for (like of post.likes) { if (like.user._id ==
+        locals.user.id) { flag = true; break; } }%> <% if (flag) { %>
+        <a
+          class="toggle-like-button bg-liked"
+          data-likes="<%= post.likes.length %>"
+          href="/likes/toggle/?id=<%= post._id %>&type=Post"
+        >
+          <i style="margin-left: 0px" class="fa-solid fa-heart liked"></i>
+          <span><%= post.likes.length %></span>
         </a>
-
-        <a href="/users/profile/<%= post.user.id %>"> <%= post.user.name %></a>
-
-        <div id="post-menu-options">
-            <i onclick="toggleMenuOptions('<%= post._id %>')" class="fa-solid fa-ellipsis-vertical"></i>
-
-            
-
-        </div>
-
-        
-    </div>
-
-    <div class="post-img">
-        <% if(post.myfile != undefined) { %> 
-            <img src="<%= post.myfile %>">
         <% } else { %>
-            <img src="<%= assetPath('img/1782188.jpeg') %>">
+        <a
+          class="toggle-like-button"
+          data-likes="<%= post.likes.length %>"
+          href="/likes/toggle/?id=<%= post._id %>&type=Post"
+        >
+          <i style="margin-left: 0px" class="fa-regular fa-heart"></i>
+          <span><%= post.likes.length %></span>
+        </a>
         <% } %>
+
+        <a href="#">
+          <i class="fa-regular fa-comment"></i
+          ><span><%= post.comments.length %></span>
+        </a>
+        <a class="share-button" href="#">
+          <i style="font-size: 1.1rem" class="fa-regular fa-paper-plane"></i>
+        </a>
+      </div>
+
+      <% if (isSaved) { %>
+      <div onclick="toggleSavePost('<%= post._id %>', 'unsave')" class="right">
+        <i id="icon-<%= post._id %>" class="fa-solid fa-bookmark"></i>
+      </div>
+      <% } else { %>
+      <div onclick="toggleSavePost('<%= post._id %>', 'save')" class="right">
+        <i id="icon-<%= post._id %>" class="fa-regular fa-bookmark"></i>
+      </div>
+      <% } %>
     </div>
 
-    <div class="post-footer">
-        <div class="post-options">
-            <div class="left">
-                    <% let flag = false; for (like of post.likes) { if (like.user._id ==  locals.user.id) { flag = true; break; } }%> 
-                    <% if (flag) { %>
-                        <a class="toggle-like-button bg-liked" data-likes="<%= post.likes.length %>" href="/likes/toggle/?id=<%= post._id %>&type=Post">
-                            <i style="margin-left: 0px" class="fa-solid fa-heart liked"></i> <span><%= post.likes.length %></span>
-                        </a>
-                    <% } else { %>
-                        <a class="toggle-like-button " data-likes="<%= post.likes.length %>" href="/likes/toggle/?id=<%= post._id %>&type=Post">
-                            <i style="margin-left: 0px" class="fa-regular fa-heart "></i> <span><%= post.likes.length %></span>
-                        </a>
-                    <% } %>
-                
-                
-                <a href="#">
-                    <i  class="fa-regular fa-comment"></i><span><%= post.comments.length %></span>
-                </a>
-                <a class="share-button" href="#">
-                    <i style="font-size: 1.1rem;" class="fa-regular fa-paper-plane"></i>
-                </a>
-            </div>
-
-            <% if (isSaved) { %>
-                <div onclick="toggleSavePost('<%= post._id %>', 'unsave')" class="right">
-                    <i id="icon-<%= post._id %>" class="fa-solid fa-bookmark"></i>
-                </div>
-            <% } else { %>
-                <div onclick="toggleSavePost('<%= post._id %>', 'save')" class="right">
-                    <i id="icon-<%= post._id %>" class="fa-regular fa-bookmark"></i>
-                </div>
-            <% } %>
-            
-        </div>
-
-
-        <div class="post-caption">
-            <p class="post-user-name"><%= post.user.name %> - <span class="post-user-content"><%= post.content %></span> </p>
-        </div>
-
-        <div class="time">
-            <p><%= moment(post.createdAt).fromNow() %></p>
-        </div>
-        
-        <div id="comments-list-container" class="post-comments-list">
-            <ul id="post-comments-<%= post._id %>">
-                <% for (let comment of post.comments) { %>
-                    <%- include('_comment', {comment: comment, moment}) %>
-                <% } %>
-            </ul>
-        </div>
-        <div class="post-comments">
-            <% if(locals.user) { %>
-                <form id="post-<%= post._id %>-comments-form" action="/comments/create" method="POST">
-                    <i  class="fa-regular fa-face-smile emoji-button"></i>
-                    <input class="input-add-comment" type="text" name="content" placeholder="add a comment..." required>
-                    <input type="hidden" name="postId" value="<%= post._id %>" >
-                    <input class="submit-button" type="submit" value="Post">
-                </form>
-            <% } %>
-        </div>
+    <div class="post-caption">
+      <p class="post-user-name">
+        <%= post.user.name %> -
+        <span class="post-user-content"><%= post.content %></span>
+      </p>
     </div>
-    
-    
+
+    <div class="time">
+      <p><%= moment(post.createdAt).fromNow() %></p>
+    </div>
+
+    <div id="comments-list-container" class="post-comments-list">
+      <ul id="post-comments-<%= post._id %>">
+        <% for (let comment of post.comments) { %> <%- include('_comment',
+        {comment: comment, moment}) %> <% } %>
+      </ul>
+    </div>
+    <div class="post-comments">
+      <% if(locals.user) { %>
+      <form
+        id="post-<%= post._id %>-comments-form"
+        action="/comments/create"
+        method="POST"
+      >
+        <i
+          onclick="emojiClicked(event, '<%= post._id %>')"
+          class="fa-regular fa-face-smile emoji-button"
+        ></i>
+        <input
+          id="input-add-comment-<%= post._id %>"
+          class="input-add-comment"
+          type="text"
+          name="content"
+          placeholder="add a comment..."
+          required
+        />
+        <input type="hidden" name="postId" value="<%= post._id %>" />
+        <input class="submit-button" type="submit" value="Post" />
+      </form>
+      <% } %>
+    </div>
+  </div>
 </div>
 
-
-
+<script></script>

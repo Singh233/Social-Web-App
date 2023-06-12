@@ -1,21 +1,11 @@
+function emojiClicked(e, id) {
+  const picker = new EmojiButton({
+    theme: "dark",
+  });
 
-{
-    
-    const picker = new EmojiButton({
-        theme: 'dark'
-    });
-    
-    const button = document.querySelector('.emoji-button');
-    
-    
-    button.addEventListener('click', () => {
-        console.log("Clicked emoji", button);
-    
-        picker.togglePicker(button);
-    });
-    
-    picker.on('emoji', emoji => {
-        document.querySelector('#input-add-comment').value += emoji;
-    });
-        
+  picker.togglePicker(e.target);
+
+  picker.on("emoji", (emoji) => {
+    document.querySelector(`#input-add-comment-${id}`).value += emoji;
+  });
 }
