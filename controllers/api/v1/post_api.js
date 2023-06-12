@@ -5,6 +5,7 @@ const Joi = require("joi");
 const Post = require("../../../models/post");
 const Comment = require("../../../models/comment");
 const Like = require("../../../models/like");
+const { generateThumbnail, uploadImage, deleteFile } = require("../../../helper/imageUpload");
 
 const fieldsValidator = Joi.object({
   content: Joi.string().required(),
@@ -43,51 +44,65 @@ module.exports.createPost = async function (request, response) {
     if (!user) {
       return handleResponse(response, 401, "Unauthorized", {}, false);
     }
+    // validate the fields
+    const { value, error } = fieldsValidator.validate(request.body);
 
-    Post.uploadedFile(request, response, async function (multerError) {
-      if (multerError) {
-        return handleResponse(response, 400, "Error uploading file", {}, false);
-      }
+    if (error) {
+      return handleResponse(response, 422, "Invalid fields", { error }, false);
+    }
 
-      // validate the fields
-      const { value, error } = fieldsValidator.validate(request.body);
+    const { file } = request;
 
-      if (error) {
-        return handleResponse(
-          response,
-          422,
-          "Invalid fields",
-          { error },
-          false
-        );
-      }
-
-      if (!request.file) {
-        return handleResponse(response, 400, "File not uploaded", {}, false);
-      }
-
-      // this is saving the path of the uploaded file into the field in the user
-      const newPost = await Post.create({
-        content: value.content,
-        user: user._id,
-        myfile: `${Post.filePath}/${request.file.filename}`,
+    if (!file) {
+      return response.status(401).json({
+        data: {},
+        success: false,
+        message: "File not found!",
       });
+    }
 
-      // populate the user of newPost
-      try {
-        await newPost.populate("user");
-      } catch (exception) {
-        // console.log("error", error);
-      }
+    let imageUrl = null;
+    try {
+      imageUrl = await uploadImage("users_posts_bucket", file);
+    } catch (err) {
+      return response.status(401).json({
+        data: {},
+        success: false,
+        message: "Error in uploading file!",
+      });
+    }
 
-      return handleResponse(
-        response,
-        200,
-        "Post created successfully",
-        { post: newPost },
-        true
+    // generate thumbnail
+    let thumbnailUrl = null;
+
+    try {
+      thumbnailUrl = await generateThumbnail(
+        "users_posts_bucket",
+        file,
+        imageUrl
       );
+    } catch (err) {
+      return handleResponse(response, 400, "Error uploading file", {}, false);
+    }
+
+    // this is saving the path of the uploaded file into the field in the user
+    const newPost = await Post.create({
+      content: request.body.content,
+      user: request.user._id,
+      myfile: imageUrl,
+      thumbnail: thumbnailUrl,
     });
+
+    // populate the user of newPost
+    await newPost.populate("user");
+
+    return handleResponse(
+      response,
+      200,
+      "Post created successfully",
+      { post: newPost },
+      true
+    );
   } catch (error) {
     return handleResponse(response, 500, "Internal server error", {}, false);
   }
@@ -123,9 +138,14 @@ module.exports.destroy = async function (request, response) {
     await Like.deleteMany({ _id: { $in: post.comments } });
     await Comment.deleteMany({ post: request.params.id });
 
+    // delete the file from cloud storage
     if (post.myfile) {
-      // unlink the file from the filesystem
-      fs.unlinkSync(path.join(__dirname, "../../..", post.myfile));
+      await deleteFile("users_posts_bucket", post.myfile, false);
+    }
+
+    // delete the thumbnail from cloud storage
+    if (post.thumbnail) {
+      await deleteFile("users_posts_bucket", post.thumbnail, true);
     }
 
     return handleResponse(
