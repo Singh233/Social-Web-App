@@ -1,82 +1,234 @@
-
-
 <% if (locals.user){ %>
 
-	<div id="chat-box"  class="user-chat-box remove-box animate__animated">
-		<div class="animate__animated animate__faster chat-overlay chat-overlay-z-index">
-			<i onclick="toggleChatWindow()"  class="fa-solid fa-comments comment-icon"></i>
-			<p>Chat with friends</p>
-			<i onclick="toggleChatWindow()" class="fa-solid fa-chevron-up"></i>
-		</div>
+<div id="chat-box" class="user-chat-box remove-box animate__animated">
+  <div
+    class="animate__animated animate__faster chat-overlay chat-overlay-z-index"
+  >
+    <i
+      onclick="toggleChatWindow()"
+      class="fa-solid fa-comments comment-icon"
+    ></i>
+    <p>Chat with friends</p>
+    <i onclick="toggleChatWindow()" class="fa-solid fa-chevron-up"></i>
+  </div>
 
-		<div class="friends">
+  <div class="friends">
+    <div class="header">
+      <i
+        onclick="toggleChatWindow()"
+        class="fa-solid fa-comments comment-icon"
+      ></i>
+      <p>Chat with friends</p>
+      <i onclick="toggleChatWindow()" class="fa-solid fa-chevron-down"></i>
+    </div>
+    <p class="update-msg">🎉 New features coming soon!</p>
+    <div class="global-chat-option">
+      <button
+        id="global-chat-btn"
+        onclick="toggleChatMessages('','','','', 'global')"
+      >
+        <i class="fa-solid fa-earth-americas"></i>
+        Global Chat
+      </button>
+      <p>or</p>
+    </div>
+    <ul id="friends-list">
+      <% for(friend of friends) { %>
+      <li
+        id="<%= friend._id %>"
+        data-chatRoomId="<%= friend.chatRoomId %>"
+        onclick="toggleChatMessages('<%= friend.chatRoomId %>', '<%= friend._id %>', '<%= friend.avatar %>',  '<%= friend.name %>', 'private')"
+        class="friend animate__animated animate__faster animate__fadeIn"
+      >
+        <% if (friend.avatar) { %>
+        <img src="<%= friend.avatar %>" />
+        <% } else { %>
+        <img
+          src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
+        />
+        <% } %>
+        <span>
+          <p><%= friend.name %></p>
+          <% if (friend.chatRoom.lastMessage.message) {%>
+          <p id="lastmessage-<%= friend._id %>" class="status">
+            <%= friend.chatRoom.lastMessage.from_user._id ===
+            locals.user._id.toString() ? 'You ' : '' %> <%=
+            friend.chatRoom.lastMessage.message %>
+          </p>
+          <% } else { %>
+          <p id="status-<%= friend._id %>" class="status">offline</p>
+          <% } %>
+        </span>
+        <i
+          id="message-icon-<%= friend._id %>"
+          class="icon remove fa-solid fa-comment"
+        ></i>
+        <i
+          id="tick-icon-<%= friend._id %>"
+          class="icon singleTick remove fa-solid fa-check"
+        ></i>
+        <i
+          id="double-tick-icon-<%= friend._id %>"
+          class="icon doubleTick remove fa-solid fa-check-double"
+        ></i>
+        <i
+          id="seen-icon-<%= friend._id %>"
+          class="icon seen remove fa-solid fa-check-double"
+        ></i>
+        <i
+          id="circle-icon-<%= friend._id %>"
+          class="icon circle remove fa-solid fa-circle"
+        ></i>
 
-			<div class="header">
-				<i onclick="toggleChatWindow()"  class="fa-solid fa-comments comment-icon"></i>
-				<p>Chat with friends</p>
-				<i onclick="toggleChatWindow()" class="fa-solid fa-chevron-down"></i>
-			</div>
-			<p class="update-msg">🎉 New features coming soon!</p>
-			<div class="global-chat-option">
-				<button id="global-chat-btn" onclick="toggleChatMessages('','','','', 'global')">
-					<i class="fa-solid fa-earth-americas"></i>
-					Global Chat
-				</button>
-				<p>or</p>
-			</div>
-			<ul id="friends-list">
-				<% for(friend of friends) { %>
-					<li id="<%= friend._id %>" 
-						data-chatRoomId="<%= friend.chatRoomId %>"
-						onclick="toggleChatMessages('<%= friend.chatRoomId %>', '<%= friend._id %>', '<%= friend.avatar %>',  '<%= friend.name %>', 'private')" 
-						class="friend animate__animated animate__faster animate__fadeIn">
-						<% if (friend.avatar) { %>
-							<img src="<%= friend.avatar %>">
-						<% } else { %>
-							<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png">
-						<% } %>
-						<span>
-							<p><%= friend.name %></p>
-							<p id="status-<%= friend._id %>" class="status"> offline</p>
-						</span>
-						<i id="message-icon-<%= friend._id %>" class="icon remove fa-solid fa-comment"></i>
-						<i id="tick-icon-<%= friend._id %>" class="icon singleTick remove fa-solid fa-check"></i>
-						<i id="double-tick-icon-<%= friend._id %>" class="icon doubleTick remove fa-solid fa-check-double"></i>
-						<i id="seen-icon-<%= friend._id %>" class="icon seen remove fa-solid fa-check-double"></i>
-						<i id="circle-icon-<%= friend._id %>" class="icon circle remove fa-solid fa-circle"></i>
-						<p id="last-message-time-<%= friend._id %>" class="time remove">10:21 PM</p>
-					</li>
-				<% } %>
+        <% if (friend.chatRoom.lastMessage.message) { %>
+        <p id="last-message-time-<%= friend._id %>" class="time">
+          <% const timeString = new
+          Date(friend.chatRoom.lastMessage.timestamp).toLocaleTimeString("en-US",
+          { hour12: true }).toString(); const [hours, minutes, seconds] =
+          timeString.split(":"); const [second, ampm] = seconds.split(' '); %>
+          <%= `${hours}:${minutes} ${ampm}` %>
+        </p>
+        <% }%>
+      </li>
+      <% } %> <% if (friends.length === 0) { %>
+      <li class="no-friend animate__animated animate__faster animate__fadeIn">
+        <p>
+          <i class="fa-solid fa-user-plus"></i> Add a friend to start
+          conversation!
+        </p>
+      </li>
+      <% } %>
+    </ul>
+  </div>
 
-				<% if (friends.length === 0) { %>
-					<li class="no-friend animate__animated animate__faster animate__fadeIn">
-						<p><i class="fa-solid fa-user-plus"></i> Add a friend to start conversation!</p>
-					</li>
-				<% } %>
-			</ul>
-
-			
-		</div>
-
-		<div class="footer">
-			<p>Start a conversation!</p>
-		</div>
-
-	</div>
-    <%- include('_chat_messages_global') -%>
-    <%- include('_chat_messages_private') -%>
-
-<% } %>
-
+  <div class="footer">
+    <p>Start a conversation!</p>
+  </div>
+</div>
+<%- include('_chat_messages_global') -%> <%- include('_chat_messages_private')
+-%> <% } %>
 
 <script>
-	let previousId = '';
+  let previousId = "";
+  let friends = [];
+	<% for (friend of friends) { %>
+	friends.push(JSON.parse(`<%- JSON.stringify(friend) %>`));
+	<% } %>
+	console.log(friends)
+  // add background image to chat window
+  let chatWindow = document.querySelector(".user-messages");
+  chatWindow.setAttribute(
+    "style",
+    "background-image: linear-gradient(rgba(0, 0, 0, 0.7), #000000), url('<%= assetPath('img/161.jpg') %>');background-size: cover;"
+  );
+  const friendsList = document.querySelector("#friends-list");
 
-	// add background image to chat window
-	let chatWindow = document.querySelector('.user-messages');
-	chatWindow.setAttribute('style', "background-image: linear-gradient(rgba(0, 0, 0, 0.7), #000000), url('<%= assetPath('img/161.jpg') %>');background-size: cover;")
+  $(".friend").click(function () {
+    const toUser = $(this).attr("id");
 
+    // clear the chat box if the user clicks on a different friend
+    if (document.getElementById("chat-user-id").value === toUser) {
+      // console.log('inside if')
+      $(`#chat-messages-list-private-${toUser}`).children().remove();
+      $(`#chat-messages-list-private-${toUser}`).html(`
+                     <p class="update-msg">Send hi 👋 to your friend!</p>
+                 `);
+    }
+    $(`#chat-messages-list-private-${toUser}`)
+      .parent()
+      .find("#messages-loader")
+      .removeClass("hide-loader");
 
+    friends &&
+      friends.map((friend) => {
+        if (friend._id === toUser) {
+          friend.chatRoom.messages.forEach(function (message) {
+            addChatToDOM(message);
+          });
+        }
+      });
+  });
 
+  function addChatToDOM(data) {
+    const userId = document.getElementById("chat-user-id").value;
+    if (userId !== data.sender._id && userId !== data.receiver._id) {
+      return;
+    }
 
+    const newMessage = $("<li>");
+    let profile = $("<img>");
+
+    newMessage.addClass("animate__animated  animate__fadeIn");
+    let messageType = "other-message animate__animated  animate__fadeIn";
+
+    if (data.sender.email === "<%= locals.user.email %>") {
+      messageType = "self-message";
+      newMessage.append(`<div class="msg-content">
+                                 <span>
+                                     ${data.message} <sup>${new Date(
+        data.createdAt
+      ).toLocaleTimeString("en-US", {
+        hour12: true,
+        hour: "numeric",
+        minute: "numeric",
+      })}</sup>
+                                 </span>
+                                 <img src="${
+                                   data.sender.avatar
+                                     ? data.sender.avatar
+                                     : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
+                                 }">
+
+                             </div>`);
+    } else {
+      newMessage.append(`<div class="msg-content">
+                                 <img src="${
+                                   data.sender.avatar
+                                     ? data.sender.avatar
+                                     : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
+                                 }">
+                                 <span>
+                                     ${data.message} <sup>${new Date(
+        data.createdAt
+      ).toLocaleTimeString("en-US", {
+        hour12: true,
+        hour: "numeric",
+        minute: "numeric",
+      })}</sup>
+                                 </span>
+
+                             </div>`);
+    }
+
+    // check if the last message was sent by the same user
+    if ($(`#chat-messages-list-private-${userId} li`).length) {
+      const lastMessage = $(
+        `#chat-messages-list-private-${userId} li:last-child`
+      );
+
+      if (lastMessage.find("img").attr("src") === data.sender.avatar) {
+        lastMessage.find("sub").remove();
+        // hide the visibility of the profile image
+        lastMessage.find("img").css("visibility", "hidden");
+
+        // remove margin from the last self message
+        if (lastMessage.hasClass("self-message")) {
+          lastMessage.css("margin-bottom", "0px");
+        } else {
+          lastMessage.css("margin-bottom", "0px");
+        }
+
+        // remove margin from the current message
+        newMessage.css("margin-top", "0px");
+      }
+    }
+    // newMessage.append($('<sub>', {
+    //     'html': data.sender.name
+    // }));
+
+    newMessage.addClass(messageType);
+
+    $(`#chat-messages-list-private-${userId}`).append(newMessage);
+    $("#chat-message-input-private").val("");
+  }
 </script>

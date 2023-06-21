@@ -7,6 +7,7 @@ const Post = require("../models/post");
 const User = require("../models/user");
 const Friendships = require("../models/friendship");
 const env = require("../config/environment");
+const ChatRoom = require("../models/chatRoom");
 
 module.exports.redirectToHome = function (request, response) {
   return response.redirect("/home");
@@ -45,15 +46,18 @@ module.exports.home = async function (request, response) {
 
     const friendsArray = [];
 
-    for (const friend of friends) {
-      followingCount =
-        friend.status === "accepted" ? followingCount + 1 : followingCount;
-      friendsArray.push({
-        ...friend.to_user._doc,
-        status: friend.status,
-        chatRoomId: friend.chat_room,
-      });
-    }
+    await Promise.all(
+      friends.map(async (friend) => {
+        followingCount =
+          friend.status === "accepted" ? followingCount + 1 : followingCount;
+        friendsArray.push({
+          ...friend.to_user._doc,
+          status: friend.status,
+          chatRoomId: friend.chat_room._id,
+          chatRoom: await ChatRoom.findById(friend.chat_room),
+        });
+      })
+    );
 
     return response.render("home.ejs", {
       title: "Home",

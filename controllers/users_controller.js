@@ -4,6 +4,7 @@ const User = require("../models/user");
 const Friendships = require("../models/friendship");
 const Post = require("../models/post");
 const { deleteFile, uploadImage } = require("../helper/imageUpload");
+const ChatRoom = require("../models/chatRoom");
 
 module.exports.profile = async function (request, response) {
   const user = await User.findById(request.params.id);
@@ -27,6 +28,7 @@ module.exports.profile = async function (request, response) {
         }
       })
     );
+
     // sort the posts in descending order of time
     savedPosts.sort((a, b) => b.createdAt - a.createdAt);
   }

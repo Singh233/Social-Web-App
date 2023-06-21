@@ -3,6 +3,9 @@ const Joi = require("joi");
 
 const Chat = require("../../../models/chat");
 const ChatRoom = require("../../../models/chatRoom");
+const Friendship = require("../../../models/friendship");
+const OldChatRoom = require("../../../models/oldChatRoom");
+const User = require("../../../models/user");
 
 const paramsValidator = Joi.object({
   sender: Joi.string().required(),
@@ -23,14 +26,7 @@ function handleResponse(res, status, message, data, success) {
 
 async function joinGlobalChatRoom(chatRoomId, data, res) {
   // find the chat room
-  const chatRoom = await ChatRoom.findOne({ type: data.type })
-    .populate("messages")
-    .populate({
-      path: "messages",
-      populate: {
-        path: "sender",
-      },
-    });
+  const chatRoom = await ChatRoom.findOne({ type: data.type });
 
   // if the chat room already exists then return the chat room
   if (chatRoom) {
@@ -73,37 +69,50 @@ async function joinPrivateChatRoom(data, res) {
   const { chatRoomId } = data;
 
   // find the chat room
-  const chatRoom = await ChatRoom.findById(chatRoomId)
-    .populate("messages")
-    .populate({
-      path: "messages",
-      populate: {
-        path: "sender",
-      },
-    })
-    .populate({
-      path: "messages",
-      populate: {
-        path: "receiver",
-      },
-    });
+  const chatRoom = await ChatRoom.findById(chatRoomId);
 
   return handleResponse(res, 200, "Chat room exists", { chatRoom }, true);
 }
 
 async function createGlobalMessage(data, res) {
-  const { sender, message } = data;
+  const { sender: senderId, message } = data;
   // find the chat room
   const chatRoom = await ChatRoom.findOne({ type: data.type });
+  const sender = await User.findById(senderId);
 
-  // create a new chat message
-  const chat = await Chat.create({
-    sender: sender,
-    receiver: sender,
+  // create a new chat object
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString();
+  const chat = {
+    sender: {
+      _id: sender._id,
+      name: sender.name,
+      avatar: sender.avatar,
+      email: sender.email,
+    },
+    receiver: {
+      _id: sender._id,
+      name: sender.name,
+      avatar: sender.avatar,
+      email: sender.email,
+    },
     message: message,
-    chatRoomId: chatRoom._id,
-  });
+    createdAt: formattedDate,
+  };
 
+  // create a new last message object
+  const lastMessage = {
+    from_user: {
+      _id: sender._id,
+      name: sender.name,
+      avatar: sender.avatar,
+      email: sender.email,
+    },
+    message: message,
+    timestamp: formattedDate,
+  };
+  // set lastMessage in the chatRoom
+  chatRoom.lastMessage = lastMessage;
   // push the chat message to the chatRoom
   chatRoom.messages.push(chat);
   await chatRoom.save();
@@ -112,19 +121,47 @@ async function createGlobalMessage(data, res) {
 }
 
 async function createPrivateMessage(data, res) {
-  const { sender, receiver, message, chatRoomId } = data;
+  const { sender: senderId, receiver: receiverId, message, chatRoomId } = data;
 
   // find the chat room
   const chatRoom = await ChatRoom.findById(chatRoomId);
+  const sender = await User.findById(senderId);
+  const receiver = await User.findById(receiverId);
 
-  // create a new chat message
-  const chat = await Chat.create({
-    sender: sender,
-    receiver: receiver,
+  // create a new chat object
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString();
+  const chat = {
+    sender: {
+      _id: sender._id,
+      name: sender.name,
+      avatar: sender.avatar,
+      email: sender.email,
+    },
+    receiver: {
+      _id: receiver._id,
+      name: receiver.name,
+      avatar: receiver.avatar,
+      email: receiver.email,
+    },
     message: message,
-    chatRoomId: chatRoomId,
-  });
+    createdAt: formattedDate,
+  };
 
+  // create a new last message object
+  const lastMessage = {
+    from_user: {
+      _id: sender._id,
+      name: sender.name,
+      avatar: sender.avatar,
+      email: sender.email,
+    },
+    message: message,
+    timestamp: formattedDate,
+  };
+
+  // set lastMessage in the chatRoom
+  chatRoom.lastMessage = lastMessage;
   // push the chat message to the chatRoom
   chatRoom.messages.push(chat);
   await chatRoom.save();
@@ -192,3 +229,78 @@ module.exports.createMessage = async function (req, res) {
       return handleResponse(res, 400, "Invalid chat room type", null, false);
   }
 };
+
+// const friendships = await Friendship.find();
+
+//   await Promise.all(
+//     friendships.map(async (friendship) => {
+//       const Oldroom = await OldChatRoom.findById(friendship.chat_room);
+//       const newroom = await ChatRoom.findById(friendship.chat_room);
+
+//       // Custom comparison function
+//       const compareByCreatedAt = (a, b) => {
+//         // Convert createdAt strings to Date objects
+//         const dateA = new Date(a.createdAt);
+//         const dateB = new Date(b.createdAt);
+
+//         // Compare the dates
+//         if (dateA < dateB) {
+//           return -1;
+//         }
+//         if (dateA > dateB) {
+//           return 1;
+//         }
+//         return 0;
+//       };
+
+//       const messagesArray = [];
+
+//       if (Oldroom) {
+//         newroom.messages = [];
+//         await newroom.save();
+//         await Promise.all(
+//           Oldroom.messages.map(async (message, index) => {
+//             const chat = await Chat.findById(message._id).populate(
+//               "sender receiver"
+//             );
+//             messagesArray.push(chat);
+//           })
+//         );
+//       }
+
+//       // Sort the array by createdAt
+//       messagesArray.sort(compareByCreatedAt);
+//       await Promise.all(
+//         messagesArray.map(async (message, index) => {
+//           if (index === messagesArray.length - 1) {
+//             newroom.lastMessage = {
+//               from_user: {
+//                 _id: message.sender._id,
+//                 name: message.sender.name,
+//                 avatar: message.sender.avatar,
+//                 email: message.sender.email,
+//               },
+//               message: message.message,
+//               timestamp: message.createdAt,
+//             };
+//           }
+//           const newMessage = message;
+//           newMessage.sender = {
+//             _id: message.sender._id,
+//             name: message.sender.name,
+//             avatar: message.sender.avatar,
+//             email: message.sender.email,
+//           };
+//           newMessage.receiver = {
+//             _id: message.receiver._id,
+//             name: message.receiver.name,
+//             avatar: message.receiver.avatar,
+//             email: message.receiver.email,
+//           };
+//           console.log(newMessage);
+//           newroom.messages.push(newMessage);
+//         })
+//       );
+//       await newroom.save();
+//     })
+//   );

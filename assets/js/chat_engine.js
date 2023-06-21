@@ -58,13 +58,13 @@ class ChatEngine {
       // iterate over the map and update the status of the user
       data.map.forEach(function (value, key) {
         let statusElement = $(`#status-${value.userId}`);
-        if (statusElement.length > 0 && value.userId != self.userId) {
+        if (statusElement.length > 0 && value.userId !== self.userId) {
           if (value.status === "Active now") {
             statusElement.html('<i class="fa-solid fa-circle"></i> Active now');
 
-            $(`#message-icon-${value.userId}`).removeClass("remove");
-            $(`#circle-icon-${value.userId}`).addClass("remove");
-            $(`#last-message-time-${value.userId}`).addClass("remove");
+            // $(`#message-icon-${value.userId}`).removeClass("remove");
+            // $(`#circle-icon-${value.userId}`).addClass("remove");
+            // $(`#last-message-time-${value.userId}`).addClass("remove");
           } else {
             // console.log(value);
             // show last seen time using moment library
@@ -155,58 +155,6 @@ class ChatEngine {
         to_user,
         chatroom: chatRoom,
       });
-
-      // clear the chat box if the user clicks on a different friend
-      if (document.getElementById("chat-user-id").value === to_user) {
-        // console.log('inside if')
-        $(`#chat-messages-list-private-${to_user}`).children().remove();
-        $(`#chat-messages-list-private-${to_user}`).html(`
-                    <p class="update-msg">Send hi 👋 to your friend!</p>
-                `);
-      }
-      $(`#chat-messages-list-private-${to_user}`)
-        .parent()
-        .find("#messages-loader")
-        .removeClass("hide-loader");
-    });
-
-    self.socket.on("private_user_joined", async function (data) {
-      // console.log('a user joined!', data);
-      // show loader while fetching the messages
-
-      const response = await fetch(
-        `/api/v1/chat/private/${data.from_user}/${data.to_user}/${data.chatroom}`
-      );
-      const responseData = await response.json();
-
-      // hide loader after fetching the messages
-      $(`#chat-messages-list-private-${data.to_user}`)
-        .parent()
-        .find("#messages-loader")
-        .addClass("hide-loader");
-
-      // if chat messages private list is empty, then add the messages to the list
-      if (
-        $(`#chat-messages-list-private-${data.from_user}`).children().length <=
-        1
-      ) {
-        responseData.data.chatRoom.messages.forEach(function (message) {
-          addChatToDOM(message);
-        });
-      }
-
-      scrollToBottomPrivate();
-
-      // emit the event to update that the user has seen the messages
-      // self.socket.emit('update_seen', {
-      //     user_email: self.userEmail,
-      //     user_name: self.userName,
-      //     user_profile: self.userProfile,
-      //     time: new Date().toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"}),
-      //     from_user: data.from_user,
-      //     to_user: data.to_user,
-      //     chatroom: data.chatroom,
-      // });
     });
 
     // listen to keypress event on the chat message input private and show the typing status
@@ -534,12 +482,62 @@ class ChatEngine {
     });
 
     self.socket.on("receive_private_message", function (data) {
-      // post the message to the database
-      // show toast notification if the user is not in the chat window
+      // add message to friend chatroom
+      const timestamp = new Date().toISOString();
+      let toUser = null;
+      let flag = true;
+      if (self.userEmail === data.user_email) {
+        toUser = data.to_user;
+        flag = false;
+      } else {
+        toUser = data.user_email;
+      }
+      // eslint-disable-next-line no-param-reassign, no-unused-expressions
+      friends &&
+        friends.map((friend) => {
+          let checkFriend = friend._id;
+          if (flag) {
+            checkFriend = friend.email;
+          }
+          if (checkFriend === toUser) {
+            friend.chatRoom.messages.push({
+              sender: {
+                _id: data.from_user,
+                avatar: data.user_profile,
+                name: data.user_name,
+                email: data.user_email,
+              },
+              receiver: {
+                _id: data.to_user,
+              },
+              message: `${data.message}`,
+              createdAt: timestamp,
+            });
 
-      // console.log('message received', data.message);
+            friend.chatRoom.lastMessage = {
+              from_user: {
+                _id: data.from_user,
+                avatar: data.user_profile,
+                name: data.user_name,
+                email: data.user_email,
+              },
+              message: data.message,
+              timestamp: timestamp,
+            };
+            // if current user is sender
+            if (flag) {
+              $(`#lastmessage-${data.from_user}`).text(`${data.message}`);
+              $(`#last-message-time-${data.from_user}`).text(`${data.time}`);
+            } else {
+              $(`#lastmessage-${data.to_user}`).text(`${data.message}`);
+              $(`#last-message-time-${data.to_user}`).text(`${data.time}`);
+            }
+          }
+        });
+
+      // console.log("message received", data);
       let userId = document.getElementById("chat-user-id").value;
-      if (userId != data.from_user && userId != data.to_user) {
+      if (userId !== data.from_user && userId !== data.to_user) {
         return;
       }
       // console.log(userId);
@@ -549,7 +547,7 @@ class ChatEngine {
       newMessage.addClass("animate__animated  animate__fadeIn");
       let messageType = "other-message animate__animated  animate__fadeIn";
 
-      if (data.user_email == self.userEmail) {
+      if (data.user_email === self.userEmail) {
         messageType = "self-message";
         newMessage.append(`<div class="msg-content">
                                 <span>
@@ -573,7 +571,7 @@ class ChatEngine {
           `#chat-messages-list-private-${userId} li:last-child`
         );
 
-        if (lastMessage.find("img").attr("src") == data.user_profile) {
+        if (lastMessage.find("img").attr("src") === data.user_profile) {
           lastMessage.find("sub").remove();
           // hide the visibility of the profile image
           lastMessage.find("img").css("visibility", "hidden");
@@ -612,90 +610,6 @@ class ChatEngine {
         "chat-messages-list-private-" + userId
       );
       chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function addChatToDOM(data) {
-      let userId = document.getElementById("chat-user-id").value;
-      if (userId != data.sender._id && userId != data.receiver._id) {
-        return;
-      }
-
-      // console.log(userId);
-      let newMessage = $("<li>");
-      let profile = $("<img>");
-
-      newMessage.addClass("animate__animated  animate__fadeIn");
-      let messageType = "other-message animate__animated  animate__fadeIn";
-
-      if (data.sender.email == self.userEmail) {
-        messageType = "self-message";
-        newMessage.append(`<div class="msg-content">
-                                <span>
-                                    ${data.message} <sup>${new Date(
-          data.createdAt
-        ).toLocaleTimeString("en-US", {
-          hour12: true,
-          hour: "numeric",
-          minute: "numeric",
-        })}</sup> 
-                                </span>
-                                <img src="${
-                                  data.sender.avatar
-                                    ? data.sender.avatar
-                                    : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                                }">
-                                
-                            </div>`);
-      } else {
-        newMessage.append(`<div class="msg-content">
-                                <img src="${
-                                  data.sender.avatar
-                                    ? data.sender.avatar
-                                    : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                                }">
-                                <span>
-                                    ${data.message} <sup>${new Date(
-          data.createdAt
-        ).toLocaleTimeString("en-US", {
-          hour12: true,
-          hour: "numeric",
-          minute: "numeric",
-        })}</sup> 
-                                </span>
-                                
-                            </div>`);
-      }
-
-      // check if the last message was sent by the same user
-      if ($(`#chat-messages-list-private-${userId} li`).length) {
-        let lastMessage = $(
-          `#chat-messages-list-private-${userId} li:last-child`
-        );
-
-        if (lastMessage.find("img").attr("src") == data.sender.avatar) {
-          lastMessage.find("sub").remove();
-          // hide the visibility of the profile image
-          lastMessage.find("img").css("visibility", "hidden");
-
-          // remove margin from the last self message
-          if (lastMessage.hasClass("self-message")) {
-            lastMessage.css("margin-bottom", "0px");
-          } else {
-            lastMessage.css("margin-bottom", "0px");
-          }
-
-          // remove margin from the current message
-          newMessage.css("margin-top", "0px");
-        }
-      }
-      // newMessage.append($('<sub>', {
-      //     'html': data.sender.name
-      // }));
-
-      newMessage.addClass(messageType);
-
-      $(`#chat-messages-list-private-${userId}`).append(newMessage);
-      $("#chat-message-input-private").val("");
     }
 
     function addGlobalChatToDOM(data) {

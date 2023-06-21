@@ -14,10 +14,68 @@ const chatRoomSchema = new Schema(
         ref: "User",
       },
     ],
+    lastMessage: {
+      from_user: {
+        _id: {
+          type: String,
+        },
+        name: {
+          type: String,
+        },
+        avatar: {
+          type: String,
+        },
+        email: {
+          type: String,
+        },
+      },
+      message: {
+        type: String,
+      },
+      timestamp: {
+        type: Date,
+      },
+    },
     messages: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Chat",
+        sender: {
+          _id: {
+            type: String,
+          },
+          name: {
+            type: String,
+          },
+          avatar: {
+            type: String,
+          },
+          email: {
+            type: String,
+          },
+        },
+        receiver: {
+          _id: {
+            type: String,
+          },
+          name: {
+            type: String,
+          },
+          avatar: {
+            type: String,
+          },
+          email: {
+            type: String,
+          },
+        },
+        message: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+        },
+        updatedAt: {
+          type: Date,
+        },
       },
     ],
   },
@@ -26,5 +84,5 @@ const chatRoomSchema = new Schema(
   }
 );
 
-const ChatRoom = mongoose.model("ChatRoom", chatRoomSchema);
+const ChatRoom = mongoose.model("OldChatRoom", chatRoomSchema);
 module.exports = ChatRoom;
