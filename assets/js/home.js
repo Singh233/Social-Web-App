@@ -127,46 +127,48 @@ function toggleChatMessages(chatRoomId, userId, profile, name, type) {
   // using jquery
   $(".user-chat-box").toggleClass("remove");
   $(`#user-messages-${type}`).toggleClass("remove");
-  if (name != "") {
-    // set the email of the user to the chat header
-    document.getElementById("chat-room-private-username").innerText = name;
-
-    // check the status of the user
-    if (
-      $(`#status-${userId}`).html() ==
-      '<i class="fa-solid fa-circle"></i> Active Now'
-    ) {
-      // set the font awesome icon color to green
-      document
-        .getElementById("chat-room-private-status-icon")
-        .classList.remove("offline-color");
-
-      document.getElementById("chat-room-private-status-text").innerHTML =
-        "Active Now";
-    } else {
-      // set the font awesome icon color to red
-      document
-        .getElementById("chat-room-private-status-icon")
-        .classList.add("offline-color");
-
-      document.getElementById("chat-room-private-status-text").innerHTML = $(
-        "#status-" + userId
-      ).html();
-    }
-
-    // set the profile img of the user to the chat header
-    document.getElementById("chat-room-private-profile-img").src = profile;
-    // update the id of the chat messages list
-    document.getElementById(
-      `chat-messages-list-private-${previousId}`
-    ).id = `chat-messages-list-private-${userId}`;
-    // set hidden input value to the user id
-    document.getElementById("chat-user-id").value = userId;
-    // set hidden input value to the chatRoom id
-    document.getElementById("chatroom-id").value = chatRoomId;
-    // set the previous id to the current id
-    previousId = userId;
+  if (name === "") {
+    return;
   }
+  $("#chat-room-private-status").removeClass(`${previousId}`);
+  $("#chat-room-private-status").addClass(`${userId}`);
+  // set the email of the user to the chat header
+  document.getElementById("chat-room-private-username").innerText = name;
+
+  // check the status of the user
+  if ($(`#status-icon-${userId}`).hasClass("user-active")) {
+    // set the font awesome icon color to green
+    document
+      .getElementById("chat-room-private-status-icon")
+      .classList.remove("offline-color");
+
+    document.getElementById("chat-room-private-status-text").innerHTML =
+      "Active Now";
+  } else {
+    // set the font awesome icon color to red
+    document
+      .getElementById("chat-room-private-status-icon")
+      .classList.add("offline-color");
+
+    document.getElementById("chat-room-private-status-text").innerHTML = $(
+      `#hidden-status-${userId}`
+    ).html();
+  }
+
+  // set the profile img of the user to the chat header
+  document.getElementById("chat-room-private-profile-img").src = profile
+    ? profile
+    : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png";
+  // update the id of the chat messages list
+  document.getElementById(
+    `chat-messages-list-private-${previousId}`
+  ).id = `chat-messages-list-private-${userId}`;
+  // set hidden input value to the user id
+  document.getElementById("chat-user-id").value = userId;
+  // set hidden input value to the chatRoom id
+  document.getElementById("chatroom-id").value = chatRoomId;
+  // set the previous id to the current id
+  previousId = userId;
 }
 
 function openChatWindow() {
@@ -334,4 +336,3 @@ $("#cancel-search-mobile").on("click", function () {
         `);
   $("#search-results-mobile").css("padding", "0");
 });
-

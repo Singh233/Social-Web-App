@@ -118,7 +118,7 @@
     include('_right_section', {all_users: all_users}); %> <% } %>
   </div>
 
-  <% } %> <% if(locals.user) { %> <%- include('_chat_box', {friends}) -%> <% }
+  <% } %> <% if(locals.user) { %> <%- include('_chat_box', {friends, moment}) -%> <% }
   %> <% if (locals.user){ %> <%- include('_bottom_nav_bar_sm') -%> <% } %>
 </div>
 

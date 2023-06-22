@@ -130,7 +130,7 @@ module.exports.chatSockets = function (socketServer) {
       }
 
       socket.join(chatRoom);
-      io.in(chatRoom).emit("private_user_joined", data);
+      // io.in(chatRoom).emit("private_user_joined", data);
     });
 
     // Send private message to a user

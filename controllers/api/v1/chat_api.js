@@ -4,7 +4,6 @@ const Joi = require("joi");
 const Chat = require("../../../models/chat");
 const ChatRoom = require("../../../models/chatRoom");
 const Friendship = require("../../../models/friendship");
-const OldChatRoom = require("../../../models/oldChatRoom");
 const User = require("../../../models/user");
 
 const paramsValidator = Joi.object({
@@ -229,78 +228,3 @@ module.exports.createMessage = async function (req, res) {
       return handleResponse(res, 400, "Invalid chat room type", null, false);
   }
 };
-
-// const friendships = await Friendship.find();
-
-//   await Promise.all(
-//     friendships.map(async (friendship) => {
-//       const Oldroom = await OldChatRoom.findById(friendship.chat_room);
-//       const newroom = await ChatRoom.findById(friendship.chat_room);
-
-//       // Custom comparison function
-//       const compareByCreatedAt = (a, b) => {
-//         // Convert createdAt strings to Date objects
-//         const dateA = new Date(a.createdAt);
-//         const dateB = new Date(b.createdAt);
-
-//         // Compare the dates
-//         if (dateA < dateB) {
-//           return -1;
-//         }
-//         if (dateA > dateB) {
-//           return 1;
-//         }
-//         return 0;
-//       };
-
-//       const messagesArray = [];
-
-//       if (Oldroom) {
-//         newroom.messages = [];
-//         await newroom.save();
-//         await Promise.all(
-//           Oldroom.messages.map(async (message, index) => {
-//             const chat = await Chat.findById(message._id).populate(
-//               "sender receiver"
-//             );
-//             messagesArray.push(chat);
-//           })
-//         );
-//       }
-
-//       // Sort the array by createdAt
-//       messagesArray.sort(compareByCreatedAt);
-//       await Promise.all(
-//         messagesArray.map(async (message, index) => {
-//           if (index === messagesArray.length - 1) {
-//             newroom.lastMessage = {
-//               from_user: {
-//                 _id: message.sender._id,
-//                 name: message.sender.name,
-//                 avatar: message.sender.avatar,
-//                 email: message.sender.email,
-//               },
-//               message: message.message,
-//               timestamp: message.createdAt,
-//             };
-//           }
-//           const newMessage = message;
-//           newMessage.sender = {
-//             _id: message.sender._id,
-//             name: message.sender.name,
-//             avatar: message.sender.avatar,
-//             email: message.sender.email,
-//           };
-//           newMessage.receiver = {
-//             _id: message.receiver._id,
-//             name: message.receiver.name,
-//             avatar: message.receiver.avatar,
-//             email: message.receiver.email,
-//           };
-//           console.log(newMessage);
-//           newroom.messages.push(newMessage);
-//         })
-//       );
-//       await newroom.save();
-//     })
-//   );

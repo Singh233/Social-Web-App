@@ -57,36 +57,52 @@ class ChatEngine {
       }
       // iterate over the map and update the status of the user
       data.map.forEach(function (value, key) {
-        let statusElement = $(`#status-${value.userId}`);
-        if (statusElement.length > 0 && value.userId !== self.userId) {
-          if (value.status === "Active now") {
-            statusElement.html('<i class="fa-solid fa-circle"></i> Active now');
+        const statusElement = $(`#status-${value.userId}`);
+        const hiddenStatusElement = $(`#hidden-status-${value.userId}`);
+        if (value.userId === self.userId) {
+          return;
+        }
+        if (value.status === "Active now") {
+          if (statusElement) {
+            statusElement.html("Active now");
+          }
+          hiddenStatusElement.html("Active now");
+          $(`#status-icon-${value.userId}`).addClass("user-active");
 
-            // $(`#message-icon-${value.userId}`).removeClass("remove");
-            // $(`#circle-icon-${value.userId}`).addClass("remove");
-            // $(`#last-message-time-${value.userId}`).addClass("remove");
+          if ($("#chat-room-private-status").hasClass(value.userId)) {
+            $("#chat-room-private-status-icon").removeClass("offline-color");
+            $("#chat-room-private-status-text").html("Active now");
+          }
+
+          // $(`#message-icon-${value.userId}`).removeClass("remove");
+          // $(`#circle-icon-${value.userId}`).addClass("remove");
+          // $(`#last-message-time-${value.userId}`).addClass("remove");
+        } else {
+          // console.log(value);
+          // show last seen time using moment library
+          $(`#status-icon-${value.userId}`).removeClass("user-active");
+
+          if ($("#chat-room-private-status").hasClass(value.userId)) {
+            $("#chat-room-private-status-icon").addClass("offline-color");
+            $("#chat-room-private-status-text").html(
+              value.moment ? `Active ${value.moment}` : "offline"
+            );
+          }
+
+          if (value.moment) {
+            if (statusElement) {
+              statusElement.html(`Active ${value.moment}`);
+            }
+            hiddenStatusElement.html(`Active ${value.moment}`);
           } else {
-            // console.log(value);
-            // show last seen time using moment library
-            if (value.moment) {
-              statusElement.html("Active " + value.moment);
-            } else {
+            if (statusElement) {
               statusElement.html("offline");
             }
+            hiddenStatusElement.html("offline");
           }
         }
       });
     });
-
-    // update status of user
-    // self.socket.on('status_updated', function(data) {
-    //     // console.log("status updated", data);
-    //     if (data.status == 'online'){
-    //         $(`#status-${data.user_id}`).html('<i class="fa-solid fa-circle"></i> Online');
-    //     } else {
-    //         $(`#status-${data.user_id}`).html('<i class="fa-solid fa-circle"></i> Offline');
-    //     }
-    // });
 
     // connect socket on global chat button click
     $("#global-chat-btn").click(function () {
@@ -524,6 +540,7 @@ class ChatEngine {
               message: data.message,
               timestamp: timestamp,
             };
+
             // if current user is sender
             if (flag) {
               $(`#lastmessage-${data.from_user}`).text(`${data.message}`);
@@ -534,6 +551,29 @@ class ChatEngine {
             }
           }
         });
+
+      const compareByCreatedAt = (a, b) => {
+        // Convert createdAt strings to Date objects
+        const timeA = a.chatRoom.lastMessage
+          ? a.chatRoom.lastMessage.timestamp
+          : `2000-05-11T18:05:57.632Z`;
+        const timeB = b.chatRoom.lastMessage
+          ? b.chatRoom.lastMessage.timestamp
+          : `2000-05-11T18:05:57.632Z`;
+
+        const dateA = new Date(timeA);
+        const dateB = new Date(timeB);
+
+        // Compare the dates
+        if (dateA > dateB) {
+          return -1;
+        }
+        if (dateA < dateB) {
+          return 1;
+        }
+        return 0;
+      };
+      friends && friends.sort(compareByCreatedAt);
 
       // console.log("message received", data);
       let userId = document.getElementById("chat-user-id").value;
