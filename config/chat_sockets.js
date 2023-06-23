@@ -135,15 +135,18 @@ module.exports.chatSockets = function (socketServer) {
 
     // Send private message to a user
     socket.on("send_private_message", function (data) {
-      // check if a room already exists
-      const chatRoom = data.chatroom;
 
-      io.in(chatRoom).emit("receive_private_message", data);
-
-      // emit notification to the receiver of the message only
       if (activeUsers.has(data.to_user)) {
         // emit notification to the receiver of the message only
         io.to(activeUsers.get(data.to_user).socketId).emit(
+          "receive_notification",
+          data
+        );
+      }
+
+      if (activeUsers.has(data.from_user)) {
+        // emit notification to the sender of the message
+        io.to(activeUsers.get(data.from_user).socketId).emit(
           "receive_notification",
           data
         );

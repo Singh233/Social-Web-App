@@ -28,17 +28,9 @@ class ChatEngine {
   }
 
   connectionHandler() {
-    let self = this;
+    const self = this;
     this.socket.on("connect", function () {
       // console.log('connection established using sockets...!');
-      // join private chat room
-      // self.socket.emit('join_private_room', {
-      //     user_email: self.userEmail,
-      //     user_name: self.userName,
-      //     user_profile: self.userProfile,
-      //     time: new Date().toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric"}),
-      //     chatroom: 'Private',
-      // });
       self.socket.emit("user_online", {
         user_id: self.userId,
       });
@@ -46,7 +38,7 @@ class ChatEngine {
 
     self.socket.on("connections", function (data) {
       $("#active-users").html(
-        '<i class="fa-solid fa-circle"></i> ' + (data.count - 1) + " Online"
+        `<i class="fa-solid fa-circle"></i> ${data.count - 1} Online`
       );
     });
 
@@ -199,15 +191,15 @@ class ChatEngine {
     });
 
     let typing = false;
-    let timeout = undefined;
-    let animationTimeout = undefined;
+    let timeout = null;
+    let animationTimeout = null;
 
     function timeoutFunction() {
       typing = false;
       $("#typing-status-private").addClass("animate__fadeOut");
       animationTimeout = setTimeout(function () {
         $("#typing-status-private").html("");
-      }, 700);
+      }, 400);
     }
 
     // listen to typing event and show the typing status
@@ -274,7 +266,7 @@ class ChatEngine {
       $("#typing-status-global").addClass("animate__fadeOut");
       animationTimeoutGlobal = setTimeout(function () {
         $("#typing-status-global").html("");
-      }, 700);
+      }, 400);
     }
 
     // listen to typing event and show the typing status
@@ -283,7 +275,7 @@ class ChatEngine {
       // console.log('typing')
       const from_user = self.userId;
 
-      if (data.chatroom == "Global") {
+      if (data.chatroom === "Global") {
         if (data.from_user !== from_user) {
           if (typingGlobal === false) {
             clearTimeout(animationTimeoutGlobal);
@@ -321,7 +313,7 @@ class ChatEngine {
       }
       const chatroom = document.getElementById("chat-room-").innerText;
       // console.log(chatroom)
-      if (chatroom == "Global Chat") {
+      if (chatroom === "Global Chat") {
         // send message to the server
         self.socket.emit("send_global_message", {
           message: msg,
@@ -421,21 +413,6 @@ class ChatEngine {
       }
     });
 
-    self.socket.on("receive_notification", function (data) {
-      // console.log('notification received', data);
-      if (
-        $("#user-messages-private").hasClass("remove") &&
-        self.userId == data.to_user
-      ) {
-        toast(
-          "New message from " + data.user_name.split(" ")[0],
-          "success",
-          4000,
-          "https://img.freepik.com/free-icon/chat_318-561856.jpg?size=626&ext=jpg&uid=R38501345&ga=GA1.2.1154692012.1676455794&semt=ais"
-        );
-      }
-    });
-
     self.socket.on("receive_global_message", function (data) {
       // console.log('message received', data.message);
 
@@ -497,8 +474,20 @@ class ChatEngine {
       scrollToBottom();
     });
 
-    self.socket.on("receive_private_message", function (data) {
+    // listen to incoming notifications(message from other users)
+    self.socket.on("receive_notification", function (data) {
       // add message to friend chatroom
+      if (
+        $("#user-messages-private").hasClass("remove") &&
+        self.userId === data.to_user
+      ) {
+        toast(
+          `New message from ${data.user_name.split(" ")[0]}`,
+          "success",
+          4000,
+          "https://img.freepik.com/free-icon/chat_318-561856.jpg?size=626&ext=jpg&uid=R38501345&ga=GA1.2.1154692012.1676455794&semt=ais"
+        );
+      }
       const timestamp = new Date().toISOString();
       let toUser = null;
       let flag = true;
@@ -515,6 +504,7 @@ class ChatEngine {
           if (flag) {
             checkFriend = friend.email;
           }
+
           if (checkFriend === toUser) {
             friend.chatRoom.messages.push({
               sender: {
@@ -544,9 +534,11 @@ class ChatEngine {
             // if current user is sender
             if (flag) {
               $(`#lastmessage-${data.from_user}`).text(`${data.message}`);
+              $(`#status-${data.from_user}`).text(`${data.message}`);
               $(`#last-message-time-${data.from_user}`).text(`${data.time}`);
             } else {
               $(`#lastmessage-${data.to_user}`).text(`${data.message}`);
+              $(`#status-${data.to_user}`).text(`${data.message}`);
               $(`#last-message-time-${data.to_user}`).text(`${data.time}`);
             }
           }
@@ -755,7 +747,7 @@ class ChatEngine {
           },
           onClick: function () {}, // Callback after click
         }).showToast();
-      } else if (type == "success") {
+      } else if (type === "success") {
         if (!icon) {
           icon =
             "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d";

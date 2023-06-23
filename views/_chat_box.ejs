@@ -95,7 +95,7 @@
           timeString.split(":"); const [second, ampm] = seconds.split(' '); %>
           <%= moment(friend.chatRoom.lastMessage.timestamp).calendar(null, {
           sameDay: 'LT', nextDay: '[Tomorrow]', nextWeek: 'dddd', lastDay:
-          '[Yesterday]', lastWeek: '[Last] dddd', sameElse: 'DD/MM/YYYY' }); %>
+          '[Yesterday]', lastWeek: 'dddd', sameElse: 'DD/MM/YYYY' }); %>
         </p>
         <% }%>
       </li>
