@@ -9,6 +9,7 @@ const User = require("../../../models/user");
 const Post = require("../../../models/post");
 const Friendships = require("../../../models/friendship");
 const env = require("../../../config/environment");
+const ChatRoom = require("../../../models/chatRoom");
 
 const CLIENT_ID = env.google_clientID;
 const client = new OAuth2Client(CLIENT_ID);
@@ -222,16 +223,54 @@ module.exports.fetchUserFriends = async function (request, response) {
       },
     });
 
+    const friendsArray = [];
+
+    const compareByCreatedAt = (a, b) => {
+      // Convert createdAt strings to Date objects
+      const timeA = a.chatRoom.lastMessage.timestamp
+        ? a.chatRoom.lastMessage.timestamp
+        : `2000-05-11T18:05:57.632Z`;
+      const timeB = b.chatRoom.lastMessage.timestamp
+        ? b.chatRoom.lastMessage.timestamp
+        : `2000-05-11T18:05:57.632Z`;
+
+      const dateA = new Date(timeA);
+      const dateB = new Date(timeB);
+
+      // Compare the dates
+      if (dateA > dateB) {
+        return -1;
+      }
+      if (dateA < dateB) {
+        return 1;
+      }
+      return 0;
+    };
+
+    await Promise.all(
+      friendships.map(async (friend) => {
+        friendsArray.push({
+          ...friend.to_user._doc,
+          status: friend.status,
+          chatRoomId: friend.chat_room._id,
+          chatRoom: await ChatRoom.findById(friend.chat_room),
+        });
+      })
+    );
+
+    friendsArray.sort(compareByCreatedAt);
+
     return handleResponse(
       response,
       200,
       "User friends",
       {
-        friends: friendships,
+        friends: friendsArray,
       },
       true
     );
   } catch (error) {
+    console.log(error);
     return handleResponse(response, 500, "Internal server error", {}, false);
   }
 };

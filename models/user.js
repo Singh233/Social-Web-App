@@ -41,6 +41,7 @@ const usersSchema = new mongoose.Schema(
         ref: "Friendship",
       },
     ],
+    friends: [],
   },
   {
     timestamps: true,

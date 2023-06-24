@@ -135,6 +135,7 @@ module.exports.chatSockets = function (socketServer) {
 
     // Send private message to a user
     socket.on("send_private_message", function (data) {
+      io.in(data.chatroom).emit("receive_private_message", data);
 
       if (activeUsers.has(data.to_user)) {
         // emit notification to the receiver of the message only
