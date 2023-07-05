@@ -145,7 +145,6 @@ module.exports.chatSockets = function (socketServer) {
     });
 
     socket.on("join_video_call", (data) => {
-      console.log("join ", data);
       // io.in(data.callRoomId).emit("user_calling", data);
 
       socket.on("disconnect", () => {
@@ -154,7 +153,6 @@ module.exports.chatSockets = function (socketServer) {
     });
 
     socket.on("user_is_calling", (data) => {
-      console.log("notification ", data);
       if (activeUsers.has(data.to_user)) {
         // emit notification to the receiver of the message only
         io.to(activeUsers.get(data.to_user).socketId).emit(
@@ -165,13 +163,19 @@ module.exports.chatSockets = function (socketServer) {
     });
 
     socket.on("user_answered_call", (newData) => {
-      console.log("answered", newData);
       if (activeUsers.has(newData.to_user)) {
         // emit notification to the receiver of the message only
         io.to(activeUsers.get(newData.to_user).socketId).emit(
           "call_user_connected",
           newData
         );
+      }
+    });
+
+    socket.on("user_on_another_call", (data) => {
+      if (activeUsers.has(data.to_user)) {
+        // emit notification to the receiver of the message only
+        io.to(activeUsers.get(data.to_user).socketId).emit("user_busy", data);
       }
     });
 
@@ -194,7 +198,6 @@ module.exports.chatSockets = function (socketServer) {
     });
 
     socket.on("user_leaving_call", (data) => {
-      console.log('leaving call', data)
       emitToUserFromUser(io, activeUsers, data, "user_left_call");
     });
 

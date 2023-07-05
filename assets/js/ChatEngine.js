@@ -869,6 +869,19 @@ class CallEngine extends ChatEngine {
     });
 
     self.socket.on("user_is_calling_notification", (data) => {
+      // if media stream is already active this means user is on another call or waiting to reply
+      if (
+        self.mediaStream &&
+        self.mediaStream.active &&
+        CALL_ROOM_ID !== data.callRoomId
+      ) {
+        console.log("already on call");
+        self.socket.emit("user_on_another_call", {
+          from_user: data.to_user,
+          to_user: data.from_user,
+        });
+        return;
+      }
       CALL_ROOM_ID = data.callRoomId;
 
       self.openCallModal(callModal, false);
@@ -891,6 +904,12 @@ class CallEngine extends ChatEngine {
 
       self.otherUserPeerId = data.peerId;
 
+      // if user tries to call again
+      if (self.mediaStream && self.mediaStream.active) {
+        // close current stream
+        self.stopBothVideoAndAudio(self, self.mediaStream);
+      }
+
       self.addOwnVideoStream(self).then((stream) => {
         self.mediaStream = stream;
         self.initiateCall(self, myPeer, data.peerId);
@@ -898,7 +917,11 @@ class CallEngine extends ChatEngine {
     });
 
     self.socket.on("user_declined_call_notification", (data) => {
-      self.updateCallModal(null, true);
+      self.updateCallModal("Call declined!", true);
+    });
+
+    self.socket.on("user_busy", (data) => {
+      self.updateCallModal("Busy!", true);
     });
 
     self.socket.on("call_user_disconnected", (userId) => {
@@ -1304,7 +1327,7 @@ class CallEngine extends ChatEngine {
     $("#rejected-call-options").css({ display: "none" });
   }
 
-  updateCallModal(callModal, isOutgoingCall) {
+  updateCallModal(message, isOutgoingCall) {
     // enable video call option
     $("#user-video-button").attr("disabled", false);
     // update icon
@@ -1318,7 +1341,7 @@ class CallEngine extends ChatEngine {
 
     if (isOutgoingCall) {
       if (callStatus) {
-        $(callStatus).text("Call declined!");
+        $(callStatus).text(message);
       }
     } else {
       // remove outgoing/incoming call banner
