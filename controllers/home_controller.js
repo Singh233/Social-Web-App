@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-restricted-syntax */
 const moment = require("moment");
+const { v4: uuidV4 } = require("uuid");
 
 const Post = require("../models/post");
 const User = require("../models/user");
@@ -91,6 +92,7 @@ module.exports.home = async function (request, response) {
       followingCount: followingCount,
       websocket_host: env.websocket_host,
       moment: moment,
+      roomId: "sample-id",
     });
   } catch (error) {
     request.flash("error", "Internal Server Error");

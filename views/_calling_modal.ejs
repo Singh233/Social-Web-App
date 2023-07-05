@@ -1,0 +1,81 @@
+<div class="call-container">
+  <div class="call-wrapper">
+    <div src="" class="receiver-card">
+      <div id="user-call-header" class="header">
+        <img src="" alt="" />
+        <p class="username">Utkarsh Singh</p>
+
+        <div class="user-status">
+          <i id="is-mute" class="fa-solid fa-microphone mic-icon"></i>
+          <i id="is-camera-disabled" class="fa-solid fa-video video-icon"></i>
+        </div>
+      </div>
+
+      <div class="incoming-call">
+        <img src="" alt="" />
+        <p class="username">Utkarsh Singh</p>
+
+        <div class="incoming-call-actions">
+          <p id="answer-call" class="answer">
+            <i class="fa-solid fa-phone"></i> Answer
+          </p>
+          <p id="reject-call" class="reject">
+            <i class="fa-solid fa-phone-slash"></i> Reject
+          </p>
+        </div>
+      </div>
+
+      <div class="outgoing-call">
+        <img src="" alt="" />
+        <p class="call-status">Calling...</p>
+        <p class="username">Utkarsh Singh</p>
+        <div id="rejected-call-options">
+          <p id="call-again-button">
+            <i class="fa-solid fa-video video-icon"></i>
+            Call again
+          </p>
+          <p id="close-call-button">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Close
+          </p>
+        </div>
+      </div>
+
+      <video
+        class="receiver-video"
+        src=""
+        autoplay="autoplay"
+        loop="loop"
+      ></video> 
+
+      <video
+        class="receiver-video-cover"
+        src="../video/stock-video-compressed.mp4"
+        autoplay="autoplay"
+        loop="loop"
+      ></video>
+    </div>
+
+    <div src="" class="caller-card">
+      <div class="header">
+        <img src="<%= localUser.avatar %>" alt="" />
+        <p class="username">You</p>
+      </div>
+
+      <video class="caller-video" src=""></video>
+
+      <div class="call-actions">
+        <!-- <i id="mic-icon" class="fa-solid fa-microphone-slash"></i> -->
+        <i id="mic-icon" class="fa-solid fa-microphone mic-icon"></i>
+
+        <i id="camera-icon" class="fa-solid fa-video video-icon"></i>
+        <!-- <i id="camera-icon" class="fa-solid fa-video-slash"></i> -->
+
+        <i
+          id="exit-call"
+          class="fa-solid fa-right-from-bracket call-exit-icon"
+        ></i>
+      </div>
+    </div>
+  </div>
+</div>

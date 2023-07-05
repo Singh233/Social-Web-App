@@ -4,7 +4,30 @@
 <link rel="stylesheet" href="<%= assetPath('css/post_card_design.css') %>" />
 <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>" />
 <link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>" />
+<script>
+  let CALL_ROOM_ID = "<%= locals.user ? roomId : '' %>";
+</script>
 
+<style>
+  #video-grid {
+    position: absolute;
+    z-index: 999;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 300px);
+    grid-auto-rows: 300px;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: rotateY(180deg);
+    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+    -moz-transform:rotateY(180deg); /* Firefox */
+  }
+</style>
+
+<div id="video-grid"></div>
 <div class="home-container">
   <i onclick="menuButtonClicked()" class="fa-solid fa-bars menu-button"></i>
   <i
@@ -112,14 +135,16 @@
   </div>
 
   <% if(locals.user) { %>
+    <%- include('_calling_modal', {localUser: locals.user}) -%>
   <div class="right-section-div">
     <% if (friends != undefined) {%> <%- include('_right_section', {all_users:
     all_users, friends: friends}); %> <% } else { %> <%-
     include('_right_section', {all_users: all_users}); %> <% } %>
   </div>
 
-  <% } %> <% if(locals.user) { %> <%- include('_chat_box', {friends, moment}) -%> <% }
-  %> <% if (locals.user){ %> <%- include('_bottom_nav_bar_sm') -%> <% } %>
+  <% } %> <% if(locals.user) { %> <%- include('_chat_box', {friends, moment})
+  -%> <% } %> <% if (locals.user){ %> <%- include('_bottom_nav_bar_sm') -%> <% }
+  %>
 </div>
 
 <% if(!locals.user) { %> <%- include('user_sign_in'); %> <%-
@@ -131,8 +156,7 @@ include('user_sign_up'); %> <% } %> <% if (locals.user){ %>
 <script src="<%= assetPath('js/home_post_comments.js') %>"></script>
 <script src="<%= assetPath('js/home_posts.js') %>"></script>
 <script src="<%= assetPath('js/toggle_likes.js') %>"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
-<script src="<%= assetPath('js/chat_engine.js') %>"></script>
+
 <script>
   $(".toggle-like-button").each(function () {
     let self = this;
@@ -143,15 +167,6 @@ include('user_sign_up'); %> <% } %> <% if (locals.user){ %>
 <script src="<%= assetPath('js/home.js') %>"></script>
 <% if (locals.user){ %>
 <script>
-  new ChatEngine(
-    "user-chat-box",
-    "<%= locals.user._id %>",
-    "<%= locals.user.email %>",
-    "<%= locals.user.name %>",
-    "<%= locals.user.avatar %>",
-    "<%= websocket_host %>"
-  );
-
   const blurDivs = document.querySelectorAll(".blur-load");
 
   blurDivs.forEach((div) => {

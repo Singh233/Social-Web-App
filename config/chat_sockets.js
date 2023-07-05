@@ -4,6 +4,17 @@ const socketIo = require("socket.io");
 
 const Socket = require("../models/socket");
 
+function emitToUserFromUser(io, activeUsers, data, message) {
+  if (activeUsers.has(data.from_user)) {
+    // emit notification to the receiver of the message only
+    io.to(activeUsers.get(data.from_user).socketId).emit(message, data);
+  }
+  if (activeUsers.has(data.to_user)) {
+    // emit notification to the receiver of the message only
+    io.to(activeUsers.get(data.to_user).socketId).emit(message, data);
+  }
+}
+
 module.exports.chatSockets = function (socketServer) {
   const io = socketIo(socketServer, {
     cors: {
@@ -14,7 +25,7 @@ module.exports.chatSockets = function (socketServer) {
   let activeUsers = new Map();
   // get the map from the database
   Socket.find({}, function (err, map) {
-    if (err) {
+    if (err || !map || !map[0]) {
       return;
     }
     activeUsers = new Map(map[0].mapData);
@@ -131,6 +142,60 @@ module.exports.chatSockets = function (socketServer) {
 
       socket.join(chatRoom);
       // io.in(chatRoom).emit("private_user_joined", data);
+    });
+
+    socket.on("join_video_call", (data) => {
+      console.log("join ", data);
+      // io.in(data.callRoomId).emit("user_calling", data);
+
+      socket.on("disconnect", () => {
+        socket.to(data.callRoomId).emit("call_user_disconnected", data.peerId);
+      });
+    });
+
+    socket.on("user_is_calling", (data) => {
+      console.log("notification ", data);
+      if (activeUsers.has(data.to_user)) {
+        // emit notification to the receiver of the message only
+        io.to(activeUsers.get(data.to_user).socketId).emit(
+          "user_is_calling_notification",
+          data
+        );
+      }
+    });
+
+    socket.on("user_answered_call", (newData) => {
+      console.log("answered", newData);
+      if (activeUsers.has(newData.to_user)) {
+        // emit notification to the receiver of the message only
+        io.to(activeUsers.get(newData.to_user).socketId).emit(
+          "call_user_connected",
+          newData
+        );
+      }
+    });
+
+    socket.on("user_declined_call", (data) => {
+      if (activeUsers.has(data.to_user)) {
+        // emit notification to the receiver of the message only
+        io.to(activeUsers.get(data.to_user).socketId).emit(
+          "user_declined_call_notification",
+          data
+        );
+      }
+    });
+
+    socket.on("call_mic_toggle", (data) => {
+      emitToUserFromUser(io, activeUsers, data, "mic_toggled");
+    });
+
+    socket.on("call_camera_toggle", (data) => {
+      emitToUserFromUser(io, activeUsers, data, "camera_toggled");
+    });
+
+    socket.on("user_leaving_call", (data) => {
+      console.log('leaving call', data)
+      emitToUserFromUser(io, activeUsers, data, "user_left_call");
     });
 
     // Send private message to a user

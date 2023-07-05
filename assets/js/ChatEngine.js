@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable max-classes-per-file */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-undef */
 class ChatEngine {
@@ -7,7 +9,7 @@ class ChatEngine {
     this.userId = userId;
     this.userName = userName;
     this.userProfile = userProfile;
-    // console.log(host)
+
     // this.socket = io.connect('https://54.91.2.241:5000', {
     this.socket = io.connect(host, {
       transports: ["websocket"],
@@ -23,11 +25,11 @@ class ChatEngine {
     this.chatRooms = ["Global"];
 
     if (this.userEmail) {
-      this.connectionHandler();
+      this.chatConnectionHandler();
     }
   }
 
-  connectionHandler() {
+  chatConnectionHandler() {
     const self = this;
     this.socket.on("connect", function () {
       // console.log('connection established using sockets...!');
@@ -148,7 +150,7 @@ class ChatEngine {
       const to_user = $(this).attr("id");
       const from_user = self.userId;
       const chatRoom = $(this).attr("data-chatRoomId");
-
+      CALL_ROOM_ID = chatRoom;
       // join private chat room
       self.socket.emit("join_private_room", {
         user_email: self.userEmail,
@@ -770,6 +772,618 @@ class ChatEngine {
           onClick: function () {}, // Callback after click
         }).showToast();
       }
+    }
+  }
+}
+
+class CallEngine extends ChatEngine {
+  constructor(chatBoxId, userId, userEmail, userName, userProfile, host) {
+    super(chatBoxId, userId, userEmail, userName, userProfile, host);
+
+    this.callConnectionHandler();
+    this.peerId = null;
+    this.mediaStream = null;
+
+    // current caller object
+    this.callee = {
+      toUser: null,
+      fromUser: null,
+      userName: "",
+      userAvatar: "",
+      callRoomId: "",
+    };
+
+    // dom elements for video
+    this.myVideo = document.querySelector(".caller-video");
+    this.receiverVideo = document.querySelector(".receiver-video");
+    this.myVideo.muted = true;
+    this.peers = {};
+    this.toUser = null;
+  }
+
+  callConnectionHandler() {
+    const self = this;
+    const callModal = document.querySelector(".call-container");
+
+    const myPeer = new Peer(undefined, {
+      host: "/",
+      port: "3001",
+    });
+
+    myPeer.on("open", function (id) {
+      self.peerId = id;
+    });
+
+    self.handleCallActionsButtonClick(self);
+
+    $("#user-video-button, #call-again-button").click(async function () {
+      const userVideoButton = $("#user-video-button");
+      if ($(userVideoButton).attr("disabled")) {
+        return;
+      }
+      self.openCallModal(callModal, true);
+
+      // set reciever name and avatar
+      const parent = $(userVideoButton).parent();
+      let img = "";
+      let name = parent.find("#chat-room-private-username").text();
+      let toUser = "";
+      const fromUser = self.userId;
+
+      // if parent is not null this means user is manually calling by visiting inside user chats
+      if (name !== "Private Chat") {
+        img = parent.find("img").attr("src");
+        name = parent.find("#chat-room-private-username").text();
+        toUser = document.getElementById("chat-user-id").value;
+      } else {
+        // else gather data from callee object
+        img = self.callee.userAvatar;
+        name = self.callee.userName;
+        toUser = self.callee.fromUser;
+      }
+      // update details on call modal
+      $(".receiver-card").find("img").attr("src", img);
+      $(".receiver-card").find(".username").text(name);
+
+      self.toUser = toUser;
+
+      // emit notification to user
+      self.socket.emit("user_is_calling", {
+        to_user: toUser,
+        from_user: fromUser,
+        user_name: self.userName,
+        user_profile: self.userProfile,
+        callRoomId: CALL_ROOM_ID,
+        peerId: self.peerId,
+      });
+
+      // if user tries to reconnect
+      if ($(this).attr("id") === "call-again-button") {
+        // close current stream
+        self.stopBothVideoAndAudio(self, self.mediaStream);
+      }
+      self.addOwnVideoStream(self, myPeer).then((stream) => {
+        self.mediaStream = stream;
+        self.initiateCall(self, myPeer);
+      });
+    });
+
+    self.socket.on("user_is_calling_notification", (data) => {
+      CALL_ROOM_ID = data.callRoomId;
+
+      self.openCallModal(callModal, false);
+
+      // update callee
+      self.callee = {
+        toUser: data.to_user,
+        fromUser: data.from_user,
+        userName: data.user_name,
+        userAvatar: data.user_profile,
+        callRoomId: data.callRoomId,
+      };
+
+      // set reciever name and avatar
+      $(".receiver-card").find("img").attr("src", data.user_profile);
+      $(".receiver-card").find(".username").text(data.user_name);
+
+      self.toUser = data.from_user;
+      const fromUser = self.userId;
+
+      self.otherUserPeerId = data.peerId;
+
+      self.addOwnVideoStream(self).then((stream) => {
+        self.mediaStream = stream;
+        self.initiateCall(self, myPeer, data.peerId);
+      });
+    });
+
+    self.socket.on("user_declined_call_notification", (data) => {
+      self.updateCallModal(null, true);
+    });
+
+    self.socket.on("call_user_disconnected", (userId) => {
+      if (this.peers[userId]) this.peers[userId].close();
+    });
+  }
+
+  // Adds the user's own video stream
+  addOwnVideoStream(self) {
+    return new Promise((resolve, reject) => {
+      navigator.mediaDevices
+        .getUserMedia({
+          video: true,
+          audio: true,
+        })
+        .then((newStream) => {
+          resolve(newStream);
+        });
+    });
+  }
+
+  initiateCall(self, myPeer, otherUserPeerId) {
+    const stream = self.mediaStream;
+
+    self.socket.emit("join_video_call", {
+      callRoomId: CALL_ROOM_ID,
+      peerId: self.peerId,
+    });
+
+    self.addVideoStream(self.myVideo, stream);
+
+    myPeer.on("call", (call) => {
+      if (stream && !stream.active) {
+        return;
+      }
+
+      call.answer(stream);
+      // remove outgoing/incoming call banner
+      $(".outgoing-call").css({ display: "none" });
+      $(".incoming-call").css({ display: "none" });
+
+      // display header info
+      $("#user-call-header").css({ display: "flex" });
+
+      // enable call exit icon
+      $(".call-exit-icon").css({ display: "block" });
+
+      call.on("stream", (userVideoStream) => {
+        // display receiver video
+        $(".receiver-video").css({ display: "flex" });
+        $(".receiver-video-cover").css({ display: "none" });
+        self.addVideoStream(self.receiverVideo, userVideoStream);
+        self.displayNotification("User joined!", 1000);
+      });
+
+      call.on("close", () => {
+        $(".receiver-video").css({ display: "none" });
+        $(".receiver-video-cover").css({ display: "flex" });
+        // this.receiverVideo.remove();
+      });
+    });
+
+    // handle answer call click
+    $("#answer-call").click(() => {
+      if (otherUserPeerId === self.peerId) {
+        return;
+      }
+
+      // enable exit button
+      $(".call-exit-icon").css({ display: "block" });
+
+      // fire an event that the user answered call
+      self.socket.emit("user_answered_call", {
+        from_user: self.userId,
+        to_user: self.toUser,
+        fromUserPeerId: self.peerId,
+      });
+    });
+
+    // handle reject call click
+    $("#reject-call").click(() => {
+      // if (self.peers[self.peerId]) self.peers[self.peerId].close();
+      // if (self.peers[otherUserPeerId]) self.peers[otherUserPeerId].close();
+
+      // if (otherUserPeerId === self.peerId) {
+      //   return;
+      // }
+
+      const callModal = document.querySelector(".call-container");
+      self.closeCallModal(callModal, false);
+
+      // function to cancel incoming call
+      self.cancelCall(self, stream);
+    });
+
+    // Event listener for other user call connected
+    self.socket.on("call_user_connected", (data) => {
+      self.otherUserPeerId = data.fromUserPeerId;
+      self.connectToNewUser(data.fromUserPeerId, stream, myPeer);
+    });
+
+    // Event listeners when user toggle mic or camera
+    self.socket.on("mic_toggled", (data) => {
+      if (data.from_user === self.userId) {
+        self.toggleAudioOnly(self, myPeer, stream, data.isDisabled);
+        self.displayNotification("You are muted!", "success", 2000);
+      } else if (data.isDisabled) {
+        // update mic icon of connected user
+        $("#is-mute").removeClass("fa-microphone");
+        $("#is-mute").addClass("fa-microphone-slash");
+        $("#is-mute").css({ padding: "10px 7.5px" });
+        self.displayNotification("User muted", "success", 2000);
+      } else {
+        // update mic icon of connected user
+        $("#is-mute").removeClass("fa-microphone-slash");
+        $("#is-mute").addClass("fa-microphone");
+        $("#is-mute").css({ padding: "10px 13px" });
+        self.displayNotification("User unmuted", "success", 2000);
+      }
+    });
+    self.socket.on("camera_toggled", (data) => {
+      if (data.from_user === self.userId) {
+        self.toggleVideoOnly(self, myPeer, stream, data.isDisabled);
+      } else if (data.isDisabled) {
+        // update video icon of connected user
+        $("#is-camera-disabled").removeClass("fa-video");
+        $("#is-camera-disabled").addClass("fa-video-slash");
+        self.displayNotification("Video hidden", "success", 2000);
+      } else {
+        // update video icon of connected user
+        $("#is-camera-disabled").removeClass("fa-video-slash");
+        $("#is-camera-disabled").addClass("fa-video");
+        self.displayNotification("User video visible", "success", 2000);
+      }
+    });
+
+    // Event listener for when user leaves call
+    self.socket.on("user_left_call", (data) => {
+      // if (self.peers[data.fromUserPeerId])
+      //   self.peers[data.fromUserPeerId].close();
+
+      if (data.from_user === self.userId) {
+        self.stopBothVideoAndAudio(self, stream);
+      } else {
+        self.updateCallModal(null, false);
+      }
+
+      self.callCleanUp(self);
+    });
+  }
+
+  endCall(self, stream) {
+    // emit event to the connected user
+    self.socket.emit("user_leaving_call", {
+      from_user: self.userId,
+      to_user: self.toUser,
+      fromUserPeerId: self.peerId,
+    });
+
+    // Clean up any other resources associated with the call
+    self.stopBothVideoAndAudio(self, stream);
+    self.callCleanUp(self);
+
+    self.isInCall = false;
+  }
+
+  cancelCall(self, stream) {
+    // Emit event to other user
+    self.socket.emit("user_declined_call", {
+      from_user: self.userId,
+      to_user: self.toUser,
+      fromUserPeerId: self.peerId,
+    });
+
+    // Clean up video resources and connections
+    self.stopBothVideoAndAudio(self, stream);
+    self.callCleanUp(self);
+  }
+
+  handleCallActionsButtonClick(self) {
+    const callModal = document.querySelector(".call-container");
+
+    // handle mic icon click
+    $("#mic-icon").click(function () {
+      const isDisabled = $(this).hasClass("disabled");
+      if (isDisabled) {
+        $(this).removeClass("disabled");
+        $(this).removeClass("fa-microphone-slash");
+        $(this).addClass("fa-microphone");
+        $(this).css({ padding: "10px 13px" });
+      } else {
+        $(this).css({ padding: "10px 7.5px" });
+        $(this).addClass("disabled");
+        $(this).removeClass("fa-microphone");
+        $(this).addClass("fa-microphone-slash");
+      }
+
+      // emit event to the connected user
+      self.socket.emit("call_mic_toggle", {
+        from_user: self.userId,
+        to_user: self.toUser,
+        isDisabled: !isDisabled,
+      });
+    });
+
+    // handle camera icon click
+    $("#camera-icon").click(function () {
+      const isDisabled = $(this).hasClass("disabled");
+      if (isDisabled) {
+        $(this).removeClass("disabled");
+        $(this).removeClass("fa-video-slash");
+        $(this).addClass("fa-video");
+      } else {
+        $(this).addClass("disabled");
+        $(this).removeClass("fa-video");
+        $(this).addClass("fa-video-slash");
+      }
+      // emit event to the connected user
+      self.socket.emit("call_camera_toggle", {
+        from_user: self.userId,
+        to_user: self.toUser,
+        isDisabled: !isDisabled,
+      });
+    });
+
+    // handle call exit click or close call
+    $("#exit-call, #close-call-button").click(() => {
+      // close call modal
+      self.closeCallModal(callModal, true);
+      // function to end current call
+      self.endCall(self, self.mediaStream);
+    });
+  }
+
+  // Adds a video stream to the video grid
+  addVideoStream(video, stream) {
+    video.srcObject = stream;
+
+    video.addEventListener("loadedmetadata", () => {
+      video.play();
+    });
+
+    video.removeEventListener("loadedmetadata", func);
+
+    function func() {}
+  }
+
+  // Connects to a new user for a call
+  connectToNewUser(userId, stream, myPeer) {
+    const self = this;
+    // if (self.peers[userId]) {
+    //   return;
+    // }
+
+    // update calling status
+    $(".call-status").text("");
+
+    // remove outgoing/incoming call banner
+    $(".outgoing-call").css({ display: "none" });
+    $(".incoming-call").css({ display: "none" });
+
+    // display header info
+    $("#user-call-header").css({ display: "flex" });
+
+    const call = myPeer.call(userId, stream);
+    self.peers[userId] = call;
+
+    call.on("stream", (userVideoStream) => {
+      // display receiver video
+      $(".receiver-video").css({ display: "flex" });
+      $(".receiver-video-cover").css({ display: "none" });
+      self.addVideoStream(self.receiverVideo, userVideoStream);
+    });
+
+    call.on("close", () => {
+      $(".receiver-video").css({ display: "none" });
+      $(".receiver-video-cover").css({ display: "flex" });
+      // this.receiverVideo.remove();
+    });
+  }
+
+  // stop both mic and camera
+  stopBothVideoAndAudio(self, stream) {
+    stream.getTracks().forEach((track) => {
+      if (track.readyState === "live" || track.readyState === "ended") {
+        track.stop();
+      }
+    });
+  }
+
+  // stop only camera
+  toggleVideoOnly(self, myPeer, stream, isDisabled) {
+    stream.getTracks().forEach(async (track) => {
+      if (
+        (track.readyState === "live" || track.readyState === "ended") &&
+        track.kind === "video"
+      ) {
+        track.enabled = !isDisabled;
+      }
+    });
+
+    // If the camera is being enabled, create a new call with the updated stream
+  }
+
+  // stop only mic
+  toggleAudioOnly(self, myPeer, stream, isDisabled) {
+    stream.getTracks().forEach(async (track) => {
+      if (
+        (track.readyState === "live" || track.readyState === "ended") &&
+        track.kind === "audio"
+      ) {
+        track.enabled = !isDisabled;
+      }
+    });
+  }
+
+  callCleanUp(self) {
+    $("#reject-call").unbind("click");
+    $("#answer-call").unbind("click");
+    // $("#mic-icon").unbind("click");
+
+    // Unsubscribe from socket events
+    self.socket.off("mic_toggled");
+    self.socket.off("camera_toggled");
+    self.socket.off("user_left_call");
+    self.socket.off("call_user_connected");
+
+    // remove event listener
+    self.myVideo.removeEventListener("loadedmetadata", log());
+
+    self.receiverVideo.removeEventListener("loadedmetadata", log());
+    function log() {}
+    self.closePeerConnection(self);
+  }
+
+  closePeerConnection(self) {
+    if (self.peers[self.peerId]) self.peers[self.peerId].close();
+    if (self.otherUserPeerId && self.peers[self.otherUserPeerId])
+      self.peers[self.otherUserPeerId].close();
+  }
+
+  closeCallModal(callModal, isOutgoingCall) {
+    // close call modal
+    callModal.style.display = "none";
+
+    // hide rejected call options
+    $("#rejected-call-options").css({ display: "none" });
+
+    // enable video call option
+    $("#user-video-button").attr("disabled", false);
+    // update icon
+    $("#user-video-button").removeClass("fa-video-slash disabled-video-button");
+    $("#user-video-button").addClass("fa-video");
+
+    if (isOutgoingCall) {
+      // reset header and video
+      $("#user-call-header").css({ display: "none" });
+      $(".receiver-video").css({ display: "none" });
+      $(".receiver-video-cover").css({ display: "flex" });
+    }
+  }
+
+  openCallModal(callModal, isOutgoingCall) {
+    const userVideoButton = $("#user-video-button");
+
+    // disable button so no other call could be made
+    $(userVideoButton).attr("disabled", true);
+    // update icon
+    $(userVideoButton).removeClass("fa-video");
+    $(userVideoButton).addClass("fa-video-slash disabled-video-button");
+
+    // open call modal
+    callModal.style.display = "flex";
+
+    if (isOutgoingCall) {
+      // first hide if incoming call banner was opened
+      const incomingCallBanner = document.querySelector(".incoming-call");
+      incomingCallBanner.style.display = "none";
+
+      // display outgoing call banner
+      const outgoingCallBanner = document.querySelector(".outgoing-call");
+      outgoingCallBanner.style.display = "flex";
+
+      // find outgoing call element and update call status
+      const callStatus = $(".outgoing-call").find(".call-status");
+      if (callStatus) {
+        $(callStatus).text("Calling...");
+      }
+    } else {
+      // first hide outgoing call banner if it was opened
+      const outgoingCallBanner = document.querySelector(".outgoing-call");
+      outgoingCallBanner.style.display = "none";
+
+      // display incoming call banner
+      const incomingCallBanner = document.querySelector(".incoming-call");
+      incomingCallBanner.style.display = "flex";
+
+      // disable exit button
+      $(".call-exit-icon").css({ display: "none" });
+    }
+
+    // show rejected call options
+    $("#rejected-call-options").css({ display: "none" });
+  }
+
+  updateCallModal(callModal, isOutgoingCall) {
+    // enable video call option
+    $("#user-video-button").attr("disabled", false);
+    // update icon
+    $("#user-video-button").removeClass("fa-video-slash disabled-video-button");
+    $("#user-video-button").addClass("fa-video");
+
+    // show rejected call options
+    $("#rejected-call-options").css({ display: "flex" });
+    // find outgoing call element and update call status
+    const callStatus = $(".outgoing-call").find(".call-status");
+
+    if (isOutgoingCall) {
+      if (callStatus) {
+        $(callStatus).text("Call declined!");
+      }
+    } else {
+      // remove outgoing/incoming call banner
+      $(".outgoing-call").css({ display: "flex" });
+      $(".incoming-call").css({ display: "none" });
+
+      // display header info
+      $("#user-call-header").css({ display: "none" });
+
+      // display receiver video cover
+      $(".receiver-video").css({ display: "none" });
+      $(".receiver-video-cover").css({ display: "flex" });
+
+      if (callStatus) {
+        $(callStatus).text("Call ended!");
+      }
+    }
+  }
+
+  displayNotification(message, type, duration, icon) {
+    if (type === "error") {
+      if (!icon) {
+        icon =
+          "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9";
+      }
+
+      Toastify({
+        text: "<%= flash.error %>",
+        duration: duration,
+        destination: "",
+        newWindow: true,
+        close: true,
+        avatar: icon,
+        gravity: "top", // `top` or `bottom`
+        position: "center", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "#D20A0A",
+          borderRadius: "10px",
+          color: "white",
+        },
+        onClick: function () {}, // Callback after click
+      }).showToast();
+    } else if (type === "success") {
+      if (!icon) {
+        icon =
+          "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d";
+      }
+      Toastify({
+        text: message,
+        duration: duration,
+        destination: "",
+        newWindow: true,
+        close: true,
+        avatar: icon,
+
+        gravity: "top", // `top` or `bottom`
+        position: "center", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "#202020",
+          borderRadius: "10px",
+        },
+        onClick: function () {}, // Callback after click
+      }).showToast();
     }
   }
 }
