@@ -1,61 +1,87 @@
-<div class="call-container">
-  <div class="call-wrapper">
-    <div src="" class="receiver-card">
-      <div id="user-call-header" class="header">
-        <img src="" alt="" />
-        <p class="username">Utkarsh Singh</p>
-
-        <div class="user-status">
-          <i id="is-mute" class="fa-solid fa-microphone mic-icon"></i>
-          <i id="is-camera-disabled" class="fa-solid fa-video video-icon"></i>
-        </div>
-      </div>
-
-      <div class="incoming-call">
-        <img src="" alt="" />
-        <p class="username">Utkarsh Singh</p>
-
-        <div class="incoming-call-actions">
-          <p id="answer-call" class="answer">
-            <i class="fa-solid fa-phone"></i> Answer
-          </p>
-          <p id="reject-call" class="reject">
-            <i class="fa-solid fa-phone-slash"></i> Reject
-          </p>
-        </div>
-      </div>
-
-      <div class="outgoing-call">
-        <img src="" alt="" />
-        <p class="call-status">Calling...</p>
-        <p class="username">Utkarsh Singh</p>
-        <div id="rejected-call-options">
-          <p id="call-again-button">
-            <i class="fa-solid fa-video video-icon"></i>
-            Call again
-          </p>
-          <p id="close-call-button">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            Close
-          </p>
-        </div>
-      </div>
-
-      <video
-        class="receiver-video"
-        src=""
-        autoplay="autoplay"
-        loop="loop"
-      ></video>
-
-      <video
-        class="receiver-video-cover"
-        src="../video/stock-video-compressed.mp4"
-        autoplay="autoplay"
-        loop="loop"
-      ></video>
+<!-- <div
+  class="incoming-call-toast-container animate__animated animate__bounceInLeft"
+>
+  <div class="wrapper">
+    <i class="fa-solid fa-angle-up call-expand-button"></i>
+    <img src="../assets/img/1782188.jpeg" alt="" />
+    <p class="username">Ankit Vishwakarma</p>
+    <div class="toast-call-options">
+      <p id="answer-call-toast" class="answer">
+        <i class="fa-solid fa-phone"></i> Answer
+      </p>
+      <p id="reject-call-toast" class="reject">
+        <i class="fa-solid fa-phone-slash"></i> Reject
+      </p>
     </div>
 
+    <div id="toast-rejected-call-options">
+      <p id="toast-call-again-button">
+        <i class="fa-solid fa-video video-icon"></i>
+        Call again
+      </p>
+      <p id="toast-close-call-button">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Close
+      </p>
+    </div>
+  </div>
+</div> -->
+
+<div src="" class="incoming-outgoing-call-window animate__animated">
+  <i class="fa-solid fa-angle-up call-expand-button"></i>
+
+  <div id="user-call-header" class="header">
+    <img src="" alt="" />
+    <p class="username">Utkarsh Singh</p>
+
+    <div class="user-status">
+      <i id="is-mute" class="fa-solid fa-microphone mic-icon"></i>
+      <i id="is-camera-disabled" class="fa-solid fa-video video-icon"></i>
+    </div>
+  </div>
+
+  <div class="incoming-call">
+    <img src="" alt="user-avatar" class="user-avatar" />
+    <p class="username">Utkarsh Singh</p>
+
+    <div class="incoming-call-actions">
+      <p id="answer-call" class="answer">
+        <i class="fa-solid fa-phone"></i> Answer
+      </p>
+      <p id="reject-call" class="reject">
+        <i class="fa-solid fa-phone-slash"></i> Reject
+      </p>
+    </div>
+  </div>
+
+  <div class="outgoing-call">
+    <img src="" alt="" class="user-avatar"/>
+    <p class="call-status">Calling...</p>
+    <p class="username">Utkarsh Singh</p>
+    <div id="rejected-call-options">
+      <p id="call-again-button">
+        <i class="fa-solid fa-video video-icon"></i>
+        Call again
+      </p>
+      <p id="close-call-button">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Close
+      </p>
+    </div>
+  </div>
+
+  <video class="receiver-video" src="" autoplay="autoplay" loop="loop"></video>
+
+  <div class="receiver-card-cover"></div>
+</div>
+
+<div class="call-container animate__animated animate__faster">
+  <div class="call-wrapper">
+    <i class="fa-solid fa-angle-up call-minimise-button"></i>
+
+    <div src="" class="receiver-card">
+      <div class="dummy-card"></div>
+    </div>
     <div src="" class="caller-card">
       <div class="header">
         <img src="<%= localUser.avatar %>" alt="" />

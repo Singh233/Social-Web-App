@@ -816,11 +816,15 @@ class CallEngine extends ChatEngine {
 
     self.handleCallActionsButtonClick(self);
 
+    self.handleCallMinimise(self);
+    self.handleCallMaximise(self);
+
     $("#user-video-button, #call-again-button").click(async function () {
       const userVideoButton = $("#user-video-button");
       if ($(userVideoButton).attr("disabled")) {
         return;
       }
+
       self.openCallModal(callModal, true);
 
       // set reciever name and avatar
@@ -842,8 +846,21 @@ class CallEngine extends ChatEngine {
         toUser = self.callee.fromUser;
       }
       // update details on call modal
-      $(".receiver-card").find("img").attr("src", img);
-      $(".receiver-card").find(".username").text(name);
+      $(".incoming-outgoing-call-window").find("img").attr("src", img);
+      $(".incoming-outgoing-call-window").find(".username").text(name);
+
+      // update receiver card cover background image
+      $(".receiver-card-cover").css({
+        background: `linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.65) 0%,
+        rgba(0, 0, 0, 0.65) 100%
+      ),
+      url("${img}") center / cover no-repeat`,
+      });
+
+      // hide call maximise button
+      $(".call-expand-button").css({ display: "none" });
 
       self.toUser = toUser;
 
@@ -856,7 +873,8 @@ class CallEngine extends ChatEngine {
         callRoomId: CALL_ROOM_ID,
         peerId: self.peerId,
       });
-
+      // enable call exit icon
+      $(".call-exit-icon").css({ display: "block" });
       // if user tries to reconnect
       if ($(this).attr("id") === "call-again-button") {
         // close current stream
@@ -869,22 +887,20 @@ class CallEngine extends ChatEngine {
     });
 
     self.socket.on("user_is_calling_notification", (data) => {
-      // if media stream is already active this means user is on another call or waiting to reply
+      // if media stream is already active this means user is on another call or waiting to respond
       if (
         self.mediaStream &&
         self.mediaStream.active &&
         CALL_ROOM_ID !== data.callRoomId
       ) {
-        console.log("already on call");
         self.socket.emit("user_on_another_call", {
           from_user: data.to_user,
           to_user: data.from_user,
         });
         return;
       }
-      CALL_ROOM_ID = data.callRoomId;
 
-      self.openCallModal(callModal, false);
+      CALL_ROOM_ID = data.callRoomId;
 
       // update callee
       self.callee = {
@@ -895,9 +911,32 @@ class CallEngine extends ChatEngine {
         callRoomId: data.callRoomId,
       };
 
+      self.openCallModal(callModal, false);
+      self.showIncomingCallToast(self);
+
       // set reciever name and avatar
-      $(".receiver-card").find("img").attr("src", data.user_profile);
-      $(".receiver-card").find(".username").text(data.user_name);
+      $(".incoming-outgoing-call-window")
+        .find("img")
+        .attr("src", data.user_profile);
+      $(".incoming-outgoing-call-window")
+        .find(".username")
+        .text(data.user_name);
+
+      // update receiver card cover background image
+      $(".receiver-card-cover").css({
+        background: `linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.65) 0%,
+        rgba(0, 0, 0, 0.65) 100%
+      ),
+      url("${data.user_profile}") center / cover no-repeat`,
+      });
+
+      // disable call exit icon
+      $(".call-exit-icon").css({ display: "none" });
+
+      // show call maximise button
+      $(".call-expand-button").css({ display: "block" });
 
       self.toUser = data.from_user;
       const fromUser = self.userId;
@@ -972,14 +1011,14 @@ class CallEngine extends ChatEngine {
       call.on("stream", (userVideoStream) => {
         // display receiver video
         $(".receiver-video").css({ display: "flex" });
-        $(".receiver-video-cover").css({ display: "none" });
+        $(".receiver-card-cover").css({ display: "none" });
         self.addVideoStream(self.receiverVideo, userVideoStream);
         self.displayNotification("User joined!", 1000);
       });
 
       call.on("close", () => {
         $(".receiver-video").css({ display: "none" });
-        $(".receiver-video-cover").css({ display: "flex" });
+        $(".receiver-card-cover").css({ display: "flex" });
         // this.receiverVideo.remove();
       });
     });
@@ -989,6 +1028,9 @@ class CallEngine extends ChatEngine {
       if (otherUserPeerId === self.peerId) {
         return;
       }
+
+      // if button that cliced is on the toast then manually trigger call expand button
+      $(".call-expand-button").trigger("click");
 
       // enable exit button
       $(".call-exit-icon").css({ display: "block" });
@@ -1003,16 +1045,9 @@ class CallEngine extends ChatEngine {
 
     // handle reject call click
     $("#reject-call").click(() => {
-      // if (self.peers[self.peerId]) self.peers[self.peerId].close();
-      // if (self.peers[otherUserPeerId]) self.peers[otherUserPeerId].close();
-
-      // if (otherUserPeerId === self.peerId) {
-      //   return;
-      // }
-
       const callModal = document.querySelector(".call-container");
       self.closeCallModal(callModal, false);
-
+      self.hideIncomingCallToast(self);
       // function to cancel incoming call
       self.cancelCall(self, stream);
     });
@@ -1151,6 +1186,8 @@ class CallEngine extends ChatEngine {
     $("#exit-call, #close-call-button").click(() => {
       // close call modal
       self.closeCallModal(callModal, true);
+      self.hideIncomingCallToast(self);
+
       // function to end current call
       self.endCall(self, self.mediaStream);
     });
@@ -1192,13 +1229,13 @@ class CallEngine extends ChatEngine {
     call.on("stream", (userVideoStream) => {
       // display receiver video
       $(".receiver-video").css({ display: "flex" });
-      $(".receiver-video-cover").css({ display: "none" });
+      $(".receiver-card-cover").css({ display: "none" });
       self.addVideoStream(self.receiverVideo, userVideoStream);
     });
 
     call.on("close", () => {
       $(".receiver-video").css({ display: "none" });
-      $(".receiver-video-cover").css({ display: "flex" });
+      $(".receiver-card-cover").css({ display: "flex" });
       // this.receiverVideo.remove();
     });
   }
@@ -1264,8 +1301,19 @@ class CallEngine extends ChatEngine {
   }
 
   closeCallModal(callModal, isOutgoingCall) {
+    const incomingOutgoingCallWindow = $(".incoming-outgoing-call-window");
+
+    // add fade out animation to call modal and incomingOutgoing call window
+    $(callModal).removeClass("animate__fadeIn");
+    $(callModal).addClass("animate__fadeOut");
+    $(incomingOutgoingCallWindow).removeClass(
+      "animate__fadeIn animate__fadeOut animate__bounceInLeft animate__bounceOutLeft toast-container-exp-animate toast-container-shrink-animate"
+    );
+    $(incomingOutgoingCallWindow).addClass("animate__fadeOut");
     // close call modal
-    callModal.style.display = "none";
+    setTimeout(() => {
+      callModal.style.display = "none";
+    }, 700);
 
     // hide rejected call options
     $("#rejected-call-options").css({ display: "none" });
@@ -1280,12 +1328,13 @@ class CallEngine extends ChatEngine {
       // reset header and video
       $("#user-call-header").css({ display: "none" });
       $(".receiver-video").css({ display: "none" });
-      $(".receiver-video-cover").css({ display: "flex" });
+      $(".receiver-card-cover").css({ display: "flex" });
     }
   }
 
   openCallModal(callModal, isOutgoingCall) {
     const userVideoButton = $("#user-video-button");
+    const incomingOutgoingCallWindow = $(".incoming-outgoing-call-window");
 
     // disable button so no other call could be made
     $(userVideoButton).attr("disabled", true);
@@ -1293,10 +1342,24 @@ class CallEngine extends ChatEngine {
     $(userVideoButton).removeClass("fa-video");
     $(userVideoButton).addClass("fa-video-slash disabled-video-button");
 
-    // open call modal
-    callModal.style.display = "flex";
+    // remove animations from call modal and add fade in animation
+    $(callModal).removeClass("animate__fadeOut animate__fadeIn");
+    $(callModal).addClass("animate__fadeIn");
 
     if (isOutgoingCall) {
+      // open call modal
+      callModal.style.display = "flex";
+      // remove animations from outgoing call banner and add fade in animation
+      $(incomingOutgoingCallWindow).removeClass(
+        "animate__fadeIn animate__fadeOut animate__bounceInLeft animate__bounceOutLeft toast-container-exp-animate toast-container-shrink-animate"
+      );
+      $(incomingOutgoingCallWindow).addClass("animate__fadeIn");
+      $(".incoming-outgoing-call-window").css({ display: "flex" });
+
+      // make the call in full window position
+      $(".incoming-outgoing-call-window").addClass("call-maximised");
+      // $(".call-maximise-button").trigger("click");
+
       // first hide if incoming call banner was opened
       const incomingCallBanner = document.querySelector(".incoming-call");
       incomingCallBanner.style.display = "none";
@@ -1311,6 +1374,8 @@ class CallEngine extends ChatEngine {
         $(callStatus).text("Calling...");
       }
     } else {
+      // make the call in minimised window position
+      $(".incoming-outgoing-call-window").addClass("call-minimised");
       // first hide outgoing call banner if it was opened
       const outgoingCallBanner = document.querySelector(".outgoing-call");
       outgoingCallBanner.style.display = "none";
@@ -1336,6 +1401,10 @@ class CallEngine extends ChatEngine {
 
     // show rejected call options
     $("#rejected-call-options").css({ display: "flex" });
+
+    // show rejected call options for toast as well
+    $("#toast-rejected-call-options").css({ display: "flex" });
+
     // find outgoing call element and update call status
     const callStatus = $(".outgoing-call").find(".call-status");
 
@@ -1353,12 +1422,162 @@ class CallEngine extends ChatEngine {
 
       // display receiver video cover
       $(".receiver-video").css({ display: "none" });
-      $(".receiver-video-cover").css({ display: "flex" });
+      $(".receiver-card-cover").css({ display: "flex" });
 
       if (callStatus) {
         $(callStatus).text("Call ended!");
       }
     }
+  }
+
+  showIncomingCallToast(self) {
+    const incomingOutgoingCallWindow = $(".incoming-outgoing-call-window");
+
+    // $(".call-container").css({ display: "none" });
+    if ($(incomingOutgoingCallWindow).css("display") === "none") {
+      $(incomingOutgoingCallWindow).removeClass(
+        "animate__fadeIn animate__fadeOut animate__bounceInLeft animate__bounceOutLeft toast-container-exp-animate toast-container-shrink-animate"
+      );
+      $(incomingOutgoingCallWindow).addClass("animate__bounceInLeft");
+      $(incomingOutgoingCallWindow).css({ display: "flex" });
+    }
+    // // update toast background with user avatar
+    // $(incomingOutgoingCallWindow).css({
+    //   background: `linear-gradient(
+    //   to bottom,
+    //   rgba(0, 0, 0, 0.65) 0%,
+    //   rgba(0, 0, 0, 0.65) 100%
+    // ),
+    // url("${data.user_profile}") center / cover no-repeat`,
+    // });
+
+    // // set reciever name and avatar
+    // $(incomingOutgoingCallWindow).find("img").attr("src", data.user_profile);
+    // $(incomingOutgoingCallWindow).find(".username").text(data.user_name);
+  }
+
+  hideIncomingCallToast(self) {
+    const incomingOutgoingCallWindow = $(".incoming-outgoing-call-window");
+    // remove all animation classes first
+    $(incomingOutgoingCallWindow).removeClass(
+      "animate__fadeIn animate__fadeOut animate__bounceInLeft animate__bounceOutLeft toast-container-exp-animate toast-container-shrink-animate"
+    );
+
+    const callModal = $(".call-container");
+    // if callmodal is not visible then add bounce out animation
+    if ($(callModal).css("display") === "none") {
+      $(incomingOutgoingCallWindow).addClass("animate__bounceOutLeft");
+    } else {
+      // else fade out
+      $(incomingOutgoingCallWindow).addClass("animate__fadeOut");
+    }
+
+    setTimeout(() => {
+      $(incomingOutgoingCallWindow).css({ display: "none" });
+      // if button that cliced is on the toast then manually trigger call expand button
+      $(".call-minimise-button").trigger("click");
+      self.removeZoomInAnimations();
+      self.removeZoomOutAnimations();
+    }, 700);
+  }
+
+  handleCallMinimise(self) {
+    const callModal = $(".call-container");
+    const incomingOutgoingCallWindow = $(".incoming-outgoing-call-window");
+
+    $(".call-minimise-button").click(function () {
+      // hide button
+      $(".call-expand-button").css({ display: "block" });
+      $(callModal).removeClass("animate__fadeIn");
+      $(callModal).addClass("animate__fadeOut");
+      $(incomingOutgoingCallWindow).removeClass(
+        "animate__fadeIn animate__fadeOut animate__bounceInLeft animate__bounceOutLeft toast-container-exp-animate toast-container-shrink-animate"
+      );
+      $(incomingOutgoingCallWindow).removeClass("call-maximised");
+
+      self.addZoomOutAnimation(self);
+
+      setTimeout(() => {
+        $(incomingOutgoingCallWindow).addClass("call-minimised");
+      }, 500);
+
+      // $(incomingOutgoingCallWindow).css({ display: "flex" });
+      // $(incomingOutgoingCallWindow).removeClass("animate__bounceInLeft");
+      // $(incomingOutgoingCallWindow).removeClass("animate__fadeOut");
+      // $(incomingOutgoingCallWindow).addClass("animate__fadeIn");
+    });
+  }
+
+  handleCallMaximise(self) {
+    const callModal = $(".call-container");
+    const incomingOutgoingCallWindow = $(".incoming-outgoing-call-window");
+
+    $(".call-expand-button").click(function () {
+      // show minimise button
+      $(".call-expand-button").css({ display: "none" });
+      $(callModal).css({ display: "flex" });
+      $(callModal).removeClass("animate__fadeOut");
+      $(callModal).addClass("animate__fadeIn");
+      $(incomingOutgoingCallWindow).removeClass(
+        "animate__fadeIn animate__fadeOut animate__bounceInLeft animate__bounceOutLeft toast-container-exp-animate toast-container-shrink-animate"
+      );
+      $(incomingOutgoingCallWindow).removeClass("call-minimised");
+
+      self.addZoomInAnimation(self);
+
+      setTimeout(() => {
+        $(incomingOutgoingCallWindow).addClass("call-maximised");
+      }, 500);
+
+      // $(incomingOutgoingCallWindow).removeClass("animate__fadeIn");
+      // $(incomingOutgoingCallWindow).addClass("animate__fadeOut");
+    });
+  }
+
+  addZoomInAnimation(self) {
+    const incomingOutgoingCallWindow = $(".incoming-outgoing-call-window");
+
+    // remove previous animation classes
+    self.removeZoomOutAnimations();
+    // add new animation classes
+    $(incomingOutgoingCallWindow).addClass("toast-container-exp-animate");
+    $(".incoming-call, .outgoing-call").addClass(
+      "incoming-outgoing-exp-animate"
+    );
+    $(".receiver-card-cover").addClass("receiver-card-exp-animate");
+  }
+
+  addZoomOutAnimation(self) {
+    const incomingOutgoingCallWindow = $(".incoming-outgoing-call-window");
+
+    // remove previous animation classes
+    self.removeZoomInAnimations();
+    // add new animation classes
+    $(incomingOutgoingCallWindow).addClass("toast-container-shrink-animate");
+    $(".incoming-call, .outgoing-call").addClass(
+      "incoming-outgoing-shrink-animate"
+    );
+    $(".receiver-card-cover").addClass("receiver-card-shrink-animate");
+  }
+
+  removeZoomOutAnimations() {
+    const incomingOutgoingCallWindow = $(".incoming-outgoing-call-window");
+
+    $(incomingOutgoingCallWindow).removeClass("toast-container-shrink-animate");
+    $(".incoming-call, .outgoing-call").removeClass(
+      "incoming-outgoing-shrink-animate"
+    );
+    $(".receiver-card-cover").removeClass("receiver-card-shrink-animate");
+  }
+
+  removeZoomInAnimations() {
+    const incomingOutgoingCallWindow = $(".incoming-outgoing-call-window");
+
+    $(incomingOutgoingCallWindow).removeClass("toast-container-exp-animate");
+    $(".incoming-call, .outgoing-call").removeClass(
+      "incoming-outgoing-exp-animate"
+    );
+    $(".receiver-card-cover").removeClass("receiver-card-exp-animate");
   }
 
   displayNotification(message, type, duration, icon) {
