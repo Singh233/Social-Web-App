@@ -797,8 +797,10 @@ class CallEngine extends ChatEngine {
     this.myVideo = document.querySelector(".caller-video");
     this.receiverVideo = document.querySelector(".receiver-video");
     this.myVideo.muted = true;
+
     this.peers = {};
     this.toUser = null;
+    this.isInCall = false;
   }
 
   callConnectionHandler() {
@@ -965,6 +967,8 @@ class CallEngine extends ChatEngine {
 
     self.socket.on("call_user_disconnected", (userId) => {
       if (this.peers[userId]) this.peers[userId].close();
+      // update is in call variable
+      self.isInCall = false;
     });
   }
 
@@ -1029,6 +1033,9 @@ class CallEngine extends ChatEngine {
         return;
       }
 
+      // update is in call variable
+      self.isInCall = true;
+
       // if button that cliced is on the toast then manually trigger call expand button
       $(".call-expand-button").trigger("click");
 
@@ -1056,52 +1063,100 @@ class CallEngine extends ChatEngine {
     self.socket.on("call_user_connected", (data) => {
       self.otherUserPeerId = data.fromUserPeerId;
       self.connectToNewUser(data.fromUserPeerId, stream, myPeer);
+      // update is in call variable
+      self.isInCall = true;
     });
 
     // Event listeners when user toggle mic or camera
     self.socket.on("mic_toggled", (data) => {
       if (data.from_user === self.userId) {
         self.toggleAudioOnly(self, myPeer, stream, data.isDisabled);
-        self.displayNotification("You are muted!", "success", 2000);
-      } else if (data.isDisabled) {
+        self.displayNotification(
+          `${data.isDisabled ? "You are muted!" : "You are now unmuted!"}`,
+          "success",
+          2000
+        );
+        return;
+      }
+      if (!self.isInCall) {
+        return;
+      }
+      if (data.isDisabled) {
         // update mic icon of connected user
         $("#is-mute").removeClass("fa-microphone");
         $("#is-mute").addClass("fa-microphone-slash");
         $("#is-mute").css({ padding: "10px 7.5px" });
-        self.displayNotification("User muted", "success", 2000);
+        self.displayNotification(
+          `${data.user_name && data.user_name.split(" ")[0]} is muted!`,
+          "success",
+          2000
+        );
       } else {
         // update mic icon of connected user
         $("#is-mute").removeClass("fa-microphone-slash");
         $("#is-mute").addClass("fa-microphone");
         $("#is-mute").css({ padding: "10px 13px" });
-        self.displayNotification("User unmuted", "success", 2000);
+        self.displayNotification(
+          `${data.user_name && data.user_name.split(" ")[0]} is now unmuted!`,
+          "success",
+          2000
+        );
       }
     });
     self.socket.on("camera_toggled", (data) => {
       if (data.from_user === self.userId) {
         self.toggleVideoOnly(self, myPeer, stream, data.isDisabled);
-      } else if (data.isDisabled) {
+        self.displayNotification(
+          `${
+            data.isDisabled
+              ? "Your video is hidden!"
+              : "Your video is now visible!"
+          }`,
+          "success",
+          2000
+        );
+        return;
+      }
+      if (!self.isInCall) {
+        return;
+      }
+      if (data.isDisabled) {
         // update video icon of connected user
         $("#is-camera-disabled").removeClass("fa-video");
         $("#is-camera-disabled").addClass("fa-video-slash");
-        self.displayNotification("Video hidden", "success", 2000);
+        self.displayNotification(
+          `${
+            data.user_name && data.user_name.split(" ")[0]
+          } turned off their video!`,
+          "success",
+          2000
+        );
       } else {
         // update video icon of connected user
         $("#is-camera-disabled").removeClass("fa-video-slash");
         $("#is-camera-disabled").addClass("fa-video");
-        self.displayNotification("User video visible", "success", 2000);
+        self.displayNotification(
+          `${
+            data.user_name && data.user_name.split(" ")[0]
+          } turned on their video!`,
+          "success",
+          2000
+        );
       }
     });
 
     // Event listener for when user leaves call
     self.socket.on("user_left_call", (data) => {
-      // if (self.peers[data.fromUserPeerId])
-      //   self.peers[data.fromUserPeerId].close();
-
       if (data.from_user === self.userId) {
         self.stopBothVideoAndAudio(self, stream);
+        self.displayNotification(`Call ended!`, "success", 2000);
       } else {
         self.updateCallModal(null, false);
+        self.displayNotification(
+          `${data.user_name && data.user_name.split(" ")[0]} ended call!`,
+          "success",
+          2000
+        );
       }
 
       self.callCleanUp(self);
@@ -1113,6 +1168,8 @@ class CallEngine extends ChatEngine {
     self.socket.emit("user_leaving_call", {
       from_user: self.userId,
       to_user: self.toUser,
+      user_name: self.userName,
+      user_profile: self.userAvatar,
       fromUserPeerId: self.peerId,
     });
 
@@ -1154,10 +1211,12 @@ class CallEngine extends ChatEngine {
         $(this).addClass("fa-microphone-slash");
       }
 
-      // emit event to the connected user
+      // emit event to self and connected user
       self.socket.emit("call_mic_toggle", {
         from_user: self.userId,
         to_user: self.toUser,
+        user_name: self.userName,
+        user_profile: self.userProfile,
         isDisabled: !isDisabled,
       });
     });
@@ -1178,6 +1237,8 @@ class CallEngine extends ChatEngine {
       self.socket.emit("call_camera_toggle", {
         from_user: self.userId,
         to_user: self.toUser,
+        user_name: self.userName,
+        user_profile: self.userProfile,
         isDisabled: !isDisabled,
       });
     });
@@ -1187,6 +1248,9 @@ class CallEngine extends ChatEngine {
       // close call modal
       self.closeCallModal(callModal, true);
       self.hideIncomingCallToast(self);
+
+      // update is in call vaiable
+      self.isInCall = false;
 
       // function to end current call
       self.endCall(self, self.mediaStream);
