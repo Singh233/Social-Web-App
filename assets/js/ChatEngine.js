@@ -519,6 +519,7 @@ class ChatEngine {
                 _id: data.to_user,
               },
               message: `${data.message}`,
+              messageType: `${data.messageType ? data.messageType : "text"}`,
               createdAt: timestamp,
             });
 
@@ -530,6 +531,7 @@ class ChatEngine {
                 email: data.user_email,
               },
               message: data.message,
+              messageType: `${data.messageType ? data.messageType : "text"}`,
               timestamp: timestamp,
             };
 
@@ -579,19 +581,30 @@ class ChatEngine {
       let profile = $("<img>");
 
       newMessage.addClass("animate__animated  animate__fadeIn");
-      let messageType = "other-message animate__animated  animate__fadeIn";
+      let senderType = "other-message animate__animated  animate__fadeIn";
 
       if (data.user_email === self.userEmail) {
-        messageType = "self-message";
+        senderType = "self-message";
         newMessage.append(`<div class="msg-content">
                                 <span>
                                     ${data.message} <sup>${data.time}</sup> 
                                 </span>
-                                <img src="${data.user_profile}">
+                                ${
+                                  data.messageType &&
+                                  data.messageType === "call"
+                                    ? `<i class="fa-solid fa-video"></i>`
+                                    : ""
+                                }
+                                
                             </div>`);
       } else {
         newMessage.append(`<div class="msg-content">
-                                <img src="${data.user_profile}">
+                                ${
+                                  data.messageType &&
+                                  data.messageType === "call"
+                                    ? `<i class="fa-solid fa-video"></i>`
+                                    : ""
+                                }
                                 <span>
                                     ${data.message} <sup>${data.time}</sup> 
                                 </span>
@@ -625,7 +638,7 @@ class ChatEngine {
       //     'html': data.user_name
       // }));
 
-      newMessage.addClass(messageType);
+      newMessage.addClass(senderType);
 
       $(`#chat-messages-list-private-${userId}`).append(newMessage);
       $("#chat-message-input-private").val("");
@@ -1245,6 +1258,15 @@ class CallEngine extends ChatEngine {
 
     // handle call exit click or close call
     $("#exit-call, #close-call-button").click(() => {
+      const msg = self.isInCall ? "Call ended!" : "Missed call!";
+      // send private message to user
+      self.sendPrivateMessage(
+        self,
+        msg,
+        self.userId,
+        self.toUser,
+        CALL_ROOM_ID
+      );
       // close call modal
       self.closeCallModal(callModal, true);
       self.hideIncomingCallToast(self);
@@ -1463,25 +1485,37 @@ class CallEngine extends ChatEngine {
     $("#user-video-button").removeClass("fa-video-slash disabled-video-button");
     $("#user-video-button").addClass("fa-video");
 
+    // remove previous animation and add new animation
+    $("#rejected-call-options").removeClass("animate__fadeIn animate__fadeOut");
+    $("#rejected-call-options").addClass("animate__fadeIn");
+
     // show rejected call options
     $("#rejected-call-options").css({ display: "flex" });
-
-    // show rejected call options for toast as well
-    $("#toast-rejected-call-options").css({ display: "flex" });
 
     // find outgoing call element and update call status
     const callStatus = $(".outgoing-call").find(".call-status");
 
     if (isOutgoingCall) {
+      // remove previous animation and add new animation
+      $(callStatus).removeClass("animate__fadeIn animate__fadeOut");
+      $(callStatus).addClass("animate__fadeIn");
       if (callStatus) {
         $(callStatus).text(message);
       }
     } else {
+      // remove animation classes from outgoing call banner and reciever video cover
+      $(".outgoing-call").removeClass(
+        "incoming-outgoing-shrink-animate incoming-outgoing-exp-animate"
+      );
+      $(".receiver-card-cover").removeClass(
+        "receiver-card-shrink-animate receiver-card-exp-animate"
+      );
+
       // remove outgoing/incoming call banner
       $(".outgoing-call").css({ display: "flex" });
       $(".incoming-call").css({ display: "none" });
 
-      // display header info
+      // hide header info
       $("#user-call-header").css({ display: "none" });
 
       // display receiver video cover
@@ -1642,6 +1676,45 @@ class CallEngine extends ChatEngine {
       "incoming-outgoing-exp-animate"
     );
     $(".receiver-card-cover").removeClass("receiver-card-exp-animate");
+  }
+
+  sendPrivateMessage(self, msg, fromUser, toUser, chatRoom) {
+    // send message to the server
+    self.socket.emit("send_private_message", {
+      message: msg,
+      messageType: "call",
+      user_email: self.userEmail,
+      user_name: self.userName,
+      user_profile: self.userProfile,
+      time: new Date().toLocaleTimeString("en-US", {
+        hour12: true,
+        hour: "numeric",
+        minute: "numeric",
+      }),
+      from_user: fromUser,
+      to_user: toUser,
+      chatroom: chatRoom,
+    });
+
+    fetch(
+      `/api/v1/chat/createmessage/${msg}/private/${fromUser}/${toUser}/${chatRoom}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        // console.log(data);
+      })
+      .catch(function (err) {
+        // console.log(err);
+      });
   }
 
   displayNotification(message, type, duration, icon) {

@@ -182,20 +182,23 @@
          minute: "numeric",
        })}</sup>
                                   </span>
-                                  <img src="${
-                                    data.sender.avatar
-                                      ? data.sender.avatar
-                                      : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                                  }">
+
+                                  ${
+                                    data.messageType &&
+                                    data.messageType === "call" ?
+                                    `<i class="fa-solid fa-video"></i>`
+                                    : ''
+                                  }
 
                               </div>`);
      } else {
        newMessage.append(`<div class="msg-content">
-                                  <img src="${
-                                    data.sender.avatar
-                                      ? data.sender.avatar
-                                      : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                                  }">
+                                  ${
+                                    data.messageType &&
+                                    data.messageType === "call" ?
+                                    `<i class="fa-solid fa-video"></i>`
+                                    : ''
+                                  }
                                   <span>
                                       ${data.message} <sup>${new Date(
          data.createdAt

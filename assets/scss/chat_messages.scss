@@ -209,8 +209,13 @@ $button-color-ligth-blue: #4db1ff;
         display: flex;
         align-items: center;
 
+        i {
+          padding: 10px;
+          background: #202020;
+          border-radius: 50%;
+          color: gray;
+        }
         span {
-          height: 100%;
           display: flex;
           align-items: center;
           padding-left: 10px;
@@ -218,6 +223,12 @@ $button-color-ligth-blue: #4db1ff;
           font-size: 0.9rem;
           margin-left: 6px;
           position: relative;
+
+          min-height: max-content;
+          padding: 10px;
+          padding-left: 15px;
+
+          text-align: left;
 
           background-color: $button-color-gray;
 
@@ -268,8 +279,13 @@ $button-color-ligth-blue: #4db1ff;
       .msg-content {
         display: flex;
         align-items: center;
+        i {
+          padding: 10px;
+          background: #202020;
+          border-radius: 50%;
+          color: gray;
+        }
         span {
-          height: 100%;
           display: flex;
           align-items: center;
           padding-left: 15px;
@@ -278,6 +294,12 @@ $button-color-ligth-blue: #4db1ff;
           margin-right: 6px;
 
           position: relative;
+
+          min-height: max-content;
+          padding: 10px;
+          padding-left: 15px;
+
+          text-align: right;
 
           background-color: $button-color-blue;
 
