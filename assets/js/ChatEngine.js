@@ -331,16 +331,23 @@ class ChatEngine {
           chatroom: "Global",
         });
 
-        fetch(
-          `/api/v1/chat/createmessage/${msg}/global/${self.userId}/all/global`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        )
+        const data = {
+          message: msg,
+          type: "global",
+          sender: self.userId,
+          receiver: "all",
+          chatRoomId: "global",
+          messageType: "text",
+        };
+
+        fetch(`/api/v1/chat/createmessage/`, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        })
           .then(function (response) {
             return response.json();
           })
@@ -355,15 +362,15 @@ class ChatEngine {
     });
 
     $("#send-message-private").click(function () {
-      let msg = $("#chat-message-input-private").val();
+      const msg = $("#chat-message-input-private").val();
 
       if (msg === "") {
         return;
       }
 
-      const to_user = document.getElementById("chat-user-id").value;
-      const from_user = self.userId;
-      let chatRoom = document.getElementById("chatroom-id").value;
+      const toUser = document.getElementById("chat-user-id").value;
+      const fromUser = self.userId;
+      const chatRoom = document.getElementById("chatroom-id").value;
 
       // send message to the server
       self.socket.emit("send_private_message", {
@@ -376,21 +383,27 @@ class ChatEngine {
           hour: "numeric",
           minute: "numeric",
         }),
-        from_user,
-        to_user,
+        from_user: fromUser,
+        to_user: toUser,
         chatroom: chatRoom,
       });
 
-      fetch(
-        `/api/v1/chat/createmessage/${msg}/private/${from_user}/${to_user}/${chatRoom}`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      const data = {
+        message: msg,
+        type: "private",
+        sender: fromUser,
+        receiver: toUser,
+        chatRoomId: chatRoom,
+        messageType: "text",
+      };
+      fetch(`/api/v1/chat/createmessage/`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
         .then(function (response) {
           return response.json();
         })
@@ -586,13 +599,22 @@ class ChatEngine {
       if (data.user_email === self.userEmail) {
         senderType = "self-message";
         newMessage.append(`<div class="msg-content">
-                                <span>
+                                <span style='${
+                                  data.messageType &&
+                                  data.messageType === "call"
+                                    ? `background-color: #202020`
+                                    : ""
+                                }'>
                                     ${data.message} <sup>${data.time}</sup> 
                                 </span>
                                 ${
                                   data.messageType &&
                                   data.messageType === "call"
-                                    ? `<i class="fa-solid fa-video"></i>`
+                                    ? `<i class="fa-solid fa-video" style='${
+                                        data.message === "Video call started"
+                                          ? `background-color: #37dc52`
+                                          : "background-color: #d20a0a"
+                                      }'></i>`
                                     : ""
                                 }
                                 
@@ -602,10 +624,19 @@ class ChatEngine {
                                 ${
                                   data.messageType &&
                                   data.messageType === "call"
-                                    ? `<i class="fa-solid fa-video"></i>`
+                                    ? `<i class="fa-solid fa-video" style='${
+                                        data.message === "Video call started"
+                                          ? `background-color: #37dc52`
+                                          : "background-color: #d20a0a"
+                                      }'></i>`
                                     : ""
                                 }
-                                <span>
+                                <span style='${
+                                  data.messageType &&
+                                  data.messageType === "call"
+                                    ? `background-color: #202020`
+                                    : ""
+                                }'>
                                     ${data.message} <sup>${data.time}</sup> 
                                 </span>
                                 
@@ -614,7 +645,7 @@ class ChatEngine {
 
       // check if the last message was sent by the same user
       if ($(`#chat-messages-list-private-${userId} li`).length) {
-        let lastMessage = $(
+        const lastMessage = $(
           `#chat-messages-list-private-${userId} li:last-child`
         );
 
@@ -666,7 +697,7 @@ class ChatEngine {
       newMessage.addClass("animate__animated  animate__fadeIn");
       let messageType = "other-message animate__animated  animate__fadeIn";
 
-      if (data.sender.email == self.userEmail) {
+      if (data.sender.email === self.userEmail) {
         messageType = "self-message";
         newMessage.append(`<div class="msg-content">
                                 <span>
@@ -792,10 +823,16 @@ class ChatEngine {
 class CallEngine extends ChatEngine {
   constructor(chatBoxId, userId, userEmail, userName, userProfile, host) {
     super(chatBoxId, userId, userEmail, userName, userProfile, host);
-
+    // Define the call states
+    this.CALL_STATES = {
+      IDLE: "idle",
+      ANSWERED: "answered",
+      RINGING: "ringing",
+    };
     this.callConnectionHandler();
     this.peerId = null;
     this.mediaStream = null;
+    this.callerUserId = null;
 
     // current caller object
     this.callee = {
@@ -813,7 +850,9 @@ class CallEngine extends ChatEngine {
 
     this.peers = {};
     this.toUser = null;
-    this.isInCall = false;
+    this.isCallRinging = false;
+    // initial state
+    this.callState = this.CALL_STATES.IDLE;
   }
 
   callConnectionHandler() {
@@ -841,6 +880,9 @@ class CallEngine extends ChatEngine {
       }
 
       self.openCallModal(callModal, true);
+
+      // update callerUserId
+      self.callerUserId = self.userId;
 
       // set reciever name and avatar
       const parent = $(userVideoButton).parent();
@@ -885,9 +927,26 @@ class CallEngine extends ChatEngine {
         from_user: fromUser,
         user_name: self.userName,
         user_profile: self.userProfile,
+        user_email: self.userEmail,
         callRoomId: CALL_ROOM_ID,
         peerId: self.peerId,
       });
+
+      // Send text message to maintain call history in chats
+      if (
+        self.callState === self.CALL_STATES.IDLE ||
+        self.callState === self.CALL_STATES.RINGING
+      ) {
+        const msg = "Video call started";
+        // send private message to user
+        self.sendPrivateMessage(
+          self,
+          msg,
+          self.userId,
+          self.toUser,
+          CALL_ROOM_ID
+        );
+      }
       // enable call exit icon
       $(".call-exit-icon").css({ display: "block" });
       // if user tries to reconnect
@@ -916,6 +975,11 @@ class CallEngine extends ChatEngine {
       }
 
       CALL_ROOM_ID = data.callRoomId;
+
+      // update callerUserId
+      self.callerUserId = data.from_user;
+
+      self.callState = self.CALL_STATES.RINGING;
 
       // update callee
       self.callee = {
@@ -971,6 +1035,20 @@ class CallEngine extends ChatEngine {
     });
 
     self.socket.on("user_declined_call_notification", (data) => {
+      if (
+        self.callState === self.CALL_STATES.IDLE ||
+        self.callState === self.CALL_STATES.RINGING
+      ) {
+        const msg = "Missed video call";
+        // send private message to user
+        self.sendPrivateMessage(
+          self,
+          msg,
+          self.userId,
+          self.toUser,
+          CALL_ROOM_ID
+        );
+      }
       self.updateCallModal("Call declined!", true);
     });
 
@@ -978,10 +1056,30 @@ class CallEngine extends ChatEngine {
       self.updateCallModal("Busy!", true);
     });
 
-    self.socket.on("call_user_disconnected", (userId) => {
-      if (this.peers[userId]) this.peers[userId].close();
+    self.socket.on("call_user_disconnected", (data) => {
+      if (
+        self.callState === self.CALL_STATES.ANSWERED ||
+        self.callState === self.CALL_STATES.RINGING
+      ) {
+        self.sendPrivateMessage(
+          self,
+          "Video call ended!",
+          data.from_user,
+          data.to_user,
+          data.chatroom,
+          data.user_name,
+          data.user_email,
+          data.user_profile
+        );
+        self.updateCallModal(null, false);
+        self.displayNotification(
+          `${data.user_name && data.user_name.split(" ")[0]} left call!`,
+          "success",
+          2000
+        );
+      }
       // update is in call variable
-      self.isInCall = false;
+      self.callState = self.CALL_STATES.IDLE;
     });
   }
 
@@ -1002,10 +1100,17 @@ class CallEngine extends ChatEngine {
   initiateCall(self, myPeer, otherUserPeerId) {
     const stream = self.mediaStream;
 
-    self.socket.emit("join_video_call", {
-      callRoomId: CALL_ROOM_ID,
-      peerId: self.peerId,
-    });
+    if (stream && stream.active) {
+      self.socket.emit("join_video_call", {
+        to_user: self.toUser,
+        from_user: self.userId,
+        user_name: self.userName,
+        user_profile: self.userProfile,
+        user_email: self.userEmail,
+        callRoomId: CALL_ROOM_ID,
+        peerId: self.peerId,
+      });
+    }
 
     self.addVideoStream(self.myVideo, stream);
 
@@ -1047,7 +1152,7 @@ class CallEngine extends ChatEngine {
       }
 
       // update is in call variable
-      self.isInCall = true;
+      self.callState = self.CALL_STATES.ANSWERED;
 
       // if button that cliced is on the toast then manually trigger call expand button
       $(".call-expand-button").trigger("click");
@@ -1077,7 +1182,7 @@ class CallEngine extends ChatEngine {
       self.otherUserPeerId = data.fromUserPeerId;
       self.connectToNewUser(data.fromUserPeerId, stream, myPeer);
       // update is in call variable
-      self.isInCall = true;
+      self.callState = self.CALL_STATES.ANSWERED;
     });
 
     // Event listeners when user toggle mic or camera
@@ -1091,7 +1196,10 @@ class CallEngine extends ChatEngine {
         );
         return;
       }
-      if (!self.isInCall) {
+      if (
+        self.callState === self.CALL_STATES.IDLE ||
+        self.callState === self.CALL_STATES.RINGING
+      ) {
         return;
       }
       if (data.isDisabled) {
@@ -1130,7 +1238,10 @@ class CallEngine extends ChatEngine {
         );
         return;
       }
-      if (!self.isInCall) {
+      if (
+        self.callState === self.CALL_STATES.IDLE ||
+        self.callState === self.CALL_STATES.RINGING
+      ) {
         return;
       }
       if (data.isDisabled) {
@@ -1160,6 +1271,23 @@ class CallEngine extends ChatEngine {
 
     // Event listener for when user leaves call
     self.socket.on("user_left_call", (data) => {
+      if (
+        self.peers &&
+        self.otherUserPeerId &&
+        self.peers[self.otherUserPeerId]
+      ) {
+        const msg = "Video call ended";
+        // send private message to user
+        self.sendPrivateMessage(
+          self,
+          msg,
+          self.userId,
+          self.toUser,
+          CALL_ROOM_ID
+        );
+      }
+      self.callState = self.CALL_STATES.IDLE;
+
       if (data.from_user === self.userId) {
         self.stopBothVideoAndAudio(self, stream);
         self.displayNotification(`Call ended!`, "success", 2000);
@@ -1189,8 +1317,8 @@ class CallEngine extends ChatEngine {
     // Clean up any other resources associated with the call
     self.stopBothVideoAndAudio(self, stream);
     self.callCleanUp(self);
-
-    self.isInCall = false;
+    self.callState = self.CALL_STATES.IDLE;
+    self.callerUserId = null;
   }
 
   cancelCall(self, stream) {
@@ -1257,23 +1385,34 @@ class CallEngine extends ChatEngine {
     });
 
     // handle call exit click or close call
-    $("#exit-call, #close-call-button").click(() => {
-      const msg = self.isInCall ? "Call ended!" : "Missed call!";
-      // send private message to user
-      self.sendPrivateMessage(
-        self,
-        msg,
-        self.userId,
-        self.toUser,
-        CALL_ROOM_ID
-      );
+    $("#exit-call, #close-call-button").click((e) => {
+      if (e.currentTarget.id === "exit-call") {
+        if (
+          (self.peers &&
+            self.otherUserPeerId &&
+            self.peers[self.otherUserPeerId]) ||
+          (self.callerUserId && self.callerUserId === self.userId)
+        ) {
+          const msg =
+            self.callState === self.CALL_STATES.ANSWERED
+              ? "Video call ended"
+              : "Missed video call";
+          // send private message to user
+          self.sendPrivateMessage(
+            self,
+            msg,
+            self.userId,
+            self.toUser,
+            CALL_ROOM_ID
+          );
+        }
+      }
       // close call modal
       self.closeCallModal(callModal, true);
       self.hideIncomingCallToast(self);
 
       // update is in call vaiable
-      self.isInCall = false;
-
+      self.callState = self.CALL_STATES.IDLE;
       // function to end current call
       self.endCall(self, self.mediaStream);
     });
@@ -1381,9 +1520,14 @@ class CallEngine extends ChatEngine {
   }
 
   closePeerConnection(self) {
-    if (self.peers[self.peerId]) self.peers[self.peerId].close();
-    if (self.otherUserPeerId && self.peers[self.otherUserPeerId])
+    if (self.peers[self.peerId]) {
+      self.peers[self.peerId].close();
+      self.peers[self.peerId] = null;
+    }
+    if (self.otherUserPeerId && self.peers[self.otherUserPeerId]) {
       self.peers[self.otherUserPeerId].close();
+      self.peers[self.otherUserPeerId] = null;
+    }
   }
 
   closeCallModal(callModal, isOutgoingCall) {
@@ -1678,14 +1822,16 @@ class CallEngine extends ChatEngine {
     $(".receiver-card-cover").removeClass("receiver-card-exp-animate");
   }
 
-  sendPrivateMessage(self, msg, fromUser, toUser, chatRoom) {
+  sendPrivateMessage(self, msg, fromUser, toUser, chatRoom, ...userData) {
     // send message to the server
     self.socket.emit("send_private_message", {
       message: msg,
       messageType: "call",
-      user_email: self.userEmail,
-      user_name: self.userName,
-      user_profile: self.userProfile,
+      user_name: userData && userData.length > 0 ? userData[0] : self.userName,
+      user_email:
+        userData && userData.length > 0 ? userData[1] : self.userEmail,
+      user_profile:
+        userData && userData.length > 0 ? userData[2] : self.userProfile,
       time: new Date().toLocaleTimeString("en-US", {
         hour12: true,
         hour: "numeric",
@@ -1695,17 +1841,27 @@ class CallEngine extends ChatEngine {
       to_user: toUser,
       chatroom: chatRoom,
     });
+    self.addToDB(self, msg, fromUser, toUser, chatRoom);
+  }
 
-    fetch(
-      `/api/v1/chat/createmessage/${msg}/private/${fromUser}/${toUser}/${chatRoom}`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    )
+  addToDB(self, msg, fromUser, toUser, chatRoom) {
+    const data = {
+      message: msg,
+      type: "private",
+      sender: fromUser,
+      receiver: toUser,
+      chatRoomId: chatRoom,
+      messageType: "call",
+    };
+
+    fetch(`/api/v1/chat/createmessage/`, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
       .then(function (response) {
         return response.json();
       })

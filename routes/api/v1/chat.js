@@ -5,9 +5,6 @@ const chatApi = require("../../../controllers/api/v1/chat_api");
 
 router.get("/:type/:sender/:receiver/:chatRoomId", chatApi.joinChatRoom);
 
-router.post(
-  "/createmessage/:message/:type/:sender/:receiver/:chatRoomId",
-  chatApi.createMessage
-);
+router.post("/createmessage/", chatApi.createMessage);
 
 module.exports = router;

@@ -173,7 +173,11 @@
      if (data.sender.email === "<%= locals.user.email %>") {
        messageType = "self-message";
        newMessage.append(`<div class="msg-content">
-                                  <span>
+                                  <span style='${
+                                    data.messageType &&
+                                    data.messageType === "call" ?
+                                    `background-color: #202020`
+                                    : ''}'>
                                       ${data.message} <sup>${new Date(
          data.createdAt
        ).toLocaleTimeString("en-US", {
@@ -186,20 +190,31 @@
                                   ${
                                     data.messageType &&
                                     data.messageType === "call" ?
-                                    `<i class="fa-solid fa-video"></i>`
+                                    `<i class="fa-solid fa-video" style='${
+                                    data.message === "Video call started" ?
+                                    `background-color: #37dc52`
+                                    : 'background-color: #d20a0a'}'></i>`
                                     : ''
                                   }
 
                               </div>`);
      } else {
-       newMessage.append(`<div class="msg-content">
+       newMessage.append(
+        `<div class="msg-content">
                                   ${
                                     data.messageType &&
                                     data.messageType === "call" ?
-                                    `<i class="fa-solid fa-video"></i>`
+                                    `<i class="fa-solid fa-video" style='${
+                                    data.message === "Video call started" ?
+                                    `background-color: #37dc52`
+                                    : 'background-color: #d20a0a'}'></i>`
                                     : ''
                                   }
-                                  <span>
+                                  <span style='${
+                                    data.messageType &&
+                                    data.messageType === "call" ?
+                                    `background-color: #202020`
+                                    : ''}'>
                                       ${data.message} <sup>${new Date(
          data.createdAt
        ).toLocaleTimeString("en-US", {

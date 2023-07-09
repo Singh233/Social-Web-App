@@ -32,6 +32,11 @@ const chatRoomSchema = new Schema(
       message: {
         type: String,
       },
+      messageType: {
+        type: String,
+        enum: ["text", "call"],
+        default: "text",
+      },
       timestamp: {
         type: Date,
       },
@@ -69,6 +74,11 @@ const chatRoomSchema = new Schema(
         message: {
           type: String,
           required: true,
+        },
+        messageType: {
+          type: String,
+          enum: ["text", "call"],
+          default: "text",
         },
         createdAt: {
           type: Date,

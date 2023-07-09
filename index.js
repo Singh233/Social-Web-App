@@ -66,8 +66,8 @@ const multerMid = multer({
 
 app.use(multerMid.single("filepond"));
 
-// app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
-// app.use(bodyParser.json()); // Send JSON responses
+app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
+app.use(bodyParser.json()); // Send JSON responses
 app.use(express.urlencoded({ extended: true }));
 
 app.use(

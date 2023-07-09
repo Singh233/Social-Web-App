@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unsupported-features/es-syntax */
 /* eslint-disable no-restricted-syntax */
 const moment = require("moment");
 const socketIo = require("socket.io");
@@ -148,7 +149,30 @@ module.exports.chatSockets = function (socketServer) {
       // io.in(data.callRoomId).emit("user_calling", data);
 
       socket.on("disconnect", () => {
-        socket.to(data.callRoomId).emit("call_user_disconnected", data.peerId);
+        // console.log("user disconnected");
+        const msgData = {
+          message: "Video call ended",
+          messageType: "call",
+          user_name: data.user_name,
+          user_email: data.user_email,
+          user_profile: data.user_profile,
+          time: new Date().toLocaleTimeString("en-US", {
+            hour12: true,
+            hour: "numeric",
+            minute: "numeric",
+          }),
+          from_user: data.from_user,
+          to_user: data.to_user,
+          chatroom: data.callRoomId,
+          socketDisconnect: true,
+        };
+        if (activeUsers.has(data.to_user)) {
+          // emit notification to the receiver of the message only
+          io.to(activeUsers.get(data.to_user).socketId).emit(
+            "call_user_disconnected",
+            msgData
+          );
+        }
       });
     });
 

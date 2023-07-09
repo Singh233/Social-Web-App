@@ -6,12 +6,13 @@ const ChatRoom = require("../../../models/chatRoom");
 const Friendship = require("../../../models/friendship");
 const User = require("../../../models/user");
 
-const paramsValidator = Joi.object({
+const bodyValidator = Joi.object({
   sender: Joi.string().required(),
   receiver: Joi.string().required(),
   type: Joi.string().valid("global", "private").required(),
   message: Joi.string(),
   chatRoomId: Joi.string(),
+  messageType: Joi.string().valid("text", "call"),
 });
 
 function handleResponse(res, status, message, data, success) {
@@ -96,6 +97,7 @@ async function createGlobalMessage(data, res) {
       email: sender.email,
     },
     message: message,
+    messageType: "text",
     createdAt: formattedDate,
   };
 
@@ -108,6 +110,7 @@ async function createGlobalMessage(data, res) {
       email: sender.email,
     },
     message: message,
+    messageType: "text",
     timestamp: formattedDate,
   };
   // set lastMessage in the chatRoom
@@ -120,7 +123,13 @@ async function createGlobalMessage(data, res) {
 }
 
 async function createPrivateMessage(data, res) {
-  const { sender: senderId, receiver: receiverId, message, chatRoomId } = data;
+  const {
+    sender: senderId,
+    receiver: receiverId,
+    message,
+    chatRoomId,
+    messageType,
+  } = data;
 
   // find the chat room
   const chatRoom = await ChatRoom.findById(chatRoomId);
@@ -143,7 +152,8 @@ async function createPrivateMessage(data, res) {
       avatar: receiver.avatar,
       email: receiver.email,
     },
-    message: message,
+    message,
+    messageType,
     createdAt: formattedDate,
   };
 
@@ -155,7 +165,8 @@ async function createPrivateMessage(data, res) {
       avatar: sender.avatar,
       email: sender.email,
     },
-    message: message,
+    message,
+    messageType,
     timestamp: formattedDate,
   };
 
@@ -170,7 +181,7 @@ async function createPrivateMessage(data, res) {
 
 module.exports.joinChatRoom = async function (req, res) {
   // validate the request params
-  const { error, value } = paramsValidator.validate(req.params);
+  const { error, value } = bodyValidator.validate(req.body);
 
   // if the request params are invalid then return the error
   if (error) {
@@ -202,7 +213,7 @@ module.exports.joinChatRoom = async function (req, res) {
 // controller for creating a chat message
 module.exports.createMessage = async function (req, res) {
   // validate the request params
-  const { error, value } = paramsValidator.validate(req.params);
+  const { error, value } = bodyValidator.validate(req.body);
 
   if (error) {
     return handleResponse(res, 400, error.message, null, false);
