@@ -2,8 +2,10 @@
 /* eslint-disable no-restricted-syntax */
 const moment = require("moment");
 const socketIo = require("socket.io");
+const http = require("http");
 
 const Socket = require("../models/socket");
+const { update } = require("lodash");
 
 function emitToUserFromUser(io, activeUsers, data, message) {
   if (activeUsers.has(data.from_user)) {
@@ -16,12 +18,59 @@ function emitToUserFromUser(io, activeUsers, data, message) {
   }
 }
 
+function addToDB(msg, fromUser, toUser, chatRoom) {
+  const options = {
+    hostname: "localhost", // server's hostname
+    port: 8000, // server's port
+    path: "/api/v1/chat/createmessage/", // API endpoint you want to call
+    method: "POST", // POST HTTP method
+    headers: {
+      "Content-Type": "application/json", // Set the content type of the request body
+    },
+  };
+  const requestBody = JSON.stringify({
+    message: msg,
+    type: "private",
+    sender: fromUser,
+    receiver: toUser,
+    chatRoomId: chatRoom,
+    messageType: "call",
+  });
+
+  const req = http.request(options, (res) => {
+    let data = "";
+
+    res.on("data", (chunk) => {
+      data += chunk;
+    });
+
+    res.on("end", () => {
+      // console.log("Response:", data);
+      // Do something with the response data
+    });
+  });
+
+  req.on("error", (error) => {
+    // console.error("Error:", error);
+  });
+
+  req.write(requestBody); // Write the request body
+  req.end();
+}
+
 module.exports.chatSockets = function (socketServer) {
   const io = socketIo(socketServer, {
     cors: {
       origin: "*",
     },
   });
+
+  const CALL_STATES = {
+    IDLE: "idle",
+    ANSWERED: "answered",
+    RINGING: "ringing",
+  };
+
   // make a map of all the users
   let activeUsers = new Map();
   // get the map from the database
@@ -41,6 +90,23 @@ module.exports.chatSockets = function (socketServer) {
       mapData: activeUsers,
     });
   }
+  function updateCallState(fromUser, toUser, callState) {
+    // check if activeUsers map has the from user/ to user and update call state
+    if (activeUsers.has(fromUser)) {
+      activeUsers.set(fromUser, {
+        ...activeUsers.get(fromUser),
+        callState: callState,
+        isCaller: true,
+      });
+    }
+    if (activeUsers.has(toUser)) {
+      activeUsers.set(toUser, {
+        ...activeUsers.get(toUser),
+        callState: callState,
+        isCaller: false,
+      });
+    }
+  }
 
   io.sockets.on("connection", function (socket) {
     // console.log('new connection received', socket.id);
@@ -49,6 +115,8 @@ module.exports.chatSockets = function (socketServer) {
       userId: socket.handshake.query.userId,
       socketId: socket.id,
       status: "Active now",
+      callState: CALL_STATES.IDLE,
+      isCaller: false,
       timeStamp: new Date(),
       moment: moment(new Date()).fromNow(),
     });
@@ -73,6 +141,7 @@ module.exports.chatSockets = function (socketServer) {
           userId: data.user_id,
           socketId: socket.id,
           status: "Active now",
+          callState: CALL_STATES.IDLE,
           timeStamp: new Date(),
           moment: moment(new Date()).fromNow(),
         });
@@ -100,6 +169,7 @@ module.exports.chatSockets = function (socketServer) {
       // update status of user to offline and emit to all users
       if (activeUsers.has(userId)) {
         activeUsers.set(userId, {
+          ...activeUsers.get(userId),
           userId: activeUsers.get(userId).userId,
           socketId: socket.id,
           status: "offline",
@@ -149,7 +219,6 @@ module.exports.chatSockets = function (socketServer) {
       // io.in(data.callRoomId).emit("user_calling", data);
 
       socket.on("disconnect", () => {
-        // console.log("user disconnected");
         const msgData = {
           message: "Video call ended",
           messageType: "call",
@@ -173,6 +242,20 @@ module.exports.chatSockets = function (socketServer) {
             msgData
           );
         }
+        if (
+          activeUsers.has(data.from_user) &&
+          activeUsers.get(data.from_user).isCaller &&
+          (activeUsers.get(data.from_user).callState === CALL_STATES.ANSWERED ||
+            activeUsers.get(data.from_user).callState === CALL_STATES.RINGING)
+        ) {
+          addToDB(
+            "Video call ended",
+            data.from_user,
+            data.to_user,
+            data.callRoomId
+          );
+          updateCallState(data.from_user, data.to_user, CALL_STATES.IDLE);
+        }
       });
     });
 
@@ -184,6 +267,7 @@ module.exports.chatSockets = function (socketServer) {
           data
         );
       }
+      updateCallState(data.from_user, data.to_user, CALL_STATES.RINGING);
     });
 
     socket.on("user_answered_call", (newData) => {
@@ -194,6 +278,7 @@ module.exports.chatSockets = function (socketServer) {
           newData
         );
       }
+      updateCallState(newData.to_user, newData.from_user, CALL_STATES.ANSWERED);
     });
 
     socket.on("user_on_another_call", (data) => {
@@ -201,6 +286,7 @@ module.exports.chatSockets = function (socketServer) {
         // emit notification to the receiver of the message only
         io.to(activeUsers.get(data.to_user).socketId).emit("user_busy", data);
       }
+      updateCallState(data.to_user, data.from_user, CALL_STATES.ANSWERED);
     });
 
     socket.on("user_declined_call", (data) => {
@@ -211,6 +297,7 @@ module.exports.chatSockets = function (socketServer) {
           data
         );
       }
+      updateCallState(data.to_user, data.from_user, CALL_STATES.ANSWERED);
     });
 
     socket.on("call_mic_toggle", (data) => {
@@ -223,6 +310,7 @@ module.exports.chatSockets = function (socketServer) {
 
     socket.on("user_leaving_call", (data) => {
       emitToUserFromUser(io, activeUsers, data, "user_left_call");
+      updateCallState(data.from_user, data.to_user, CALL_STATES.IDLE);
     });
 
     // Send private message to a user

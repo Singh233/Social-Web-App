@@ -375,6 +375,7 @@ class ChatEngine {
       // send message to the server
       self.socket.emit("send_private_message", {
         message: msg,
+        messageType: "text",
         user_email: self.userEmail,
         user_name: self.userName,
         user_profile: self.userProfile,
@@ -494,7 +495,9 @@ class ChatEngine {
       // add message to friend chatroom
       if (
         $("#user-messages-private").hasClass("remove") &&
-        self.userId === data.to_user
+        self.userId === data.to_user &&
+        data.messageType &&
+        data.messageType === "text"
       ) {
         toast(
           `New message from ${data.user_name.split(" ")[0]}`,
@@ -946,6 +949,8 @@ class CallEngine extends ChatEngine {
           self.toUser,
           CALL_ROOM_ID
         );
+        // save in database
+        self.addToDB(self, msg, self.userId, self.toUser, CALL_ROOM_ID);
       }
       // enable call exit icon
       $(".call-exit-icon").css({ display: "block" });
@@ -962,11 +967,7 @@ class CallEngine extends ChatEngine {
 
     self.socket.on("user_is_calling_notification", (data) => {
       // if media stream is already active this means user is on another call or waiting to respond
-      if (
-        self.mediaStream &&
-        self.mediaStream.active &&
-        CALL_ROOM_ID !== data.callRoomId
-      ) {
+      if (self.callState !== self.CALL_STATES.IDLE) {
         self.socket.emit("user_on_another_call", {
           from_user: data.to_user,
           to_user: data.from_user,
@@ -1048,18 +1049,38 @@ class CallEngine extends ChatEngine {
           self.toUser,
           CALL_ROOM_ID
         );
+        // save in database
+        self.addToDB(self, msg, self.userId, self.toUser, CALL_ROOM_ID);
       }
       self.updateCallModal("Call declined!", true);
     });
 
     self.socket.on("user_busy", (data) => {
-      self.updateCallModal("Busy!", true);
+      self.updateCallModal("On another call!", true);
+
+      if (
+        self.callState === self.CALL_STATES.IDLE ||
+        self.callState === self.CALL_STATES.RINGING
+      ) {
+        const msg = "Missed video call";
+        // send private message to user
+        self.sendPrivateMessage(
+          self,
+          msg,
+          self.userId,
+          self.toUser,
+          CALL_ROOM_ID
+        );
+        // save in database
+        self.addToDB(self, msg, self.userId, self.toUser, CALL_ROOM_ID);
+      }
     });
 
     self.socket.on("call_user_disconnected", (data) => {
       if (
-        self.callState === self.CALL_STATES.ANSWERED ||
-        self.callState === self.CALL_STATES.RINGING
+        (!self.callerUserId || self.callerUserId !== self.userId) &&
+        (self.callState === self.CALL_STATES.ANSWERED ||
+          self.callState === self.CALL_STATES.RINGING)
       ) {
         self.sendPrivateMessage(
           self,
@@ -1285,6 +1306,8 @@ class CallEngine extends ChatEngine {
           self.toUser,
           CALL_ROOM_ID
         );
+        // add message in database
+        self.addToDB(self, msg, self.userId, self.toUser, CALL_ROOM_ID);
       }
       self.callState = self.CALL_STATES.IDLE;
 
@@ -1405,6 +1428,8 @@ class CallEngine extends ChatEngine {
             self.toUser,
             CALL_ROOM_ID
           );
+          // add message in database
+          self.addToDB(self, msg, self.userId, self.toUser, CALL_ROOM_ID);
         }
       }
       // close call modal
@@ -1841,7 +1866,6 @@ class CallEngine extends ChatEngine {
       to_user: toUser,
       chatroom: chatRoom,
     });
-    self.addToDB(self, msg, fromUser, toUser, chatRoom);
   }
 
   addToDB(self, msg, fromUser, toUser, chatRoom) {

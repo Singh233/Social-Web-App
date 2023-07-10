@@ -152,7 +152,7 @@ video {
   display: none;
   flex-direction: column;
   position: fixed;
-  z-index: 9999;
+  z-index: 1000;
 
   padding: 20px;
   padding-bottom: 5px;
@@ -248,7 +248,8 @@ video {
       align-items: center;
       margin-top: 10px;
 
-      p {
+      .answer,
+      .reject {
         display: flex;
         align-items: center;
         padding: 10px 20px;
@@ -285,7 +286,8 @@ video {
       display: none;
       align-items: center;
 
-      p {
+      #call-again-button,
+      #close-call-button {
         padding: 10px 20px;
         color: white;
         border-radius: 15px;
@@ -610,7 +612,8 @@ video {
           align-items: center;
           margin-top: 10px;
 
-          p {
+          .answer,
+          .reject {
             display: flex;
             align-items: center;
             padding: 10px 20px;
@@ -647,7 +650,8 @@ video {
           display: none;
           align-items: center;
 
-          p {
+          #call-again-button,
+          #close-call-button {
             padding: 10px 20px;
             color: white;
             border-radius: 15px;
@@ -769,7 +773,6 @@ video {
   animation: incomingOutgoingAnimationZoomOut 0.5s;
 }
 
-
 @keyframes zoomIn {
   0% {
     top: 10px;
@@ -851,5 +854,511 @@ video {
   100% {
     min-width: 338px;
     min-height: 238px;
+  }
+}
+
+@media screen and (max-width: "550px") {
+  video {
+    min-width: 94vw;
+    max-width: none;
+    min-height: 48vh;
+    max-height: none;
+  }
+
+  .incoming-outgoing-call-window {
+    padding: 10px;
+    .call-expand-button {
+      font-size: 1.1rem;
+      top: 82%;
+      right: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transform: rotateZ(180deg);
+    }
+
+    .receiver-card-cover {
+      width: 100%;
+      height: 100%;
+      min-width: 94vw;
+      min-height: 205px;
+    }
+
+    .incoming-call,
+    .outgoing-call {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 1;
+      transform: translate(-50%, -50%);
+      min-width: 0;
+      max-width: 0;
+      min-height: 0;
+      max-height: 0;
+      width: 100%;
+      height: 100%;
+      margin-top: 8px;
+      img {
+        height: 45px;
+        width: 45px;
+      }
+
+      .username {
+        font-size: 1.1rem;
+      }
+    }
+
+    .incoming-call {
+      .incoming-call-actions {
+        margin-top: 10px;
+
+        .answer,
+        .reject {
+          padding: 10px 20px;
+          border-radius: 15px;
+          font-size: 1rem;
+
+          p {
+          }
+          i {
+            margin-right: 7px;
+          }
+        }
+      }
+    }
+
+    .outgoing-call {
+      #rejected-call-options {
+        #call-again-button,
+        #close-call-button {
+          padding: 10px 20px;
+          color: white;
+          border-radius: 15px;
+
+          display: flex;
+          align-items: center;
+          margin: 10px;
+          width: max-content;
+
+          p {
+            // display: none;
+          }
+
+          i {
+            margin-right: 6px;
+          }
+        }
+      }
+    }
+
+    .header {
+      margin-top: 10px;
+      width: 96%;
+      background: none;
+      img {
+        height: 45px;
+        width: 45px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin: 10px;
+      }
+
+      p {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .user-status {
+        position: absolute;
+        right: 10px;
+
+        i {
+          margin: 5px;
+          padding: 10px;
+          border-radius: 50%;
+        }
+
+        .mic-icon {
+          padding: 10px 13px;
+        }
+
+        .hide {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .call-minimised {
+    top: 63px;
+    left: 0;
+    width: 100vw;
+
+    .receiver-card-cover {
+      display: flex;
+    }
+
+    .incoming-call,
+    .outgoing-call {
+      // flex-direction: row;
+      min-width: 95vw;
+      min-height: 205px;
+      padding: 0px;
+      margin-top: 0px;
+    }
+  }
+
+  .call-maximised {
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .receiver-card-cover {
+      width: 100%;
+      height: 100%;
+      min-width: 92.5vw;
+      max-width: 92.5vw;
+      min-height: 48vh;
+      max-height: 48vh;
+      border-radius: 30px;
+    }
+
+    .incoming-call,
+    .outgoing-call {
+      flex-direction: column;
+      min-width: 93vw;
+      max-width: 0;
+      min-height: 48vh;
+      max-height: 0;
+      margin-top: 2px;
+    }
+  }
+
+  .call-container {
+    .call-wrapper {
+      .call-minimise-button {
+        display: none;
+      }
+
+      .caller-card {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        bottom: 0;
+
+        padding: 10px;
+        padding-top: 5px;
+
+        .header {
+          width: 96%;
+          position: absolute;
+          top: 5px;
+
+          img {
+            height: 45px;
+            width: 45px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 10px;
+          }
+
+          p {
+            font-size: 1.1rem;
+            font-weight: 600;
+          }
+        }
+
+        .call-actions {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 93%;
+          padding: 10px 20px;
+          border-radius: 20px;
+          border: 1px solid rgba(233, 233, 233, 0.233);
+          background-color: rgba(255, 255, 255, 0.139);
+          backdrop-filter: blur(30px);
+          -webkit-backdrop-filter: blur(30px);
+
+          position: absolute;
+          bottom: 23px;
+          left: 50%;
+          right: 50%;
+          width: max-content;
+          margin: auto;
+          transform: translate(-50%, -10px);
+
+          i {
+            background-color: rgba(255, 255, 255, 0.541);
+            border-radius: 50%;
+            padding: 10px;
+            margin: 5px;
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-out;
+
+            &:hover {
+              background-color: lighten($color: #d20a0a, $amount: 0%);
+            }
+          }
+
+          .disabled {
+            background-color: #d20a0a;
+          }
+
+          .mic-icon {
+            padding: 10px 13px;
+          }
+        }
+      }
+
+      .receiver-card {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        padding: 20px;
+        padding-bottom: 5px;
+
+        .receiver-video {
+          display: none;
+        }
+
+        .dummy-card {
+          width: 100%;
+          height: 100%;
+          min-width: 500px;
+          max-width: 500px;
+          min-height: 376px;
+          max-height: 376px;
+          border-radius: 30px;
+        }
+
+        .incoming-call,
+        .outgoing-call {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          z-index: 1;
+          transform: translate(-50%, -50%);
+          min-width: 500px;
+          max-width: 500px;
+          min-height: 375px;
+          max-height: 375px;
+          margin-top: 8px;
+          display: none;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          border-radius: 30px;
+          padding: 20px;
+          border: 1px solid rgba(233, 233, 233, 0.233);
+          transition: all 0.4s ease-in-out;
+
+          // background-color: rgba(255, 255, 255, 0.149);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+
+          img {
+            height: 75px;
+            width: 75px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 10px;
+          }
+
+          .username {
+            font-size: 1.2rem;
+            font-weight: 600;
+          }
+
+          .call-status {
+          }
+        }
+
+        .incoming-call {
+          .incoming-call-actions {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+
+            .answer,
+            .reject {
+              p {
+                // display: none;
+              }
+              i {
+                margin-right: 7px;
+              }
+            }
+            .answer {
+              background-color: #37dc52;
+              border: 1px solid #06be2d;
+
+              &:hover {
+                background-color: lighten($color: #37dc52, $amount: 20%);
+              }
+            }
+            .reject {
+              background-color: #d20a0adb;
+              border: 1px solid #d20a0a;
+              &:hover {
+                background-color: lighten($color: #d20a0adb, $amount: 20%);
+              }
+            }
+          }
+        }
+
+        .outgoing-call {
+          #rejected-call-options {
+            display: none;
+            align-items: center;
+
+            #call-again-button,
+            #close-call-button {
+              padding: 10px 20px;
+              color: white;
+              border-radius: 15px;
+
+              display: flex;
+              align-items: center;
+              margin: 10px;
+              width: max-content;
+              cursor: pointer;
+              transition: background-color 0.2s ease-out;
+
+              p {
+                // display: none;
+              }
+
+              i {
+                margin-right: 6px;
+              }
+            }
+
+            #call-again-button {
+              background-color: #37dc52;
+              border: 1px solid #06be2d;
+              &:hover {
+                background-color: lighten($color: #37dc52, $amount: 15%);
+              }
+            }
+
+            #close-call-button {
+              background-color: #d20a0adb;
+              border: 1px solid #d20a0a;
+
+              &:hover {
+                background-color: lighten($color: #d20a0adb, $amount: 15%);
+              }
+            }
+          }
+        }
+
+        .header {
+          display: none;
+          align-items: center;
+          position: absolute;
+          top: 0;
+          z-index: 1;
+          margin-top: 20px;
+          width: 93%;
+          border-radius: 30px 30px 0 0;
+
+          background: linear-gradient(
+            0deg,
+            rgba(138, 0, 154, 0) 0%,
+            rgba(0, 0, 0, 1) 100%
+          );
+          img {
+            height: 45px;
+            width: 45px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 10px;
+          }
+
+          p {
+            font-size: 1.1rem;
+            font-weight: 600;
+          }
+
+          .user-status {
+            position: absolute;
+            right: 10px;
+
+            display: flex;
+            align-items: center;
+
+            i {
+            }
+
+            .mic-icon {
+              padding: 10px 13px;
+            }
+
+            .hide {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Expand Animation classes
+  .toast-container-exp-animate {
+    animation: zoomIn 0.5s;
+  }
+
+  .receiver-card-exp-animate {
+    animation: recieverCardAnimationZoomIn 0.5s;
+  }
+
+  .incoming-outgoing-exp-animate {
+    animation: incomingOutgoingAnimationZoomIn 0.5s;
+  }
+  @keyframes zoomIn {
+    0% {
+      top: 66px;
+      left: 0;
+    }
+    100% {
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  @keyframes recieverCardAnimationZoomIn {
+    0% {
+      min-width: 94vw;
+      min-height: 115px;
+    }
+    100% {
+      width: 100%;
+      height: 100%;
+      min-width: 92.5vw;
+      max-width: 92.5vw;
+      min-height: 48vh;
+      max-height: 48vh;
+      border-radius: 30px;
+    }
+  }
+
+  @keyframes incomingOutgoingAnimationZoomIn {
+    0% {
+      min-width: 94vw;
+      min-height: 115px;
+    }
+    100% {
+      width: 100%;
+      height: 100%;
+      min-width: 92.5vw;
+      max-width: 92.5vw;
+      min-height: 48vh;
+      max-height: 48vh;
+      border-radius: 30px;
+    }
   }
 }
