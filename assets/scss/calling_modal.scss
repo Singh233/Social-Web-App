@@ -748,7 +748,7 @@ video {
 
 // Expand Animation classes
 .toast-container-exp-animate {
-  animation: zoomIn 0.5s;
+  animation: zoomInToast 0.5s;
 }
 
 .receiver-card-exp-animate {
@@ -773,7 +773,7 @@ video {
   animation: incomingOutgoingAnimationZoomOut 0.5s;
 }
 
-@keyframes zoomIn {
+@keyframes zoomInToast {
   0% {
     top: 10px;
     left: 10px;
@@ -1000,7 +1000,7 @@ video {
     .incoming-call,
     .outgoing-call {
       // flex-direction: row;
-      min-width: 95vw;
+      min-width: 95svw;
       min-height: 205px;
       padding: 0px;
       margin-top: 0px;
@@ -1308,7 +1308,7 @@ video {
 
   // Expand Animation classes
   .toast-container-exp-animate {
-    animation: zoomIn 0.5s;
+    animation: zoomInToast 0.5s;
   }
 
   .receiver-card-exp-animate {
@@ -1318,7 +1318,7 @@ video {
   .incoming-outgoing-exp-animate {
     animation: incomingOutgoingAnimationZoomIn 0.5s;
   }
-  @keyframes zoomIn {
+  @keyframes zoomInToast {
     0% {
       top: 66px;
       left: 0;

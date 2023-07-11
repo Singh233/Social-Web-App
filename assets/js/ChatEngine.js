@@ -862,13 +862,11 @@ class CallEngine extends ChatEngine {
     const self = this;
     const callModal = document.querySelector(".call-container");
 
-    const myPeer = new Peer(undefined, {
-      host: "/",
-      port: "3001",
-    });
+    const myPeer = new Peer();
 
     myPeer.on("open", function (id) {
       self.peerId = id;
+      console.log(id);
     });
 
     self.handleCallActionsButtonClick(self);

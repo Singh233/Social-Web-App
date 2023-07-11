@@ -58,6 +58,7 @@
         "passport-google-oauth2": "^0.2.0",
         "passport-jwt": "^4.0.0",
         "passport-local": "^1.0.0",
+        "peer": "^1.0.0",
         "rotating-file-stream": "^3.0.4",
         "sharp": "^0.32.1",
         "socket.io": "^4.5.4",
