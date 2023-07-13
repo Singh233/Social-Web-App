@@ -866,7 +866,6 @@ class CallEngine extends ChatEngine {
 
     myPeer.on("open", function (id) {
       self.peerId = id;
-      console.log(id);
     });
 
     self.handleCallActionsButtonClick(self);
@@ -1166,9 +1165,16 @@ class CallEngine extends ChatEngine {
 
     // handle answer call click
     $("#answer-call").click(() => {
-      if (otherUserPeerId === self.peerId) {
+      if (
+        otherUserPeerId === self.peerId ||
+        $("#answer-call").attr("disabled")
+      ) {
         return;
       }
+      // disable button to prevent multiple event triggers
+      $("#answer-call").attr("disabled", true);
+      $("#answer-call").html(`<i class="fa-solid fa-phone"></i>
+      <p>Connecting...</p>`);
 
       // update is in call variable
       self.callState = self.CALL_STATES.ANSWERED;
@@ -1194,6 +1200,9 @@ class CallEngine extends ChatEngine {
       self.hideIncomingCallToast(self);
       // function to cancel incoming call
       self.cancelCall(self, stream);
+
+      // update is in call variable
+      self.callState = self.CALL_STATES.IDLE;
     });
 
     // Event listener for other user call connected
@@ -1571,6 +1580,11 @@ class CallEngine extends ChatEngine {
     // hide rejected call options
     $("#rejected-call-options").css({ display: "none" });
 
+    // enable answer call button and update text
+    $("#answer-call").attr("disabled", false);
+    $("#answer-call").html(`<i class="fa-solid fa-phone"></i>
+      <p>Answer</p>`);
+
     // enable video call option
     $("#user-video-button").attr("disabled", false);
     // update icon
@@ -1655,6 +1669,11 @@ class CallEngine extends ChatEngine {
     // remove previous animation and add new animation
     $("#rejected-call-options").removeClass("animate__fadeIn animate__fadeOut");
     $("#rejected-call-options").addClass("animate__fadeIn");
+
+    // enable answer call button and update text
+    $("#answer-call").attr("disabled", false);
+    $("#answer-call").html(`<i class="fa-solid fa-phone"></i>
+      <p>Answer</p>`);
 
     // show rejected call options
     $("#rejected-call-options").css({ display: "flex" });

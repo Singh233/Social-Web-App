@@ -199,11 +199,7 @@ $button-color-ligth-blue: #4db1ff;
       align-items: flex-start;
       width: auto;
       text-align: right;
-      padding: 5px;
-      height: 40px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      padding-bottom: 20px;
+      padding: 2px;
 
       .msg-content {
         display: flex;
@@ -234,9 +230,10 @@ $button-color-ligth-blue: #4db1ff;
 
           sup {
             align-self: flex-end;
-            padding: 2px 10px;
+            padding: 2px 5px;
             font-size: 0.7rem;
             color: gray;
+            min-width: max-content;
           }
 
           &::before {
@@ -270,11 +267,7 @@ $button-color-ligth-blue: #4db1ff;
       align-items: flex-end;
       width: auto;
       text-align: right;
-      padding: 5px;
-      height: 40px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      padding-bottom: 20px;
+      padding: 2px;
 
       .msg-content {
         display: flex;
@@ -329,9 +322,10 @@ $button-color-ligth-blue: #4db1ff;
 
           sup {
             align-self: flex-end;
-            padding: 2px 10px;
+            padding: 2px 5px;
             font-size: 0.7rem;
             color: rgba(255, 255, 255, 0.584);
+            min-width: max-content;
           }
 
           // add a bubble like effect to the message for example: ios messages app

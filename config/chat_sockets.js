@@ -20,8 +20,8 @@ function emitToUserFromUser(io, activeUsers, data, message) {
 
 function addToDB(msg, fromUser, toUser, chatRoom) {
   const options = {
-    hostname: "localhost", // server's hostname
-    port: 8000, // server's port
+    hostname: "sanam.social", // server's hostname
+    port: 80, // server's port
     path: "/api/v1/chat/createmessage/", // API endpoint you want to call
     method: "POST", // POST HTTP method
     headers: {
