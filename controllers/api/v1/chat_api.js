@@ -181,7 +181,7 @@ async function createPrivateMessage(data, res) {
 
 module.exports.joinChatRoom = async function (req, res) {
   // validate the request params
-  const { error, value } = bodyValidator.validate(req.body);
+  const { error, value } = bodyValidator.validate(req.params);
 
   // if the request params are invalid then return the error
   if (error) {

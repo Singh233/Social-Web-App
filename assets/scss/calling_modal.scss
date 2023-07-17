@@ -861,7 +861,7 @@ video {
   video {
     min-width: 94vw;
     max-width: none;
-    min-height: 48vh;
+    min-height: 42vh;
     max-height: none;
   }
 
@@ -1048,6 +1048,11 @@ video {
         padding: 10px;
         padding-top: 5px;
 
+        .caller-video {
+          width: 94vw;
+          height: 43vh;
+        }
+
         .header {
           width: 96%;
           position: absolute;
@@ -1122,6 +1127,8 @@ video {
 
         .receiver-video {
           display: none;
+          width: 94vw;
+          height: 43vh;
         }
 
         .dummy-card {

@@ -419,12 +419,12 @@ class ChatEngine {
 
     // send a message on pressing enter
     $("#chat-message-input-global").keypress(function (e) {
-      if (e.which == 13) {
+      if (e.which === 13) {
         $("#send-message-global").click();
       }
     });
     $("#chat-message-input-private").keypress(function (e) {
-      if (e.which == 13) {
+      if (e.which === 13) {
         $("#send-message-private").click();
       }
     });
@@ -438,7 +438,7 @@ class ChatEngine {
       newMessage.addClass("animate__animated  animate__fadeIn");
       let messageType = "other-message animate__animated  animate__fadeIn";
 
-      if (data.user_email == self.userEmail) {
+      if (data.user_email === self.userEmail) {
         messageType = "self-message";
         newMessage.append(`<div class="msg-content">
                                 <span>
@@ -460,7 +460,7 @@ class ChatEngine {
       if ($("#chat-messages-list-global li").length) {
         let lastMessage = $("#chat-messages-list-global li:last-child");
 
-        if (lastMessage.find("sub").html() == data.user_name) {
+        if (lastMessage.find("sub").html() === data.user_name) {
           lastMessage.find("sub").remove();
           // hide the visibility of the profile image
           lastMessage.find("img").css("visibility", "hidden");
@@ -773,7 +773,7 @@ class ChatEngine {
     }
 
     function toast(message, type, duration, icon) {
-      if (type == "error") {
+      if (type === "error") {
         if (!icon) {
           icon =
             "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9";
@@ -1457,10 +1457,6 @@ class CallEngine extends ChatEngine {
     video.addEventListener("loadedmetadata", () => {
       video.play();
     });
-
-    video.removeEventListener("loadedmetadata", func);
-
-    function func() {}
   }
 
   // Connects to a new user for a call
