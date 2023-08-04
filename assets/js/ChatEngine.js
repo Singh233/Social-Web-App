@@ -921,17 +921,6 @@ class CallEngine extends ChatEngine {
 
       self.toUser = toUser;
 
-      // emit notification to user
-      self.socket.emit("user_is_calling", {
-        to_user: toUser,
-        from_user: fromUser,
-        user_name: self.userName,
-        user_profile: self.userProfile,
-        user_email: self.userEmail,
-        callRoomId: CALL_ROOM_ID,
-        peerId: self.peerId,
-      });
-
       // Send text message to maintain call history in chats
       if (
         self.callState === self.CALL_STATES.IDLE ||
@@ -946,6 +935,8 @@ class CallEngine extends ChatEngine {
           self.toUser,
           CALL_ROOM_ID
         );
+        // update call state variable
+        self.callState = self.CALL_STATES.RINGING;
         // save in database
         self.addToDB(self, msg, self.userId, self.toUser, CALL_ROOM_ID);
       }
@@ -957,6 +948,16 @@ class CallEngine extends ChatEngine {
         self.stopBothVideoAndAudio(self, self.mediaStream);
       }
       self.addOwnVideoStream(self, myPeer).then((stream) => {
+        // emit notification to user
+        self.socket.emit("user_is_calling", {
+          to_user: toUser,
+          from_user: fromUser,
+          user_name: self.userName,
+          user_profile: self.userProfile,
+          user_email: self.userEmail,
+          callRoomId: CALL_ROOM_ID,
+          peerId: self.peerId,
+        });
         self.mediaStream = stream;
         self.initiateCall(self, myPeer);
       });
@@ -1050,11 +1051,12 @@ class CallEngine extends ChatEngine {
         self.addToDB(self, msg, self.userId, self.toUser, CALL_ROOM_ID);
       }
       self.updateCallModal("Call declined!", true);
+
+      // remove otherUserPeerId
+      self.otherUserPeerId = null;
     });
 
     self.socket.on("user_busy", (data) => {
-      self.updateCallModal("On another call!", true);
-
       if (
         self.callState === self.CALL_STATES.IDLE ||
         self.callState === self.CALL_STATES.RINGING
@@ -1071,14 +1073,31 @@ class CallEngine extends ChatEngine {
         // save in database
         self.addToDB(self, msg, self.userId, self.toUser, CALL_ROOM_ID);
       }
+
+      self.updateCallModal("On another call!", true);
+
+      // remove otherUserPeerId
+      self.otherUserPeerId = null;
     });
 
     self.socket.on("call_user_disconnected", (data) => {
+      // check if it is the same call or not
+      console.log("disconnected", data.fromUserPeerId, self.otherUserPeerId);
       if (
-        (!self.callerUserId || self.callerUserId !== self.userId) &&
-        (self.callState === self.CALL_STATES.ANSWERED ||
-          self.callState === self.CALL_STATES.RINGING)
+        !self.otherUserPeerId ||
+        self.otherUserPeerId !== data.fromUserPeerId
       ) {
+        return;
+      }
+      console.log("after if ", self.callerUserId, self.userId);
+
+      if (
+        ((!self.callerUserId || self.callerUserId !== self.userId) &&
+          self.callState === self.CALL_STATES.ANSWERED) ||
+        self.callState === self.CALL_STATES.RINGING
+      ) {
+        console.log("inside if");
+
         self.sendPrivateMessage(
           self,
           "Video call ended!",
@@ -1089,15 +1108,31 @@ class CallEngine extends ChatEngine {
           data.user_email,
           data.user_profile
         );
+      }
+      if (
+        self.callState === self.CALL_STATES.ANSWERED ||
+        self.callState === self.CALL_STATES.RINGING
+      ) {
+        // send private message to user
+        self.sendPrivateMessage(
+          self,
+          "Video call ended!",
+          self.userId,
+          self.toUser,
+          CALL_ROOM_ID
+        );
         self.updateCallModal(null, false);
+
+        // remove otherUserPeerId
+        self.otherUserPeerId = null;
         self.displayNotification(
           `${data.user_name && data.user_name.split(" ")[0]} left call!`,
           "success",
           2000
         );
+        // update is in call variable
+        self.callState = self.CALL_STATES.IDLE;
       }
-      // update is in call variable
-      self.callState = self.CALL_STATES.IDLE;
     });
   }
 
@@ -1119,6 +1154,7 @@ class CallEngine extends ChatEngine {
     const stream = self.mediaStream;
 
     if (stream && stream.active) {
+      console.log("test123");
       self.socket.emit("join_video_call", {
         to_user: self.toUser,
         from_user: self.userId,
@@ -1224,6 +1260,7 @@ class CallEngine extends ChatEngine {
         );
         return;
       }
+      // Return if call is not connected
       if (
         self.callState === self.CALL_STATES.IDLE ||
         self.callState === self.CALL_STATES.RINGING
@@ -1316,6 +1353,14 @@ class CallEngine extends ChatEngine {
         // add message in database
         self.addToDB(self, msg, self.userId, self.toUser, CALL_ROOM_ID);
       }
+
+      // check if it is the same call or not
+      if (
+        self.otherUserPeerId &&
+        self.otherUserPeerId !== data.fromUserPeerId
+      ) {
+        return;
+      }
       self.callState = self.CALL_STATES.IDLE;
 
       if (data.from_user === self.userId) {
@@ -1349,6 +1394,7 @@ class CallEngine extends ChatEngine {
     self.callCleanUp(self);
     self.callState = self.CALL_STATES.IDLE;
     self.callerUserId = null;
+    self.otherUserPeerId = null;
   }
 
   cancelCall(self, stream) {
@@ -1421,7 +1467,9 @@ class CallEngine extends ChatEngine {
           (self.peers &&
             self.otherUserPeerId &&
             self.peers[self.otherUserPeerId]) ||
-          (self.callerUserId && self.callerUserId === self.userId)
+          (self.callerUserId &&
+            self.callerUserId === self.userId &&
+            self.callState !== self.CALL_STATES.IDLE)
         ) {
           const msg =
             self.callState === self.CALL_STATES.ANSWERED
@@ -1545,6 +1593,9 @@ class CallEngine extends ChatEngine {
     self.receiverVideo.removeEventListener("loadedmetadata", log());
     function log() {}
     self.closePeerConnection(self);
+
+    // remove otherUserPeerId
+    self.otherUserPeerId = null;
   }
 
   closePeerConnection(self) {
@@ -1779,6 +1830,7 @@ class CallEngine extends ChatEngine {
 
       setTimeout(() => {
         $(incomingOutgoingCallWindow).addClass("call-minimised");
+        $(callModal).css({ display: "none" });
       }, 500);
 
       // $(incomingOutgoingCallWindow).css({ display: "flex" });

@@ -106,7 +106,7 @@ $button-color-ligth-blue: #4db1ff;
         color: lighten($color: gray, $amount: 15%);
       }
     }
-    
+
     .back-button {
       justify-self: flex-start;
       font-size: 1.2rem;
@@ -115,7 +115,6 @@ $button-color-ligth-blue: #4db1ff;
       &:hover {
         color: darken($color: white, $amount: 15%);
       }
-
     }
 
     .chat-menu {
@@ -468,7 +467,6 @@ $button-color-ligth-blue: #4db1ff;
       border-radius: 0 0 0 30px;
       border: none;
 
-
       &:focus {
         outline: none;
       }
@@ -495,7 +493,7 @@ $button-color-ligth-blue: #4db1ff;
   }
 }
 
-@media screen and (max-width: "480px") {
+@media screen and (max-width: "500px") {
   .remove {
     display: none;
   }
@@ -516,7 +514,7 @@ $button-color-ligth-blue: #4db1ff;
 
     .chat-messages-list {
       height: 100%;
-      margin-bottom: 60px;
+      margin-bottom: 72px;
     }
 
     #chat-message-input-container {
@@ -525,20 +523,21 @@ $button-color-ligth-blue: #4db1ff;
       border-top: 1px solid rgba(231, 231, 231, 0.233);
 
       .chat-message-input {
-        border-radius: 15px;
+        border-radius: 25px;
         margin: 10px;
         height: auto;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         margin-right: 0px;
+        background-color: rgba(32, 32, 32, 0.9);
       }
 
       .send-message {
         border-radius: 50%;
-        margin: 7px;
+        margin: 9px;
         height: auto;
         width: auto;
-        padding: 5px 16px;
-        font-size: 1rem;
+        padding: 5px 18px;
+        font-size: 1.2rem;
       }
     }
   }

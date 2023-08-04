@@ -5,3 +5,5 @@
 /public
 /assets/css
 googleCloudKey.json
+
+.env

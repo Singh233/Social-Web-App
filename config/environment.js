@@ -21,6 +21,35 @@ const development = {
   certificate: process.env.CODEIAL_CERTIFICATE,
   key: process.env.CODEIAL_CERTIFICATE_KEY,
   websocket_host: "https://localhost:4000",
+  peer: {
+    config: {
+      iceServers: [
+        {
+          urls: process.env.VITE_STUN_URLS,
+        },
+        {
+          urls: process.env.VITE_TURN1_URLS,
+          username: process.env.VITE_TURN1_USERNAME,
+          credential: process.env.VITE_TURN1_CREDENTIAL,
+        },
+        {
+          urls: process.env.VITE_TURN2_URLS,
+          username: process.env.VITE_TURN2_USERNAME,
+          credential: process.env.VITE_TURN2_CREDENTIAL,
+        },
+        {
+          urls: process.env.VITE_TURN3_URLS,
+          username: process.env.VITE_TURN3_USERNAME,
+          credential: process.env.VITE_TURN3_CREDENTIAL,
+        },
+        {
+          urls: process.env.VITE_TURN4_URLS,
+          username: process.env.VITE_TURN4_USERNAME,
+          credential: process.env.VITE_TURN4_CREDENTIAL,
+        },
+      ],
+    },
+  },
   // morgan: {
   //     mode: 'dev',
   //     options: { stream: accessLogStream }
@@ -50,6 +79,35 @@ const production = {
   certificate: process.env.CODEIAL_CERTIFICATE,
   key: process.env.CODEIAL_CERTIFICATE_KEY,
   websocket_host: `https://sanam.social`,
+  peer: {
+    config: {
+      iceServers: [
+        {
+          urls: process.env.VITE_STUN_URLS,
+        },
+        {
+          urls: process.env.VITE_TURN1_URLS,
+          username: process.env.VITE_TURN1_USERNAME,
+          credential: process.env.VITE_TURN1_CREDENTIAL,
+        },
+        {
+          urls: process.env.VITE_TURN2_URLS,
+          username: process.env.VITE_TURN2_USERNAME,
+          credential: process.env.VITE_TURN2_CREDENTIAL,
+        },
+        {
+          urls: process.env.VITE_TURN3_URLS,
+          username: process.env.VITE_TURN3_USERNAME,
+          credential: process.env.VITE_TURN3_CREDENTIAL,
+        },
+        {
+          urls: process.env.VITE_TURN4_URLS,
+          username: process.env.VITE_TURN4_USERNAME,
+          credential: process.env.VITE_TURN4_CREDENTIAL,
+        },
+      ],
+    },
+  },
   // morgan: {
   //     mode: 'combined',
   //     options: { stream: accessLogStream }

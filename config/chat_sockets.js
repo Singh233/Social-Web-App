@@ -234,6 +234,7 @@ module.exports.chatSockets = function (socketServer) {
           to_user: data.to_user,
           chatroom: data.callRoomId,
           socketDisconnect: true,
+          fromUserPeerId: data.peerId,
         };
         if (activeUsers.has(data.to_user)) {
           // emit notification to the receiver of the message only
