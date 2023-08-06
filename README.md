@@ -2,13 +2,13 @@
 
 # 🌍 Social Media Web Application
 
-Introducing Instagram-like web application, built using Node.js, MongoDB, EJS, Express JS, and Gulp with an advanced authentication system. My application offers an intuitive and scalable solution for creating a social media platform for sharing photos and videos. With a focus on performance and user experience. 
+Introducing Instagram-like web application, built using Node.js, MongoDB, EJS, Express JS, and Gulp with an advanced authentication system. My application offers an intuitive and scalable solution for creating a social media platform for sharing photos and videos with a focus on performance and user experience. 
 
-Here authentication system is built on top of Passport.js and allows for seamless user registration and login, with password encryption and session management for added security. Where backend architecture utilizes Node.js and MongoDB to ensure optimal data storage and retrieval, while EJS provides a flexible templating engine for efficient front-end development. 
+Here authentication system is built on top of Passport.js and allows for seamless user registration and login, with password encryption and session management for added security whereas backend architecture utilizes Node.js and MongoDB to ensure optimal data storage and retrieval, while EJS provides a flexible templating engine for efficient front-end development. 
 
-In addition, build process is streamlined with Gulp for fast and automated deployment. Whether you're a beginner or an experienced developer, my web application is a great reference point for building a scalable and robust social media platform.
+In addition, the build process is streamlined with Gulp for fast and automated deployment. Whether you're a beginner or an experienced developer, my web application is a great reference point for building a scalable and robust social media platform.
 
-⛔️ Please note that this project is a work in progress, and some features may not be fully functional or available at this time. See the listed features below.
+⛔️ Please note that this project is a work in progress, and some features may not be fully functional or available. See the listed features below.
 
 ## 👀 Demo
 
@@ -41,17 +41,18 @@ https://github.com/Singh233/Social-Media-API
 - Global Messaging ✅
 - Direct Messaging ✅
   - Online/offline status 🌐
+  - Typing Status 💬
   - Receive incoming message notification 🔔
+- Video/Voice calling 📞
 - Responsivity
   - 🖥️ Desktop 
   - 📱 Mobile
 
 ### In progress 🚧
-- Video/Voice calling 📞
 - Video uploads 🎥
 - Email of message request ✉️
 - Share images in chat 🎆
-- Tablet responsivness 🟦
+- Tablet responsiveness 🟦
 
 
 ## Run Project Locally
