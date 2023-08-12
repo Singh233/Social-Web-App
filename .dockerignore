@@ -1,0 +1,15 @@
+/node_modules
+
+# /ssl
+
+.env
+
+.git
+
+.DS_Store
+
+dist
+
+.aws
+
+.coverage

@@ -4,6 +4,8 @@
 /uploads
 /public
 /assets/css
+/ssl
 googleCloudKey.json
 
 .env
+.DS_Store

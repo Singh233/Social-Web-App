@@ -862,7 +862,35 @@ class CallEngine extends ChatEngine {
     const self = this;
     const callModal = document.querySelector(".call-container");
 
-    const myPeer = new Peer();
+    const myPeer = new Peer({
+      config: {
+        iceServers: [
+          {
+            urls: "stun:stun.relay.metered.ca:80",
+          },
+          {
+            urls: "turn:a.relay.metered.ca:80",
+            username: "06fcec0650a1078182e01861",
+            credential: "gximPew8dg+G6PIS",
+          },
+          {
+            urls: "turn:a.relay.metered.ca:80?transport=tcp",
+            username: "06fcec0650a1078182e01861",
+            credential: "gximPew8dg+G6PIS",
+          },
+          {
+            urls: "turn:a.relay.metered.ca:443",
+            username: "06fcec0650a1078182e01861",
+            credential: "gximPew8dg+G6PIS",
+          },
+          {
+            urls: "turn:a.relay.metered.ca:443?transport=tcp",
+            username: "06fcec0650a1078182e01861",
+            credential: "gximPew8dg+G6PIS",
+          },
+        ],
+      },
+    });
 
     myPeer.on("open", function (id) {
       self.peerId = id;
@@ -1082,22 +1110,18 @@ class CallEngine extends ChatEngine {
 
     self.socket.on("call_user_disconnected", (data) => {
       // check if it is the same call or not
-      console.log("disconnected", data.fromUserPeerId, self.otherUserPeerId);
       if (
         !self.otherUserPeerId ||
         self.otherUserPeerId !== data.fromUserPeerId
       ) {
         return;
       }
-      console.log("after if ", self.callerUserId, self.userId);
 
       if (
         ((!self.callerUserId || self.callerUserId !== self.userId) &&
           self.callState === self.CALL_STATES.ANSWERED) ||
         self.callState === self.CALL_STATES.RINGING
       ) {
-        console.log("inside if");
-
         self.sendPrivateMessage(
           self,
           "Video call ended!",
@@ -1154,7 +1178,6 @@ class CallEngine extends ChatEngine {
     const stream = self.mediaStream;
 
     if (stream && stream.active) {
-      console.log("test123");
       self.socket.emit("join_video_call", {
         to_user: self.toUser,
         from_user: self.userId,

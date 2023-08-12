@@ -39,9 +39,6 @@ const passportGoogle = require("./config/passport-google-oauth2-strategy");
 
 const bodyParser = require("body-parser");
 
-// sass
-const sassMiddleware = require("node-sass-middleware");
-
 const MongoStore = require("connect-mongo");
 
 const flash = require("connect-flash");
@@ -86,14 +83,8 @@ app.use(
 
 // compiles scss to css
 if (env.name === "development") {
-  // app.use(sassMiddleware({
-  //     src: path.join(__dirname, env.asset_path, 'scss'),
-  //     dest: path.join(__dirname, env.asset_path, 'css'),
-  //     debug: false,
-  //     outputStyle: 'expanded',
-  //     prefix: '/css'
-  // }));
-  // console.log(path.join(__dirname, env.asset_path, 'scss'))
+  // sass
+  const sassMiddleware = require("node-sass-middleware");
 
   app.use(
     sassMiddleware({
