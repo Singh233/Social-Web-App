@@ -57,49 +57,77 @@ https://github.com/Singh233/Social-Media-API
 
 ## Run Project Locally
 
-Clone the project
+### Without Docker 
+
+ - Clone the project
 
 ```bash
   git clone https://github.com/Singh233/Social-Web-App.git
 ```
 
-Go to the project directory
+ - Go to the project directory
 
 ```bash
   cd Social-Web-App
 ```
 
-Set up Environment variables (Mac/Ubuntu/Linux)
+ - Set up Environment variables (Mac/Ubuntu/Linux)
 
 ```bash
   sudo vi ~/.bash_profile
 ```
 
-Save profile (Mac/Ubuntu/Linux)
+ - Save profile (Mac/Ubuntu/Linux)
 
 ```bash
   source ~/.bash_profile
 ```
 
-Install Redis on system and run
+ - Install Redis on system and run
 
 ```bash
   https://redis.io/docs/getting-started/installation/
 ```
 
-Install the packages
+ - Install the packages
 
 ```bash
   npm install
 ```
 
-Start the server
+ - Start the server
 
 ```bash
   npm start
 ```
 
 
+### Using Docker
+
+ - Clone the project
+
+```bash
+  git clone https://github.com/Singh233/Social-Web-App.git
+```
+
+ - Pull the docker-setup branch
+
+```bash
+  git pull docker-setup
+```
+
+ - Go to the project directory
+
+```bash
+  cd Social-Web-App
+```
+
+ - (NOTE) Add .env and SSL (certificate and key) files to project
+ - Run command
+
+```bash
+  docker compose up
+```
 
 
 
@@ -146,6 +174,7 @@ To run this project, you will need to add the following environment variables to
 ![160shots_so](https://github.com/Singh233/Social-Web-App/assets/37498067/76ba6efa-78b2-4e6e-9b73-1cf420542ec4)
 ![444shots_so](https://github.com/Singh233/Social-Web-App/assets/37498067/3a94d9da-dcb5-4226-854a-ea8dbfda478d)
 ![81shots_so](https://github.com/Singh233/Social-Web-App/assets/37498067/51b0a6c3-3b82-4c2b-a813-3e64d7fcda4c)
+![593shots_so](https://github.com/Singh233/Social-Web-App/assets/37498067/dd57a60f-3403-4865-a250-4ce7c97065c1)
 ![982shots_so](https://github.com/Singh233/Social-Web-App/assets/37498067/4c2ebda9-fbf2-4ba2-8feb-5004d7c68238)
 
 
