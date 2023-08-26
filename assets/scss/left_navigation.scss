@@ -1,281 +1,258 @@
-$button-color-blue: #0057D2; 
-$button-hover-color: #D1EFFF;
-$button-color-red: #D20A0A; 
-$text-color-gray: #d0d0d0; 
-$button-color-gray: #212121; 
-$button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba(11,73,149,1) 97%);
-
-
+$button-color-blue: #0057d2;
+$button-hover-color: #d1efff;
+$button-color-red: #d20a0a;
+$text-color-gray: #d0d0d0;
+$button-color-gray: #212121;
+$button-color-gradient-blue: linear-gradient(
+  130deg,
+  rgba(18, 119, 243, 1) 0%,
+  rgba(11, 73, 149, 1) 97%
+);
 
 .left-navigation-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh !important;
+  min-width: 300px;
+  margin: 0;
+  color: white;
+
+  background: rgba(0, 0, 0, 0.506);
+  // box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(233, 233, 233, 0.233);
+  border-left: none;
+  border-top: none;
+  border-bottom: none;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  #nav-header {
     display: flex;
     flex-direction: column;
-    height: 100vh !important;
-    min-width: 300px;
-    margin: 0;
-    color: white;
+    padding: 0px;
+    margin-top: 15px;
 
-    background: rgba(0, 0, 0, 0.506);
-    // box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(233, 233, 233, 0.233);
-    border-left: none;
-    border-top: none;
-    border-bottom: none;
+    #branding {
+      display: flex;
+      align-items: center;
+
+      img {
+        height: 50px;
+        width: 50px;
+      }
+
+      p {
+        margin-left: 7px;
+        font-size: 1.5rem;
+        font-weight: 700;
+
+        span {
+          font-size: 0.9rem;
+        }
+
+        .s {
+          font-size: 1.7rem;
+          font-weight: 800;
+        }
+
+        i {
+          color: $button-color-blue;
+          font-size: 1.8rem;
+        }
+      }
+    }
+  }
+
+  #nav-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 90%;
+    margin-bottom: 200px;
+
+    .nav-links {
+      align-self: center;
+
+      a,
+      p {
+        display: flex;
+        align-items: center;
+        color: gray;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 10px 50px;
+        background-color: #212121;
+        border-radius: 10px;
+        margin: 10px;
+        margin-top: 20px;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+          color: white;
+          background-color: $button-color-blue;
+        }
+
+        i {
+          margin-right: 10px;
+          font-size: 1.3rem;
+        }
+      }
+    }
+
+    .sm-nav-links {
+      display: none;
+    }
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #212121;
+    border-radius: 15px;
+    margin: 20px;
+    padding: 7px 5px;
+    cursor: pointer;
+    width: 260px;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    .user-container {
+      display: flex;
+      align-items: center;
+      margin: 5px;
+
+      img {
+        height: 40px;
+        width: 40px;
+        margin-right: 5px;
+        border-radius: 50%;
+      }
+
+      p {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 0;
+        margin-left: 10px;
+      }
+
+      i {
+        margin-left: 15px;
+      }
+    }
+
+    .expanded {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px;
+
+      a,
+      p {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 10px 30px;
+        color: gray;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          color: white;
+        }
+      }
+    }
+
+    .hide {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: "480px") {
+  //do Smth
+  .left-navigation-container {
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: auto;
     position: sticky;
-    top: 0;
-    z-index: 1;
-    
-
-
+    top: 0%;
+    z-index: 5;
+    border: none;
+    height: 200px !important;
+    // background-image: linear-gradient(rgba(0, 0, 0, 0.5), #000000), url('../img/161.jpg');
+    background-size: cover;
 
     #nav-header {
+      align-items: flex-start;
+      flex-direction: row;
+      justify-content: space-between;
+
+      #branding {
         display: flex;
-        flex-direction: column;
-        padding: 0px;
-        margin-top: 15px;
+        align-items: center;
 
-
-        #branding {
-            display: flex;
-            align-items: center;
-
-            
-            img {
-                height: 50px;
-                width: 50px;
-
-            }
-
-            p {
-                margin-left: 7px;
-                font-size: 1.5rem;
-                font-weight: 700;
-
-                span {
-                    font-size: 0.9rem;
-                }
-
-                .s {
-                    font-size: 1.7rem;
-                    font-weight: 800;
-                }
-
-                i {
-                    color: $button-color-blue;
-                    font-size: 1.8rem;
-                }
-            }
+        img {
+          height: 50px;
+          width: 50px;
         }
-        
+
+        p {
+          margin-left: 7px;
+          font-size: 1.3rem;
+          font-weight: 700;
+
+          span {
+            font-size: 0.8rem;
+          }
+
+          .s {
+            font-size: 1.5rem;
+            font-weight: 800;
+          }
+
+          i {
+            color: $button-color-blue;
+            font-size: 1.6rem;
+          }
+        }
+      }
     }
 
     #nav-section {
+      flex-direction: row;
+      height: auto;
+      width: auto;
+      margin-bottom: 0px;
+
+      .nav-links {
+        display: none;
+      }
+
+      .sm-nav-links {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 100%;
-        height: 90%;
-        margin-bottom: 200px;
+        align-items: center;
 
-        .nav-links {
-            align-self: center;
-
-            a, p {
-                display: flex;
-                align-items: center;
-                color: gray;
-                text-decoration: none;
-                font-size: 1rem;
-                font-weight: 600;
-                padding: 10px 50px;
-                background-color: #212121;
-                border-radius: 10px;
-                margin: 10px;
-                margin-top: 20px;
-                transition: all 0.2s ease-in-out;
-                cursor: pointer;
-
-                &:hover {
-                    color: white;
-                    background-color: $button-color-blue;
-                }
-
-                i {
-                    margin-right: 10px;
-                    font-size: 1.3rem;
-                }
-            }
+        i {
+          text-decoration: none;
+          color: white;
+          margin-right: 10px;
+          font-size: 1.3rem;
         }
-
-        .sm-nav-links {
-            display: none;
-        }
-        
+      }
     }
 
     .footer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: #212121;
-        border-radius: 15px;
-        margin: 20px;
-        padding: 7px 5px;
-        cursor: pointer;
-        width: 260px;
-
-        position: absolute;
-        bottom: 0;
-        left: 0;
-
-        .user-container {
-            display: flex;
-            align-items: center;
-            margin: 5px;
-
-            img {
-                height: 40px;
-                width: 40px;
-                margin-right: 5px;
-                border-radius: 50%;
-            }
-
-            p {
-                font-size: 0.9rem;
-                font-weight: 600;
-                margin: 0;
-                margin-left: 10px;
-            }
-
-            i {
-                margin-left: 15px;
-            }
-        }
-
-        .expanded {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 10px;
-
-
-            a, p {
-                display: flex;
-                align-items: center;
-                text-decoration: none;
-                font-size: 0.9rem;
-                font-weight: 600;
-                padding: 10px 30px;
-                color: gray;
-                transition: all 0.2s ease-in-out;
-
-                &:hover {
-                    color: white;
-                }
-
-            }
-        }
-
-        .hide {
-            display: none;
-        }
+      display: none;
     }
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-@media screen and (max-width: "480px") {
-    //do Smth
-    .left-navigation-container {
-        flex-direction: row;
-        justify-content: space-between;
-        min-height: auto;
-        position: sticky;
-        top: 0%;
-        z-index: 5;
-        border: none;
-        height: 200px !important;
-        // background-image: linear-gradient(rgba(0, 0, 0, 0.5), #000000), url('../img/161.jpg');
-        background-size: cover;
-
-        #nav-header {
-            align-items: flex-start;
-            flex-direction: row;
-            justify-content: space-between;
-
-            #branding {
-                display: flex;
-                align-items: center;
-    
-                
-                img {
-                    height: 50px;
-                    width: 50px;
-    
-                }
-    
-                p {
-                    margin-left: 7px;
-                    font-size: 1.3rem;
-                    font-weight: 700;
-    
-                    span {
-                        font-size: 0.8rem;
-                    }
-    
-                    .s {
-                        font-size: 1.5rem;
-                        font-weight: 800;
-                    }
-    
-                    i {
-                        color: $button-color-blue;
-                        font-size: 1.6rem;
-                    }
-                }
-            }
-
-            
-        }    
-
-        #nav-section {
-            flex-direction: row;
-            height: auto;
-            width: auto;
-            margin-bottom: 0px;
-            
-            .nav-links {
-                display: none;
-            }
-
-            .sm-nav-links {
-                display: flex;
-                align-items: center;
-
-                i {
-                    text-decoration: none;
-                    color: white;
-                    margin-right: 10px;
-                    font-size: 1.3rem;
-                }
-                
-            }
-        }
-
-        .footer {
-            display: none;
-        }
-
-    }
+  }
 }

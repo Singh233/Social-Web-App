@@ -642,7 +642,7 @@
   let scroll = false;
 
   window.onscroll = (event) => {
-    if (scroll) return;
+    if (scroll || window.location.href.includes("profile")) return;
     // Check if the user is 200 pixels away from the bottom of the page
     if (
       window.innerHeight + window.pageYOffset >=
