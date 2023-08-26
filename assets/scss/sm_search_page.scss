@@ -1,166 +1,154 @@
-$button-color-blue: #0057D2; 
-$button-hover-color: #D1EFFF;
-$button-color-red: #D20A0A; 
-$text-color-gray: #d0d0d0; 
-$button-color-gray: #212121; 
+$button-color-blue: #0057d2;
+$button-hover-color: #d1efff;
+$button-color-red: #d20a0a;
+$text-color-gray: #d0d0d0;
+$button-color-gray: #212121;
 
 .search-page-container {
-    display: none;
-    
+  display: none;
 }
 
 .remove {
-    display: none;
+  display: none;
 }
 
 @media screen and (max-width: "480px") {
+  .search-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100vw;
+    padding: 5px;
+    position: relative;
+    padding-bottom: 50px;
+    padding-top: 70px;
 
-   
-    .search-page-container {
+    .search-header {
+      position: fixed;
+      top: 0;
+      background-color: #212121;
+      z-index: 9999;
+
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 70px;
+
+      a {
+        text-decoration: none;
+        color: white;
+      }
+
+      i {
+        margin-left: 15px;
+      }
+
+      #search-form-mobile {
+        align-self: center;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: center;
         align-items: center;
-        min-width: 100vw;
-        padding: 5px;
-        position: relative;
-        padding-bottom: 50px;
+        width: 100%;
 
-        .search-header {
-            position: fixed;
-            top: 0;
-            background-color: #212121;
-            z-index: 9999;
+        #user-search-bar-mobile {
+          font-size: 1rem;
+          padding: 9px 15px;
+          background-color: black;
+          color: white;
+          border-radius: 20px;
+          border: none;
+          width: 73%;
+          // disable clear button
+          &::-webkit-search-cancel-button {
+            -webkit-appearance: none;
+          }
 
-            display: flex;
-            align-items: center;
-            width: 100%;
-            height: 70px;
-
-            a {
-                text-decoration: none;
-                color: white;
-            }
-
-            i {
-                margin-left: 15px;
-
-            }
-
-
-            #search-form-mobile {
-                align-self: center;
-                display: flex;
-                flex-direction: row;
-                justify-content: center;    
-                align-items: center;
-                width: 100%;
-
-    
-                #user-search-bar-mobile {
-                    font-size: 1rem;
-                    padding: 9px 15px;
-                    background-color: black;
-                    color: white;
-                    border-radius: 20px;
-                    border: none;
-                    width: 73%;
-                    // disable clear button
-                    &::-webkit-search-cancel-button {
-                        -webkit-appearance: none;
-                    }
-    
-                    &:focus {
-                        outline: none;
-                    }
-                }
-    
-                .cancel-button {
-                    margin-left: 10px;
-                    font-size: 0.9rem;
-                }
-            }
-
+          &:focus {
+            outline: none;
+          }
         }
 
-        #search-results-mobile {
-
-            width: 95vw;
-            border-radius: 20px;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-
-
-            .info {
-                margin-top: 50px;
-                
-            }
-
-            .user-result {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                width: 100%;
-                padding: 5px;
-                margin: 5px;
-                border-radius: 20px;
-                transition: all 0.2s ease-in-out;
-                cursor: pointer;
-
-
-                a {
-                    text-decoration: none;
-                    color: white;
-                }
-
-                img {
-                    height: 40px;
-                    width: 40px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                }
-
-                .no-avatar {
-                    height: 40px;
-                    width: 40px;
-                    border-radius: 50%;
-                    // blue gradient background
-                    background: dodgerblue;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-
-                }
-
-                p {
-                    margin-left: 10px;
-                }
-
-                .arrow-left {
-                    position: absolute;
-                    right: 20px;
-                    color: #202020;
-                }
-            }
-
-            .no-user-found {
-                padding: 35px;
-
-                i {
-                    margin-right: 10px;
-                }
-            }
-
-            .divider {
-                width: 100%;
-                height: 1px;
-                background-color: rgba(255, 255, 255, 0.179);
-                margin: 10px 0;
-            }
+        .cancel-button {
+          margin-left: 10px;
+          font-size: 0.9rem;
         }
-
+      }
     }
+
+    #search-results-mobile {
+      width: 95vw;
+      border-radius: 20px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      .info {
+        margin-top: 50px;
+      }
+
+      .user-result {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        padding: 5px;
+        margin: 5px;
+        border-radius: 20px;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+
+        a {
+          text-decoration: none;
+          color: white;
+        }
+
+        img {
+          height: 40px;
+          width: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .no-avatar {
+          height: 40px;
+          width: 40px;
+          border-radius: 50%;
+          // blue gradient background
+          background: dodgerblue;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        p {
+          margin-left: 10px;
+        }
+
+        .arrow-left {
+          position: absolute;
+          right: 20px;
+          color: #202020;
+        }
+      }
+
+      .no-user-found {
+        padding: 35px;
+
+        i {
+          margin-right: 10px;
+        }
+      }
+
+      .divider {
+        width: 100%;
+        height: 1px;
+        background-color: rgba(255, 255, 255, 0.179);
+        margin: 10px 0;
+      }
+    }
+  }
 }

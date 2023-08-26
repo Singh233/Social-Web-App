@@ -184,8 +184,9 @@ $button-color-gradient-blue: linear-gradient(
     flex-direction: row;
     justify-content: space-between;
     min-height: auto;
-    position: sticky;
+    position: fixed;
     top: 0%;
+    width: 100vw;
     z-index: 5;
     border: none;
     height: 200px !important;
@@ -196,6 +197,7 @@ $button-color-gradient-blue: linear-gradient(
       align-items: flex-start;
       flex-direction: row;
       justify-content: space-between;
+      margin-top: 7px;
 
       #branding {
         display: flex;
@@ -242,11 +244,26 @@ $button-color-gradient-blue: linear-gradient(
         display: flex;
         align-items: center;
 
+        .logout-button {
+          color: white;
+          background-color: black;
+          border-radius: 10px;
+          padding: 5px 15px;
+        }
+
         i {
           text-decoration: none;
           color: white;
           margin-right: 10px;
           font-size: 1.3rem;
+        }
+
+        svg {
+          height: 30px;
+          width: 30px;
+          path {
+            fill: white;
+          }
         }
       }
     }
