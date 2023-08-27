@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unsupported-features/es-syntax */
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-undef */
 const User = require("../models/user");
@@ -5,6 +6,7 @@ const Friendships = require("../models/friendship");
 const Post = require("../models/post");
 const { deleteFile, uploadImage } = require("../helper/imageUpload");
 const ChatRoom = require("../models/chatRoom");
+const App = require("../models/app");
 
 module.exports.profile = async function (request, response) {
   const user = await User.findById(request.params.id);
@@ -143,9 +145,15 @@ module.exports.create = async function (request, response) {
   }
 
   const user = await User.findOne({ email: request.body.email });
+  const appData = await App.find({});
+  appData[0].totalUsers += 1;
+  await appData[0].save();
 
   if (!user) {
-    const newUser = await User.create(request.body);
+    const newUser = await User.create({
+      ...request.body,
+      platformRank: appData[0].totalUsers,
+    });
 
     if (!newUser) {
       request.flash("error", "Error creating user!");

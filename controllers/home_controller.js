@@ -9,6 +9,7 @@ const User = require("../models/user");
 const Friendships = require("../models/friendship");
 const env = require("../config/environment");
 const ChatRoom = require("../models/chatRoom");
+const App = require("../models/app");
 
 module.exports.redirectToHome = function (request, response) {
   return response.redirect("/home");

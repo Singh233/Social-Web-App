@@ -849,7 +849,7 @@ class CallEngine extends ChatEngine {
     // dom elements for video
     this.myVideo = document.querySelector(".caller-video");
     this.receiverVideo = document.querySelector(".receiver-video");
-    this.myVideo.muted = true;
+    if (this.myVideo) this.myVideo.muted = true;
 
     this.peers = {};
     this.toUser = null;
@@ -1082,22 +1082,18 @@ class CallEngine extends ChatEngine {
 
     self.socket.on("call_user_disconnected", (data) => {
       // check if it is the same call or not
-      console.log("disconnected", data.fromUserPeerId, self.otherUserPeerId);
       if (
         !self.otherUserPeerId ||
         self.otherUserPeerId !== data.fromUserPeerId
       ) {
         return;
       }
-      console.log("after if ", self.callerUserId, self.userId);
 
       if (
         ((!self.callerUserId || self.callerUserId !== self.userId) &&
           self.callState === self.CALL_STATES.ANSWERED) ||
         self.callState === self.CALL_STATES.RINGING
       ) {
-        console.log("inside if");
-
         self.sendPrivateMessage(
           self,
           "Video call ended!",
@@ -1154,7 +1150,6 @@ class CallEngine extends ChatEngine {
     const stream = self.mediaStream;
 
     if (stream && stream.active) {
-      console.log("test123");
       self.socket.emit("join_video_call", {
         to_user: self.toUser,
         from_user: self.userId,

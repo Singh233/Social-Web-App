@@ -2,7 +2,7 @@ function toggleFollow(event) {
   // get the element on which the event is fired
   let self = $(event.target);
 
-  if (self.html() === "Follow") {
+  if (self.html().trim() === "Follow") {
     $.ajax({
       type: "get",
       url: `/users/friends/add?from=${self.attr("data-from")}&to=${self.attr(
@@ -58,7 +58,7 @@ function toggleFollow(event) {
         }).showToast();
       },
     });
-  } else if (self.html() === "Unfollow") {
+  } else if (self.html().trim() === "Unfollow") {
     $.ajax({
       type: "get",
       url: `/users/friends/remove?from=${self.attr("data-from")}&to=${self.attr(
