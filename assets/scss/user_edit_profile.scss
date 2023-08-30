@@ -48,18 +48,38 @@ $button-color-gradient-blue: linear-gradient(
 
     a {
       text-decoration: none;
-      color: white;
+      color: gray;
+      font-weight: 600;
 
       font-size: 1.3rem;
       cursor: pointer;
       transition: all 0.2s ease-in-out;
-      font-weight: 600;
+
+      display: flex;
+      align-items: center;
+
       &:hover {
-        color: $button-color-blue;
+        color: white;
+        svg {
+          path {
+            fill: white;
+          }
+        }
       }
 
       i {
         margin-right: 5px;
+      }
+
+      svg {
+        height: 30px;
+        width: 30px;
+        margin-right: 5px;
+
+        path {
+          fill: gray;
+          transition: all 0.2s ease-out;
+        }
       }
     }
   }
@@ -110,7 +130,7 @@ $button-color-gradient-blue: linear-gradient(
   #name-input {
     font-size: 1rem;
     margin-left: 15px;
-    width: 50%;
+    width: 85%;
     background-color: $button-color-gray;
     border-radius: 10px;
 
@@ -164,12 +184,32 @@ $button-color-gradient-blue: linear-gradient(
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 
+    display: flex;
+    align-items: center;
+
     &:hover {
       color: white;
+
+      svg {
+        path {
+          fill: white;
+        }
+      }
     }
 
     i {
       margin-right: 5px;
+    }
+
+    svg {
+      height: 30px;
+      width: 30px;
+      margin-right: 5px;
+
+      path {
+        fill: gray;
+        transition: all 0.2s ease-out;
+      }
     }
   }
 }

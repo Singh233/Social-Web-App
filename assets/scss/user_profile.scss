@@ -43,19 +43,38 @@ $button-color-gradient-blue: linear-gradient(
 
       a {
         text-decoration: none;
-        color: white;
+        color: gray;
         font-weight: 600;
 
         font-size: 1.3rem;
         cursor: pointer;
         transition: all 0.2s ease-in-out;
 
+        display: flex;
+        align-items: center;
+
         &:hover {
-          color: $button-color-blue;
+          color: white;
+          svg {
+            path {
+              fill: white;
+            }
+          }
         }
 
         i {
           margin-right: 5px;
+        }
+
+        svg {
+          height: 30px;
+          width: 30px;
+          margin-right: 5px;
+
+          path {
+            fill: gray;
+            transition: all 0.2s ease-out;
+          }
         }
       }
     }
@@ -102,6 +121,20 @@ $button-color-gradient-blue: linear-gradient(
 
       i {
         margin-right: 5px;
+      }
+
+      svg {
+        margin-right: 5px;
+        height: 30px;
+        width: 30px;
+        path {
+          fill: white;
+        }
+      }
+
+      p {
+        display: flex;
+        align-items: center;
       }
 
       span {
@@ -191,6 +224,9 @@ $button-color-gradient-blue: linear-gradient(
 
       #about-user {
         align-self: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         margin-top: 5px;
         font-size: 0.9rem;
         color: $text-color-gray;
@@ -199,6 +235,15 @@ $button-color-gradient-blue: linear-gradient(
         border-radius: 15px;
         width: 100%;
         text-align: center;
+
+        svg {
+          height: 22px;
+          width: 22px;
+          margin-right: 5px;
+          path {
+            fill: #d0d0d0;
+          }
+        }
       }
 
       .profile-actions {
@@ -275,19 +320,46 @@ $button-color-gradient-blue: linear-gradient(
           cursor: pointer;
           padding: 10px;
           transition: all 0.2s ease-in-out;
+          display: flex;
+          align-items: center;
           span {
             background-color: #212121;
             padding: 3px 10px;
             border-radius: 5px;
           }
 
+          i {
+            margin-right: 5px;
+          }
+
+          svg {
+            margin-right: 5px;
+
+            path {
+              transition: all 0.2s ease-in-out;
+              fill: gray;
+            }
+          }
+
           &:hover {
             color: white;
+
+            svg {
+              path {
+                fill: white;
+              }
+            }
           }
         }
 
         .active {
           color: white;
+
+          svg {
+            path {
+              fill: white;
+            }
+          }
         }
 
         .vertical-border {
@@ -438,11 +510,11 @@ $button-color-gradient-blue: linear-gradient(
         border-radius: 0 0 20px 20px;
 
         .hashtag {
-            font-size: 2.4rem;
-            color: #ffffff52;
-            // font-family: "Rosario";
-            // font-family: "Urbanist";
-          }
+          font-size: 2.4rem;
+          color: #ffffff52;
+          // font-family: "Rosario";
+          // font-family: "Urbanist";
+        }
       }
 
       .content {

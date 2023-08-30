@@ -1,37 +1,37 @@
-
-
 <% if (locals.user){ %>
 
-	<div id="user-messages-global" class="user-messages remove  animate__animated">
-		<!-- <div class="animate__animated animate__faster chat-overlay chat-overlay-z-index">
+<div id="user-messages-global" class="user-messages remove animate__animated">
+  <!-- <div class="animate__animated animate__faster chat-overlay chat-overlay-z-index">
 			<i onclick="toggleChatWindow()"  class="fa-solid fa-comments comment-icon"></i>
 			<p>Chat with friends</p>
 			<i onclick="toggleChatWindow()" class="fa-solid fa-chevron-up"></i>
 		</div> -->
-		<div id="messages-loader" class="hide-loader">
-			<div class="leap-frog">
-				<div class="leap-frog__dot"></div>
-				<div class="leap-frog__dot"></div>
-				<div class="leap-frog__dot"></div>
-			</div>
-			<p>loading <span>messages</span> </p>
-		</div>
+  <div id="messages-loader" class="hide-loader">
+    <div class="leap-frog">
+      <div class="leap-frog__dot"></div>
+      <div class="leap-frog__dot"></div>
+      <div class="leap-frog__dot"></div>
+    </div>
+    <p>loading <span>messages</span></p>
+  </div>
 
-		<div class="header">
-			<i id="close-chat-window" onclick="toggleChatMessages('','', '', '', 'global')" class="fa-solid fa-arrow-left-long back-button"></i>
-			<p id="chat-room-" class="chat-room">Global Chat</p>
-			<!-- <i class="fa-solid fa-ellipsis-vertical chat-menu"></i> -->
-			<p></p>
-		</div>
+  <div class="header">
+    <i
+      id="close-chat-window"
+      onclick="toggleChatMessages('','', '', '', 'global')"
+      class="fa-solid fa-arrow-left-long back-button"
+    ></i>
+    <p id="chat-room-" class="chat-room">Global Chat</p>
+    <!-- <i class="fa-solid fa-ellipsis-vertical chat-menu"></i> -->
+    <p></p>
+  </div>
 
-		<p id="active-users"></p>
+  <p id="active-users"></p>
 
-		<ul id="chat-messages-list-global" class="chat-messages-list global">
-			<!-- Display day -->
+  <ul id="chat-messages-list-global" class="chat-messages-list global">
+    <!-- Display day -->
 
-			
-
-			<!-- <li class="other-message animate__animated animate__faster animate__zoomIn">
+    <!-- <li class="other-message animate__animated animate__faster animate__zoomIn">
 				<div class="msg-content">
 					<img src="<%= assetPath('img/1782188.jpeg') %>">
 					<span>
@@ -51,22 +51,39 @@
 				
 				
 			</li> -->
-
-		</ul>
-		<div id="typing-status-global" class="typing-status animate__animated">
-			<!-- <img src="<%= assetPath('img/1782188.jpeg') %>">
+  </ul>
+  <div id="typing-status-global" class="typing-status animate__animated">
+    <!-- <img src="<%= assetPath('img/1782188.jpeg') %>">
 			<div class="animation">
 				<div class="animation__dot1"></div>
 				<div class="animation__dot2"></div>
 				<div class="animation__dot3"></div>
 			</div> -->
-			<!-- <p><span id="typing-status-name"></span> Sanambir is typing...</p> -->
-
-		</div>
-		<div class="animate__animated" id="chat-message-input-container">
-			<input id="chat-message-input-global" class="chat-message-input" placeholder="Type message here" required>
-			<button id="send-message-global" class="send-message"><i class="fa-solid fa-paper-plane"></i></button>
-		</div>
-
-	</div>
+    <!-- <p><span id="typing-status-name"></span> Sanambir is typing...</p> -->
+  </div>
+  <div class="animate__animated" id="chat-message-input-container">
+    <input
+      id="chat-message-input-global"
+      class="chat-message-input"
+      placeholder="Type message here"
+      required
+    />
+    <button id="send-message-global" class="send-message">
+      <!-- <i class="fa-solid fa-paper-plane"></i> -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+        id="plain"
+      >
+        <path
+          fill="#111"
+          d="M18.6357 15.6701L20.3521 10.5208C21.8516 6.02242 22.6013 3.77322 21.414 2.58595C20.2268 1.39869 17.9776 2.14842 13.4792 3.64788L8.32987 5.36432C4.69923 6.57453 2.88392 7.17964 2.36806 8.06698C1.87731 8.91112 1.87731 9.95369 2.36806 10.7978C2.88392 11.6852 4.69923 12.2903 8.32987 13.5005C8.77981 13.6505 9.28601 13.5434 9.62294 13.2096L15.1286 7.75495C15.4383 7.44808 15.9382 7.45041 16.245 7.76015C16.5519 8.06989 16.5496 8.56975 16.2398 8.87662L10.8231 14.2432C10.4518 14.6111 10.3342 15.1742 10.4995 15.6701C11.7097 19.3007 12.3148 21.1161 13.2022 21.6319C14.0463 22.1227 15.0889 22.1227 15.933 21.6319C16.8204 21.1161 17.4255 19.3008 18.6357 15.6701Z"
+        ></path>
+      </svg>
+    </button>
+  </div>
+</div>
 <% } %>

@@ -1,183 +1,183 @@
-$button-color-blue: #0057D2; 
-$button-hover-color: #D1EFFF;
-$button-color-red: #D20A0A; 
-$text-color-gray: #d0d0d0; 
-$button-color-gray: #212121; 
-$button-color-gradient-blue: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba(11,73,149,1) 97%);
-
+$button-color-blue: #0057d2;
+$button-hover-color: #d1efff;
+$button-color-red: #d20a0a;
+$text-color-gray: #d0d0d0;
+$button-color-gray: #212121;
+$button-color-gradient-blue: linear-gradient(
+  130deg,
+  rgba(18, 119, 243, 1) 0%,
+  rgba(11, 73, 149, 1) 97%
+);
 
 .right-section-container {
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    min-height: 100vh;
-    min-width: 390px;
-    justify-items: center;
-    color: white;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  min-height: 100vh;
+  min-width: 390px;
+  justify-items: center;
+  color: white;
 
-    background: rgba(0, 0, 0, 0.25);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.051);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    // border-radius: 0 15px 15px 0;
-    border-left: 1px solid rgba(236, 236, 236, 0.233);
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.051);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  // border-radius: 0 15px 15px 0;
+  border-left: 1px solid rgba(236, 236, 236, 0.233);
 
+  #user-friends,
+  #other-users {
+    width: 95%;
 
-    #user-friends, #other-users {
-        
-        width: 95%;
-        h4 {
-            padding: 10px 20px;
-            background-color: $button-color-gray;
+    svg {
+      height: 30px;
+      width: 30px;
+      margin-right: 7px;
 
-            margin: 20px;
-            margin-bottom: 0px;
-            border-radius: 10px;
-            // text-align: center;
-            position: relative;
+      path {
+        fill: white;
+      }
+    }
 
-            i {
-                margin-right: 7px;
-            }
+    h4 {
+      padding: 10px 20px;
+      background-color: $button-color-gray;
 
-            span {
-                background-color: black;
-                position: absolute;
-                right: 15px;
-                top: 5px;
-                padding: 5px 12px;
-                border-radius: 50%;
-            }
+      margin: 20px;
+      margin-bottom: 0px;
+      border-radius: 10px;
+      // text-align: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      i {
+        margin-right: 7px;
+        font-size: 1.1rem;
+      }
+
+      span {
+        background-color: black;
+        position: absolute;
+        right: 15px;
+        top: 5px;
+        padding: 5px 12px;
+        border-radius: 50%;
+      }
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+
+      margin: 20px;
+      margin-top: 0px;
+      padding: 20px;
+      list-style: none;
+
+      max-height: 290px;
+
+      // make the list scrollable
+      overflow-y: scroll;
+      overscroll-behavior: none;
+
+      &::-webkit-scrollbar {
+        margin: 2px;
+        background-color: black;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #6e6e6e;
+        border-radius: 8px;
+      }
+
+      .user {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+
+        img {
+          height: 35px;
+          width: 35px;
+          border-radius: 50%;
+          margin-right: 10px;
+          object-fit: cover;
         }
 
-        .list {
+        p {
+          cursor: pointer;
+
+          a {
+            text-decoration: none;
+            color: gray;
+
+            &:hover {
+              color: white;
+            }
+          }
+
+          .user-info {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
 
-            margin: 20px;
-            margin-top: 0px;
-            padding: 20px;
-            list-style: none;
-
-            max-height: 290px;
-            
-            // make the list scrollable
-            overflow-y: scroll;
-            overscroll-behavior: none;
-            
-            
-            &::-webkit-scrollbar {
-                margin: 2px;
-                background-color: black;
-            }
-        
-            &::-webkit-scrollbar-thumb {
-                background-color:#6e6e6e;
-                border-radius: 8px;
+            .user-image {
+              height: 50px;
+              width: 50px;
+              border-radius: 50%;
+              margin-right: 10px;
             }
 
+            .user-name {
+              font-size: 1.2rem;
+              font-weight: 700;
+            }
+          }
 
+          .user-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
 
-
-            .user {
-                display: flex;
-                align-items: center;
-                padding: 5px;
-
-
-                img {
-                    height: 35px;
-                    width: 35px;
-                    border-radius: 50%;
-                    margin-right: 10px;
-                    object-fit: cover;
-                }
-    
-                p {
-                    cursor: pointer;
-
-                    a {
-                        text-decoration: none;
-                        color: gray;
-
-                        &:hover {
-                            color: white;
-                        }
-                    }
-    
-    
-                    .user-info {
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        width: 100%;
-    
-                        .user-image {
-                            height: 50px;
-                            width: 50px;
-                            border-radius: 50%;
-                            margin-right: 10px;
-                        }
-    
-                        .user-name {
-                            font-size: 1.2rem;
-                            font-weight: 700;
-                        }
-                    }
-    
-                    .user-status {
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        width: 100%;
-    
-                        .status {
-                            font-size: 0.9rem;
-                            font-weight: 700;
-                            margin-right: 10px;
-                        }
-    
-                        .status-circle {
-                            height: 10px;
-                            width: 10px;
-                            border-radius: 50%;
-                            background-color: $button-color-red;
-                        }
-                    }
-                }
-
-                
+            .status {
+              font-size: 0.9rem;
+              font-weight: 700;
+              margin-right: 10px;
             }
 
-            
+            .status-circle {
+              height: 10px;
+              width: 10px;
+              border-radius: 50%;
+              background-color: $button-color-red;
+            }
+          }
         }
-        
+      }
     }
+  }
 
-    #user-friends {
-        margin-top: 50px;
-    }
+  #user-friends {
+    margin-top: 50px;
+  }
 }
 
 .section-visible {
-    display: grid !important;
-    position: relative;
-    z-index: 9999;
+  display: grid !important;
+  position: relative;
+  z-index: 9999;
 }
 
-
-
-
 @media screen and (max-width: 1400px) {
-    .right-section-container {
-        display: none;
-    }
-
-    
+  .right-section-container {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 480px) {
-    .right-section-container {
-        // display: grid;
-        display: none;
-    }
+  .right-section-container {
+    // display: grid;
+    display: none;
+  }
 }

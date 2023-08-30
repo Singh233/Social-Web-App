@@ -86,7 +86,20 @@ $button-color-gray: #212121;
       justify-content: center;
       position: relative;
 
+      svg {
+        margin-right: 5px;
+        g {
+          stroke: rgba(255, 255, 255, 0.7);
+          stroke-width: 2.2px;
+        }
+        path {
+          fill: rgba(255, 255, 255, 0.7);
+        }
+      }
+
       .info {
+        display: flex;
+        align-items: center;
         margin-top: 50px;
       }
 

@@ -45,12 +45,19 @@ $button-color-gradient-blue: linear-gradient(
       }
 
       p {
+        display: flex;
+        align-items: center;
         margin-left: 7px;
         font-size: 1.5rem;
         font-weight: 700;
 
         span {
           font-size: 0.9rem;
+          // align-self: flex-end;
+        }
+
+        sup {
+          font-size: 1.5rem;
         }
 
         .s {
@@ -58,9 +65,42 @@ $button-color-gradient-blue: linear-gradient(
           font-weight: 800;
         }
 
+        .social {
+          margin-top: 5px;
+        }
+
         i {
           color: $button-color-blue;
           font-size: 1.8rem;
+        }
+
+        svg {
+          margin-right: 5px;
+          height: 40px;
+          width: 40px;
+          // padding: 5px;
+          // background: linear-gradient(
+          //   124deg,
+          //   #ff2400,
+          //   #e81d1d,
+          //   #e8b71d,
+          //   #e3e81d,
+          //   #1de840,
+          //   #1ddde8,
+          //   #2b1de8,
+          //   #dd00f3,
+          //   #dd00f3
+          // );
+          // background-size: 1800% 1800%;
+          // border-radius: 10px;
+
+          // -webkit-animation: rainbow 18s ease infinite;
+          // -z-animation: rainbow 18s ease infinite;
+          // -o-animation: rainbow 18s ease infinite;
+          // animation: rainbow 18s ease infinite;
+          path {
+            fill: white;
+          }
         }
       }
     }
@@ -96,11 +136,35 @@ $button-color-gradient-blue: linear-gradient(
         &:hover {
           color: white;
           background-color: $button-color-blue;
+
+          svg {
+            path {
+              fill: white;
+            }
+            .dots-black {
+              fill: black;
+            }
+          }
         }
 
         i {
           margin-right: 10px;
           font-size: 1.3rem;
+        }
+
+        svg {
+          margin-right: 5px;
+          height: 27px;
+          width: 27px;
+
+          path {
+            transition: all 0.2s ease-in-out;
+            fill: gray;
+          }
+
+          .dots-black {
+            fill: black;
+          }
         }
       }
     }
@@ -135,6 +199,7 @@ $button-color-gradient-blue: linear-gradient(
         width: 40px;
         margin-right: 5px;
         border-radius: 50%;
+        object-fit: cover;
       }
 
       p {
@@ -146,6 +211,8 @@ $button-color-gradient-blue: linear-gradient(
 
       i {
         margin-left: 15px;
+        transition: all 0.2s ease-in-out;
+        transform: rotate(180deg);
       }
     }
 
@@ -168,6 +235,21 @@ $button-color-gradient-blue: linear-gradient(
 
         &:hover {
           color: white;
+          svg {
+            path {
+              fill: white;
+            }
+          }
+        }
+      }
+
+      svg {
+        margin-right: 5px;
+        // height: 27px;
+        // width: 27px;
+        path {
+          transition: all 0.2s ease-in-out;
+          fill: gray;
         }
       }
     }
@@ -249,6 +331,7 @@ $button-color-gradient-blue: linear-gradient(
           background-color: black;
           border-radius: 10px;
           padding: 5px 15px;
+          text-decoration: none;
         }
 
         i {
@@ -271,5 +354,50 @@ $button-color-gradient-blue: linear-gradient(
     .footer {
       display: none;
     }
+  }
+}
+
+@-webkit-keyframes rainbow {
+  0% {
+    background-position: 0% 82%;
+  }
+  50% {
+    background-position: 100% 19%;
+  }
+  100% {
+    background-position: 0% 82%;
+  }
+}
+@-moz-keyframes rainbow {
+  0% {
+    background-position: 0% 82%;
+  }
+  50% {
+    background-position: 100% 19%;
+  }
+  100% {
+    background-position: 0% 82%;
+  }
+}
+@-o-keyframes rainbow {
+  0% {
+    background-position: 0% 82%;
+  }
+  50% {
+    background-position: 100% 19%;
+  }
+  100% {
+    background-position: 0% 82%;
+  }
+}
+@keyframes rainbow {
+  0% {
+    background-position: 0% 82%;
+  }
+  50% {
+    background-position: 100% 19%;
+  }
+  100% {
+    background-position: 0% 82%;
   }
 }
