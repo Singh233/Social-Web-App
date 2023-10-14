@@ -59,8 +59,8 @@ console.log("chat server is listening on port 4000");
 const multerMid = multer({
   storage: multer.memoryStorage(),
   limits: {
-    // no larger than 5mb.
-    fileSize: 5 * 1024 * 1024,
+    // no larger than 10mb.
+    fileSize: 10 * 1024 * 1024,
   },
 });
 
@@ -74,6 +74,7 @@ app.use(
   cors({
     origin: [
       "https://chillsanam.me",
+      "https://react.sanam.social",
       "http://localhost:3000",
       "http://127.0.0.1:5173",
       "http://localhost:4173",
