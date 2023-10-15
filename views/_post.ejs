@@ -63,9 +63,9 @@
   </div>
 
   <div class="post-img">
-    <% if(post.myfile) { %>
+    <% if(post.imgPath) { %>
     <div class="blur-load" style="background-image: url(<%= post.thumbnail %>)">
-      <img src="<%= post.myfile %>" loading="lazy" />
+      <img src="<%= post.imgPath %>" loading="lazy" />
     </div>
     <% } else { %>
     <img src="<%= assetPath('img/1782188.jpeg') %>" />
@@ -147,7 +147,7 @@
     <div class="post-caption">
       <p class="post-user-name">
         <%= post.user.name %> -
-        <span class="post-user-content"><%= post.content %></span>
+        <span class="post-user-content"><%= post.caption %></span>
       </p>
     </div>
 

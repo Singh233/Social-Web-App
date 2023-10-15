@@ -188,8 +188,8 @@
       <div id="user-posts-list" class="post-list">
         <% for (let post of user_posts) { %>
         <div onclick="showNotification()" class="post-img">
-          <% if(post.myfile != undefined) { %>
-          <img src="<%= post.myfile %>" />
+          <% if(post.imgPath != undefined) { %>
+          <img src="<%= post.imgPath %>" />
           <% } else { %>
           <img src="<%= assetPath('img/1782188.jpeg') %>" />
           <% } %>
@@ -200,8 +200,8 @@
       <div id="saved-posts-list" class="post-list remove">
         <% for (let post of savedPosts) { %>
         <div onclick="showNotification()" class="post-img">
-          <% if(post.myfile != undefined) { %>
-          <img src="<%= post.myfile %>" />
+          <% if(post.imgPath != undefined) { %>
+          <img src="<%= post.imgPath %>" />
           <% } else { %>
           <img src="<%= assetPath('img/1782188.jpeg') %>" />
           <% } %>

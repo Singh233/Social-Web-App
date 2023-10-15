@@ -5,7 +5,11 @@ const Joi = require("joi");
 const Post = require("../../../models/post");
 const Comment = require("../../../models/comment");
 const Like = require("../../../models/like");
-const { generateThumbnail, uploadImage, deleteFile } = require("../../../helper/imageUpload");
+const {
+  generateThumbnail,
+  uploadImage,
+  deleteFile,
+} = require("../../../helper/imageUpload");
 
 const fieldsValidator = Joi.object({
   content: Joi.string().required(),
@@ -87,7 +91,7 @@ module.exports.createPost = async function (request, response) {
 
     // this is saving the path of the uploaded file into the field in the user
     const newPost = await Post.create({
-      content: request.body.content,
+      content: request.body.caption,
       user: request.user._id,
       myfile: imageUrl,
       thumbnail: thumbnailUrl,
@@ -139,8 +143,8 @@ module.exports.destroy = async function (request, response) {
     await Comment.deleteMany({ post: request.params.id });
 
     // delete the file from cloud storage
-    if (post.myfile) {
-      await deleteFile("users_posts_bucket", post.myfile, false);
+    if (post.imgPath) {
+      await deleteFile("users_posts_bucket", post.imgPath, false);
     }
 
     // delete the thumbnail from cloud storage

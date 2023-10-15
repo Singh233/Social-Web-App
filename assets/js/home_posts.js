@@ -26,7 +26,12 @@
 
   const pond = FilePond.create(inputElement, {
     storeAsFile: true,
-    acceptedFileTypes: ["image/png", "image/jpeg"],
+    acceptedFileTypes: [
+      "image/png",
+      "image/jpeg",
+      "video/quicktime",
+      "video/mp4",
+    ],
     allowImageTransform: true,
     imageTransformOutputQuality: 75,
     allowImageExifOrientation: true,

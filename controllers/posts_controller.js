@@ -25,6 +25,12 @@ module.exports.createPost = async function (request, response) {
       });
     }
 
+    if (file.mimetype === "video/mp4" || file.mimetype === "video/quicktime") {
+      console.log(file);
+      return;
+    }
+    console.log(file);
+
     let imageUrl = null;
     try {
       imageUrl = await uploadImage("users_posts_bucket", file);
@@ -55,10 +61,11 @@ module.exports.createPost = async function (request, response) {
 
     // this is saving the path of the uploaded file into the field in the user
     const newPost = await Post.create({
-      content: request.body.content,
+      caption: request.body.caption,
       user: request.user._id,
-      myfile: imageUrl,
+      imgPath: imageUrl,
       thumbnail: thumbnailUrl,
+      isImg: true,
     });
 
     // populate the user of newPost
@@ -79,6 +86,7 @@ module.exports.createPost = async function (request, response) {
     request.flash("success", "Post published!");
     return response.redirect("/");
   } catch (error) {
+    console.log(error);
     request.flash("error", "Error creating post");
     return response.redirect("back");
   }
@@ -103,8 +111,8 @@ module.exports.destroy = async function (request, response) {
     });
 
     // delete the file from cloud storage
-    if (post.myfile) {
-      await deleteFile("users_posts_bucket", post.myfile, false);
+    if (post.imgPath) {
+      await deleteFile("users_posts_bucket", post.imgPath, false);
     }
 
     // delete the thumbnail from cloud storage

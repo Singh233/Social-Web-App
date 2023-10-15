@@ -59,8 +59,8 @@ console.log("chat server is listening on port 4000");
 const multerMid = multer({
   storage: multer.memoryStorage(),
   limits: {
-    // no larger than 10mb.
-    fileSize: 10 * 1024 * 1024,
+    // no larger than 100MB.
+    fileSize: 100 * 1024 * 1024,
   },
 });
 
