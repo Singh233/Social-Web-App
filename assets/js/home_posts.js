@@ -183,8 +183,8 @@
                         : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
                     })">
                       <img src="${
-                        post.myfile
-                          ? post.myfile
+                        post.imgPath
+                          ? post.imgPath
                           : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
                       }" loading="lazy" />
                     </div>
@@ -224,7 +224,7 @@
                         <p class="post-user-name">${
                           post.user.name
                         } - &nbsp; </p>
-                        <p class="post-user-content">${post.content}</p>
+                        <p class="post-user-content">${post.caption}</p>
                     </div>
 
                     <div class="time">
@@ -317,8 +317,8 @@
                         : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
                     })">
                       <img src="${
-                        post.myfile
-                          ? post.myfile
+                        post.imgPath
+                          ? post.imgPath
                           : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
                       }" loading="lazy" />
                     </div>
@@ -392,7 +392,7 @@
                         <p class="post-user-name">${
                           post.user.name
                         } - &nbsp; </p>
-                        <p class="post-user-content">${post.content}</p>
+                        <p class="post-user-content">${post.caption}</p>
                     </div>
 
                     <div class="time">

@@ -1,4 +1,7 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-extraneous-dependencies */
+const { v4: uuidv4 } = require("uuid");
+const fsExtra = require("fs-extra");
 const Post = require("../models/post");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
@@ -7,7 +10,134 @@ const {
   uploadImage,
   generateThumbnail,
   deleteFile,
-} = require("../helper/imageUpload");
+  uploadVideo,
+} = require("../helper/googleCloudStore");
+const transcodeVideoToQuality = require("../helper/videoEncoder");
+
+const generateUniquePrefix = () => {
+  const timestamp = Date.now();
+  const randomSuffix = uuidv4().split("-")[0]; // Extract a portion of the UUID
+  const uniquePrefix = `${timestamp}-${randomSuffix}`;
+  return uniquePrefix;
+};
+
+const clearLocalFiles = (outputFileName) => {
+  const directoryPath = `/Users/sanambirsingh/Documents/development/codeial/uploads/${outputFileName}`;
+  // delete all the files
+  fsExtra.remove(directoryPath).catch((err) => {
+    console.error(`Error deleting directory: ${err}`);
+  });
+};
+
+const imgUpload = async (request, response, file) => {
+  let imageUrl = null;
+  try {
+    imageUrl = await uploadImage("users_posts_bucket", file);
+  } catch (error) {
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading file!",
+    });
+  }
+
+  // generate thumbnail
+  let thumbnailUrl = null;
+
+  try {
+    thumbnailUrl = await generateThumbnail(
+      "users_posts_bucket",
+      file,
+      imageUrl
+    );
+  } catch (error) {
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading file!",
+    });
+  }
+
+  // this is saving the path of the uploaded file into the field in the user
+  const newPost = await Post.create({
+    caption: request.body.caption,
+    user: request.user._id,
+    imgPath: imageUrl,
+    thumbnail: thumbnailUrl,
+    isImg: true,
+  });
+
+  // populate the user of newPost
+  await newPost.populate("user");
+
+  return newPost;
+};
+
+const videoUpload = async (request, response, file) => {
+  let videoUrl = null;
+  const uniquePrefix = generateUniquePrefix(); // Generate unique prefix
+  const fileName = `${uniquePrefix}-${file.originalname.replace(/ /g, "_")}`; // Append prefix to file name
+  try {
+    // Upload the original video to GCS
+    videoUrl = await uploadVideo("users_videos_bucket", file, fileName); // Implement uploadVideo function to upload the video to GCS.
+  } catch (error) {
+    console.log(error);
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading video!",
+    });
+  }
+
+  // Define quality levels for transcoding
+  const qualities = [
+    { name: "high", resolution: "1280x720", bitrate: "2500k" },
+    { name: "medium", resolution: "640x360", bitrate: "1000k" },
+    { name: "low", resolution: "426x240", bitrate: "500k" },
+  ];
+
+  const transcodedVideos = [];
+  // Transcode the video into different qualities
+  await Promise.all(
+    qualities.map(async (quality) => {
+      try {
+        const outputUrl = await transcodeVideoToQuality(
+          "users_videos_bucket",
+          uniquePrefix,
+          quality,
+          videoUrl
+        ); // Implement transcodeVideoToQuality function to transcode the video.
+        transcodedVideos.push({ quality: quality.name, videoPath: outputUrl });
+        return transcodedVideos;
+      } catch (error) {
+        console.log(error);
+        return response.status(401).json({
+          data: {},
+          success: false,
+          message: "Error transcoding video!",
+        });
+      }
+    })
+  );
+  await deleteFile("users_videos_bucket", videoUrl, false);
+  const outputFileName = `transcoded_${uniquePrefix}`;
+  clearLocalFiles(outputFileName);
+  return null;
+
+  // Create a new Post document with the video qualities
+  // const newPost = await Post.create({
+  //   caption: request.body.caption,
+  //   user: request.user._id,
+  //   videoPath: videoUrl,
+  //   videoQualities: transcodedVideos,
+  //   isVideo: true,
+  // });
+
+  // // Populate the user field of the newPost
+  // await newPost.populate("user").execPopulate();
+
+  // return newPost;
+};
 
 // eslint-disable-next-line consistent-return
 module.exports.createPost = async function (request, response) {
@@ -24,52 +154,13 @@ module.exports.createPost = async function (request, response) {
         message: "File not found!",
       });
     }
+    let newPost = null;
 
     if (file.mimetype === "video/mp4" || file.mimetype === "video/quicktime") {
-      console.log(file);
-      return;
+      newPost = await videoUpload(request, response, file);
+    } else {
+      newPost = await imgUpload(request, response, file);
     }
-    console.log(file);
-
-    let imageUrl = null;
-    try {
-      imageUrl = await uploadImage("users_posts_bucket", file);
-    } catch (error) {
-      return response.status(401).json({
-        data: {},
-        success: false,
-        message: "Error in uploading file!",
-      });
-    }
-
-    // generate thumbnail
-    let thumbnailUrl = null;
-
-    try {
-      thumbnailUrl = await generateThumbnail(
-        "users_posts_bucket",
-        file,
-        imageUrl
-      );
-    } catch (error) {
-      return response.status(401).json({
-        data: {},
-        success: false,
-        message: "Error in uploading file!",
-      });
-    }
-
-    // this is saving the path of the uploaded file into the field in the user
-    const newPost = await Post.create({
-      caption: request.body.caption,
-      user: request.user._id,
-      imgPath: imageUrl,
-      thumbnail: thumbnailUrl,
-      isImg: true,
-    });
-
-    // populate the user of newPost
-    await newPost.populate("user");
 
     if (request.xhr) {
       // the request is an AJAX request return the response in JSON format

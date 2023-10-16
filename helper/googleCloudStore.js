@@ -60,6 +60,82 @@ const uploadImage = (bucketName, file) =>
       .end(buffer);
   });
 
+const uploadVideo = (bucketName, file, fileName) =>
+  new Promise((resolve, reject) => {
+    const { buffer } = file;
+    const bucket = googleCloudStorage.bucket(bucketName);
+
+    // Specify the content type
+    // const options = {
+    //   metadata: {
+    //     contentType: "application/vnd.apple.mpegurl", // Set content type for M3U8 file
+    //   },
+    // };
+
+    // // Upload the file with specified content type
+    // bucket.upload("localFilePath", {
+    //   destination: fileName,
+    //   metadata: options.metadata,
+    // });
+
+    const blob = bucket.file(fileName);
+    const blobStream = blob.createWriteStream({
+      resumable: false,
+    });
+
+    // Create a new Buffer from the provided Buffer
+    const newBuffer = Buffer.from(buffer);
+    blobStream
+      .on("finish", () => {
+        const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+        resolve(publicUrl);
+      })
+      .on("error", (error) => {
+        console.log(error);
+        reject(`Unable to upload image, something went wrong`);
+      })
+      .end(buffer);
+  });
+
+// async function uploadVideo(bucketName, data, destination) {
+//   try {
+//     const bucket = googleCloudStorage.bucket(bucketName);
+//     const file = bucket.file(destination);
+
+//     await file.save(data);
+
+//     console.log(`File uploaded to Google Cloud Storage: ${destination}`);
+//   } catch (error) {
+//     console.error(`Error uploading file: ${error}`);
+//     throw error;
+//   }
+// }
+
+const uploadVideo2 = async (bucketName, fileBuffer, destinationFileName) => {
+  try {
+    const bucket = googleCloudStorage.bucket(bucketName);
+    const file = bucket.file(destinationFileName);
+
+    // Specify the content type
+    // const options = {
+    //   metadata: {
+    //     contentType: "application/vnd.apple.mpegurl", // Set content type for M3U8 file
+    //   },
+    // };
+
+    // Upload the file to GCS
+    await file.save(fileBuffer);
+
+    // Construct the public URL for the uploaded file
+    const publicUrl = `https://storage.googleapis.com/${bucketName}/${destinationFileName}`;
+
+    return publicUrl;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 const deleteFile = async (bucketName, fileUrl, isThumbnail) => {
   try {
     // Reference the bucket
@@ -76,7 +152,7 @@ const deleteFile = async (bucketName, fileUrl, isThumbnail) => {
 
     return;
   } catch (err) {
-    // console.error("Error deleting file:", err);
+    console.error("Error deleting file:", err);
     return err;
   }
 };
@@ -120,6 +196,8 @@ const generateThumbnail = async (bucketName, file, fileName) => {
 
 module.exports = {
   uploadImage,
+  uploadVideo,
+  uploadVideo2,
   uploadThumbnail,
   getFileNameFromFilePath,
   generateUniquePrefix,

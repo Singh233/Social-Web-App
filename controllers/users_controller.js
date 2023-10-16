@@ -4,7 +4,7 @@
 const User = require("../models/user");
 const Friendships = require("../models/friendship");
 const Post = require("../models/post");
-const { deleteFile, uploadImage } = require("../helper/imageUpload");
+const { deleteFile, uploadImage } = require("../helper/googleCloudStore");
 const ChatRoom = require("../models/chatRoom");
 const App = require("../models/app");
 

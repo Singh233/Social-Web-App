@@ -9,7 +9,7 @@ const {
   generateThumbnail,
   uploadImage,
   deleteFile,
-} = require("../../../helper/imageUpload");
+} = require("../../../helper/googleCloudStore");
 
 const fieldsValidator = Joi.object({
   content: Joi.string().required(),
