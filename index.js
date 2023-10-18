@@ -51,7 +51,7 @@ const path = require("path");
 
 // setup the chat server to be used with socket.io
 const chatServer = require("https").Server(server);
-const chatSockets = require("./config/chat_sockets").chatSockets(chatServer);
+require("./config/chat_sockets").chatSockets(chatServer);
 
 chatServer.listen(4000);
 console.log("chat server is listening on port 4000");
@@ -175,7 +175,7 @@ if (!isApiRequest) {
 // use express router
 app.use("/", require("./routes"));
 
-app.listen(port, function (error) {
+server.listen(port, function (error) {
   if (error) {
     console.log("Error: ", error);
     console.log(`Error in running the server: ${error}`);

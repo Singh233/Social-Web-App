@@ -490,6 +490,20 @@ class ChatEngine {
       scrollToBottom();
     });
 
+    // Listen for video encoding completion
+    self.socket.on("video-encoding-complete", (data) => {
+      // Handle the completion event here
+      console.log("Video encoding job completed:", data.jobId);
+      // You can update the UI or display a notification to the user
+    });
+
+    // Listen for video progress
+    self.socket.on("video-progress", (data) => {
+      // Handle the completion event here
+      console.log("Progress:", data.progress);
+      // You can update the UI or display a notification to the user
+    });
+
     // listen to incoming notifications(message from other users)
     self.socket.on("receive_notification", function (data) {
       // add message to friend chatroom

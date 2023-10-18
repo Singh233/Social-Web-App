@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-extraneous-dependencies */
 const { v4: uuidv4 } = require("uuid");
-const fsExtra = require("fs-extra");
 const Post = require("../models/post");
+const queue = require("../config/kue");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
 const User = require("../models/user");
@@ -12,21 +12,13 @@ const {
   deleteFile,
   uploadVideo,
 } = require("../helper/googleCloudStore");
-const transcodeVideoToQuality = require("../helper/videoEncoder");
+const videoEncoderWorker = require("../workers/video_encoding_worker");
 
 const generateUniquePrefix = () => {
   const timestamp = Date.now();
   const randomSuffix = uuidv4().split("-")[0]; // Extract a portion of the UUID
   const uniquePrefix = `${timestamp}-${randomSuffix}`;
   return uniquePrefix;
-};
-
-const clearLocalFiles = (outputFileName) => {
-  const directoryPath = `/Users/sanambirsingh/Documents/development/codeial/uploads/${outputFileName}`;
-  // delete all the files
-  fsExtra.remove(directoryPath).catch((err) => {
-    console.error(`Error deleting directory: ${err}`);
-  });
 };
 
 const imgUpload = async (request, response, file) => {
@@ -89,39 +81,19 @@ const videoUpload = async (request, response, file) => {
     });
   }
 
-  // Define quality levels for transcoding
-  const qualities = [
-    { name: "high", resolution: "1280x720", bitrate: "2500k" },
-    { name: "medium", resolution: "640x360", bitrate: "1000k" },
-    { name: "low", resolution: "426x240", bitrate: "500k" },
-  ];
+  const data = {
+    videoUrl,
+    uniquePrefix,
+    userId: request.user.id,
+  };
+  // parallel job to
+  queue.create("videoEncoders", data).save(function (error) {
+    if (error) {
+      request.flash("error", "Error in creating a queue");
+    }
+    console.log("Parallel job created successfully!");
+  });
 
-  const transcodedVideos = [];
-  // Transcode the video into different qualities
-  await Promise.all(
-    qualities.map(async (quality) => {
-      try {
-        const outputUrl = await transcodeVideoToQuality(
-          "users_videos_bucket",
-          uniquePrefix,
-          quality,
-          videoUrl
-        ); // Implement transcodeVideoToQuality function to transcode the video.
-        transcodedVideos.push({ quality: quality.name, videoPath: outputUrl });
-        return transcodedVideos;
-      } catch (error) {
-        console.log(error);
-        return response.status(401).json({
-          data: {},
-          success: false,
-          message: "Error transcoding video!",
-        });
-      }
-    })
-  );
-  await deleteFile("users_videos_bucket", videoUrl, false);
-  const outputFileName = `transcoded_${uniquePrefix}`;
-  clearLocalFiles(outputFileName);
   return null;
 
   // Create a new Post document with the video qualities

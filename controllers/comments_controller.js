@@ -3,6 +3,7 @@ const Comment = require("../models/comment");
 const Post = require("../models/post");
 const queue = require("../config/kue");
 const Like = require("../models/like");
+const commentEmailWorker = require("../workers/comment_email_worker");
 
 module.exports.create = async function (request, response) {
   try {

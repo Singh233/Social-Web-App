@@ -111,7 +111,11 @@ const uploadVideo = (bucketName, file, fileName) =>
 //   }
 // }
 
-const uploadVideo2 = async (bucketName, fileBuffer, destinationFileName) => {
+const uploadVideoSegments = async (
+  bucketName,
+  fileBuffer,
+  destinationFileName
+) => {
   try {
     const bucket = googleCloudStorage.bucket(bucketName);
     const file = bucket.file(destinationFileName);
@@ -197,7 +201,7 @@ const generateThumbnail = async (bucketName, file, fileName) => {
 module.exports = {
   uploadImage,
   uploadVideo,
-  uploadVideo2,
+  uploadVideoSegments,
   uploadThumbnail,
   getFileNameFromFilePath,
   generateUniquePrefix,

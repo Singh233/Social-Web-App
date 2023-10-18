@@ -555,6 +555,9 @@
       processData: false,
       contentType: false,
       success: function (data) {
+        if (!data.data.post) {
+          return;
+        }
         // console.log(data.data.post)
         const newPost = newPostDom(data.data.post);
         $("#posts-list-container").prepend(newPost);
