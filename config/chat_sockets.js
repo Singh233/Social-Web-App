@@ -112,7 +112,7 @@ const chatSockets = function (socketServer) {
   }
 
   io.sockets.on("connection", function (socket) {
-    console.log("new connection received", socket.id);
+    // console.log("new connection received", socket.id);
 
     activeUsers.set(socket.handshake.query.userId, {
       userId: socket.handshake.query.userId,

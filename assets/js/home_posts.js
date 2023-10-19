@@ -23,7 +23,8 @@
   const inputElement = document.querySelector("#myfile");
   const inputElement2 = document.querySelector("#myfile-sm");
   const inputElement3 = document.querySelector("#profile-file");
-
+  let fileName = "";
+  let fileType = "";
   const pond = FilePond.create(inputElement, {
     storeAsFile: true,
     acceptedFileTypes: [
@@ -58,6 +59,14 @@
       // add it to the DOM so we can see the result
       // document.body.appendChild(img);
     },
+  });
+
+  // Get the filename when a file is added
+  pond.on("addfile", (error, file) => {
+    if (!error) {
+      fileName = file.file.name;
+      fileType = file.file.type;
+    }
   });
 
   const pond2 = FilePond.create(inputElement2, {
@@ -538,6 +547,7 @@
 
   // ajax call to create a post on submit of the form
   $("#new-post-form").submit(function (e) {
+    const videoUploadStatusContainer = $("#video-upload-status-container");
     e.preventDefault();
     const form = document.querySelector("#new-post-form");
     const formData = new FormData(form);
@@ -556,16 +566,70 @@
       contentType: false,
       success: function (data) {
         if (!data.data.post) {
-          return;
-        }
-        // console.log(data.data.post)
-        const newPost = newPostDom(data.data.post);
-        $("#posts-list-container").prepend(newPost);
-        deletePost($(" .delete-post-button", newPost));
+          gsap.from(videoUploadStatusContainer, {
+            opacity: 0,
+            duration: 0.5,
+            onStart: () => {
+              videoUploadStatusContainer.css({ display: "flex" });
+            },
+          });
 
-        new PostComments(data.data.post._id);
-        // enable the functionality of the toggle liek button on the new post
-        new ToggleLike($(" .toggle-like-button", newPost));
+          videoUploadStatusContainer
+            .find(".header .heading span")
+            .text("Processing Video");
+
+          $(".progress-percentage").text(`0%`);
+
+          $(".video-upload-progress").LineProgressbar({
+            percentage: 0,
+            fillBackgroundColor: "#0156D1",
+            backgroundColor: "black",
+            height: "15px",
+            radius: "10px",
+            ShowProgressCount: false,
+          });
+          videoUploadStatusContainer.find(".info").html(
+            `<i class="fa-solid fa-circle-info"></i> 
+              Processing can take some time. You can close the window or can browse.`
+          );
+        } else {
+          gsap.to(videoUploadStatusContainer, {
+            opacity: 0,
+            duration: 0.7,
+            delay: 1,
+            onComplete: () => {
+              // Optional: You can hide or remove the element after the animation
+              videoUploadStatusContainer.css({ display: "none", opacity: 1 });
+            },
+          });
+
+          setTimeout(() => {
+            // console.log(data.data.post)
+            const newPost = newPostDom(data.data.post);
+            $("#posts-list-container").prepend(newPost);
+            deletePost($(".delete-post-button", newPost));
+
+            new PostComments(data.data.post._id);
+            // enable the functionality of the toggle liek button on the new post
+            new ToggleLike($(" .toggle-like-button", newPost));
+
+            const blurDivs = document.querySelectorAll(".blur-load");
+
+            blurDivs.forEach((div) => {
+              const img = div.querySelector("img");
+              function loaded() {
+                // show img
+                div.classList.add("loaded");
+              }
+
+              if (img.complete) {
+                loaded();
+              } else {
+                img.addEventListener("load", loaded);
+              }
+            });
+          }, 2000);
+        }
 
         // clear the form
         $("#new-post-form")[0].reset();
@@ -576,40 +640,81 @@
 
         submitButton.val("Post");
         submitButton.prop("disabled", false);
-        const blurDivs = document.querySelectorAll(".blur-load");
 
-        blurDivs.forEach((div) => {
-          const img = div.querySelector("img");
-          function loaded() {
-            // show img
-            div.classList.add("loaded");
-          }
+        setTimeout(() => {
+          Toastify({
+            text: data.data.success,
+            duration: 2000,
+            destination: "",
+            newWindow: true,
+            close: true,
+            avatar:
+              "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
 
-          if (img.complete) {
-            loaded();
-          } else {
-            img.addEventListener("load", loaded);
-          }
-        });
-
-        Toastify({
-          text: data.data.success,
-          duration: 2000,
-          destination: "",
-          newWindow: true,
-          close: true,
-          avatar:
-            "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
-
-          gravity: "top", // `top` or `bottom`
-          position: "center", // `left`, `center` or `right`
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-          style: {
-            background: "#0057D2",
-            borderRadius: "10px",
+            gravity: "top", // `top` or `bottom`
+            position: "center", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "#0057D2",
+              borderRadius: "10px",
+            },
+            onClick: function () {}, // Callback after click
+          }).showToast();
+        }, 1000);
+      },
+      xhr: function () {
+        const xhr = new window.XMLHttpRequest();
+        gsap.from(videoUploadStatusContainer, {
+          opacity: 0,
+          duration: 0.5,
+          onStart: () => {
+            videoUploadStatusContainer.css({ display: "flex" });
           },
-          onClick: function () {}, // Callback after click
-        }).showToast();
+        });
+        // Upload progress
+        xhr.upload.addEventListener(
+          "progress",
+          function (evt) {
+            if (evt.lengthComputable) {
+              const percentComplete = Math.round(
+                (evt.loaded / evt.total) * 100
+              );
+              // videoUploadStatusContainer.css({ display: "flex" });
+              videoUploadStatusContainer
+                .find(".header .heading span")
+                .text(
+                  `Uploading ${
+                    fileType === "image/png" ||
+                    fileType === "image/jpg" ||
+                    fileType === "image/jpeg"
+                      ? "Image"
+                      : "Video"
+                  }`
+                );
+              videoUploadStatusContainer
+                .find(".header .file-name")
+                .text(fileName.substring(0, 15));
+              videoUploadStatusContainer.find(".info").html(
+                `<i class="fa-solid fa-circle-info"></i> 
+                  File is being uploaded. Please don't close the tab or refresh.`
+              );
+
+              $(".progress-percentage").text(`${percentComplete}%`);
+
+              $(".video-upload-progress").LineProgressbar({
+                percentage: percentComplete,
+                fillBackgroundColor: "#0156D1",
+                backgroundColor: "#00000000",
+                height: "15px",
+                radius: "10px",
+                ShowProgressCount: false,
+              });
+            }
+          },
+          false
+        );
+
+        return xhr;
       },
       error: function (error) {
         Toastify({

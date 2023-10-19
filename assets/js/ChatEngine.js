@@ -493,14 +493,40 @@ class ChatEngine {
     // Listen for video encoding completion
     self.socket.on("video-encoding-complete", (data) => {
       // Handle the completion event here
-      console.log("Video encoding job completed:", data.jobId);
+      // console.log("Video encoding job completed:", data.jobId);
+      $(".progress-percentage").text("Completed!");
+      gsap.to($("#video-upload-status-container"), {
+        opacity: 0,
+        duration: 0.7,
+        delay: 1,
+        onComplete: () => {
+          // Optional: You can hide or remove the element after the animation
+          $("#video-upload-status-container").css({
+            display: "none",
+            opacity: 1,
+          });
+        },
+      });
       // You can update the UI or display a notification to the user
     });
 
     // Listen for video progress
     self.socket.on("video-progress", (data) => {
       // Handle the completion event here
-      console.log("Progress:", data.progress);
+      // console.log("Progress:", data.progress);
+      if (data.progress === 100) {
+        $(".progress-percentage").text("Almost done!");
+      } else {
+        $(".progress-percentage").text(`${data.progress}%`);
+      }
+      $(".video-upload-progress").LineProgressbar({
+        percentage: data.progress,
+        fillBackgroundColor: "#0156D1",
+        backgroundColor: "#00000000",
+        height: "15px",
+        radius: "10px",
+        ShowProgressCount: false,
+      });
       // You can update the UI or display a notification to the user
     });
 
