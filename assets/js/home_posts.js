@@ -2,7 +2,6 @@
 /* eslint-disable no-inner-declarations */
 /* eslint-disable no-new */
 /* eslint-disable no-undef */
-
 {
   FilePond.registerPlugin(
     FilePondPluginImageCrop,
@@ -12,10 +11,11 @@
     FilePondPluginImageResize,
     // corrects mobile image orientation
     FilePondPluginImageExifOrientation,
-
+    FilePondPluginFileMetadata,
     // validates the size of the file
     FilePondPluginFileValidateSize,
     FilePondPluginImageEdit
+    // FilePondPluginMediaPreview
   );
 
   // Filepond initialisation logic
@@ -25,6 +25,8 @@
   const inputElement3 = document.querySelector("#profile-file");
   let fileName = "";
   let fileType = "";
+  let fileSize = 0;
+  let fileDuration = 0;
   const pond = FilePond.create(inputElement, {
     storeAsFile: true,
     acceptedFileTypes: [
@@ -61,13 +63,26 @@
     },
   });
 
+  window.URL = window.URL || window.webkitURL;
   // Get the filename when a file is added
   pond.on("addfile", (error, file) => {
     if (!error) {
       fileName = file.file.name;
       fileType = file.file.type;
+      fileSize = file.file.size;
+      const video = document.createElement("video");
+      video.preload = "metadata";
+
+      video.onloadedmetadata = function () {
+        window.URL.revokeObjectURL(video.src);
+        const { duration } = video;
+        fileDuration = duration;
+      };
+
+      video.src = URL.createObjectURL(file.file);
     }
   });
+  const myVideos = [];
 
   const pond2 = FilePond.create(inputElement2, {
     storeAsFile: true,
@@ -551,6 +566,10 @@
     e.preventDefault();
     const form = document.querySelector("#new-post-form");
     const formData = new FormData(form);
+    formData.append("fileName", fileName);
+    formData.append("fileType", fileType);
+    formData.append("fileSize", fileSize);
+    formData.append("fileDuration", fileDuration);
     const id = $("#local_user_id").val();
 
     // disable submit button
@@ -565,7 +584,7 @@
       processData: false,
       contentType: false,
       success: function (data) {
-        if (!data.data.post) {
+        if (!data.data.post.isImg) {
           gsap.from(videoUploadStatusContainer, {
             opacity: 0,
             duration: 0.5,

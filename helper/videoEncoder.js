@@ -61,18 +61,18 @@ async function transcodeVideoToQuality(
         try {
           const files = fs.readdirSync(outputDirectory);
           // Wait for all uploads to complete
-          // await Promise.all(
-          //   files.map(async (file) => {
-          //     const data = fs.readFileSync(path.join(outputDirectory, file));
-          //     await uploadVideoSegments(
-          //       "users_videos_bucket",
-          //       data, // Use the Buffer
-          //       `${outputFileName}/${quality.name}/${file}`
-          //     );
-          //   })
-          // );
+          await Promise.all(
+            files.map(async (file) => {
+              const data = fs.readFileSync(path.join(outputDirectory, file));
+              await uploadVideoSegments(
+                "users_videos_bucket",
+                data, // Use the Buffer
+                `${outputFileName}/${quality.name}/${file}`
+              );
+            })
+          );
           console.log("Successfully encoded");
-          resolve();
+          resolve(`${outputFileName}/${quality.name}`);
         } catch (error) {
           reject(error);
         }

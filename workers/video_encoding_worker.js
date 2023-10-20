@@ -4,6 +4,8 @@ const queue = require("../config/kue");
 const transcodeVideoToQuality = require("../helper/videoEncoder");
 const { deleteFile } = require("../helper/googleCloudStore");
 const { getIo, getActiveUsers } = require("../config/chat_sockets");
+const Video = require("../models/video");
+const Post = require("../models/post");
 
 const clearLocalFiles = (outputFileName) => {
   const directoryPath = `/Users/sanambirsingh/Documents/development/codeial/uploads/${outputFileName}`;
@@ -16,7 +18,13 @@ const clearLocalFiles = (outputFileName) => {
 queue.process("videoEncoders", async (job, done) => {
   const io = getIo();
   console.log("Video encoding worker is processing a job", job.data);
-  const { videoUrl, uniquePrefix, userId } = job.data;
+  const {
+    videoUrl,
+    uniquePrefix,
+    userId,
+    post,
+    reqBody: { fileName, fileType, fileSize, fileDuration },
+  } = job.data;
 
   // Define quality levels for transcoding
   const qualities = [
@@ -46,8 +54,23 @@ queue.process("videoEncoders", async (job, done) => {
       }
     })
   );
-  await deleteFile("users_videos_bucket", videoUrl, false);
+  // Create new video document
+  const newVideoDoc = await Video.create({
+    title: fileName,
+    size: fileSize,
+    duration: fileDuration,
+    userId: userId,
+    postId: post._id,
+    qualities: transcodedVideos,
+  });
 
+  if (post) {
+    // update post document
+    await Post.findByIdAndUpdate(post._id, {
+      videoId: newVideoDoc._id,
+    });
+  }
+  await deleteFile("users_videos_bucket", videoUrl, false);
   const outputFileName = `transcoded_${uniquePrefix}`;
   clearLocalFiles(outputFileName);
 

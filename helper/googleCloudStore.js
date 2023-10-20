@@ -140,6 +140,13 @@ const uploadVideoSegments = async (
   }
 };
 
+const listFiles = async (bucketName, folderName) => {
+  const [files] = await googleCloudStorage
+    .bucket(bucketName)
+    .getFiles({ prefix: folderName });
+  return files;
+};
+
 const deleteFile = async (bucketName, fileUrl, isThumbnail) => {
   try {
     // Reference the bucket
@@ -159,6 +166,15 @@ const deleteFile = async (bucketName, fileUrl, isThumbnail) => {
     console.error("Error deleting file:", err);
     return err;
   }
+};
+
+const deleteFiles = async (bucketName, folderName) => {
+  const files = await listFiles(bucketName, folderName);
+  await Promise.all(
+    files.map(async (file) => {
+      await file.delete();
+    })
+  );
 };
 
 const uploadThumbnail = (bucketName, fileData, fileName) =>
@@ -208,4 +224,5 @@ module.exports = {
   generateThumbnail,
   getFileNameFromUrl,
   deleteFile,
+  deleteFiles,
 };

@@ -11,8 +11,10 @@ const {
   generateThumbnail,
   deleteFile,
   uploadVideo,
+  deleteFiles,
 } = require("../helper/googleCloudStore");
 const videoEncoderWorker = require("../workers/video_encoding_worker");
+const Video = require("../models/video");
 
 const generateUniquePrefix = () => {
   const timestamp = Date.now();
@@ -21,7 +23,7 @@ const generateUniquePrefix = () => {
   return uniquePrefix;
 };
 
-const imgUpload = async (request, response, file) => {
+const imgUploadPost = async (request, response, file) => {
   let imageUrl = null;
   try {
     imageUrl = await uploadImage("users_posts_bucket", file);
@@ -65,7 +67,7 @@ const imgUpload = async (request, response, file) => {
   return newPost;
 };
 
-const videoUpload = async (request, response, file) => {
+const videoUploadPost = async (request, response, file) => {
   let videoUrl = null;
   const uniquePrefix = generateUniquePrefix(); // Generate unique prefix
   const fileName = `${uniquePrefix}-${file.originalname.replace(/ /g, "_")}`; // Append prefix to file name
@@ -81,34 +83,37 @@ const videoUpload = async (request, response, file) => {
     });
   }
 
+  // Create a new Post document
+  const newPost = await Post.create({
+    isImg: false,
+    thumbnail: "",
+    videoId: null,
+    caption: request.body.caption,
+    user: request.user._id,
+    comments: [],
+    likes: [],
+    savedBy: [],
+  });
+
+  // Populate the user field of the newPost
+  await newPost.populate("user");
+
   const data = {
     videoUrl,
     uniquePrefix,
     userId: request.user.id,
+    post: newPost,
+    reqBody: request.body,
   };
+
   // parallel job to
   queue.create("videoEncoders", data).save(function (error) {
     if (error) {
-      request.flash("error", "Error in creating a queue");
+      console.log(error);
     }
-    console.log("Parallel job created successfully!");
   });
 
-  return null;
-
-  // Create a new Post document with the video qualities
-  // const newPost = await Post.create({
-  //   caption: request.body.caption,
-  //   user: request.user._id,
-  //   videoPath: videoUrl,
-  //   videoQualities: transcodedVideos,
-  //   isVideo: true,
-  // });
-
-  // // Populate the user field of the newPost
-  // await newPost.populate("user").execPopulate();
-
-  // return newPost;
+  return newPost;
 };
 
 // eslint-disable-next-line consistent-return
@@ -129,9 +134,9 @@ module.exports.createPost = async function (request, response) {
     let newPost = null;
 
     if (file.mimetype === "video/mp4" || file.mimetype === "video/quicktime") {
-      newPost = await videoUpload(request, response, file);
+      newPost = await videoUploadPost(request, response, file);
     } else {
-      newPost = await imgUpload(request, response, file);
+      newPost = await imgUploadPost(request, response, file);
     }
 
     if (request.xhr) {
@@ -183,6 +188,15 @@ module.exports.destroy = async function (request, response) {
       await deleteFile("users_posts_bucket", post.thumbnail, true);
     }
 
+    if (!post.isImg) {
+      const video = await Video.findByIdAndRemove(post.videoId);
+      await Promise.all(
+        video.qualities.map(async (quality) => {
+          await deleteFiles("users_videos_bucket", quality.videoPath);
+        })
+      );
+    }
+
     return response.status(200).json({
       data: {
         post_id: request.params.id,
@@ -191,7 +205,7 @@ module.exports.destroy = async function (request, response) {
       message: "Post deleted!",
     });
   } catch (error) {
-    request.flash("error", "Unauthorized");
+    console.log(error);
     return response.status(401).send("Unauthorized");
   }
 };

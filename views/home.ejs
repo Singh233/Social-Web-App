@@ -35,7 +35,8 @@
     class="fa-solid fa-xmark menu-button remove"
   ></i>
   <div class="post-div">
-    <%- include('_top_header'); %> <% if(locals.user) { %>
+    <%- include('_top_header'); %> 
+    <% if(locals.user) { %>
     <input
       type="hidden"
       value="<%= locals.user._id %>"
@@ -168,10 +169,15 @@
 
     <section id="feed-posts">
       <div id="posts-list-container">
-        <% for (let i of posts) { %> <% let isSaved = false; %> <% for (let j of
-        locals.user.savedPosts) { %> <% if (j._id.toString() ===
-        i._id.toString()) { %> <% isSaved = true; %> <% } %> <% } %> <%-
-        include('_post.ejs', {post: i, moment, isSaved}) -%> <% } %>
+        <% for (let post of posts) { %> 
+          <% let isSaved = false; %> 
+          <% for (let j of locals.user.savedPosts) { %> 
+            <% if (j._id.toString() === post._id.toString()) { %> 
+              <% isSaved = true; %> 
+            <% } %> 
+          <% } %> 
+          <%- include('_post.ejs', {post: post, moment, isSaved}) -%>
+        <% } %>
       </div>
     </section>
     <% } %>

@@ -7,9 +7,7 @@ const videoSchema = new mongoose.Schema(
     duration: { type: Number },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     postId: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
-    quality_360p: { type: String },
-    quality_720p: { type: String },
-    quality_1080p: { type: String },
+    qualities: [],
   },
   {
     timestamps: true,

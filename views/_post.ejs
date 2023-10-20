@@ -61,12 +61,15 @@
       ></i>
     </div>
   </div>
-
   <div class="post-img">
-    <% if(post.imgPath) { %>
-    <div class="blur-load" style="background-image: url(<%= post.thumbnail %>)">
-      <img src="<%= post.imgPath %>" loading="lazy" />
-    </div>
+    <% if(post.isImg) { %>
+      <% if(post.imgPath) { %>
+      <div class="blur-load" style="background-image: url(<%= post.thumbnail %>)">
+        <img src="<%= post.imgPath %>" loading="lazy" />
+      </div>
+      <% } else { %>
+      <img src="<%= assetPath('img/1782188.jpeg') %>" />
+      <% } %> 
     <% } else { %>
     <img src="<%= assetPath('img/1782188.jpeg') %>" />
     <% } %>
