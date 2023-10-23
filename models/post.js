@@ -5,7 +5,7 @@ const postSchema = new mongoose.Schema(
     isImg: { type: Boolean, required: true },
     imgPath: { type: String },
     thumbnail: { type: String },
-    videoId: { type: mongoose.Schema.Types.ObjectId, ref: "Video" },
+    video: { type: mongoose.Schema.Types.ObjectId, ref: "Video" },
     caption: { type: String, required: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     // include the array of ids of all comments in this post schema itself

@@ -253,7 +253,7 @@ module.exports.getPosts = async (request, response) => {
       .sort("-createdAt")
       .skip(offset)
       .limit(limit)
-      .populate("user likes")
+      .populate("user likes video")
       .populate({
         path: "comments",
         options: {

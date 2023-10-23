@@ -32,6 +32,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
+    <link href="https://vjs.zencdn.net/8.6.0/video-js.css" rel="stylesheet" />
+    <!-- City -->
+    <link
+      href="https://unpkg.com/@videojs/themes@1/dist/fantasy/index.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/@videojs/themes@1/dist/sea/index.css"
+      rel="stylesheet"
+    />
+
     <!-- File Pond -->
     <link
       href="https://unpkg.com/filepond@^4/dist/filepond.css"
@@ -81,6 +96,8 @@
     <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js"></script>
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script> -->
+    <script src="https://vjs.zencdn.net/8.6.0/video.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"
       integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg=="
@@ -156,13 +173,13 @@
               destination: "",
               newWindow: true,
               close: true,
-              avatar: "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+              avatar: "https://cdn-icons-png.flaticon.com/128/7518/7518748.png",
 
               gravity: "top", // `top` or `bottom`
               position: "center", // `left`, `center` or `right`
               stopOnFocus: true, // Prevents dismissing of toast on hover
               style: {
-                  background: "#0057D2",
+                  background: "#000000",
                   borderRadius: "10px",
               },
               onClick: function(){} // Callback after click
@@ -176,12 +193,12 @@
               destination: "",
               newWindow: true,
               close: true,
-              avatar: "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
+              avatar: "https://cdn-icons-png.flaticon.com/128/9426/9426995.png",
               gravity: "top", // `top` or `bottom`
               position: "center", // `left`, `center` or `right`
               stopOnFocus: true, // Prevents dismissing of toast on hover
               style: {
-                  background: "#D20A0A",
+                  background: "#000000",
                   borderRadius: "10px",
                   color: "white",
               },
@@ -194,10 +211,11 @@
     "></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
-    <script src="<%= assetPath('js/ChatEngine.js') %>"></script>
 
-    <script>
-        <% if (locals.user){ %>
+    <script type="module">
+      <% if (locals.user){ %>
+        import CallEngine from "<%= assetPath('js/ChatEngine.js') %>";
+
           new CallEngine(
             "user-chat-box",
             "<%= locals.user._id %>",
@@ -212,6 +230,7 @@
     <script src="<%= assetPath('js/home.js') %>"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.js"></script>
+
     <script src="<%= assetPath('js/jquery.lineProgressbar.js') %>"></script>
     <script
       type="module"

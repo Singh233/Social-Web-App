@@ -64,11 +64,13 @@ queue.process("videoEncoders", async (job, done) => {
     qualities: transcodedVideos,
   });
 
+  let newPost = null;
   if (post) {
     // update post document
-    await Post.findByIdAndUpdate(post._id, {
-      videoId: newVideoDoc._id,
+    newPost = await Post.findByIdAndUpdate(post._id, {
+      video: newVideoDoc._id,
     });
+    newPost = await Post.findById(post._id).populate("video user");
   }
   await deleteFile("users_videos_bucket", videoUrl, false);
   const outputFileName = `transcoded_${uniquePrefix}`;
@@ -80,6 +82,7 @@ queue.process("videoEncoders", async (job, done) => {
     if (activeUsers.has(userId)) {
       io.to(activeUsers.get(userId).socketId).emit("video-encoding-complete", {
         jobId: job.id,
+        post: newPost,
         status: "completed",
       });
     }

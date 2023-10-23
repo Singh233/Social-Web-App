@@ -45,7 +45,7 @@ async function transcodeVideoToQuality(
       .on("progress", function (progress) {
         if (progress && quality.name === "high") {
           const newProgress = Math.round(progress.percent);
-          if (newProgress % 10 === 0) {
+          if (newProgress % 5 === 0) {
             const io = getIo();
             const activeUsers = getActiveUsers();
             if (activeUsers.has(userId)) {

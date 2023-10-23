@@ -2,6 +2,9 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-undef */
+import { newPostDom, deletePost } from "./home_posts.js";
+import { refreshVideoPlayback } from "./video_playback_handler.js";
+
 class ChatEngine {
   constructor(chatBoxId, userId, userEmail, userName, userProfile, host) {
     this.chatBox = $(`#${chatBoxId}`);
@@ -494,6 +497,8 @@ class ChatEngine {
     self.socket.on("video-encoding-complete", (data) => {
       // Handle the completion event here
       // console.log("Video encoding job completed:", data.jobId);
+      localStorage.removeItem("video-processing-progress");
+
       $(".progress-percentage").text("Completed!");
       gsap.to($("#video-upload-status-container"), {
         opacity: 0,
@@ -507,17 +512,44 @@ class ChatEngine {
           });
         },
       });
-      // You can update the UI or display a notification to the user
+      self.displayNotification("Video is processed!", "success", 2000, null);
+      setTimeout(() => {
+        const newPost = newPostDom(data.post);
+        $("#posts-list-container").prepend(newPost);
+        deletePost($(".delete-post-button", newPost));
+
+        new PostComments(data.post._id);
+        // enable the functionality of the toggle liek button on the new post
+        new ToggleLike($(" .toggle-like-button", newPost));
+        videojs(`video-${data.post.video._id}`);
+        refreshVideoPlayback();
+      }, 1500);
     });
 
     // Listen for video progress
     self.socket.on("video-progress", (data) => {
       // Handle the completion event here
       // console.log("Progress:", data.progress);
+      const videoUploadStatusContainer = $("#video-upload-status-container");
+      localStorage.setItem("video-processing-progress", data.progress);
+
       if (data.progress === 100) {
         $(".progress-percentage").text("Almost done!");
       } else {
         $(".progress-percentage").text(`${data.progress}%`);
+      }
+      if (videoUploadStatusContainer.css("display") === "none") {
+        gsap.from(videoUploadStatusContainer, {
+          opacity: 0,
+          duration: 0.5,
+          onStart: () => {
+            videoUploadStatusContainer.css({ display: "flex" });
+          },
+        });
+
+        videoUploadStatusContainer
+          .find(".header .heading span")
+          .text("Processing Video");
       }
       $(".video-upload-progress").LineProgressbar({
         percentage: data.progress,
@@ -863,7 +895,7 @@ class ChatEngine {
   }
 }
 
-class CallEngine extends ChatEngine {
+export default class CallEngine extends ChatEngine {
   constructor(chatBoxId, userId, userEmail, userName, userProfile, host) {
     super(chatBoxId, userId, userEmail, userName, userProfile, host);
     // Define the call states
@@ -2003,46 +2035,29 @@ class CallEngine extends ChatEngine {
         icon =
           "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9";
       }
-
-      Toastify({
-        text: "<%= flash.error %>",
-        duration: duration,
-        destination: "",
-        newWindow: true,
-        close: true,
-        avatar: icon,
-        gravity: "top", // `top` or `bottom`
-        position: "center", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "#D20A0A",
-          borderRadius: "10px",
-          color: "white",
-        },
-        onClick: function () {}, // Callback after click
-      }).showToast();
     } else if (type === "success") {
       if (!icon) {
         icon =
           "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d";
       }
-      Toastify({
-        text: message,
-        duration: duration,
-        destination: "",
-        newWindow: true,
-        close: true,
-        avatar: icon,
-
-        gravity: "top", // `top` or `bottom`
-        position: "center", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "#202020",
-          borderRadius: "10px",
-        },
-        onClick: function () {}, // Callback after click
-      }).showToast();
     }
+
+    Toastify({
+      text: message,
+      duration: duration,
+      destination: "",
+      newWindow: true,
+      close: true,
+      avatar: icon,
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: type === "error" ? "#D20A0A" : "#202020",
+        borderRadius: "10px",
+        color: "white",
+      },
+      onClick: function () {}, // Callback after click
+    }).showToast();
   }
 }

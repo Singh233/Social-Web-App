@@ -87,7 +87,7 @@ const videoUploadPost = async (request, response, file) => {
   const newPost = await Post.create({
     isImg: false,
     thumbnail: "",
-    videoId: null,
+    video: null,
     caption: request.body.caption,
     user: request.user._id,
     comments: [],
@@ -189,7 +189,7 @@ module.exports.destroy = async function (request, response) {
     }
 
     if (!post.isImg) {
-      const video = await Video.findByIdAndRemove(post.videoId);
+      const video = await Video.findByIdAndRemove(post.video);
       await Promise.all(
         video.qualities.map(async (quality) => {
           await deleteFiles("users_videos_bucket", quality.videoPath);

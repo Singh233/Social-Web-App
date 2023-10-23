@@ -2,122 +2,123 @@
 /* eslint-disable no-inner-declarations */
 /* eslint-disable no-new */
 /* eslint-disable no-undef */
-{
-  FilePond.registerPlugin(
-    FilePondPluginImageCrop,
-    FilePondPluginImagePreview,
-    FilePondPluginFileValidateType,
-    FilePondPluginImageTransform,
-    FilePondPluginImageResize,
-    // corrects mobile image orientation
-    FilePondPluginImageExifOrientation,
-    FilePondPluginFileMetadata,
-    // validates the size of the file
-    FilePondPluginFileValidateSize,
-    FilePondPluginImageEdit
-    // FilePondPluginMediaPreview
-  );
+import { refreshVideoPlayback } from "./video_playback_handler.js";
 
-  // Filepond initialisation logic
+FilePond.registerPlugin(
+  FilePondPluginImageCrop,
+  FilePondPluginImagePreview,
+  FilePondPluginFileValidateType,
+  FilePondPluginImageTransform,
+  FilePondPluginImageResize,
+  // corrects mobile image orientation
+  FilePondPluginImageExifOrientation,
+  FilePondPluginFileMetadata,
+  // validates the size of the file
+  FilePondPluginFileValidateSize,
+  FilePondPluginImageEdit,
+  FilePondPluginMediaPreview
+);
 
-  const inputElement = document.querySelector("#myfile");
-  const inputElement2 = document.querySelector("#myfile-sm");
-  const inputElement3 = document.querySelector("#profile-file");
-  let fileName = "";
-  let fileType = "";
-  let fileSize = 0;
-  let fileDuration = 0;
-  const pond = FilePond.create(inputElement, {
-    storeAsFile: true,
-    acceptedFileTypes: [
-      "image/png",
-      "image/jpeg",
-      "video/quicktime",
-      "video/mp4",
-    ],
-    allowImageTransform: true,
-    imageTransformOutputQuality: 75,
-    allowImageExifOrientation: true,
-    allowImageEdit: true,
-    allowImageEditor: true,
-    fileValidateTypeDetectType: (source, type) =>
-      new Promise((resolve, reject) => {
-        // Do custom type detection here and return with promise
+// Filepond initialisation logic
 
-        resolve(type);
-      }),
+const inputElement = document.querySelector("#myfile");
+const inputElement2 = document.querySelector("#myfile-sm");
+const inputElement3 = document.querySelector("#profile-file");
+let fileName = "";
+let fileType = "";
+let fileSize = 0;
+let fileDuration = 0;
+const pond = FilePond.create(inputElement, {
+  storeAsFile: true,
+  acceptedFileTypes: [
+    "image/png",
+    "image/jpeg",
+    "video/quicktime",
+    "video/mp4",
+  ],
+  allowImageTransform: true,
+  imageTransformOutputQuality: 75,
+  allowImageExifOrientation: true,
+  allowImageEdit: true,
+  allowImageEditor: true,
+  fileValidateTypeDetectType: (source, type) =>
+    new Promise((resolve, reject) => {
+      // Do custom type detection here and return with promise
 
-    // add onaddfile callback
-    onaddfile: (error, fileItem) => {},
+      resolve(type);
+    }),
 
-    // add onpreparefile callback
-    onpreparefile: (fileItem, output) => {
-      // create a new image object
-      const img = new Image();
+  // add onaddfile callback
+  onaddfile: (error, fileItem) => {},
 
-      // set the image source to the output of the Image Transform plugin
-      img.src = URL.createObjectURL(output);
+  // add onpreparefile callback
+  onpreparefile: (fileItem, output) => {
+    // create a new image object
+    const img = new Image();
 
-      // add it to the DOM so we can see the result
-      // document.body.appendChild(img);
-    },
-  });
+    // set the image source to the output of the Image Transform plugin
+    img.src = URL.createObjectURL(output);
 
-  window.URL = window.URL || window.webkitURL;
-  // Get the filename when a file is added
-  pond.on("addfile", (error, file) => {
-    if (!error) {
-      fileName = file.file.name;
-      fileType = file.file.type;
-      fileSize = file.file.size;
-      const video = document.createElement("video");
-      video.preload = "metadata";
+    // add it to the DOM so we can see the result
+    // document.body.appendChild(img);
+  },
+});
 
-      video.onloadedmetadata = function () {
-        window.URL.revokeObjectURL(video.src);
-        const { duration } = video;
-        fileDuration = duration;
-      };
+window.URL = window.URL || window.webkitURL;
+// Get the filename when a file is added
+pond.on("addfile", (error, file) => {
+  if (!error) {
+    fileName = file.file.name;
+    fileType = file.file.type;
+    fileSize = file.file.size;
+    const video = document.createElement("video");
+    video.preload = "metadata";
 
-      video.src = URL.createObjectURL(file.file);
-    }
-  });
-  const myVideos = [];
+    video.onloadedmetadata = function () {
+      window.URL.revokeObjectURL(video.src);
+      const { duration } = video;
+      fileDuration = duration;
+    };
 
-  const pond2 = FilePond.create(inputElement2, {
-    storeAsFile: true,
-    acceptedFileTypes: ["image/png", "image/jpeg"],
-    allowImageTransform: true,
-    imageTransformOutputQuality: 75,
-    allowImageExifOrientation: true,
+    video.src = URL.createObjectURL(file.file);
+  }
+});
+const myVideos = [];
 
-    // add onaddfile callback
-    onaddfile: (error, fileItem) => {},
+const pond2 = FilePond.create(inputElement2, {
+  storeAsFile: true,
+  acceptedFileTypes: ["image/png", "image/jpeg"],
+  allowImageTransform: true,
+  imageTransformOutputQuality: 75,
+  allowImageExifOrientation: true,
 
-    // add onpreparefile callback
-    onpreparefile: (fileItem, output) => {
-      // create a new image object
-      const img = new Image();
+  // add onaddfile callback
+  onaddfile: (error, fileItem) => {},
 
-      // set the image source to the output of the Image Transform plugin
-      img.src = URL.createObjectURL(output);
+  // add onpreparefile callback
+  onpreparefile: (fileItem, output) => {
+    // create a new image object
+    const img = new Image();
 
-      // add it to the DOM so we can see the result
-      // document.body.appendChild(img);
-    },
-  });
+    // set the image source to the output of the Image Transform plugin
+    img.src = URL.createObjectURL(output);
 
-  const profilePond = FilePond.create(inputElement3, {
-    storeAsFile: true,
-    acceptedFileTypes: ["image/png", "image/jpeg"],
-    allowImageTransform: true,
-    imageTransformOutputQuality: 75,
-    allowImageExifOrientation: true,
-    allowImageEdit: true,
-  });
+    // add it to the DOM so we can see the result
+    // document.body.appendChild(img);
+  },
+});
 
-  let renderCommentDom = function (comment, isLiked) {
-    return `<div id="comment-${comment._id}" class="comment-display">
+const profilePond = FilePond.create(inputElement3, {
+  storeAsFile: true,
+  acceptedFileTypes: ["image/png", "image/jpeg"],
+  allowImageTransform: true,
+  imageTransformOutputQuality: 75,
+  allowImageExifOrientation: true,
+  allowImageEdit: true,
+});
+
+let renderCommentDom = function (comment, isLiked) {
+  return `<div id="comment-${comment._id}" class="comment-display">
           <img src="${comment.user.avatar}" id="user-profile-img">
           <div class="middle-section">
               <div class="upper">
@@ -154,13 +155,13 @@
           }
           <br>
       </div>`;
-  };
+};
 
-  // method to create a post in DOM
-  let newPostDom = function (post) {
-    return $(`<div id="post-${
-      post._id
-    }" class="display-posts animate__animated animate__fadeIn">
+// method to create a post in DOM
+export let newPostDom = function (post) {
+  return $(`<div id="post-${
+    post._id
+  }" class="display-posts animate__animated animate__fadeIn">
                 
 
 
@@ -201,17 +202,41 @@
 
                 
                 <div class="post-img">
-                    <div class="blur-load" style="background-image: url(${
-                      post.thumbnail
-                        ? post.thumbnail
+                  ${
+                    post.isImg
+                      ? `<div class="blur-load" style="background-image: url(${
+                          post.thumbnail
+                            ? post.thumbnail
+                            : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
+                        })">
+                    <img src="${
+                      post.imgPath
+                        ? post.imgPath
                         : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
-                    })">
-                      <img src="${
-                        post.imgPath
-                          ? post.imgPath
-                          : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
-                      }" loading="lazy" />
-                    </div>
+                    }" loading="lazy" />
+                  </div>`
+                      : `
+                      <video
+                      id="video-${post.video._id}"
+                      class="video-js vjs-theme-forest"
+                      controls
+                      preload="auto"
+                      width="640"
+                      height="400"
+                    >
+                      <source
+                        src="https://storage.googleapis.com/users_videos_bucket/${
+                          post.video.qualities[
+                            post.video.qualities.findIndex(
+                              (ele) => ele.quality === "high"
+                            )
+                          ].videoPath
+                        }/high.m3u8"
+                        type="application/x-mpegURL"
+                      />
+                    </video>`
+                  }
+                    
                 </div>
 
                 <div class="post-footer">
@@ -275,12 +300,12 @@
                             </form>
                 
                     </div>`);
-  };
+};
 
-  let renderPostDom = function (post, isLiked, isSaved) {
-    return $(`<div id="post-${
-      post._id
-    }" class="display-posts animate__animated animate__fadeIn">
+let renderPostDom = function (post, isLiked, isSaved) {
+  return $(`<div id="post-${
+    post._id
+  }" class="display-posts animate__animated animate__fadeIn">
                 
 
 
@@ -335,17 +360,41 @@
                 </div>
 
                 <div class="post-img">
-                    <div class="blur-load" style="background-image: url(${
-                      post.thumbnail
-                        ? post.thumbnail
+                  ${
+                    post.isImg
+                      ? `<div class="blur-load" style="background-image: url(${
+                          post.thumbnail
+                            ? post.thumbnail
+                            : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
+                        })">
+                    <img src="${
+                      post.imgPath
+                        ? post.imgPath
                         : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
-                    })">
-                      <img src="${
-                        post.imgPath
-                          ? post.imgPath
-                          : "https://e0.pxfuel.com/wallpapers/238/155/desktop-wallpaper-oceanic-gradient-for-mac-in-2021-abstract-iphone-abstract-abstract-macos-monterey.jpg"
-                      }" loading="lazy" />
-                    </div>
+                    }" loading="lazy" />
+                  </div>`
+                      : `
+                      <video
+                      id="video-${post.video._id}"
+                      class="video-js vjs-theme-forest"
+                      controls
+                      preload="auto"
+                      width="640"
+                      height="400"
+                    >
+                      <source
+                        src="https://storage.googleapis.com/users_videos_bucket/${
+                          post.video.qualities[
+                            post.video.qualities.findIndex(
+                              (ele) => ele.quality === "high"
+                            )
+                          ].videoPath
+                        }/high.m3u8"
+                        type="application/x-mpegURL"
+                      />
+                    </video>`
+                  }
+                    
                 </div>
 
                 <div class="post-footer">
@@ -443,7 +492,7 @@
                             ${post.comments
                               .map((comment) => {
                                 let flag = false;
-                                for (like of comment.likes) {
+                                for (const like of comment.likes) {
                                   if (like.user === $("#user-id").val()) {
                                     flag = true;
                                     break;
@@ -486,203 +535,90 @@
                             </form>
                 
                     </div>`);
-  };
+};
 
-  // method to delete a post from DOM
+// method to delete a post from DOM
 
-  const deletePost = function (deleteLink) {
-    $(deleteLink).click(function (e) {
-      e.preventDefault();
-
-      $.ajax({
-        type: "get",
-        url: $(deleteLink).prop("href"),
-        success: function (data) {
-          $(`#post-${data.data.post_id}`).remove();
-          Toastify({
-            text: data.data.success,
-            duration: 2000,
-            destination: "",
-            newWindow: true,
-            close: true,
-            avatar:
-              "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
-
-            gravity: "top", // `top` or `bottom`
-            position: "center", // `left`, `center` or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
-            style: {
-              background: "#0057D2",
-              borderRadius: "10px",
-            },
-            onClick: function () {}, // Callback after click
-          }).showToast();
-        },
-        error: function (error) {
-          Toastify({
-            text: "Something went wrong!",
-            duration: 2000,
-            destination: "",
-            newWindow: true,
-            close: true,
-            avatar:
-              "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
-            gravity: "top", // `top` or `bottom`
-            position: "center", // `left`, `center` or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
-            style: {
-              background: "#D20A0A",
-              borderRadius: "10px",
-              color: "white",
-            },
-            onClick: function () {}, // Callback after click
-          }).showToast();
-        },
-      });
-    });
-  };
-
-  // loop over all the existing posts on the page (when the window loads for the first time )
-  // and call the delete post method on each post
-
-  const convertPostsToAjax = function () {
-    // iterate over all posts
-    $("#posts-list-container>div").each(function () {
-      const self = $(this);
-      const deleteButton = $(" .delete-post-button", self);
-      deletePost(deleteButton);
-
-      // get the post's id by splitting the id attribute
-      const postId = self.prop("id").split("-")[1];
-      new PostComments(postId);
-    });
-  };
-
-  convertPostsToAjax();
-
-  // ajax call to create a post on submit of the form
-  $("#new-post-form").submit(function (e) {
-    const videoUploadStatusContainer = $("#video-upload-status-container");
+export const deletePost = function (deleteLink) {
+  $(deleteLink).click(function (e) {
     e.preventDefault();
-    const form = document.querySelector("#new-post-form");
-    const formData = new FormData(form);
-    formData.append("fileName", fileName);
-    formData.append("fileType", fileType);
-    formData.append("fileSize", fileSize);
-    formData.append("fileDuration", fileDuration);
-    const id = $("#local_user_id").val();
-
-    // disable submit button
-    const submitButton = $("#submit");
-    submitButton.val("Uploading...");
-    submitButton.prop("disabled", true);
 
     $.ajax({
-      type: "post",
-      url: `/posts/create/${id}`,
-      data: formData,
-      processData: false,
-      contentType: false,
+      type: "get",
+      url: $(deleteLink).prop("href"),
       success: function (data) {
-        if (!data.data.post.isImg) {
-          gsap.from(videoUploadStatusContainer, {
-            opacity: 0,
-            duration: 0.5,
-            onStart: () => {
-              videoUploadStatusContainer.css({ display: "flex" });
-            },
-          });
-
-          videoUploadStatusContainer
-            .find(".header .heading span")
-            .text("Processing Video");
-
-          $(".progress-percentage").text(`0%`);
-
-          $(".video-upload-progress").LineProgressbar({
-            percentage: 0,
-            fillBackgroundColor: "#0156D1",
-            backgroundColor: "black",
-            height: "15px",
-            radius: "10px",
-            ShowProgressCount: false,
-          });
-          videoUploadStatusContainer.find(".info").html(
-            `<i class="fa-solid fa-circle-info"></i> 
-              Processing can take some time. You can close the window or can browse.`
-          );
-        } else {
-          gsap.to(videoUploadStatusContainer, {
-            opacity: 0,
-            duration: 0.7,
-            delay: 1,
-            onComplete: () => {
-              // Optional: You can hide or remove the element after the animation
-              videoUploadStatusContainer.css({ display: "none", opacity: 1 });
-            },
-          });
-
-          setTimeout(() => {
-            // console.log(data.data.post)
-            const newPost = newPostDom(data.data.post);
-            $("#posts-list-container").prepend(newPost);
-            deletePost($(".delete-post-button", newPost));
-
-            new PostComments(data.data.post._id);
-            // enable the functionality of the toggle liek button on the new post
-            new ToggleLike($(" .toggle-like-button", newPost));
-
-            const blurDivs = document.querySelectorAll(".blur-load");
-
-            blurDivs.forEach((div) => {
-              const img = div.querySelector("img");
-              function loaded() {
-                // show img
-                div.classList.add("loaded");
-              }
-
-              if (img.complete) {
-                loaded();
-              } else {
-                img.addEventListener("load", loaded);
-              }
-            });
-          }, 2000);
-        }
-
-        // clear the form
-        $("#new-post-form")[0].reset();
-
-        // remove the image preview of filepond
-        pond.removeFile();
-        pond2.removeFile();
-
-        submitButton.val("Post");
-        submitButton.prop("disabled", false);
-
-        setTimeout(() => {
-          Toastify({
-            text: data.data.success,
-            duration: 2000,
-            destination: "",
-            newWindow: true,
-            close: true,
-            avatar:
-              "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
-
-            gravity: "top", // `top` or `bottom`
-            position: "center", // `left`, `center` or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
-            style: {
-              background: "#0057D2",
-              borderRadius: "10px",
-            },
-            onClick: function () {}, // Callback after click
-          }).showToast();
-        }, 1000);
+        gsap.to($(`#post-${data.data.post_id}`), {
+          opacity: 0,
+          y: -2000,
+          duration: 0.9,
+          ease: "power2.inOut",
+          onComplete: () => {
+            // Optional: You can hide or remove the element after the animation
+            $(`#post-${data.data.post_id}`).remove();
+          },
+        });
+        showNotification(data.data.success, "success", 2000, null);
       },
-      xhr: function () {
-        const xhr = new window.XMLHttpRequest();
+      error: function (error) {
+        showNotification("Something went wrong!", "error", 2000, null);
+      },
+    });
+  });
+};
+
+// loop over all the existing posts on the page (when the window loads for the first time )
+// and call the delete post method on each post
+
+const convertPostsToAjax = function () {
+  // iterate over all posts
+  $("#posts-list-container>div").each(function () {
+    const self = $(this);
+    const deleteButton = $(" .delete-post-button", self);
+    deletePost(deleteButton);
+
+    // get the post's id by splitting the id attribute
+    const postId = self.prop("id").split("-")[1];
+    new PostComments(postId);
+  });
+};
+
+convertPostsToAjax();
+
+// ajax call to create a post on submit of the form
+$("#new-post-form").submit(function (e) {
+  e.preventDefault();
+  const videoUploadStatusContainer = $("#video-upload-status-container");
+  if (videoUploadStatusContainer.css("display") === "flex") {
+    showNotification(
+      "Only one video upload at a time is allowed.",
+      "info",
+      2500,
+      null
+    );
+    return;
+  }
+  const form = document.querySelector("#new-post-form");
+  const formData = new FormData(form);
+  formData.append("fileName", fileName);
+  formData.append("fileType", fileType);
+  formData.append("fileSize", fileSize);
+  formData.append("fileDuration", fileDuration);
+  const id = $("#local_user_id").val();
+
+  // disable submit button
+  const submitButton = $("#post-submit-1");
+  submitButton.find("span").text("Uploading...");
+  submitButton.prop("disabled", true);
+  submitButton.css({ cursor: "not-allowed" });
+
+  $.ajax({
+    type: "post",
+    url: `/posts/create/${id}`,
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (data) {
+      if (!data.data.post.isImg) {
         gsap.from(videoUploadStatusContainer, {
           opacity: 0,
           duration: 0.5,
@@ -690,136 +626,234 @@
             videoUploadStatusContainer.css({ display: "flex" });
           },
         });
-        // Upload progress
-        xhr.upload.addEventListener(
-          "progress",
-          function (evt) {
-            if (evt.lengthComputable) {
-              const percentComplete = Math.round(
-                (evt.loaded / evt.total) * 100
-              );
-              // videoUploadStatusContainer.css({ display: "flex" });
-              videoUploadStatusContainer
-                .find(".header .heading span")
-                .text(
-                  `Uploading ${
-                    fileType === "image/png" ||
-                    fileType === "image/jpg" ||
-                    fileType === "image/jpeg"
-                      ? "Image"
-                      : "Video"
-                  }`
-                );
-              videoUploadStatusContainer
-                .find(".header .file-name")
-                .text(fileName.substring(0, 15));
-              videoUploadStatusContainer.find(".info").html(
-                `<i class="fa-solid fa-circle-info"></i> 
-                  File is being uploaded. Please don't close the tab or refresh.`
-              );
 
-              $(".progress-percentage").text(`${percentComplete}%`);
+        videoUploadStatusContainer
+          .find(".header .heading span")
+          .text("Processing Video");
 
-              $(".video-upload-progress").LineProgressbar({
-                percentage: percentComplete,
-                fillBackgroundColor: "#0156D1",
-                backgroundColor: "#00000000",
-                height: "15px",
-                radius: "10px",
-                ShowProgressCount: false,
-              });
-            }
-          },
-          false
+        $(".progress-percentage").text(`0%`);
+
+        $(".video-upload-progress").LineProgressbar({
+          percentage: 0,
+          fillBackgroundColor: "#0156D1",
+          backgroundColor: "black",
+          height: "15px",
+          radius: "10px",
+          ShowProgressCount: false,
+        });
+        videoUploadStatusContainer.find(".info").html(
+          `<i class="fa-solid fa-circle-info"></i> 
+              Processing can take some time. You can close the window or can browse.`
         );
-
-        return xhr;
-      },
-      error: function (error) {
-        Toastify({
-          text: "Something went wrong!",
-          duration: 2000,
-          destination: "",
-          newWindow: true,
-          close: true,
-          avatar:
-            "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
-          gravity: "top", // `top` or `bottom`
-          position: "center", // `left`, `center` or `right`
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-          style: {
-            background: "#D20A0A",
-            borderRadius: "10px",
-            color: "white",
+      } else {
+        gsap.to(videoUploadStatusContainer, {
+          opacity: 0,
+          duration: 0.7,
+          delay: 1,
+          onComplete: () => {
+            // Optional: You can hide or remove the element after the animation
+            videoUploadStatusContainer.css({ display: "none", opacity: 1 });
           },
-          onClick: function () {}, // Callback after click
-        }).showToast();
-      },
-    });
+        });
+
+        setTimeout(() => {
+          // console.log(data.data.post)
+          const newPost = newPostDom(data.data.post);
+          $("#posts-list-container").prepend(newPost);
+          deletePost($(".delete-post-button", newPost));
+
+          new PostComments(data.data.post._id);
+          // enable the functionality of the toggle liek button on the new post
+          new ToggleLike($(" .toggle-like-button", newPost));
+
+          const blurDivs = document.querySelectorAll(".blur-load");
+
+          blurDivs.forEach((div) => {
+            const img = div.querySelector("img");
+            function loaded() {
+              // show img
+              div.classList.add("loaded");
+            }
+
+            if (img.complete) {
+              loaded();
+            } else {
+              img.addEventListener("load", loaded);
+            }
+            showNotification(data.data.success, "success", 2000, null);
+          });
+        }, 1700);
+      }
+
+      // clear the form
+      $("#new-post-form")[0].reset();
+
+      // remove the image preview of filepond
+      pond.removeFile();
+      pond2.removeFile();
+
+      submitButton.prop("disabled", false);
+      submitButton.find("span").text("Post");
+      submitButton.css({ cursor: "pointer" });
+    },
+    xhr: function () {
+      const xhr = new window.XMLHttpRequest();
+      gsap.from(videoUploadStatusContainer, {
+        opacity: 0,
+        duration: 0.5,
+        onStart: () => {
+          videoUploadStatusContainer.css({ display: "flex" });
+        },
+      });
+      // Upload progress
+      xhr.upload.addEventListener(
+        "progress",
+        function (evt) {
+          if (evt.lengthComputable) {
+            const percentComplete = Math.round((evt.loaded / evt.total) * 100);
+            // videoUploadStatusContainer.css({ display: "flex" });
+            videoUploadStatusContainer
+              .find(".header .heading span")
+              .text(
+                `Uploading ${
+                  fileType === "image/png" ||
+                  fileType === "image/jpg" ||
+                  fileType === "image/jpeg"
+                    ? "Image"
+                    : "Video"
+                }`
+              );
+            videoUploadStatusContainer
+              .find(".header .file-name")
+              .text(fileName.substring(0, 15));
+            videoUploadStatusContainer.find(".info").html(
+              `<i class="fa-solid fa-circle-info"></i> 
+                  File is being uploaded. Please don't close the tab or refresh.`
+            );
+
+            $(".progress-percentage").text(`${percentComplete}%`);
+
+            $(".video-upload-progress").LineProgressbar({
+              percentage: percentComplete,
+              fillBackgroundColor: "#0156D1",
+              backgroundColor: "#00000000",
+              height: "15px",
+              radius: "10px",
+              ShowProgressCount: false,
+            });
+          }
+        },
+        false
+      );
+
+      return xhr;
+    },
+    error: function (error) {
+      showNotification("Something went wrong!", "error", 2000, null);
+    },
   });
+});
 
-  // function to save posts
-  function toggleSavePost(postId, type) {
-    // check if the icon is solid or regular
-    let icon = $(`#icon-${postId}`).hasClass("fa-solid");
-    const saveButton = $(`#icon-${postId}`);
-
-    if (icon) {
-      type = "unsave";
-      saveButton.toggleClass("fa-solid fa-regular");
-    } else {
-      type = "save";
-      saveButton.toggleClass("fa-regular fa-solid");
+const showNotification = (message, type, duration, icon) => {
+  if (type === "error") {
+    if (!icon) {
+      icon = "https://cdn-icons-png.flaticon.com/128/9426/9426995.png";
     }
-
-    // make ajax call to save post
-    $.ajax({
-      type: "post",
-      url: `/posts/${type}/${postId}`,
-      success: function (data) {
-        Toastify({
-          text: data.data.success,
-          duration: 2000,
-          destination: "",
-          newWindow: true,
-          close: true,
-          avatar:
-            "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
-
-          gravity: "top", // `top` or `bottom`
-          position: "center", // `left`, `center` or `right`
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-          style: {
-            background: "#0057D2",
-            borderRadius: "10px",
-          },
-          onClick: function () {}, // Callback after click
-        }).showToast();
-      },
-      error: function (error) {
-        Toastify({
-          text: "Something went wrong!",
-          duration: 2000,
-          destination: "",
-          newWindow: true,
-          close: true,
-          avatar:
-            "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
-          gravity: "top", // `top` or `bottom`
-          position: "center", // `left`, `center` or `right`
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-          style: {
-            background: "#D20A0A",
-            borderRadius: "10px",
-            color: "white",
-          },
-          onClick: function () {}, // Callback after click
-        }).showToast();
-      },
-    });
+  } else if (type === "success") {
+    if (!icon) {
+      icon = "https://cdn-icons-png.flaticon.com/128/7518/7518748.png";
+    }
+  } else {
+    icon = "https://cdn-icons-png.flaticon.com/128/5683/5683325.png";
   }
-  const skeletonCard = function () {
-    return `
+
+  Toastify({
+    text: message,
+    duration: duration,
+    destination: "",
+    newWindow: true,
+    close: true,
+    avatar: icon,
+    gravity: "top", // `top` or `bottom`
+    position: "center", // `left`, `center` or `right`
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+    style: {
+      background:
+        type === "error"
+          ? "#000000"
+          : type === "success"
+          ? "#000000"
+          : "#000000",
+      borderRadius: "10px",
+      color: "white",
+      // borderColor: "linear-gradient(-45deg, #ff3c007b 0%, #0400ff7c 69%)"
+    },
+    onClick: function () {}, // Callback after click
+  }).showToast();
+};
+
+// function to save posts
+function toggleSavePost(postId, type) {
+  // check if the icon is solid or regular
+  let icon = $(`#icon-${postId}`).hasClass("fa-solid");
+  const saveButton = $(`#icon-${postId}`);
+
+  if (icon) {
+    type = "unsave";
+    saveButton.toggleClass("fa-solid fa-regular");
+  } else {
+    type = "save";
+    saveButton.toggleClass("fa-regular fa-solid");
+  }
+
+  // make ajax call to save post
+  $.ajax({
+    type: "post",
+    url: `/posts/${type}/${postId}`,
+    success: function (data) {
+      Toastify({
+        text: data.data.success,
+        duration: 2000,
+        destination: "",
+        newWindow: true,
+        close: true,
+        avatar:
+          "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+
+        gravity: "top", // `top` or `bottom`
+        position: "center", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "#0057D2",
+          borderRadius: "10px",
+        },
+        onClick: function () {}, // Callback after click
+      }).showToast();
+    },
+    error: function (error) {
+      Toastify({
+        text: "Something went wrong!",
+        duration: 2000,
+        destination: "",
+        newWindow: true,
+        close: true,
+        avatar:
+          "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
+        gravity: "top", // `top` or `bottom`
+        position: "center", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "#D20A0A",
+          borderRadius: "10px",
+          color: "white",
+        },
+        onClick: function () {}, // Callback after click
+      }).showToast();
+    },
+  });
+}
+const skeletonCard = function () {
+  return `
     <div class="card animate__animated animate__fadeIn">
       <h2 class="card-header skeleton">
           <!-- wating for title to load from javascript -->
@@ -836,92 +870,91 @@
       </div>
 	</div>
     `;
-  };
-  let scroll = false;
+};
+let scroll = false;
 
-  window.onscroll = (event) => {
-    if (scroll || window.location.href.includes("profile")) return;
-    // Check if the user is 200 pixels away from the bottom of the page
-    if (
+window.onscroll = (event) => {
+  if (scroll || window.location.href.includes("profile")) return;
+  // Check if the user is 200 pixels away from the bottom of the page
+  if (
+    window.innerHeight + window.pageYOffset >=
+      document.body.offsetHeight - 200 ||
+    (window.innerWidth <= 480 &&
       window.innerHeight + window.pageYOffset >=
-        document.body.offsetHeight - 200 ||
-      (window.innerWidth <= 480 &&
-        window.innerHeight + window.pageYOffset >=
-          document.body.offsetHeight - 900)
-    ) {
-      // make ajax call to get posts
-      scroll = true;
-      const offset = document.querySelectorAll("#posts-list-container")[0]
-        .children.length;
-      const limit = 5;
-      for (let i = 0; i < 5; i++) {
-        $("#posts-list-container").append(skeletonCard);
-      }
-      $.ajax({
-        type: "GET",
-        url: `/api/v1/posts/index?offset=${offset}&limit=${limit}`,
-        success: (data) => {
-          // remove skeleton loading
-          for (let i = 0; i < 5; i++) {
-            if ($("#posts-list-container").children().last().hasClass("card")) {
-              $("#posts-list-container").children().last().remove();
-            }
-          }
-          data.data.posts.forEach((post) => {
-            // check if the post is liked by the current user
-            const userId = $("#user-id").val();
-            let flag = false;
-            for (like of post.likes) {
-              if (like.user === userId) {
-                flag = true;
-                break;
-              }
-            }
-
-            // check if the post is saved by the current user
-            const savedPosts = $("#user-saved-posts").val().split(",");
-            let isSaved = false;
-            for (const savedPostId of savedPosts) {
-              if (savedPostId === post._id) {
-                isSaved = true;
-                break;
-              }
-            }
-
-            const newPost = renderPostDom(post, flag, isSaved);
-            $("#posts-list-container").append(newPost);
-            deletePost($(" .delete-post-button", newPost));
-
-            new PostComments(post._id);
-            // enable the functionality of the toggle liek button on the new post
-            new ToggleLike($(" .toggle-like-button", newPost));
-
-            const blurDivs = document.querySelectorAll(".blur-load");
-
-            blurDivs.forEach((div) => {
-              const img = div.querySelector("img");
-              function loaded() {
-                // show img
-                div.classList.add("loaded");
-              }
-
-              if (img.complete) {
-                loaded();
-              } else {
-                img.addEventListener("load", loaded);
-              }
-            });
-          });
-
-          if (data.data.posts.length !== 0) {
-            scroll = false;
-          }
-        },
-        error: (error) => {
-          console.log(error);
-          scroll = false;
-        },
-      });
+        document.body.offsetHeight - 900)
+  ) {
+    // make ajax call to get posts
+    scroll = true;
+    const offset = document.querySelectorAll("#posts-list-container")[0]
+      .children.length;
+    const limit = 5;
+    for (let i = 0; i < 5; i++) {
+      $("#posts-list-container").append(skeletonCard);
     }
-  };
-}
+    $.ajax({
+      type: "GET",
+      url: `/api/v1/posts/index?offset=${offset}&limit=${limit}`,
+      success: (data) => {
+        // remove skeleton loading
+        for (let i = 0; i < 5; i++) {
+          if ($("#posts-list-container").children().last().hasClass("card")) {
+            $("#posts-list-container").children().last().remove();
+          }
+        }
+        data.data.posts.forEach((post) => {
+          // check if the post is liked by the current user
+          const userId = $("#user-id").val();
+          let flag = false;
+          for (const like of post.likes) {
+            if (like.user === userId) {
+              flag = true;
+              break;
+            }
+          }
+
+          // check if the post is saved by the current user
+          const savedPosts = $("#user-saved-posts").val().split(",");
+          let isSaved = false;
+          for (const savedPostId of savedPosts) {
+            if (savedPostId === post._id) {
+              isSaved = true;
+              break;
+            }
+          }
+
+          const newPost = renderPostDom(post, flag, isSaved);
+          $("#posts-list-container").append(newPost);
+          deletePost($(" .delete-post-button", newPost));
+
+          new PostComments(post._id);
+          // enable the functionality of the toggle liek button on the new post
+          new ToggleLike($(" .toggle-like-button", newPost));
+          const blurDivs = document.querySelectorAll(".blur-load");
+
+          blurDivs.forEach((div) => {
+            const img = div.querySelector("img");
+            function loaded() {
+              // show img
+              div.classList.add("loaded");
+            }
+
+            if (img.complete) {
+              loaded();
+            } else {
+              img.addEventListener("load", loaded);
+            }
+          });
+        });
+        refreshVideoPlayback();
+
+        if (data.data.posts.length !== 0) {
+          scroll = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        scroll = false;
+      },
+    });
+  }
+};

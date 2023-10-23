@@ -1,3 +1,4 @@
+<% if (!post.isImg && !post.video) { %> <% } else { %>
 <div id="post-<%= post._id %>" class="display-posts">
   <div
     id="bottom-menu-options-<%= post._id %>"
@@ -29,7 +30,7 @@
         Go to profile</a
       >
     </div>
-    <% if(locals.user && locals.user.id == post.user.id) { %>
+    <% if(locals.user && locals.user.id === post.user.id) { %>
     <div class="option2">
       <a class="delete-post-button" href="/posts/destroy/<%= post._id %>">
         <i class="fa-solid fa-trash"></i>
@@ -62,16 +63,27 @@
     </div>
   </div>
   <div class="post-img">
-    <% if(post.isImg) { %>
-      <% if(post.imgPath) { %>
-      <div class="blur-load" style="background-image: url(<%= post.thumbnail %>)">
-        <img src="<%= post.imgPath %>" loading="lazy" />
-      </div>
-      <% } else { %>
-      <img src="<%= assetPath('img/1782188.jpeg') %>" />
-      <% } %> 
+    <% if(post.isImg) { %> <% if(post.imgPath) { %>
+    <div class="blur-load" style="background-image: url(<%= post.thumbnail %>)">
+      <img src="<%= post.imgPath %>" loading="lazy" />
+    </div>
     <% } else { %>
     <img src="<%= assetPath('img/1782188.jpeg') %>" />
+    <% } %> <% } else if (post.video) { %>
+    <!-- <img src="<%= assetPath('img/1782188.jpeg') %>" /> -->
+    <video
+      id="video-<%= post.video._id %>"
+      class="video-js vjs-theme-forest"
+      controls
+      preload="auto"
+      width="640"
+      height="400"
+    >
+      <source
+        src="https://storage.googleapis.com/users_videos_bucket/<%= post.video.qualities[post.video.qualities.findIndex(ele => ele.quality === 'high')].videoPath %>/high.m3u8"
+        type="application/x-mpegURL"
+      />
+    </video>
     <% } %>
   </div>
 
@@ -220,5 +232,27 @@
     </div>
   </div>
 </div>
+<% } %>
 
-<script></script>
+<script>
+
+  <% if (!post.isImg && post.video) { %>
+    videojs("video-<%= post.video._id %>");
+  <% } else if (!post.isImg && !post.video && post.user.id === locals.user.id) { %>
+    $("#video-upload-status-container").css({display: "flex"});
+    var progress = localStorage.getItem("video-processing-progress");
+    $(".progress-percentage").text(`${progress ?? 0}%`);
+    $("#video-upload-status-container")
+        .find(".header .heading span")
+        .text("Processing Video");
+
+    $(".video-upload-progress")?.LineProgressbar({
+      percentage: progress ?? 0,
+      fillBackgroundColor: "#0156D1",
+      backgroundColor: "#00000000",
+      height: "15px",
+      radius: "10px",
+      ShowProgressCount: false,
+    });
+  <% } %>
+</script>

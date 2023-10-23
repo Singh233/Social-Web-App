@@ -26,6 +26,7 @@ module.exports.home = async function (request, response) {
       .sort("-createdAt")
       .limit(5)
       .populate("user")
+      .populate("video")
       .populate("likes")
       .populate({
         path: "comments",
