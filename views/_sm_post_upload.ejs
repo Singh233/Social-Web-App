@@ -21,10 +21,13 @@
     </a>
   </div>
 
+  <%- include("_video_upload_status_card", {}) %>
+
   <form
     action="/posts/create/<%= locals.user._id %>"
     enctype="multipart/form-data"
     id="new-post-form"
+    class="post-upload-form-sm"
     method="post"
   >
     <input
@@ -103,4 +106,41 @@
 <script>
   $("#sm-nav-upload-icon").css({ display: "none" });
   $("#sm-nav-upload-icon-fill").css({ display: "block" });
+
+  if (window.innerWidth < 600) {
+    $(document).ready(function () {
+      const videoUploadStatusContainer = $("#video-upload-status-container");
+      var progress = JSON.parse(
+        localStorage.getItem("video-processing-progress")
+      ).progress;
+      var title = JSON.parse(
+        localStorage.getItem("video-processing-progress")
+      ).title;
+      if (progress) {
+        $(".post-upload-form-sm").css({ display: "none" });
+        if (videoUploadStatusContainer.css("display") === "none") {
+          gsap.from(videoUploadStatusContainer, {
+            opacity: 0,
+            duration: 0.5,
+            onStart: () => {
+              videoUploadStatusContainer.css({ display: "flex" });
+            },
+          });
+
+          videoUploadStatusContainer
+            .find(".header .heading span")
+            .text("Processing Video");
+        }
+
+        $(".video-upload-progress").LineProgressbar({
+          percentage: progress,
+          fillBackgroundColor: "#0156D1",
+          backgroundColor: "#00000000",
+          height: "15px",
+          radius: "10px",
+          ShowProgressCount: false,
+        });
+      }
+    });
+  }
 </script>

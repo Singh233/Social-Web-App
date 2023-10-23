@@ -298,7 +298,7 @@ $button-color-gray: #212121;
   display: none;
 }
 
-@media screen and (max-width: "480px") {
+@media screen and (max-width: "600px") {
   //do Smth
   .home-container {
     max-width: 100vw;
@@ -346,7 +346,7 @@ $button-color-gray: #212121;
       }
 
       #new-post-form {
-        display: none;
+        display: none !important;
         max-width: 100vw;
       }
 

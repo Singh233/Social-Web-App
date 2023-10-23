@@ -17,7 +17,7 @@ const clearLocalFiles = (outputFileName) => {
 
 queue.process("videoEncoders", async (job, done) => {
   const io = getIo();
-  console.log("Video encoding worker is processing a job", job.data);
+  console.log("Video encoding worker is processing a job", job.userId);
   const {
     videoUrl,
     uniquePrefix,
@@ -43,7 +43,8 @@ queue.process("videoEncoders", async (job, done) => {
           uniquePrefix,
           quality,
           videoUrl,
-          userId
+          userId,
+          fileName
         );
         // Implement transcodeVideoToQuality function to transcode the video.
         transcodedVideos.push({ quality: quality.name, videoPath: outputUrl });

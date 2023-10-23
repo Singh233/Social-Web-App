@@ -140,3 +140,14 @@
     }
   }
 }
+
+@media screen and (max-width: 500px) {
+  .container {
+    min-width: auto;
+    width: 95vw;
+
+    .header {
+      flex-direction: column;
+    }
+  }
+}

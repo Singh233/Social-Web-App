@@ -4,6 +4,10 @@
 /* eslint-disable no-undef */
 import { newPostDom, deletePost } from "./home_posts.js";
 import { refreshVideoPlayback } from "./video_playback_handler.js";
+const myConfetti = confetti.create(null, {
+  resize: true,
+  useWorker: true,
+});
 
 class ChatEngine {
   constructor(chatBoxId, userId, userEmail, userName, userProfile, host) {
@@ -498,8 +502,20 @@ class ChatEngine {
       // Handle the completion event here
       // console.log("Video encoding job completed:", data.jobId);
       localStorage.removeItem("video-processing-progress");
-
       $(".progress-percentage").text("Completed!");
+      myConfetti({
+        particleCount: 100,
+        spread: 80,
+        angle: 60,
+        origin: { x: 0 },
+      });
+
+      myConfetti({
+        particleCount: 100,
+        spread: 80,
+        angle: 120,
+        origin: { x: 1 },
+      });
       gsap.to($("#video-upload-status-container"), {
         opacity: 0,
         duration: 0.7,
@@ -512,6 +528,15 @@ class ChatEngine {
           });
         },
       });
+      if (window.innerWidth < 600)
+        gsap.from($(".post-upload-form-sm"), {
+          opacity: 0,
+          duration: 0.5,
+          delay: 1.7,
+          onStart: () => {
+            $(".post-upload-form-sm").css({ display: "flex" });
+          },
+        });
       self.displayNotification("Video is processed!", "success", 2000, null);
       setTimeout(() => {
         const newPost = newPostDom(data.post);
@@ -531,7 +556,11 @@ class ChatEngine {
       // Handle the completion event here
       // console.log("Progress:", data.progress);
       const videoUploadStatusContainer = $("#video-upload-status-container");
-      localStorage.setItem("video-processing-progress", data.progress);
+      const lsData = {
+        progress: data.progress,
+        title: data.videoTitle,
+      };
+      localStorage.setItem("video-processing-progress", JSON.stringify(lsData));
 
       if (data.progress === 100) {
         $(".progress-percentage").text("Almost done!");

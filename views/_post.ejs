@@ -149,11 +149,19 @@
       </div>
 
       <% if (isSaved) { %>
-      <div onclick="toggleSavePost('<%= post._id %>', 'unsave')" class="right">
+      <div
+        id="save-post"
+        onclick="toggleSavePost('<%= post._id %>', 'unsave')"
+        class="right"
+      >
         <i id="icon-<%= post._id %>" class="fa-solid fa-bookmark"></i>
       </div>
       <% } else { %>
-      <div onclick="toggleSavePost('<%= post._id %>', 'save')" class="right">
+      <div
+        id="unsave-post"
+        onclick="toggleSavePost('<%= post._id %>', 'save')"
+        class="right"
+      >
         <i id="icon-<%= post._id %>" class="fa-regular fa-bookmark"></i>
       </div>
       <% } %>
@@ -235,24 +243,93 @@
 <% } %>
 
 <script>
+  $(document).ready(function () {
 
-  <% if (!post.isImg && post.video) { %>
-    videojs("video-<%= post.video._id %>");
-  <% } else if (!post.isImg && !post.video && post.user.id === locals.user.id) { %>
-    $("#video-upload-status-container").css({display: "flex"});
-    var progress = localStorage.getItem("video-processing-progress");
-    $(".progress-percentage").text(`${progress ?? 0}%`);
-    $("#video-upload-status-container")
-        .find(".header .heading span")
-        .text("Processing Video");
+    <% if (!post.isImg && post.video) { %>
+      videojs("video-<%= post.video._id %>");
+    <% } else if (!post.isImg && !post.video && post.user.id === locals.user.id) { %>
+      $("#video-upload-status-container").css({display: "flex"});
+      var progress = JSON.parse(localStorage.getItem("video-processing-progress")).progress;
+      var title = JSON.parse(localStorage.getItem("video-processing-progress")).title;
+      $(".progress-percentage").text(`${progress ?? 0}%`);
+      $("#video-upload-status-container")
+          .find(".header .heading span")
+          .text("Processing Video");
+      $("#video-upload-status-container")
+        .find(".header .file-name")
+        .text(title.substring(0, 15));
+      $(".video-upload-progress")?.LineProgressbar({
+        percentage: progress ?? 0,
+        fillBackgroundColor: "#0156D1",
+        backgroundColor: "#00000000",
+        height: "15px",
+        radius: "10px",
+        ShowProgressCount: false,
+      });
 
-    $(".video-upload-progress")?.LineProgressbar({
-      percentage: progress ?? 0,
-      fillBackgroundColor: "#0156D1",
-      backgroundColor: "#00000000",
-      height: "15px",
-      radius: "10px",
-      ShowProgressCount: false,
+    <% } %>
+  });
+</script>
+
+<script>
+  // function to save posts
+  function toggleSavePost(postId, type) {
+    // check if the icon is solid or regular
+    let icon = $(`#icon-${postId}`).hasClass("fa-solid");
+    const saveButton = $(`#icon-${postId}`);
+
+    if (icon) {
+      type = "unsave";
+      saveButton.toggleClass("fa-solid fa-regular");
+    } else {
+      type = "save";
+      saveButton.toggleClass("fa-regular fa-solid");
+    }
+
+    // make ajax call to save post
+    $.ajax({
+      type: "post",
+      url: `/posts/${type}/${postId}`,
+      success: function (data) {
+        Toastify({
+          text: data.data.success,
+          duration: 2000,
+          destination: "",
+          newWindow: true,
+          close: true,
+          avatar:
+            "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+
+          gravity: "top", // `top` or `bottom`
+          position: "center", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "#0057D2",
+            borderRadius: "10px",
+          },
+          onClick: function () {}, // Callback after click
+        }).showToast();
+      },
+      error: function (error) {
+        Toastify({
+          text: "Something went wrong!",
+          duration: 2000,
+          destination: "",
+          newWindow: true,
+          close: true,
+          avatar:
+            "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
+          gravity: "top", // `top` or `bottom`
+          position: "center", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "#D20A0A",
+            borderRadius: "10px",
+            color: "white",
+          },
+          onClick: function () {}, // Callback after click
+        }).showToast();
+      },
     });
-  <% } %>
+  }
 </script>

@@ -19,7 +19,8 @@ async function transcodeVideoToQuality(
   fileName,
   quality,
   videoUrl,
-  userId
+  userId,
+  videoTitle
 ) {
   return new Promise((resolve, reject) => {
     const outputFileName = `transcoded_${fileName}`;
@@ -51,6 +52,7 @@ async function transcodeVideoToQuality(
             if (activeUsers.has(userId)) {
               io.to(activeUsers.get(userId).socketId).emit("video-progress", {
                 progress: newProgress,
+                videoTitle,
                 status: "Processing",
               });
             }

@@ -3,6 +3,10 @@
 /* eslint-disable no-new */
 /* eslint-disable no-undef */
 import { refreshVideoPlayback } from "./video_playback_handler.js";
+const myConfetti = confetti.create(null, {
+  resize: true,
+  useWorker: true,
+});
 
 FilePond.registerPlugin(
   FilePondPluginImageCrop,
@@ -83,17 +87,37 @@ pond.on("addfile", (error, file) => {
     video.src = URL.createObjectURL(file.file);
   }
 });
-const myVideos = [];
 
 const pond2 = FilePond.create(inputElement2, {
   storeAsFile: true,
-  acceptedFileTypes: ["image/png", "image/jpeg"],
+  acceptedFileTypes: [
+    "image/png",
+    "image/jpeg",
+    "video/quicktime",
+    "video/mp4",
+  ],
   allowImageTransform: true,
   imageTransformOutputQuality: 75,
   allowImageExifOrientation: true,
 
   // add onaddfile callback
-  onaddfile: (error, fileItem) => {},
+  onaddfile: (error, file) => {
+    if (!error) {
+      fileName = file.file.name;
+      fileType = file.file.type;
+      fileSize = file.file.size;
+      const video = document.createElement("video");
+      video.preload = "metadata";
+
+      video.onloadedmetadata = function () {
+        window.URL.revokeObjectURL(video.src);
+        const { duration } = video;
+        fileDuration = duration;
+      };
+
+      video.src = URL.createObjectURL(file.file);
+    }
+  },
 
   // add onpreparefile callback
   onpreparefile: (fileItem, output) => {
@@ -619,6 +643,14 @@ $("#new-post-form").submit(function (e) {
     contentType: false,
     success: function (data) {
       if (!data.data.post.isImg) {
+        const lsData = {
+          progress: 0,
+          title: fileName,
+        };
+        localStorage.setItem(
+          "video-processing-progress",
+          JSON.stringify(lsData)
+        );
         gsap.from(videoUploadStatusContainer, {
           opacity: 0,
           duration: 0.5,
@@ -657,6 +689,20 @@ $("#new-post-form").submit(function (e) {
         });
 
         setTimeout(() => {
+          myConfetti({
+            particleCount: 100,
+            spread: 80,
+            angle: 60,
+            origin: { x: 0 },
+          });
+
+          myConfetti({
+            particleCount: 100,
+            spread: 80,
+            angle: 120,
+            origin: { x: 1 },
+          });
+          showNotification(data.data.success, "success", 2000, null);
           // console.log(data.data.post)
           const newPost = newPostDom(data.data.post);
           $("#posts-list-container").prepend(newPost);
@@ -680,8 +726,15 @@ $("#new-post-form").submit(function (e) {
             } else {
               img.addEventListener("load", loaded);
             }
-            showNotification(data.data.success, "success", 2000, null);
           });
+          if (window.innerWidth < 600)
+            gsap.from($(".post-upload-form-sm"), {
+              opacity: 0,
+              duration: 0.5,
+              onStart: () => {
+                $(".post-upload-form-sm").css({ display: "flex" });
+              },
+            });
         }, 1700);
       }
 
@@ -701,10 +754,20 @@ $("#new-post-form").submit(function (e) {
       gsap.from(videoUploadStatusContainer, {
         opacity: 0,
         duration: 0.5,
+        delay: 0.7,
         onStart: () => {
           videoUploadStatusContainer.css({ display: "flex" });
         },
       });
+      if (window.innerWidth < 600)
+        gsap.to($(".post-upload-form-sm"), {
+          opacity: 0,
+          duration: 0.7,
+          onComplete: () => {
+            // Optional: You can hide or remove the element after the animation
+            $(".post-upload-form-sm").css({ display: "none", opacity: 1 });
+          },
+        });
       // Upload progress
       xhr.upload.addEventListener(
         "progress",
@@ -792,66 +855,6 @@ const showNotification = (message, type, duration, icon) => {
   }).showToast();
 };
 
-// function to save posts
-function toggleSavePost(postId, type) {
-  // check if the icon is solid or regular
-  let icon = $(`#icon-${postId}`).hasClass("fa-solid");
-  const saveButton = $(`#icon-${postId}`);
-
-  if (icon) {
-    type = "unsave";
-    saveButton.toggleClass("fa-solid fa-regular");
-  } else {
-    type = "save";
-    saveButton.toggleClass("fa-regular fa-solid");
-  }
-
-  // make ajax call to save post
-  $.ajax({
-    type: "post",
-    url: `/posts/${type}/${postId}`,
-    success: function (data) {
-      Toastify({
-        text: data.data.success,
-        duration: 2000,
-        destination: "",
-        newWindow: true,
-        close: true,
-        avatar:
-          "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
-
-        gravity: "top", // `top` or `bottom`
-        position: "center", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "#0057D2",
-          borderRadius: "10px",
-        },
-        onClick: function () {}, // Callback after click
-      }).showToast();
-    },
-    error: function (error) {
-      Toastify({
-        text: "Something went wrong!",
-        duration: 2000,
-        destination: "",
-        newWindow: true,
-        close: true,
-        avatar:
-          "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
-        gravity: "top", // `top` or `bottom`
-        position: "center", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "#D20A0A",
-          borderRadius: "10px",
-          color: "white",
-        },
-        onClick: function () {}, // Callback after click
-      }).showToast();
-    },
-  });
-}
 const skeletonCard = function () {
   return `
     <div class="card animate__animated animate__fadeIn">
