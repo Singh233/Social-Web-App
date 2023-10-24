@@ -164,14 +164,19 @@
       </button>
     </form>
 
-    <%- include("_video_upload_status_card", {}) %>
+    <%- include("_video_upload_status_card.ejs", {}) %>
 
     <section id="feed-posts">
       <div id="posts-list-container">
-        <% for (let post of posts) { %> <% let isSaved = false; %> <% for (let j
-        of locals.user.savedPosts) { %> <% if (j._id.toString() ===
-        post._id.toString()) { %> <% isSaved = true; %> <% } %> <% } %> <%-
-        include('_post.ejs', {post: post, moment, isSaved}) -%> <% } %>
+        <% for (let i of posts) { %> 
+          <% let isSaved = false; %>
+           <% for (let j of locals.user.savedPosts) { %> 
+            <% if (j._id.toString() === i._id.toString()) { %> 
+              <% isSaved = true; %> 
+            <% } %> 
+          <% } %> 
+          <%- include('_post.ejs', {post: i, moment, isSaved}) -%> 
+        <% } %>
       </div>
     </section>
     <% } %>
@@ -197,7 +202,7 @@ include('user_sign_up'); %> <% } %> <% if (locals.user){ %>
 <% } %>
 
 <script src="<%= assetPath('js/home_post_comments.js') %>"></script>
-<script type="module" src="<%= assetPath('js/home_posts.js') %>"></script>
+<script src="<%= assetPath('js/home_posts.js') %>"></script>
 <script src="<%= assetPath('js/toggle_likes.js') %>"></script>
 
 <script>
@@ -229,9 +234,7 @@ include('user_sign_up'); %> <% } %> <% if (locals.user){ %>
   $("#sm-nav-home-icon").addClass("active");
 </script>
 
-<script type="module">
-  import { refreshVideoPlayback } from "<%= assetPath('js/video_playback_handler.js') %>";
-
+<script>
   $(document).ready(function () {
     refreshVideoPlayback();
   });

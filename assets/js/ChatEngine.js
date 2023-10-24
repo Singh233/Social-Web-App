@@ -2,12 +2,6 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-undef */
-import { newPostDom, deletePost } from "./home_posts.js";
-import { refreshVideoPlayback } from "./video_playback_handler.js";
-const myConfetti = confetti.create(null, {
-  resize: true,
-  useWorker: true,
-});
 
 class ChatEngine {
   constructor(chatBoxId, userId, userEmail, userName, userProfile, host) {
@@ -924,7 +918,7 @@ class ChatEngine {
   }
 }
 
-export default class CallEngine extends ChatEngine {
+class CallEngine extends ChatEngine {
   constructor(chatBoxId, userId, userEmail, userName, userProfile, host) {
     super(chatBoxId, userId, userEmail, userName, userProfile, host);
     // Define the call states

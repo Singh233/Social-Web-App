@@ -126,7 +126,7 @@
     <link rel="stylesheet" href="<%= assetPath('css/calling_modal.css') %>" />
     <link
       rel="stylesheet"
-      href="<%= assetPath('css/_video_upload_status_card.css') %>"
+      href="<%= assetPath('css/video_upload_status_card.css') %>"
     />
     <!-- <link rel="stylesheet" href="<%= assetPath('css/sm_profile_page.css') %>"> -->
     <link
@@ -162,59 +162,109 @@
     <script src="<%= assetPath('js/background_color_animation.js') %>"></script>
 
     <script>
+      const refreshVideoPlayback = () => {
+        let flag = false;
+        // Initialize Video.js for each video
+        const videos = document.getElementsByClassName("video-js");
+        const videoInstances = [];
+
+        for (let i = 0; i < videos.length; i++) {
+          const video = videos[i];
+          const videoInstance = videojs(video.id);
+
+          // Add the Video.js instance to the array
+          videoInstances.push(videoInstance);
+
+          // Pause the video when it's clicked
+          videoInstance.on("play", function () {
+            flag = true;
+            // Pause all other videos
+            videoInstances.forEach(function (instance) {
+              if (instance !== videoInstance) {
+                instance.pause();
+              }
+            });
+          });
+        }
+
+        const options = {
+          root: null,
+          rootMargin: "0px",
+          threshold: 0.5, // Adjust this threshold as needed
+        };
+
+        const intersectionObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // Video is in view, play it
+              const videoInstance = videojs(entry.target.id);
+              if (flag) {
+                videoInstance.play();
+              }
+            } else {
+              // Video is out of view, pause it
+              const videoInstance = videojs(entry.target.id);
+              if (flag) videoInstance.pause();
+            }
+          });
+        }, options);
+
+        for (let i = 0; i < videos.length; i++) {
+          intersectionObserver.observe(videos[i]);
+        }
+      };
+
+            <% if (flash.success && flash.success.length > 0) { %>
 
 
-      <% if (flash.success && flash.success.length > 0) { %>
+                Toastify({
+                    text: "<%= flash.success %>",
+                    duration: 2000,
+                    destination: "",
+                    newWindow: true,
+                    close: true,
+                    avatar: "https://cdn-icons-png.flaticon.com/128/7518/7518748.png",
 
+                    gravity: "top", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "#000000",
+                        borderRadius: "10px",
+                    },
+                    onClick: function(){} // Callback after click
+                }).showToast();
+            <% } %>
 
-          Toastify({
-              text: "<%= flash.success %>",
-              duration: 2000,
-              destination: "",
-              newWindow: true,
-              close: true,
-              avatar: "https://cdn-icons-png.flaticon.com/128/7518/7518748.png",
-
-              gravity: "top", // `top` or `bottom`
-              position: "center", // `left`, `center` or `right`
-              stopOnFocus: true, // Prevents dismissing of toast on hover
-              style: {
-                  background: "#000000",
-                  borderRadius: "10px",
-              },
-              onClick: function(){} // Callback after click
-          }).showToast();
-      <% } %>
-
-      <% if (flash.error && flash.error.length > 0) { %>
-          Toastify({
-              text: "<%= flash.error %>",
-              duration: 2000,
-              destination: "",
-              newWindow: true,
-              close: true,
-              avatar: "https://cdn-icons-png.flaticon.com/128/9426/9426995.png",
-              gravity: "top", // `top` or `bottom`
-              position: "center", // `left`, `center` or `right`
-              stopOnFocus: true, // Prevents dismissing of toast on hover
-              style: {
-                  background: "#000000",
-                  borderRadius: "10px",
-                  color: "white",
-              },
-              onClick: function(){} // Callback after click
-          }).showToast();
-      <% } %>
+            <% if (flash.error && flash.error.length > 0) { %>
+                Toastify({
+                    text: "<%= flash.error %>",
+                    duration: 2000,
+                    destination: "",
+                    newWindow: true,
+                    close: true,
+                    avatar: "https://cdn-icons-png.flaticon.com/128/9426/9426995.png",
+                    gravity: "top", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "#000000",
+                        borderRadius: "10px",
+                        color: "white",
+                    },
+                    onClick: function(){} // Callback after click
+                }).showToast();
+            <% } %>
     </script>
     <script src="
     https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js
     "></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
+    <script src="<%= assetPath('js/ChatEngine.js') %>"></script>
 
-    <script type="module">
+    <script>
       <% if (locals.user){ %>
-        import CallEngine from "<%= assetPath('js/ChatEngine.js') %>";
 
           new CallEngine(
             "user-chat-box",
@@ -232,9 +282,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.js"></script>
 
     <script src="<%= assetPath('js/jquery.lineProgressbar.js') %>"></script>
-    <script
+    <!-- <script
       type="module"
       src="<%= assetPath('js/animateLayout.js') %>"
-    ></script>
+    ></script> -->
   </body>
 </html>

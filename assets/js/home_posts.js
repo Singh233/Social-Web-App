@@ -2,7 +2,7 @@
 /* eslint-disable no-inner-declarations */
 /* eslint-disable no-new */
 /* eslint-disable no-undef */
-import { refreshVideoPlayback } from "./video_playback_handler.js";
+
 const myConfetti = confetti.create(null, {
   resize: true,
   useWorker: true,
@@ -182,7 +182,7 @@ let renderCommentDom = function (comment, isLiked) {
 };
 
 // method to create a post in DOM
-export let newPostDom = function (post) {
+let newPostDom = function (post) {
   return $(`<div id="post-${
     post._id
   }" class="display-posts animate__animated animate__fadeIn">
@@ -563,7 +563,7 @@ let renderPostDom = function (post, isLiked, isSaved) {
 
 // method to delete a post from DOM
 
-export const deletePost = function (deleteLink) {
+const deletePost = function (deleteLink) {
   $(deleteLink).click(function (e) {
     e.preventDefault();
 

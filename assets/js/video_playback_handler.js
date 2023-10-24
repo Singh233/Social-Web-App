@@ -1,4 +1,5 @@
-export const refreshVideoPlayback = () => {
+/* eslint-disable import/prefer-default-export */
+const refreshVideoPlayback = () => {
   let flag = false;
   // Initialize Video.js for each video
   const videos = document.getElementsByClassName("video-js");
