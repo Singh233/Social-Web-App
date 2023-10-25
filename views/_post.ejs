@@ -243,32 +243,34 @@
 <% } %>
 
 <script>
-  $(document).ready(function () {
+    $(document).ready(function () {
 
-    <% if (!post.isImg && post.video) { %>
-      videojs("video-<%= post.video._id %>");
-    <% } else if (!post.isImg && !post.video && post.user.id === locals.user.id) { %>
-      $("#video-upload-status-container").css({display: "flex"});
-      var progress = JSON.parse(localStorage.getItem("video-processing-progress")).progress;
-      var title = JSON.parse(localStorage.getItem("video-processing-progress")).title;
-      $(".progress-percentage").text(`${progress ?? 0}%`);
-      $("#video-upload-status-container")
-          .find(".header .heading span")
-          .text("Processing Video");
-      $("#video-upload-status-container")
-        .find(".header .file-name")
-        .text(title.substring(0, 15));
-      $(".video-upload-progress")?.LineProgressbar({
-        percentage: progress ?? 0,
-        fillBackgroundColor: "#0156D1",
-        backgroundColor: "#00000000",
-        height: "15px",
-        radius: "10px",
-        ShowProgressCount: false,
-      });
+      <% if (!post.isImg && post.video) { %>
+        videojs("video-<%= post.video._id %>", {
+          playsinline: true
+        });
+      <% } else if (!post.isImg && !post.video && post.user.id === locals.user.id) { %>
+        $("#video-upload-status-container").css({display: "flex"});
+        var progress = JSON.parse(localStorage.getItem("video-processing-progress")).progress;
+        var title = JSON.parse(localStorage.getItem("video-processing-progress")).title;
+        $(".progress-percentage").text(`${progress ?? 0}%`);
+        $("#video-upload-status-container")
+            .find(".header .heading span")
+            .text("Processing Video");
+        $("#video-upload-status-container")
+          .find(".header .file-name")
+          .text(title.substring(0, 15));
+        $(".video-upload-progress")?.LineProgressbar({
+          percentage: progress ?? 0,
+          fillBackgroundColor: "#0156D1",
+          backgroundColor: "#00000000",
+          height: "15px",
+          radius: "10px",
+          ShowProgressCount: false,
+        });
 
-    <% } %>
-  });
+      <% } %>
+    });
 </script>
 
 <script>

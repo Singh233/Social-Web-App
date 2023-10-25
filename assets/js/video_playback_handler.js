@@ -7,7 +7,9 @@ const refreshVideoPlayback = () => {
 
   for (let i = 0; i < videos.length; i++) {
     const video = videos[i];
-    const videoInstance = videojs(video.id);
+    const videoInstance = videojs(video.id, {
+      playsinline: true,
+    });
 
     // Add the Video.js instance to the array
     videoInstances.push(videoInstance);
@@ -34,13 +36,17 @@ const refreshVideoPlayback = () => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         // Video is in view, play it
-        const videoInstance = videojs(entry.target.id);
+        const videoInstance = videojs(entry.target.id, {
+          playsinline: true,
+        });
         if (flag) {
           videoInstance.play();
         }
       } else {
         // Video is out of view, pause it
-        const videoInstance = videojs(entry.target.id);
+        const videoInstance = videojs(entry.target.id, {
+          playsinline: true,
+        });
         if (flag) videoInstance.pause();
       }
     });

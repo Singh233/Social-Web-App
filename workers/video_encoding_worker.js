@@ -17,7 +17,6 @@ const clearLocalFiles = (outputFileName) => {
 
 queue.process("videoEncoders", async (job, done) => {
   const io = getIo();
-  console.log("Video encoding worker is processing a job", job.userId);
   const {
     videoUrl,
     uniquePrefix,
@@ -25,6 +24,7 @@ queue.process("videoEncoders", async (job, done) => {
     post,
     reqBody: { fileName, fileType, fileSize, fileDuration },
   } = job.data;
+  console.log("Video encoding worker is processing a job", job.userId);
 
   // Define quality levels for transcoding
   const qualities = [
@@ -55,6 +55,8 @@ queue.process("videoEncoders", async (job, done) => {
       }
     })
   );
+  console.log("Successfully encoded");
+
   // Create new video document
   const newVideoDoc = await Video.create({
     title: fileName,

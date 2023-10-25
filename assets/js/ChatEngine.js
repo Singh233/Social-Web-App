@@ -540,7 +540,9 @@ class ChatEngine {
         new PostComments(data.post._id);
         // enable the functionality of the toggle liek button on the new post
         new ToggleLike($(" .toggle-like-button", newPost));
-        videojs(`video-${data.post.video._id}`);
+        videojs(`video-${data.post.video._id}`, {
+          playsinline: true,
+        });
         refreshVideoPlayback();
       }, 1500);
     });

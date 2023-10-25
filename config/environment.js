@@ -2,6 +2,8 @@
 const development = {
   name: "development",
   asset_path: "./assets",
+  ffmpegPath: process.env.FFMPEG_PATH,
+  videoEncodingOutputPath: process.env.VIDEO_ENCODE_OUTPUT_PATH,
   session_cookie_key: "blahsomething",
   db: process.env.CODIEAL_DEVELOPMENT_DB,
   smtp: {
@@ -60,6 +62,8 @@ const development = {
 const production = {
   name: "production",
   asset_path: process.env.CODEIAL_ASSET_PATH,
+  ffmpegPath: process.env.FFMPEG_PATH,
+  videoEncodingOutputPath: process.env.VIDEO_ENCODE_OUTPUT_PATH,
   session_cookie_key: process.env.CODEIAL_SESSION_KEY,
   db: process.env.CODIEAL_PRODUCTION_DB,
   smtp: {

@@ -1,6 +1,10 @@
 [
   {
-    "origin": ["http://localhost:8000"],
+    "origin": [
+      "http://localhost:8000",
+      "https://sanam.social",
+      "https://test.sanam.social"
+    ],
     "method": ["GET"],
     "responseHeader": ["Content-Type"],
     "maxAgeSeconds": 3600

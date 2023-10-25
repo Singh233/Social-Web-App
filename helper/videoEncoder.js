@@ -4,8 +4,9 @@ const ffmpeg = require("fluent-ffmpeg");
 const path = require("path");
 const fs = require("fs");
 const { getIo, getActiveUsers } = require("../config/chat_sockets");
+const env = require("../config/environment");
 
-const ffmpegPath = "/opt/homebrew/bin/ffmpeg"; // Provide the actual path to your FFmpeg executable
+const { ffmpegPath, videoEncodingOutputPath } = env; // Provide the actual path to your FFmpeg executable
 const {
   uploadVideo,
   deleteFile,
@@ -24,7 +25,7 @@ async function transcodeVideoToQuality(
 ) {
   return new Promise((resolve, reject) => {
     const outputFileName = `transcoded_${fileName}`;
-    const outputDirectory = `/Users/sanambirsingh/Documents/development/codeial/uploads/${outputFileName}/${quality.name}`;
+    const outputDirectory = `${videoEncodingOutputPath}${outputFileName}/${quality.name}`;
     if (!fs.existsSync(outputDirectory)) {
       fs.mkdirSync(outputDirectory, {
         recursive: true,
@@ -73,7 +74,6 @@ async function transcodeVideoToQuality(
               );
             })
           );
-          console.log("Successfully encoded");
           resolve(`${outputFileName}/${quality.name}`);
         } catch (error) {
           reject(error);
