@@ -1,15 +1,13 @@
 <% if (locals.user){ %>
 
-<div id="chat-box" class="user-chat-box remove-box animate__animated">
-  <div
-    class="animate__animated animate__faster chat-overlay chat-overlay-z-index"
-  >
+<div id="chat-box" class="user-chat-box animate__animated">
+  <div class="animate__animated animate__faster chat-overlay">
     <i
       onclick="toggleChatWindow()"
       class="fa-solid fa-comments comment-icon"
     ></i>
 
-    <p>Chat with friends</p>
+    <p>Messages</p>
     <i onclick="toggleChatWindow()" class="fa-solid fa-chevron-up"></i>
   </div>
 
@@ -39,7 +37,7 @@
           clip-rule="evenodd"
         ></path>
       </svg>
-      <p>Chat with friends</p>
+      <p>Messages</p>
       <i onclick="toggleChatWindow()" class="fa-solid fa-chevron-down"></i>
     </div>
     <p class="update-msg">🎉 New features coming soon!</p>
@@ -153,7 +151,13 @@
   </div>
 </div>
 <%- include('_chat_messages_global') -%> <%- include('_chat_messages_private')
--%> <% } %>
+-%>
+<script>
+  if (window.innerWidth < 600) {
+    $("#chat-box").addClass("remove-box");
+  }
+</script>
+<% } %>
 
 <script>
    let previousId = "";

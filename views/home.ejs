@@ -34,8 +34,9 @@
     onclick="menuButtonClicked()"
     class="fa-solid fa-xmark menu-button remove"
   ></i>
+  <%- include('_top_header'); %>
   <div class="post-div">
-    <%- include('_top_header'); %> <% if(locals.user) { %>
+    <% if(locals.user) { %>
     <input
       type="hidden"
       value="<%= locals.user._id %>"
@@ -63,46 +64,65 @@
       </button>
     </div>
 
+    <div class="new-post-header">
+      <% if(locals.user.avatar != undefined) { %>
+      <img src="<%= locals.user.avatar %>" alt="" />
+      <% } else { %>
+      <img
+        id="logo-placeholder"
+        src="<%= assetPath('img/dummy-profile.jpeg') %>"
+      />
+      <% } %>
+      <p class="user-greet">
+        Hey <%= locals.user.name.split(' ')[0] %>, post something new!
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          id="round-arrow-right"
+          onclick="togglePostForm()"
+        >
+          <path
+            fill="#111"
+            fill-rule="evenodd"
+            d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM12.4697 8.46967C12.7626 8.17678 13.2374 8.17678 13.5303 8.46967L16.5303 11.4697C16.8232 11.7626 16.8232 12.2374 16.5303 12.5303L13.5303 15.5303C13.2374 15.8232 12.7626 15.8232 12.4697 15.5303C12.1768 15.2374 12.1768 14.7626 12.4697 14.4697L14.1893 12.75H8C7.58579 12.75 7.25 12.4142 7.25 12C7.25 11.5858 7.58579 11.25 8 11.25H14.1893L12.4697 9.53033C12.1768 9.23744 12.1768 8.76256 12.4697 8.46967Z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </p>
+      <p class="date" style="margin-left: 20px">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          id="calendar-mark"
+        >
+          <path
+            fill="#111"
+            d="M7.75 2.5C7.75 2.08579 7.41421 1.75 7 1.75C6.58579 1.75 6.25 2.08579 6.25 2.5V4.07926C4.81067 4.19451 3.86577 4.47737 3.17157 5.17157C2.47737 5.86577 2.19451 6.81067 2.07926 8.25H21.9207C21.8055 6.81067 21.5226 5.86577 20.8284 5.17157C20.1342 4.47737 19.1893 4.19451 17.75 4.07926V2.5C17.75 2.08579 17.4142 1.75 17 1.75C16.5858 1.75 16.25 2.08579 16.25 2.5V4.0129C15.5847 4 14.839 4 14 4H10C9.16097 4 8.41527 4 7.75 4.0129V2.5Z"
+          ></path>
+          <path
+            fill="#111"
+            fill-rule="evenodd"
+            d="M22 12V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V12C2 11.161 2 10.4153 2.0129 9.75H21.9871C22 10.4153 22 11.161 22 12ZM16.5 18C17.3284 18 18 17.3284 18 16.5C18 15.6716 17.3284 15 16.5 15C15.6716 15 15 15.6716 15 16.5C15 17.3284 15.6716 18 16.5 18Z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <%= new Date().toLocaleDateString("en-US", {year: 'numeric', month:
+        'long', day:'numeric'}) %>
+      </p>
+    </div>
     <form
       action="/posts/create/<%= locals.user._id %>"
       enctype="multipart/form-data"
       id="new-post-form"
+      class="home-new-post-form"
       method="post"
     >
-      <div class="header">
-        <% if(locals.user.avatar != undefined) { %>
-        <img src="<%= locals.user.avatar %>" alt="" />
-        <% } else { %>
-        <img
-          id="logo-placeholder"
-          src="<%= assetPath('img/dummy-profile.jpeg') %>"
-        />
-        <% } %>
-        <p>Hey <%= locals.user.name.split(' ')[0] %>, post something new!</p>
-        <p class="date" style="margin-left: 20px">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-            id="calendar-mark"
-          >
-            <path
-              fill="#111"
-              d="M7.75 2.5C7.75 2.08579 7.41421 1.75 7 1.75C6.58579 1.75 6.25 2.08579 6.25 2.5V4.07926C4.81067 4.19451 3.86577 4.47737 3.17157 5.17157C2.47737 5.86577 2.19451 6.81067 2.07926 8.25H21.9207C21.8055 6.81067 21.5226 5.86577 20.8284 5.17157C20.1342 4.47737 19.1893 4.19451 17.75 4.07926V2.5C17.75 2.08579 17.4142 1.75 17 1.75C16.5858 1.75 16.25 2.08579 16.25 2.5V4.0129C15.5847 4 14.839 4 14 4H10C9.16097 4 8.41527 4 7.75 4.0129V2.5Z"
-            ></path>
-            <path
-              fill="#111"
-              fill-rule="evenodd"
-              d="M22 12V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V12C2 11.161 2 10.4153 2.0129 9.75H21.9871C22 10.4153 22 11.161 22 12ZM16.5 18C17.3284 18 18 17.3284 18 16.5C18 15.6716 17.3284 15 16.5 15C15.6716 15 15 15.6716 15 16.5C15 17.3284 15.6716 18 16.5 18Z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          <%= new Date().toLocaleDateString("en-US", {year: 'numeric', month:
-          'long', day:'numeric'}) %>
-        </p>
-      </div>
       <input
         id="local_user_id"
         type="hidden"
@@ -127,9 +147,13 @@
         type="file"
         name="filepond"
         id="myfile"
-        data-max-file-size="200MB"
+        data-max-file-size="100MB"
         class="filepond"
       />
+      <p class="info">
+        <i class="fa-solid fa-circle-info"></i>You can upload one image or video
+        at a time.
+      </p>
       <textarea
         required
         type="text"
@@ -137,7 +161,7 @@
         id="text-area"
         cols="30"
         rows="3"
-        placeholder="Type here..."
+        placeholder="Type caption here..."
       ></textarea>
       <!-- <input id="submit" type="submit" value="Post" /> -->
       <button id="post-submit-1" type="submit">
@@ -168,15 +192,10 @@
 
     <section id="feed-posts">
       <div id="posts-list-container">
-        <% for (let i of posts) { %> 
-          <% let isSaved = false; %>
-           <% for (let j of locals.user.savedPosts) { %> 
-            <% if (j._id.toString() === i._id.toString()) { %> 
-              <% isSaved = true; %> 
-            <% } %> 
-          <% } %> 
-          <%- include('_post.ejs', {post: i, moment, isSaved}) -%> 
-        <% } %>
+        <% for (let i of posts) { %> <% let isSaved = false; %> <% for (let j of
+        locals.user.savedPosts) { %> <% if (j._id.toString() ===
+        i._id.toString()) { %> <% isSaved = true; %> <% } %> <% } %> <%-
+        include('_post.ejs', {post: i, moment, isSaved}) -%> <% } %>
       </div>
     </section>
     <% } %>
@@ -185,9 +204,8 @@
   <% if(locals.user) { %> <%- include('_calling_modal', {localUser:
   locals.user}) -%>
   <div class="right-section-div">
-    <% if (friends != undefined) {%> <%- include('_right_section', {all_users:
-    all_users, friends: friends}); %> <% } else { %> <%-
-    include('_right_section', {all_users: all_users}); %> <% } %>
+    <% if (friends != undefined) {%> <%- include('_right_section', {friends:
+    friends}); %> <% } else { %> <%- include('_right_section', {}); %> <% } %>
   </div>
 
   <% } %> <% if(locals.user) { %> <%- include('_chat_box', {friends, moment})
@@ -195,8 +213,9 @@
   %>
 </div>
 
-<% if(!locals.user) { %> <%- include('user_sign_in'); %> <%-
-include('user_sign_up'); %> <% } %> <% if (locals.user){ %>
+<% if(!locals.user) { %> <%- include('_top_logo_header'); %> <%-
+include('user_sign_in'); %> <%- include('user_sign_up'); %> <% } %> <% if
+(locals.user){ %>
 <script src="<%= assetPath('js/add_emoji.js') %>"></script>
 
 <% } %>
@@ -238,5 +257,28 @@ include('user_sign_up'); %> <% } %> <% if (locals.user){ %>
   $(document).ready(function () {
     refreshVideoPlayback();
   });
+
+  function togglePostForm() {
+    const form = $(".home-new-post-form");
+
+    if (form.css("display") === "flex") {
+      gsap.to(form, {
+        opacity: 0,
+        duration: 0.7,
+        onComplete: () => {
+          // Optional: You can hide or remove the element after the animation
+          form.css({ display: "none", opacity: 1 });
+        },
+      });
+    } else {
+      gsap.from(form, {
+        opacity: 0,
+        duration: 0.5,
+        onStart: () => {
+          form.css({ display: "flex" });
+        },
+      });
+    }
+  }
 </script>
 <% } %>

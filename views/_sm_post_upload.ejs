@@ -55,7 +55,7 @@
       type="file"
       name="filepond"
       id="myfile-sm"
-      data-max-file-size="200MB"
+      data-max-file-size="100MB"
       class="filepond"
     />
     <textarea
@@ -131,6 +131,7 @@
             .find(".header .heading span")
             .text("Processing Video");
         }
+        $(".progress-percentage").text(`${progress}%`);
 
         $(".video-upload-progress").LineProgressbar({
           percentage: progress,

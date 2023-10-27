@@ -17,8 +17,8 @@ $button-color-gradient-blue: linear-gradient(
   margin: 0;
   color: white;
 
-  background: rgba(0, 0, 0, 0.506);
-  // box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
+  background-color: rgba(0, 0, 0, 0.805);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.055);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(233, 233, 233, 0.233);
@@ -28,6 +28,37 @@ $button-color-gradient-blue: linear-gradient(
   position: sticky;
   top: 0;
   z-index: 1;
+
+  &:before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+      -45deg,
+      rgba(255, 60, 0, 0.482) 0%,
+      rgba(4, 0, 255, 0.485) 69%
+    );
+    transform: translate3d(0px, 0px, 0) scale(0.95);
+    filter: blur(50px);
+    opacity: 0.5;
+    transition: opacity 0.3s;
+    border-radius: inherit;
+  }
+  &::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: inherit;
+    border-radius: inherit;
+  }
 
   #nav-header {
     display: flex;
@@ -50,23 +81,42 @@ $button-color-gradient-blue: linear-gradient(
         margin-left: 7px;
         font-size: 1.5rem;
         font-weight: 700;
+        position: relative;
+        font: 400 40px/72px Delicious Handrawn, sans-serif;
+        width: -moz-max-content;
+        width: max-content;
+        background: linear-gradient(
+          80.18deg,
+          #d1ccdd,
+          #c893e1 25%,
+          #eb47a7 50%,
+          #f94a73 75%,
+          #fb7a53
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+        background-size: cover;
 
-        span {
-          font-size: 0.9rem;
-          // align-self: flex-end;
-        }
+        // span {
+        //   font-size: 0.9rem;
+        //   // align-self: flex-end;
+        // }
 
-        sup {
-          font-size: 1.5rem;
-        }
+        // sup {
+        //   font-size: 1.5rem;
+        // }
 
-        .s {
-          font-size: 1.7rem;
-          font-weight: 800;
-        }
+        // .s {
+        //   font-size: 1.7rem;
+        //   font-weight: 800;
+        // }
 
         .social {
           margin-top: 5px;
+          font: 400 30px/72px Delicious Handrawn, sans-serif;
         }
 
         i {
@@ -172,6 +222,68 @@ $button-color-gradient-blue: linear-gradient(
     .sm-nav-links {
       display: none;
     }
+
+    .whats-new {
+      align-self: center;
+      cursor: pointer;
+      position: relative;
+
+      .whats-new-text {
+        position: relative;
+        font: 400 30px/72px Delicious Handrawn, sans-serif;
+        width: -moz-max-content;
+        width: max-content;
+        background: linear-gradient(
+          80.18deg,
+          #d1ccdd,
+          #c893e1 25%,
+          #eb47a7 50%,
+          #f94a73 75%,
+          #fb7a53
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+        background-size: cover;
+      }
+
+      #tooltip {
+        /* ... */
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        left: -60px;
+        border-radius: 20px;
+        padding: 10px;
+        background-color: #212121;
+
+        p {
+          display: flex;
+          align-items: center;
+          margin: 10px;
+          color: gray;
+          font-weight: 500;
+
+          span {
+            width: max-content;
+          }
+
+          svg {
+            margin-right: 5px;
+            path {
+              fill: dodgerblue;
+            }
+          }
+          i {
+            margin-right: 5px;
+            color: greenyellow;
+          }
+        }
+      }
+    }
   }
 
   .footer {
@@ -260,7 +372,7 @@ $button-color-gradient-blue: linear-gradient(
   }
 }
 
-@media screen and (max-width: "480px") {
+@media screen and (max-width: "600px") {
   //do Smth
   .left-navigation-container {
     flex-direction: row;
@@ -279,11 +391,12 @@ $button-color-gradient-blue: linear-gradient(
       align-items: flex-start;
       flex-direction: row;
       justify-content: space-between;
-      margin-top: 7px;
+      margin: 0;
 
       #branding {
         display: flex;
         align-items: center;
+        margin: 0;
 
         img {
           height: 50px;
@@ -291,22 +404,53 @@ $button-color-gradient-blue: linear-gradient(
         }
 
         p {
-          margin-left: 7px;
-          font-size: 1.3rem;
-          font-weight: 700;
+          font-size: 30px;
 
-          span {
-            font-size: 0.8rem;
+          // span {
+          //   font-size: 0.9rem;
+          //   // align-self: flex-end;
+          // }
+
+          // sup {
+          //   font-size: 1.5rem;
+          // }
+
+          // .s {
+          //   font-size: 1.7rem;
+          //   font-weight: 800;
+          // }
+
+          .social {
+            font-size: 25px;
           }
 
-          .s {
-            font-size: 1.5rem;
-            font-weight: 800;
-          }
+          svg {
+            margin-right: 5px;
+            height: 40px;
+            width: 40px;
+            // padding: 5px;
+            // background: linear-gradient(
+            //   124deg,
+            //   #ff2400,
+            //   #e81d1d,
+            //   #e8b71d,
+            //   #e3e81d,
+            //   #1de840,
+            //   #1ddde8,
+            //   #2b1de8,
+            //   #dd00f3,
+            //   #dd00f3
+            // );
+            // background-size: 1800% 1800%;
+            // border-radius: 10px;
 
-          i {
-            color: $button-color-blue;
-            font-size: 1.6rem;
+            // -webkit-animation: rainbow 18s ease infinite;
+            // -z-animation: rainbow 18s ease infinite;
+            // -o-animation: rainbow 18s ease infinite;
+            // animation: rainbow 18s ease infinite;
+            path {
+              fill: white;
+            }
           }
         }
       }
@@ -317,6 +461,10 @@ $button-color-gradient-blue: linear-gradient(
       height: auto;
       width: auto;
       margin-bottom: 0px;
+
+      .whats-new {
+        display: none;
+      }
 
       .nav-links {
         display: none;

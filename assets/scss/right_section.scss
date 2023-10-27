@@ -17,12 +17,51 @@ $button-color-gradient-blue: linear-gradient(
   justify-items: center;
   color: white;
 
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.85);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.051);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   // border-radius: 0 15px 15px 0;
-  border-left: 1px solid rgba(236, 236, 236, 0.233);
+  border-left: 0.5px solid rgba(236, 236, 236, 0.233);
+
+  &:before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+      -45deg,
+      rgba(255, 60, 0, 0.482) 0%,
+      rgba(4, 0, 255, 0.485) 69%
+    );
+    // background-color: #4158d0;
+    // background-image: linear-gradient(
+    //   43deg,
+    //   #4158d0 0%,
+    //   #c850c0 46%,
+    //   #ffcc70 100%
+    // );
+
+    transform: translate3d(0px, 0px, 0) scale(0.95);
+    filter: blur(50px);
+    opacity: 0.5;
+    transition: opacity 0.3s;
+    border-radius: inherit;
+  }
+  &::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: inherit;
+    border-radius: inherit;
+  }
 
   #user-friends,
   #other-users {
@@ -74,7 +113,7 @@ $button-color-gradient-blue: linear-gradient(
       padding: 20px;
       list-style: none;
 
-      max-height: 290px;
+      max-height: 29vh;
 
       // make the list scrollable
       overflow-y: scroll;
@@ -88,6 +127,12 @@ $button-color-gradient-blue: linear-gradient(
       &::-webkit-scrollbar-thumb {
         background-color: #6e6e6e;
         border-radius: 8px;
+      }
+
+      .no-friends {
+        align-self: center;
+        margin: 10px;
+        color: gray;
       }
 
       .user {
@@ -175,7 +220,7 @@ $button-color-gradient-blue: linear-gradient(
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 600px) {
   .right-section-container {
     // display: grid;
     display: none;

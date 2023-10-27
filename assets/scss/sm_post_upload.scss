@@ -12,7 +12,7 @@ $button-color-gray: #212121;
   display: none;
 }
 
-@media screen and (max-width: "480px") {
+@media screen and (max-width: "600px") {
   .post-upload-container {
     display: flex;
     flex-direction: column;
@@ -26,7 +26,7 @@ $button-color-gray: #212121;
     overflow-y: auto;
     padding-top: 200px;
     padding-top: 200px;
-
+    position: relative;
     .upload-header {
       position: fixed;
       top: 0;

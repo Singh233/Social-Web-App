@@ -40,7 +40,6 @@ module.exports.home = async function (request, response) {
         },
       });
 
-    const users = await User.find({});
     let followingCount = 0;
 
     const friends = await Friendships.find({
@@ -89,7 +88,6 @@ module.exports.home = async function (request, response) {
     return response.render("home.ejs", {
       title: "Home",
       posts: posts,
-      all_users: users,
       friends: friendsArray,
       followingCount: followingCount,
       websocket_host: env.websocket_host,

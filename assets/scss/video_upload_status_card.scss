@@ -1,4 +1,4 @@
-.container {
+.video-upload-container {
   align-self: center;
   min-width: 600px;
   padding: 20px;
@@ -111,6 +111,7 @@
     align-self: center;
     font-size: 0.9rem;
     width: 350px;
+    color: gray;
   }
 
   .file-info {
@@ -141,10 +142,11 @@
   }
 }
 
-@media screen and (max-width: 500px) {
-  .container {
+@media screen and (max-width: 600px) {
+  .video-upload-container {
     min-width: auto;
     width: 95vw;
+    border-radius: 5px;
 
     .header {
       flex-direction: column;

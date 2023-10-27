@@ -1,4 +1,3 @@
-
 <!-- <form action="/users/create" method="post">
     <input type="text" name="name" placeholder="Your name" required>
     <input type="email" name="email" placeholder="Your Email" required>
@@ -9,54 +8,102 @@
 
 <p><a href="/users/auth/google">Google Sign In/Sign Up</a></p> -->
 
+<div id="sign-up-container" class="user-sign-up remove animate__animated">
+  <div class="welcome-div">
+    <img src="<%= assetPath('img/1782188.jpeg') %>" alt="" />
+    <p>Enter Details to continue <i class="fa-solid fa-arrow-right"></i></p>
+  </div>
 
-
-
-
-<div id="sign-up-container" class="user-sign-up remove animate__animated animate__faster">
-
-    <div class="welcome-div">
-        <img src="<%= assetPath('img/1782188.jpeg') %>" alt="">
-        <p>Enter Details to continue <i class="fa-solid fa-arrow-right"></i></p>
+  <form action="/users/create" method="post">
+    <div class="input-with-icon">
+      <i class="fa-solid fa-user"></i>
+      <input
+        id="name-input"
+        type="text"
+        name="name"
+        placeholder="Your name"
+        required
+      />
+    </div>
+    <div class="input-with-icon">
+      <i class="fa-solid fa-envelope"></i>
+      <input
+        id="email-input"
+        type="email"
+        name="email"
+        placeholder="Your Email"
+        required
+      />
     </div>
 
-    
-    <form action="/users/create" method="post">
-        <div class="input-with-icon">
-            <i class="fa-solid fa-user"></i>
-            <input id="name-input" type="text" name="name" placeholder="Your name" required>
-        </div>
-        <div class="input-with-icon">
-            <i class="fa-solid fa-envelope"></i>
-            <input id="email-input" type="email" name="email" placeholder="Your Email" required>
-        </div>
-
-        <div class="input-with-icon">
-            <i class="fa-solid fa-key"></i>
-            <input id="pass-input" type="password" name="password" placeholder="Password" required>
-            <i class="fa-solid fa-eye " id="toggle-password"></i>
-        </div>
-
-        <div class="input-with-icon">
-            <i class="fa-solid fa-key"></i>
-            <input id="pass-input" type="password" name="confirm_password" placeholder="Confirm Password" required>
-            <i class="fa-solid fa-eye animate__animated animate__faster" id="toggle-password"></i>
-        </div>
-        
-        <button id="submit-button" type="submit">Sign Up </button>
-    </form>
-
-    <p class="option-text">Checkout other options</p>
-    
-    <div class="auth-options">
-        <a id="google-auth" href="/users/auth/google"><img src="<%= assetPath('img/icons8-google-48.png') %>" alt=""></a>
-        <a id="fb-auth" href="/users/auth/google"><i class="fa-brands fa-facebook-f"></i></a>
-        <a id="git-auth" href="/users/auth/google"><i class="fa-brands fa-github"></i></a>
+    <div class="input-with-icon">
+      <i class="fa-solid fa-key"></i>
+      <input
+        id="pass-input"
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+      />
     </div>
 
-    <p class="option-text">Already have an account ? <a id="toggle-sign-up-page" href="#">Sign In <i class="fa-solid fa-arrow-right"></i></a></p>
+    <div class="input-with-icon">
+      <i class="fa-solid fa-key"></i>
+      <input
+        id="pass-input"
+        class="pass-input-signup"
+        type="password"
+        name="confirm_password"
+        placeholder="Confirm Password"
+        required
+      />
+      <i
+        class="fa-solid fa-eye animate__animated animate__faster"
+        id="toggle-password-signup"
+      ></i>
+    </div>
 
+    <button id="submit-button" type="submit">Sign Up</button>
+  </form>
+
+  <p class="option-text">Checkout other options</p>
+
+  <div class="auth-options">
+    <a id="google-auth" href="/users/auth/google"
+      ><img src="<%= assetPath('img/icons8-google-48.png') %>" alt="" />
+      continue with Google</a
+    >
+    <!-- <a id="fb-auth" href="/users/auth/google"
+      ><i class="fa-brands fa-facebook-f"></i
+    ></a>
+    <a id="git-auth" href="/users/auth/google"
+      ><i class="fa-brands fa-github"></i
+    ></a> -->
+  </div>
+
+  <p class="option-text">
+    Already have an account ?
+    <a id="toggle-sign-up-page" href="#"
+      >Sign In <i class="fa-solid fa-arrow-right"></i
+    ></a>
+  </p>
 </div>
 
+<script>
+  const togglePasswordSignup = document.querySelector(
+    "#toggle-password-signup"
+  );
+  const passwordSignup = document.querySelector(".pass-input-signup");
 
+  togglePasswordSignup.addEventListener("click", function (e) {
+    // toggle the type attribute
+    const type =
+      passwordSignup.getAttribute("type") === "password" ? "text" : "password";
+    passwordSignup.setAttribute("type", type);
+    // toggle the eye slash icon
+    this.classList.toggle("animate__zoomIn");
 
+    this.classList.toggle("fa-eye");
+    this.classList.toggle("fa-eye-slash");
+  });
+</script>

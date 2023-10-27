@@ -25,12 +25,12 @@ $button-color-ligth-blue: #4db1ff;
   // backdrop-filter: blur(20px);
   // -webkit-backdrop-filter: blur(20px);
   border-radius: 20px;
-  border: 1px solid rgba(231, 231, 231, 0.233);
+  // border: 1px solid rgba(231, 231, 231, 0.233);
   // background-image: linear-gradient( rgba(0, 0, 0, 0.7), #000000,),
   //     url('../img/161.jpg');
   // background-size: cover;
 
-  margin: 20px;
+  margin: 15px;
   transition: all 0.5s ease-out;
 
   .friends {
@@ -42,6 +42,8 @@ $button-color-ligth-blue: #4db1ff;
     max-height: 470px;
     overflow-y: scroll;
     overscroll-behavior: none;
+    background-color: black;
+    border-radius: 20px 20px 0 0;
 
     &::-webkit-scrollbar {
       display: none;
@@ -99,7 +101,8 @@ $button-color-ligth-blue: #4db1ff;
       background-color: $button-color-gray;
       border-radius: 10px;
       padding: 5px 10px;
-      margin: 10px 50px;
+      margin: 15px 50px;
+      margin-top: 25px;
     }
 
     .global-chat-option {
@@ -306,7 +309,7 @@ $button-color-ligth-blue: #4db1ff;
   }
 }
 
-@media screen and (max-width: "480px") {
+@media screen and (max-width: "600px") {
   .remove-box {
     display: none;
   }
@@ -319,6 +322,7 @@ $button-color-ligth-blue: #4db1ff;
 
     .friends {
       max-height: 98%;
+      border-radius: 0;
       .header {
         border-radius: 0;
       }

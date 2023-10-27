@@ -7,7 +7,9 @@ $button-color-gray: #202020;
 #top-nav-header {
   position: fixed;
   top: 0%;
-  z-index: 1;
+  left: 0;
+  right: 0;
+  z-index: 2;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -15,16 +17,15 @@ $button-color-gray: #202020;
   padding: 5px;
   color: white;
 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 30px;
-
   #top-nav-section {
     align-self: center;
     display: flex;
     margin: 10px;
     color: white;
     padding: 10px;
+    // backdrop-filter: blur(12px);
+    // -webkit-backdrop-filter: blur(12px);
+    // border-radius: 30px;
 
     #search-form {
       align-self: center;
@@ -179,7 +180,7 @@ $button-color-gray: #202020;
   }
 }
 
-@media screen and (max-width: "480px") {
+@media screen and (max-width: "600px") {
   #top-nav-header {
     display: none;
   }

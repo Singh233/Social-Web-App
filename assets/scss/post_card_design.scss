@@ -69,6 +69,8 @@ $text-color-gray: #d0d0d0;
       margin: 10px;
       color: $button-color-red;
       font-size: 1.1rem;
+      display: flex;
+      align-items: center;
 
       a {
         text-decoration: none;
@@ -86,6 +88,12 @@ $text-color-gray: #d0d0d0;
       border: none;
       font-size: 1.1rem;
       font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease-out;
+
+      &:hover {
+        background-color: lighten($color: $button-color-blue, $amount: 10%);
+      }
     }
   }
 
@@ -147,7 +155,7 @@ $text-color-gray: #d0d0d0;
     display: flex;
     align-items: center;
     justify-content: center;
-    max-height: 444px !important;
+    max-height: 550px !important;
     overflow: hidden !important;
 
     .blur-load::before {
@@ -174,6 +182,7 @@ $text-color-gray: #d0d0d0;
       position: relative;
       background-size: cover;
       background-position: center;
+      max-height: 450px;
 
       img {
         opacity: 0;
@@ -457,6 +466,48 @@ $text-color-gray: #d0d0d0;
 
 .liked {
   color: $button-color-red;
+}
+
+.loader,
+.comment-add-loader {
+  display: none;
+  margin-right: 5px;
+  border: 4px solid $button-color-red;
+  border-left-color: transparent;
+  border-radius: 50%;
+}
+
+.loader,
+.comment-add-loader {
+  border: 4px solid $button-color-red;
+  border-left-color: transparent;
+  width: 25px;
+  height: 25px;
+}
+
+.loader,
+.comment-add-loader {
+  border: 4px solid $button-color-red;
+  border-left-color: transparent;
+  width: 25px;
+  height: 25px;
+  animation: spin89345 1s linear infinite;
+}
+
+.comment-add-loader {
+  border-color: white;
+  border-left-color: transparent;
+  margin-right: 0;
+}
+
+@keyframes spin89345 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media screen and (max-width: "500px") {

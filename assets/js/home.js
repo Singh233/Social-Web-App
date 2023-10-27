@@ -115,10 +115,25 @@ function toggleChatWindow() {
 
   chatContainer.classList.toggle("remove-box");
 
-  if (!$("body").hasClass("stop-scrolling") && window.innerWidth < 468) {
+  if (
+    !$("body").hasClass("stop-scrolling") &&
+    window.innerWidth < 600 &&
+    !chatContainer.classList.contains("remove-box")
+  ) {
     $("body").addClass("stop-scrolling");
   } else {
     $("body").removeClass("stop-scrolling");
+  }
+
+  if (window.innerWidth < 600) {
+    if (
+      $(".left-navigation-container").css("display") === "flex" &&
+      !chatContainer.classList.contains("remove-box")
+    ) {
+      $(".left-navigation-container").css({ display: "none" });
+    } else {
+      $(".left-navigation-container").css({ display: "flex" });
+    }
   }
 }
 

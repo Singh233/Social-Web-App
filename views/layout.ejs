@@ -20,7 +20,10 @@
       href="https://fonts.googleapis.com/css?family=Rosario"
       rel="stylesheet"
     />
-
+    <link
+      href="https://fonts.googleapis.com/css?family=Delicious Handrawn"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
@@ -128,6 +131,7 @@
       rel="stylesheet"
       href="<%= assetPath('css/video_upload_status_card.css') %>"
     />
+    <link rel="stylesheet" href="<%= assetPath('css/top_logo_header.css') %>" />
     <!-- <link rel="stylesheet" href="<%= assetPath('css/sm_profile_page.css') %>"> -->
     <link
       rel="stylesheet"
@@ -146,8 +150,7 @@
     <%- style %>
   </head>
   <body>
-    <%- include('_left_navigation'); %>
-
+    <% if (locals.user) { %> <%- include('_left_navigation'); %> <% } %>
     <div id="main-body"><%- body %></div>
 
     <div class="css-blurry-gradient1"></div>

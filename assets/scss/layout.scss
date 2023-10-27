@@ -50,6 +50,7 @@ body {
     filter: blur(50px);
     // background: radial-gradient(circle at 50% 50%,rgba(76, 0, 255, 1), rgba(76, 0, 255, 0));
     opacity: 0.3;
+    z-index: 0;
   }
 
   .css-blurry-gradient1 {
@@ -113,7 +114,7 @@ body {
   border-radius: 8px;
 }
 
-@media screen and (max-width: "480px") {
+@media screen and (max-width: "600px") {
   //do Smth
   body {
     overflow-x: hidden !important;
