@@ -101,6 +101,10 @@ $button-color-gray: #212121;
         display: flex;
         align-items: center;
         margin-top: 50px;
+
+        i {
+          margin-right: 5px;
+        }
       }
 
       .user-result {

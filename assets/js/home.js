@@ -215,9 +215,22 @@ function toggleScroll() {
   $("body").toggleClass("stop-scrolling");
 }
 
+var userSearchTimeout = null;
 // jquery to listen to user-search-bar input field
 $("#user-search-bar").on("keyup", function () {
-  searchUser($(this), "keyUp");
+  if (userSearchTimeout) {
+    clearTimeout(userSearchTimeout);
+    userSearchTimeout = setTimeout(() => {
+      searchUser($(this), "keyUp");
+      userSearchTimeout = null;
+    }, 600);
+    return;
+  }
+  userSearchTimeout = setTimeout(() => {
+    console.log("test");
+    searchUser($(this), "keyUp");
+    userSearchTimeout = null;
+  }, 600);
 });
 
 function searchUser(input, type) {
@@ -281,6 +294,21 @@ function searchUser(input, type) {
 
 // for mobile search bar
 $("#user-search-bar-mobile").on("keyup", function () {
+  if (userSearchTimeout) {
+    clearTimeout(userSearchTimeout);
+    userSearchTimeout = setTimeout(() => {
+      userSearchMobile($(this).val());
+      userSearchTimeout = null;
+    }, 600);
+    return;
+  }
+  userSearchTimeout = setTimeout(() => {
+    userSearchMobile($(this).val());
+    userSearchTimeout = null;
+  }, 600);
+});
+
+function userSearchMobile(searchValue) {
   let userSearchResultDOM = (user) => `
     <div class="user-result animate__animated animate__fadeIn">
         <a href="/users/profile/${user._id}">
@@ -299,11 +327,10 @@ $("#user-search-bar-mobile").on("keyup", function () {
     </div>
 
 `;
-  let searchValue = $(this).val();
 
-  if (searchValue != "") {
+  if (searchValue !== "") {
     $.ajax({
-      url: "/users/search?search=" + searchValue,
+      url: `/users/search?search=${searchValue}`,
       type: "GET",
       success: function (data) {
         // clear the search results
@@ -312,7 +339,7 @@ $("#user-search-bar-mobile").on("keyup", function () {
 
         // append the search results
         data.users.forEach((user) => {
-          if (user._id != $("#search-user-id").val())
+          if (user._id !== $("#search-user-id").val())
             $("#search-results-mobile").append(userSearchResultDOM(user));
           // add padding to the search results
         });
@@ -320,7 +347,7 @@ $("#user-search-bar-mobile").on("keyup", function () {
         // check if search results is empty
 
         // if no user is found
-        if (data.users.length == 0 || $("#search-results").html() == "") {
+        if (data.users.length === 0 || $("#search-results").html() === "") {
           $("#search-results-mobile").append(
             '<p class="no-user-found animate__animated animate__fadeIn"><i class="fa-regular fa-circle-xmark"></i>No user found</p>'
           );
@@ -338,7 +365,7 @@ $("#user-search-bar-mobile").on("keyup", function () {
         `);
     $("#search-results-mobile").css("padding", "0");
   }
-});
+}
 
 // for mobile search bar when user clicks on cancel button
 $("#cancel-search-mobile").on("click", function () {

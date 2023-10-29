@@ -84,7 +84,7 @@ $button-color-gray: #202020;
     #search-results {
       position: absolute;
       top: 80%;
-      left: 25px;
+      // left: 25px;
       width: 30vw;
       max-height: 70vh;
       background-color: $button-color-gray;
@@ -138,6 +138,7 @@ $button-color-gray: #202020;
           width: 40px;
           border-radius: 50%;
           object-fit: cover;
+          margin-top: 5px;
         }
 
         .no-avatar {
