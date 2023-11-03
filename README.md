@@ -31,6 +31,7 @@ https://github.com/Singh233/Social-Media-API
 - Sign In/Up user ✋🏻
 - Actions
     - Post image 🌆
+    - Video uploads 🎥
     - Comment on Post 💬
     - Like Post ❤️
     - Follow/Unfollow Users 👀
@@ -49,7 +50,6 @@ https://github.com/Singh233/Social-Media-API
   - 📱 Mobile
 
 ### In progress 🚧
-- Video uploads 🎥
 - Email of message request ✉️
 - Share images in chat 🎆
 - Tablet responsiveness 🟦
