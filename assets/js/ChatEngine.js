@@ -547,6 +547,35 @@ class ChatEngine {
       }, 1500);
     });
 
+    self.socket.on("video-encoding-failed", (data) => {
+      // Handle the completion event here
+      // console.log("Video encoding job completed:", data.jobId);
+      localStorage.removeItem("video-processing-progress");
+      $(".progress-percentage").text("Failed!");
+      gsap.to($("#video-upload-status-container"), {
+        opacity: 0,
+        duration: 0.7,
+        delay: 1,
+        onComplete: () => {
+          // Optional: You can hide or remove the element after the animation
+          $("#video-upload-status-container").css({
+            display: "none",
+            opacity: 1,
+          });
+        },
+      });
+      if (window.innerWidth < 600)
+        gsap.from($(".post-upload-form-sm"), {
+          opacity: 0,
+          duration: 0.5,
+          delay: 1.7,
+          onStart: () => {
+            $(".post-upload-form-sm").css({ display: "flex" });
+          },
+        });
+      self.displayNotification("Video processing failed!", "error", 2000, null);
+    });
+
     // Listen for video progress
     self.socket.on("video-progress", (data) => {
       // Handle the completion event here
@@ -575,6 +604,10 @@ class ChatEngine {
         videoUploadStatusContainer
           .find(".header .heading span")
           .text("Processing Video");
+
+        videoUploadStatusContainer
+          .find(".header .file-name")
+          .text(lsData.title.substring(0, 15));
       }
       $(".video-upload-progress").LineProgressbar({
         percentage: data.progress,
@@ -2078,7 +2111,7 @@ class CallEngine extends ChatEngine {
       position: "center", // `left`, `center` or `right`
       stopOnFocus: true, // Prevents dismissing of toast on hover
       style: {
-        background: type === "error" ? "#D20A0A" : "#202020",
+        background: type === "error" ? "#000000" : "#000000",
         borderRadius: "10px",
         color: "white",
       },

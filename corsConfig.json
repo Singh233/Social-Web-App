@@ -3,7 +3,9 @@
     "origin": [
       "http://localhost:8000",
       "https://sanam.social",
-      "https://test.sanam.social"
+      "http://localhost:5173",
+      "https://react.sanam.social",
+      "http://react.sanam.social"
     ],
     "method": ["GET"],
     "responseHeader": ["Content-Type"],

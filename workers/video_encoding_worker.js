@@ -58,9 +58,9 @@ queue.process("videoEncoders", async (job, done) => {
       }
     })
   );
-  console.log("Successfully encoded");
 
   if (isEncodingSuccess) {
+    console.log("Successfully encoded");
     // Create new video document
     const newVideoDoc = await Video.create({
       title: fileName,
@@ -96,9 +96,21 @@ queue.process("videoEncoders", async (job, done) => {
           }
         );
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
+  } else {
+    try {
+      const activeUsers = getActiveUsers();
+      // When the job is failed
+      if (activeUsers.has(userId)) {
+        io.to(activeUsers.get(userId).socketId).emit("video-encoding-failed", {
+          jobId: job.id,
+          status: "failed",
+        });
+      }
+    } catch (error) {}
+    try {
+      await Post.findByIdAndDelete(post._id);
+    } catch (error) {}
   }
   done();
 });

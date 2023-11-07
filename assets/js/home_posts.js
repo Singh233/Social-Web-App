@@ -243,11 +243,11 @@ let newPostDom = function (post) {
                       : `
                       <video
                       id="video-${post.video._id}"
-                      class="video-js vjs-theme-forest"
+                      class="video-js vjs-theme-forest vjs-fluid"
                       controls
                       preload="auto"
                       width="640"
-                      height="400"
+                      height="640"
                     >
                       <source
                         src="https://storage.googleapis.com/users_videos_bucket/${
@@ -698,7 +698,7 @@ $("#new-post-form").submit(function (e) {
 
   if (videoUploadStatusContainer.css("display") === "flex") {
     showNotification(
-      "Only one video upload at a time is allowed.",
+      "Only one upload at a time is allowed",
       "info",
       2500,
       null
@@ -748,7 +748,7 @@ $("#new-post-form").submit(function (e) {
               .find(".header .heading span")
               .text("Processing Video");
 
-            $(".progress-percentage").text(`0%`);
+            $(".progress-percentage").text(`In queue!`);
 
             $(".video-upload-progress").LineProgressbar({
               percentage: 0,
@@ -932,6 +932,15 @@ $("#new-post-form").submit(function (e) {
     },
     error: function (error) {
       showNotification("Something went wrong!", "error", 2000, null);
+      gsap.to(videoUploadStatusContainer, {
+        opacity: 0,
+        duration: 0.7,
+        delay: 1.7,
+        onComplete: () => {
+          // Optional: You can hide or remove the element after the animation
+          videoUploadStatusContainer.css({ display: "none", opacity: 1 });
+        },
+      });
     },
   });
 });

@@ -130,6 +130,10 @@
           videoUploadStatusContainer
             .find(".header .heading span")
             .text("Processing Video");
+
+          videoUploadStatusContainer
+            .find(".header .file-name")
+            .text(title.substring(0, 15));
         }
         $(".progress-percentage").text(`${progress}%`);
 

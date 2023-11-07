@@ -12,7 +12,7 @@ const {
 } = require("../../../helper/googleCloudStore");
 
 const fieldsValidator = Joi.object({
-  content: Joi.string().required(),
+  caption: Joi.string().required(),
 });
 
 // helper function to handle the response
@@ -25,12 +25,55 @@ const handleResponse = (res, status, message, data, success) => {
   return res.status(status).json(response);
 };
 
+const imgUploadPost = async (request, response, file) => {
+  let imageUrl = null;
+  try {
+    imageUrl = await uploadImage("users_posts_bucket", file);
+  } catch (error) {
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading file!",
+    });
+  }
+
+  // generate thumbnail
+  let thumbnailUrl = null;
+
+  try {
+    thumbnailUrl = await generateThumbnail(
+      "users_posts_bucket",
+      file,
+      imageUrl
+    );
+  } catch (error) {
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading file!",
+    });
+  }
+
+  // this is saving the path of the uploaded file into the field in the user
+  const newPost = await Post.create({
+    caption: request.body.caption,
+    user: request.user._id,
+    imgPath: imageUrl,
+    thumbnail: thumbnailUrl,
+    isImg: true,
+  });
+
+  // populate the user of newPost
+  await newPost.populate("user");
+
+  return newPost;
+};
+
 module.exports.index = async function (request, response) {
   const posts = await Post.find({})
     .limit(5)
     .sort("-createdAt")
-    .populate("user")
-    .populate("likes")
+    .populate("user likes video")
     .populate({
       path: "comments",
       populate: {
@@ -65,40 +108,13 @@ module.exports.createPost = async function (request, response) {
       });
     }
 
-    let imageUrl = null;
-    try {
-      imageUrl = await uploadImage("users_posts_bucket", file);
-    } catch (err) {
-      return response.status(401).json({
-        data: {},
-        success: false,
-        message: "Error in uploading file!",
-      });
+    let newPost = null;
+
+    if (file.mimetype === "video/mp4" || file.mimetype === "video/quicktime") {
+      // newPost = await videoUploadPost(request, response, file);
+    } else {
+      newPost = await imgUploadPost(request, response, file);
     }
-
-    // generate thumbnail
-    let thumbnailUrl = null;
-
-    try {
-      thumbnailUrl = await generateThumbnail(
-        "users_posts_bucket",
-        file,
-        imageUrl
-      );
-    } catch (err) {
-      return handleResponse(response, 400, "Error uploading file", {}, false);
-    }
-
-    // this is saving the path of the uploaded file into the field in the user
-    const newPost = await Post.create({
-      content: request.body.caption,
-      user: request.user._id,
-      myfile: imageUrl,
-      thumbnail: thumbnailUrl,
-    });
-
-    // populate the user of newPost
-    await newPost.populate("user");
 
     return handleResponse(
       response,

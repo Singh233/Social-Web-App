@@ -36,6 +36,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
     <link href="https://vjs.zencdn.net/8.6.0/video-js.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/videojs-mobile-ui/dist/videojs-mobile-ui.css"
+      rel="stylesheet"
+    />
     <!-- City -->
     <link
       href="https://unpkg.com/@videojs/themes@1/dist/fantasy/index.css"
@@ -101,6 +105,7 @@
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script> -->
     <script src="https://vjs.zencdn.net/8.6.0/video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-mobile-ui/dist/videojs-mobile-ui.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"
       integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg=="
@@ -174,8 +179,13 @@
         for (let i = 0; i < videos.length; i++) {
           const video = videos[i];
           const videoInstance = videojs(video.id, {
-            playsinline: true
+            playsinline: true,
+            fluid: true,
+            plugins: {
+              mobileUi: true,  // Enable the Mobile View Plugin
+            }
           });
+          videoInstance.mobileUi();
 
           // Add the Video.js instance to the array
           videoInstances.push(videoInstance);
@@ -203,16 +213,28 @@
             if (entry.isIntersecting) {
               // Video is in view, play it
               const videoInstance = videojs(entry.target.id, {
-                playsinline: true
+                playsinline: true,
+                fluid: true,
+                plugins: {
+                  mobileUi: true,  // Enable the Mobile View Plugin
+                }
               });
+              videoInstance.mobileUi();
+
               if (flag) {
                 videoInstance.play();
               }
             } else {
               // Video is out of view, pause it
               const videoInstance = videojs(entry.target.id, {
-                playsinline: true
+                playsinline: true,
+                fluid: true,
+                plugins: {
+                  mobileUi: true,  // Enable the Mobile View Plugin
+                }
               });
+              videoInstance.mobileUi();
+
               if (flag) videoInstance.pause();
             }
           });
