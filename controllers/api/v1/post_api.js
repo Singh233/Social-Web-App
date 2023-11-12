@@ -1,19 +1,30 @@
 const fs = require("fs");
 const path = require("path");
 const Joi = require("joi");
+const { v4: uuidv4 } = require("uuid");
 
 const Post = require("../../../models/post");
 const Comment = require("../../../models/comment");
 const Like = require("../../../models/like");
+const queue = require("../../../config/kue");
 const {
   generateThumbnail,
   uploadImage,
   deleteFile,
+  uploadVideo,
+  deleteFiles,
 } = require("../../../helper/googleCloudStore");
+const Video = require("../../../models/video");
 
 const fieldsValidator = Joi.object({
   caption: Joi.string().required(),
 });
+const generateUniquePrefix = () => {
+  const timestamp = Date.now();
+  const randomSuffix = uuidv4().split("-")[0]; // Extract a portion of the UUID
+  const uniquePrefix = `${timestamp}-${randomSuffix}`;
+  return uniquePrefix;
+};
 
 // helper function to handle the response
 const handleResponse = (res, status, message, data, success) => {
@@ -69,6 +80,55 @@ const imgUploadPost = async (request, response, file) => {
   return newPost;
 };
 
+const videoUploadPost = async (request, response, file) => {
+  let videoUrl = null;
+  const uniquePrefix = generateUniquePrefix(); // Generate unique prefix
+  const fileName = `${uniquePrefix}-${file.originalname.replace(/ /g, "_")}`; // Append prefix to file name
+  try {
+    // Upload the original video to GCS
+    videoUrl = await uploadVideo("users_videos_bucket", file, fileName); // Implement uploadVideo function to upload the video to GCS.
+  } catch (error) {
+    console.log(error);
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading video!",
+    });
+  }
+
+  // Create a new Post document
+  const newPost = await Post.create({
+    isImg: false,
+    thumbnail: "",
+    video: null,
+    caption: request.body.caption,
+    user: request.user._id,
+    comments: [],
+    likes: [],
+    savedBy: [],
+  });
+
+  // Populate the user field of the newPost
+  await newPost.populate("user");
+
+  const data = {
+    videoUrl,
+    uniquePrefix,
+    userId: request.user.id,
+    post: newPost,
+    reqBody: request.body,
+  };
+
+  // parallel job to
+  queue.create("videoEncoders", data).save(function (error) {
+    if (error) {
+      console.log(error);
+    }
+  });
+
+  return newPost;
+};
+
 module.exports.index = async function (request, response) {
   const posts = await Post.find({})
     .limit(5)
@@ -111,7 +171,7 @@ module.exports.createPost = async function (request, response) {
     let newPost = null;
 
     if (file.mimetype === "video/mp4" || file.mimetype === "video/quicktime") {
-      // newPost = await videoUploadPost(request, response, file);
+      newPost = await videoUploadPost(request, response, file);
     } else {
       newPost = await imgUploadPost(request, response, file);
     }
@@ -166,6 +226,15 @@ module.exports.destroy = async function (request, response) {
     // delete the thumbnail from cloud storage
     if (post.thumbnail) {
       await deleteFile("users_posts_bucket", post.thumbnail, true);
+    }
+
+    if (!post.isImg) {
+      const video = await Video.findByIdAndRemove(post.video);
+      await Promise.all(
+        video.qualities.map(async (quality) => {
+          await deleteFiles("users_videos_bucket", quality.videoPath);
+        })
+      );
     }
 
     return handleResponse(
