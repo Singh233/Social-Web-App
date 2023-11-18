@@ -187,13 +187,13 @@
 
       <div id="user-posts-list" class="post-list">
         <% for (let post of user_posts) { %>
-        <div onclick="showNotification()" class="post-img">
+        <a href="/posts/post/<%= post._id %>" class="post-img">
           <% if(post.imgPath != undefined) { %>
           <img src="<%= post.imgPath %>" />
           <% } else { %>
           <img src="<%= assetPath('img/1782188.jpeg') %>" />
           <% } %>
-        </div>
+        </a>
         <% } %>
       </div>
 

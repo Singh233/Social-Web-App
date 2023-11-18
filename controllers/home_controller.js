@@ -91,7 +91,7 @@ module.exports.home = async function (request, response) {
       friends: friendsArray,
       followingCount: followingCount,
       websocket_host: env.websocket_host,
-      moment: moment,
+      // moment: moment,
       roomId: "sample-id",
     });
   } catch (error) {

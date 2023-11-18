@@ -1,5 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-extraneous-dependencies */
+const Joi = require("joi");
+
 const { v4: uuidv4 } = require("uuid");
 const Post = require("../models/post");
 const queue = require("../config/kue");
@@ -259,5 +261,52 @@ module.exports.unsavePost = async function (request, response) {
   } catch (error) {
     request.flash("error", "Unauthorized");
     return response.status(401).send("Unauthorized");
+  }
+};
+
+// View post page
+module.exports.viewSinglePost = async function (request, response) {
+  try {
+    // verify params
+    const { value, error } = Joi.object({
+      postId: Joi.string().required(),
+    }).validate(request.params);
+
+    if (error) {
+      request.flash("error", "Invalid request!");
+      return response.redirect("back");
+    }
+
+    let isSaved = false;
+    if (request.user) {
+      request.user.savedPosts.forEach((post) => {
+        if (post._id.toString() === value.postId) {
+          isSaved = true;
+        }
+      });
+    }
+
+    const post = await Post.findById(value.postId)
+      .populate("user likes video")
+      .populate({
+        path: "comments",
+        options: {
+          sort: {
+            createdAt: -1,
+          },
+        },
+        populate: {
+          path: "user likes",
+        },
+      });
+    return response.render("post.ejs", {
+      post,
+      isSaved,
+      title: "Post",
+    });
+  } catch (error) {
+    console.log(error);
+    request.flash("error", "Internal server error");
+    return response.redirect("back");
   }
 };

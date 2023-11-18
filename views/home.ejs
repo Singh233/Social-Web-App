@@ -195,7 +195,7 @@
         <% for (let i of posts) { %> <% let isSaved = false; %> <% for (let j of
         locals.user.savedPosts) { %> <% if (j._id.toString() ===
         i._id.toString()) { %> <% isSaved = true; %> <% } %> <% } %> <%-
-        include('_post.ejs', {post: i, moment, isSaved}) -%> <% } %>
+        include('_post.ejs', {post: i, isSaved}) -%> <% } %>
       </div>
     </section>
     <% } %>
@@ -208,9 +208,8 @@
     friends}); %> <% } else { %> <%- include('_right_section', {}); %> <% } %>
   </div>
 
-  <% } %> <% if(locals.user) { %> <%- include('_chat_box', {friends, moment})
-  -%> <% } %> <% if (locals.user){ %> <%- include('_bottom_nav_bar_sm') -%> <% }
-  %>
+  <% } %> <% if(locals.user) { %> <%- include('_chat_box', {friends}) -%> <% }
+  %> <% if (locals.user){ %> <%- include('_bottom_nav_bar_sm') -%> <% } %>
 </div>
 
 <% if(!locals.user) { %> <%- include('_top_logo_header'); %> <%-

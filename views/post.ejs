@@ -1,4 +1,49 @@
-<% if (!post.isImg && !post.video) { %> <% } else { %>
+<link rel="stylesheet" href="<%= assetPath('css/home.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/chat_box.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/chat_messages.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/post.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>" />
+<link rel="stylesheet" href="<%= assetPath('css/bottom_nav_bar_sm.css') %>" />
+<% if (post.isImg || post.video) { %>
+
+<div class="post-header">
+  <a class="back-button-link" href="javascript:history.back()">
+    <!-- <i class="fa-solid fa-arrow-left-long"></i> -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+      id="square-arrow-left"
+    >
+      <path
+        fill="#111"
+        fill-rule="evenodd"
+        d="M20.5355 3.46447C19.0711 2 16.714 2 12 2C7.28595 2 4.92893 2 3.46447 3.46447C2 4.92893 2 7.28595 2 12C2 16.714 2 19.0711 3.46447 20.5355C4.92893 22 7.28595 22 12 22C16.714 22 19.0711 22 20.5355 20.5355C22 19.0711 22 16.714 22 12C22 7.28595 22 4.92893 20.5355 3.46447ZM16.75 12C16.75 12.4142 16.4142 12.75 16 12.75H9.81066L11.5303 14.4697C11.8232 14.7626 11.8232 15.2374 11.5303 15.5303C11.2374 15.8232 10.7626 15.8232 10.4697 15.5303L7.46967 12.5303C7.32902 12.3897 7.25 12.1989 7.25 12C7.25 11.8011 7.32902 11.6103 7.46967 11.4697L10.4697 8.46967C10.7626 8.17678 11.2374 8.17678 11.5303 8.46967C11.8232 8.76256 11.8232 9.23744 11.5303 9.53033L9.81066 11.25H16C16.4142 11.25 16.75 11.5858 16.75 12Z"
+        clip-rule="evenodd"
+      ></path>
+    </svg>
+  </a>
+  <a href="/users/profile/<%= post.user.id %>">
+    <% if(post.user.avatar != undefined) { %>
+    <img src="<%= post.user.avatar %>" id="user-profile-img" />
+    <% } else { %>
+    <img
+      src="<%= assetPath('img/dummy-profile.jpeg') %>"
+      id="user-profile-img"
+    />
+    <% } %>
+    <p><%= post.user.name %></p>
+  </a>
+
+  <div id="post-menu-options">
+    <i
+      onclick="toggleMenuOptions('<%= post._id %>')"
+      class="fa-solid fa-ellipsis-vertical"
+    ></i>
+  </div>
+</div>
 <div id="post-<%= post._id %>" class="display-posts">
   <div
     id="bottom-menu-options-<%= post._id %>"
@@ -42,27 +87,6 @@
     <% } %>
   </div>
 
-  <div class="post-header">
-    <a href="/users/profile/<%= post.user.id %>">
-      <% if(post.user.avatar != undefined) { %>
-      <img src="<%= post.user.avatar %>" id="user-profile-img" />
-      <% } else { %>
-      <img
-        src="<%= assetPath('img/dummy-profile.jpeg') %>"
-        id="user-profile-img"
-      />
-      <% } %>
-    </a>
-
-    <a href="/users/profile/<%= post.user.id %>"> <%= post.user.name %></a>
-
-    <div id="post-menu-options">
-      <i
-        onclick="toggleMenuOptions('<%= post._id %>')"
-        class="fa-solid fa-ellipsis-vertical"
-      ></i>
-    </div>
-  </div>
   <div class="post-img">
     <% if(post.isImg) { %> <% if(post.imgPath) { %>
     <div class="blur-load" style="background-image: url(<%= post.thumbnail %>)">
@@ -112,7 +136,7 @@
         </a>
         <% } %>
 
-        <a>
+        <a href="#">
           <!-- <i class="fa-regular fa-comment"></i> -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +155,7 @@
           </svg>
           <span><%= post.comments.length %></span>
         </a>
-        <a id="share-button-<%= post._id %>" class="share-button">
+        <a class="share-button" onclick="toggleShareOptions()">
           <!-- <i style="font-size: 1.1rem" class="fa-regular fa-paper-plane"></i> -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -148,18 +172,6 @@
           </svg>
         </a>
       </div>
-      <!-- ShareThis BEGIN -->
-      <div
-        id="share-<%= post._id %>"
-        class="share-options animate__animated animate__faster"
-        style=" top: <%= post.video ? '-88px' : '-41px'  %> "
-      >
-        <div class="sharethis-inline-share-buttons"></div>
-        <button onclick="copyUrl('<%= post._id %>')" class="copy-url-button">
-          <i class="fa-solid fa-copy"></i>
-        </button>
-      </div>
-      <!-- ShareThis END -->
       <% if (isSaved) { %>
       <div
         id="save-post"
@@ -177,6 +189,18 @@
         <i id="icon-<%= post._id %>" class="fa-regular fa-bookmark"></i>
       </div>
       <% } %>
+
+      <!-- ShareThis BEGIN -->
+      <div
+        class="share-options animate__animated animate__faster"
+        style=" top: <%= post.video ? '-88px' : '-41px'  %> "
+      >
+        <div class="sharethis-inline-share-buttons"></div>
+        <button onclick="copyUrl()" class="copy-url-button">
+          <i class="fa-solid fa-copy"></i>
+        </button>
+      </div>
+      <!-- ShareThis END -->
     </div>
 
     <div class="post-caption">
@@ -211,51 +235,52 @@
         {comment: comment}) %> <% } %>
       </ul>
     </div>
-    <div class="post-comments">
-      <% if(locals.user) { %>
-      <form
-        id="post-<%= post._id %>-comments-form"
-        action="/comments/create"
-        method="POST"
-      >
-        <i
-          onclick="emojiClicked(event, '<%= post._id %>')"
-          class="fa-regular fa-face-smile emoji-button"
-        ></i>
-        <input
-          id="input-add-comment-<%= post._id %>"
-          class="input-add-comment"
-          type="text"
-          name="content"
-          placeholder="add a comment..."
-          required
-        />
-        <input type="hidden" name="postId" value="<%= post._id %>" />
-        <!-- <input class="submit-button" type="submit" value="Post" /> -->
-
-        <button class="submit-button" type="submit">
-          <div class="comment-add-loader"></div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-            id="plain"
-            class="comment-add-button"
-          >
-            <path
-              fill="#111"
-              d="M18.6357 15.6701L20.3521 10.5208C21.8516 6.02242 22.6013 3.77322 21.414 2.58595C20.2268 1.39869 17.9776 2.14842 13.4792 3.64788L8.32987 5.36432C4.69923 6.57453 2.88392 7.17964 2.36806 8.06698C1.87731 8.91112 1.87731 9.95369 2.36806 10.7978C2.88392 11.6852 4.69923 12.2903 8.32987 13.5005C8.77981 13.6505 9.28601 13.5434 9.62294 13.2096L15.1286 7.75495C15.4383 7.44808 15.9382 7.45041 16.245 7.76015C16.5519 8.06989 16.5496 8.56975 16.2398 8.87662L10.8231 14.2432C10.4518 14.6111 10.3342 15.1742 10.4995 15.6701C11.7097 19.3007 12.3148 21.1161 13.2022 21.6319C14.0463 22.1227 15.0889 22.1227 15.933 21.6319C16.8204 21.1161 17.4255 19.3008 18.6357 15.6701Z"
-            ></path>
-          </svg>
-        </button>
-      </form>
-      <% } %>
-    </div>
   </div>
 </div>
-<% } %>
+
+<div class="post-comments">
+  <% if(locals.user) { %>
+  <form
+    id="post-<%= post._id %>-comments-form"
+    action="/comments/create"
+    method="POST"
+  >
+    <i
+      onclick="emojiClicked(event, '<%= post._id %>')"
+      class="fa-regular fa-face-smile emoji-button"
+    ></i>
+    <input
+      id="input-add-comment-<%= post._id %>"
+      class="input-add-comment"
+      type="text"
+      name="content"
+      placeholder="add a comment..."
+      required
+    />
+    <input type="hidden" name="postId" value="<%= post._id %>" />
+    <!-- <input class="submit-button" type="submit" value="Post" /> -->
+
+    <button class="submit-button" type="submit">
+      <div class="comment-add-loader"></div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+        id="plain"
+        class="comment-add-button"
+      >
+        <path
+          fill="#111"
+          d="M18.6357 15.6701L20.3521 10.5208C21.8516 6.02242 22.6013 3.77322 21.414 2.58595C20.2268 1.39869 17.9776 2.14842 13.4792 3.64788L8.32987 5.36432C4.69923 6.57453 2.88392 7.17964 2.36806 8.06698C1.87731 8.91112 1.87731 9.95369 2.36806 10.7978C2.88392 11.6852 4.69923 12.2903 8.32987 13.5005C8.77981 13.6505 9.28601 13.5434 9.62294 13.2096L15.1286 7.75495C15.4383 7.44808 15.9382 7.45041 16.245 7.76015C16.5519 8.06989 16.5496 8.56975 16.2398 8.87662L10.8231 14.2432C10.4518 14.6111 10.3342 15.1742 10.4995 15.6701C11.7097 19.3007 12.3148 21.1161 13.2022 21.6319C14.0463 22.1227 15.0889 22.1227 15.933 21.6319C16.8204 21.1161 17.4255 19.3008 18.6357 15.6701Z"
+        ></path>
+      </svg>
+    </button>
+  </form>
+  <% } %>
+</div>
+<% if (locals.user){ %> <%- include('_bottom_nav_bar_sm') -%> <% } %> <% } %>
 
 <script>
   $("#post-creation-moment-<%= post._id %>").text(
@@ -295,6 +320,36 @@
     <% } %>
   });
 </script>
+
+<% if (locals.user){ %>
+<script src="<%= assetPath('js/add_emoji.js') %>"></script>
+
+<% } %>
+
+<script src="<%= assetPath('js/home_post_comments.js') %>"></script>
+<script src="<%= assetPath('js/home_posts.js') %>"></script>
+<script src="<%= assetPath('js/toggle_likes.js') %>"></script>
+
+<script>
+  $(".toggle-like-button").each(function () {
+    let self = this;
+    let toggleLike = new ToggleLike(self);
+  });
+  const convertPostToAjax = function () {
+    // iterate over all posts
+
+    const deleteButton = $(".delete-post-button");
+    deletePost(deleteButton);
+
+    // get the post's id by splitting the id attribute
+    const postId = $(".display-posts").prop("id").split("-")[1];
+    new PostComments(postId);
+  };
+
+  convertPostToAjax();
+</script>
+
+<script src="<%= assetPath('js/home.js') %>"></script>
 
 <script>
   // function to save posts
@@ -358,28 +413,44 @@
     });
   }
 </script>
-
 <script>
-  $("#share-button-<%= post._id %>").on("click", () => {
-    const shareOptions = $("#share-<%= post._id %>");
-    if (shareOptions.css("display") === "flex") {
-      shareOptions.removeClass("animate__fadeIn");
-      shareOptions.addClass("animate__fadeOut");
-      setTimeout(() => {
-        shareOptions.css({ display: "none" });
-      }, 500);
+  const blurDivs = document.querySelectorAll(".blur-load");
+
+  blurDivs.forEach((div) => {
+    const img = div.querySelector("img");
+    function loaded() {
+      // show img
+      div.classList.add("loaded");
+    }
+
+    if (img.complete) {
+      loaded();
     } else {
-      shareOptions.css({ display: "flex" });
-      shareOptions.removeClass("animate__fadeOut");
-      shareOptions.addClass("animate__fadeIn");
+      img.addEventListener("load", loaded);
     }
   });
-  // function toggleShareOptions(postId) {}
-  function copyUrl(postId) {
+
+  $("#sm-nav-home-icon").addClass("active");
+</script>
+
+<script>
+  function toggleShareOptions() {
+    if ($(".share-options").css("display") === "flex") {
+      $(".share-options").removeClass("animate__fadeIn");
+      $(".share-options").addClass("animate__fadeOut");
+      setTimeout(() => {
+        $(".share-options").css({ display: "none" });
+      }, 500);
+    } else {
+      $(".share-options").css({ display: "flex" });
+      $(".share-options").removeClass("animate__fadeOut");
+      $(".share-options").addClass("animate__fadeIn");
+    }
+  }
+  function copyUrl() {
     // Get the text field
-    var url = window.location.href.includes("home")
-      ? window.location.href.split("home")[0] + "posts/post/" + postId
-      : window.location.href;
+    var url = window.location.href;
+
     // Copy the text inside the text field
     navigator.clipboard.writeText(url);
 

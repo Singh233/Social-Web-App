@@ -30,4 +30,10 @@ router.post(
   postsController.unsavePost
 );
 
+router.get(
+  "/post/:postId",
+  passport.checkAuthentication,
+  postsController.viewSinglePost
+);
+
 module.exports = router;

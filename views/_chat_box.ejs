@@ -124,15 +124,7 @@
         ></i>
 
         <% if (friend.chatRoom.lastMessage.message) { %>
-        <p id="last-message-time-<%= friend._id %>" class="time">
-          <% const timeString = new
-          Date(friend.chatRoom.lastMessage.timestamp).toLocaleTimeString("en-US",
-          { hour12: true }).toString(); const [hours, minutes, seconds] =
-          timeString.split(":"); const [second, ampm] = seconds.split(' '); %>
-          <%= moment(friend.chatRoom.lastMessage.timestamp).calendar(null, {
-          sameDay: 'LT', nextDay: '[Tomorrow]', nextWeek: 'dddd', lastDay:
-          '[Yesterday]', lastWeek: 'dddd', sameElse: 'DD/MM/YYYY' }); %>
-        </p>
+        <p id="last-message-time-<%= friend._id %>" class="time">-</p>
         <% }%>
       </li>
       <% } %> <% if (friends.length === 0) { %>
@@ -156,6 +148,25 @@
   if (window.innerWidth < 600) {
     $("#chat-box").addClass("remove-box");
   }
+  <% for(friend of friends) { if (!friend.chatRoom.lastMessage.timestamp) continue; %>
+  var timeString = new Date("<%= friend.chatRoom.lastMessage.timestamp %>")
+    .toLocaleTimeString("en-US", { hour12: true })
+    .toString();
+  var [hours, minutes, seconds] = timeString.split(":");
+  var [second, ampm] = seconds.split(" ");
+  var time = moment("<%= friend.chatRoom.lastMessage.timestamp %>").calendar(
+    null,
+    {
+      sameDay: "LT",
+      nextDay: "[Tomorrow]",
+      nextWeek: "dddd",
+      lastDay: "[Yesterday]",
+      lastWeek: "dddd",
+      sameElse: "DD/MM/YYYY",
+    }
+  );
+  $("#last-message-time-<%= friend._id %>").text(time);
+  <% } %>
 </script>
 <% } %>
 

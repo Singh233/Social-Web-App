@@ -273,7 +273,7 @@ let newPostDom = function (post) {
                         }&type=Post">
                             <i style="margin-left: 0px" class="fa-regular fa-heart "></i> <span>0</span>
                         </a>
-                        <a href="#">
+                        <a>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -291,7 +291,7 @@ let newPostDom = function (post) {
                           </svg>
                             <span>0</span>
                         </a>
-                        <a class="share-button" href="#">
+                        <a id="share-button-${post._id}" class="share-button">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -307,6 +307,19 @@ let newPostDom = function (post) {
                           </svg>
                         </a>
                         </div>
+                        <div
+                          id="share-${post._id}"
+                          class="share-options animate__animated animate__faster"
+                          style=" top: ${post.video ? "-88px" : "-41px"} "
+                        >
+                          <div class="sharethis-inline-share-buttons"></div>
+                          <button onclick="copyUrl('${
+                            post._id
+                          }')" class="copy-url-button">
+                            <i class="fa-solid fa-copy"></i>
+                          </button>
+                      </div>
+
 
                         <div onclick="toggleSavePost('${
                           post._id
@@ -514,8 +527,8 @@ let renderPostDom = function (post, isLiked, isSaved) {
                           </svg>
                             <span>${post.comments.length}</span>
                         </a>
-                        <a class="share-button" href="#">
-                          <svg
+                        <a id="share-button-${post._id}" class="share-button">
+                        <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
                             height="24"
@@ -529,6 +542,18 @@ let renderPostDom = function (post, isLiked, isSaved) {
                             ></path>
                           </svg>
                         </a>
+                        </div>
+                        <div
+                          id="share-${post._id}"
+                          class="share-options animate__animated animate__faster"
+                          style=" top: ${post.video ? "-88px" : "-41px"} "
+                        >
+                          <div class="sharethis-inline-share-buttons"></div>
+                          <button onclick="copyUrl('${
+                            post._id
+                          }')" class="copy-url-button">
+                            <i class="fa-solid fa-copy"></i>
+                          </button>
                         </div>
 
                         ${
@@ -643,6 +668,13 @@ const deletePost = function (deleteLink) {
       type: "get",
       url: $(deleteLink).prop("href"),
       success: function (data) {
+        if (window.location.href.includes("post")) {
+          showNotification(data.data.success, "success", 2000, null);
+          setTimeout(() => {
+            history.back();
+          }, 300);
+          return;
+        }
         gsap.to($(`#post-${data.data.post_id}`), {
           opacity: 0,
           y: -2000,
@@ -821,6 +853,20 @@ $("#new-post-form").submit(function (e) {
               loaded();
             } else {
               img.addEventListener("load", loaded);
+            }
+          });
+          $(`#share-button-${data.data.post._id}`).on("click", () => {
+            const shareOptions = $(`#share-${data.data.post._id}`);
+            if (shareOptions.css("display") === "flex") {
+              shareOptions.removeClass("animate__fadeIn");
+              shareOptions.addClass("animate__fadeOut");
+              setTimeout(() => {
+                shareOptions.css({ display: "none" });
+              }, 500);
+            } else {
+              shareOptions.css({ display: "flex" });
+              shareOptions.removeClass("animate__fadeOut");
+              shareOptions.addClass("animate__fadeIn");
             }
           });
           if (window.innerWidth < 600)
@@ -1005,7 +1051,12 @@ const skeletonCard = function () {
 let scroll = false;
 
 window.onscroll = (event) => {
-  if (scroll || window.location.href.includes("profile")) return;
+  if (
+    scroll ||
+    window.location.href.includes("profile") ||
+    window.location.href.includes("post")
+  )
+    return;
   // Check if the user is 200 pixels away from the bottom of the page
   if (
     window.innerHeight + window.pageYOffset >=
@@ -1073,6 +1124,20 @@ window.onscroll = (event) => {
               loaded();
             } else {
               img.addEventListener("load", loaded);
+            }
+          });
+          $(`#share-button-${post._id}`).on("click", () => {
+            const shareOptions = $(`#share-${post._id}`);
+            if (shareOptions.css("display") === "flex") {
+              shareOptions.removeClass("animate__fadeIn");
+              shareOptions.addClass("animate__fadeOut");
+              setTimeout(() => {
+                shareOptions.css({ display: "none" });
+              }, 500);
+            } else {
+              shareOptions.css({ display: "flex" });
+              shareOptions.removeClass("animate__fadeOut");
+              shareOptions.addClass("animate__fadeIn");
             }
           });
         });

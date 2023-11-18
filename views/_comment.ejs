@@ -1,37 +1,51 @@
-
 <div id="comment-<%= comment._id %>" class="comment-display animate__animated">
-    <img src="<%= comment.user.avatar %>" id="user-profile-img">
-    <div class="middle-section">
-        <div class="upper">
-            <p class="comment-user-name"><%= comment.user.name %>&nbsp;&nbsp;</p>
-            <p class="comment-user-content"> &nbsp;<%= comment.content %> </p>
-        </div>
-
-        <div class="bottom">
-            <p id="comment-time"> <%= moment(comment.createdAt).fromNow() %> </p>
-
-            <!-- <p id="reply-button">reply</p> -->
-            <% if(locals.user && locals.user.id == comment.user.id) { %> 
-                <a class="delete-comment-button" href="/comments/destroy/<%= comment._id %>">delete</a>
-            <% } %>
-            
-
-        </div>
-        
+  <img src="<%= comment.user.avatar %>" id="user-profile-img" />
+  <div class="middle-section">
+    <div class="upper">
+      <p class="comment-user-name"><%= comment.user.name %>&nbsp;&nbsp;</p>
+      <p class="comment-user-content">&nbsp;<%= comment.content %></p>
     </div>
 
-    <% let flag = false; for (l of comment.likes) { if (l.user._id ==  locals.user.id) { flag = true; break; } }%> 
-    <% if (flag) { %>
-        <a class="toggle-like-button" data-likes="<%= comment.likes.length %>" href="/likes/toggle/?id=<%= comment._id %>&type=Comment">
-            <i style="margin-left: 0px" class="fa-solid fa-heart liked"></i><span><%= comment.likes.length %></span>
-        </a>
-    <% } else { %>
-        <a class="toggle-like-button" data-likes="<%= comment.likes.length %>" href="/likes/toggle/?id=<%= comment._id %>&type=Comment">
-            <i style="margin-left: 0px" class="fa-regular fa-heart"></i><span><%= comment.likes.length %></span>
-        </a>
-    <% } %>
-    
+    <div class="bottom">
+      <p id="comment-time" class="comment-moment-<%= comment._id %>">-</p>
 
-    <br>
+      <!-- <p id="reply-button">reply</p> -->
+      <% if(locals.user && locals.user.id == comment.user.id) { %>
+      <a
+        class="delete-comment-button"
+        href="/comments/destroy/<%= comment._id %>"
+        >delete</a
+      >
+      <% } %>
+    </div>
+  </div>
+
+  <% let flag = false; for (l of comment.likes) { if (l.user._id ==
+  locals.user.id) { flag = true; break; } }%> <% if (flag) { %>
+  <a
+    class="toggle-like-button"
+    data-likes="<%= comment.likes.length %>"
+    href="/likes/toggle/?id=<%= comment._id %>&type=Comment"
+  >
+    <i style="margin-left: 0px" class="fa-solid fa-heart liked"></i
+    ><span><%= comment.likes.length %></span>
+  </a>
+  <% } else { %>
+  <a
+    class="toggle-like-button"
+    data-likes="<%= comment.likes.length %>"
+    href="/likes/toggle/?id=<%= comment._id %>&type=Comment"
+  >
+    <i style="margin-left: 0px" class="fa-regular fa-heart"></i
+    ><span><%= comment.likes.length %></span>
+  </a>
+  <% } %>
+
+  <br />
 </div>
 
+<script>
+  $(".comment-moment-<%= comment._id %>").text(
+    moment("<%= comment.createdAt %>").fromNow()
+  );
+</script>
