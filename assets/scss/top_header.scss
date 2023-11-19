@@ -43,7 +43,8 @@ $button-color-gray: #202020;
         margin-right: 5px;
         // disable clear button
         &::-webkit-search-cancel-button {
-          -webkit-appearance: none;
+          // -webkit-appearance: none;
+          cursor: pointer;
         }
 
         &:focus {

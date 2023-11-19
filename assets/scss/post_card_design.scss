@@ -290,6 +290,15 @@ $text-color-gray: #d0d0d0;
       .right {
         justify-self: flex-end;
         cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        width: fit-content;
+        color: white;
+        padding: 8px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(231, 231, 231, 0.233);
+        margin-left: 12px;
 
         i {
           font-size: 1.2rem;
@@ -302,33 +311,62 @@ $text-color-gray: #d0d0d0;
         text-decoration: none;
         width: fit-content;
         color: white;
-        padding: 5px 10px;
-        border-radius: 12px;
+        padding: 7px 10px;
         position: absolute;
         left: 0px;
-        top: -41px;
+        top: -46px;
         background: rgba(0, 0, 0, 0.396);
         width: 100%;
         padding: 0px;
         backdrop-filter: blur(35px);
         -webkit-backdrop-filter: blur(35px);
-        border-radius: 10px;
-        .copy-url-button {
+        border-radius: 10px 10px 0 0;
+        button {
           margin: 5px;
           background-color: #212121;
-          padding: 5px 10px;
+          padding: 7px 10px;
           outline: none;
           border: none;
           color: white;
-          border-radius: 5px;
+          border-radius: 8px;
           border: 1px solid #212121;
           transition: all 0.2s ease-out;
           cursor: pointer;
+          font-size: 1rem;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          i {
+            font-size: 1.2rem;
+          }
 
           &:hover {
             border: 1px solid rgba(255, 255, 255, 0.857);
-            transform: translateY(-2px);
+
+            // transform: translateY(-2px);
           }
+        }
+
+        .whatsapp {
+          background-color: #23d366;
+          border: 1px solid #23d366;
+        }
+
+        .fb {
+          background-color: #0765ff;
+          border: 1px solid #0765ff;
+        }
+
+        .in {
+          background-color: #0b63c4;
+          border: 1px solid #0b63c4;
+        }
+
+        .x {
+          background-color: black;
+          border: 1px solid black;
         }
       }
     }
@@ -598,6 +636,10 @@ $text-color-gray: #d0d0d0;
 
       .post-options {
         max-width: 100vw;
+        .share-options {
+          border-radius: 0px;
+          background: rgba(0, 0, 0, 0.571);
+        }
       }
 
       #comments-list-container {

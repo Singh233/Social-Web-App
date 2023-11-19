@@ -217,6 +217,12 @@ function toggleScroll() {
 
 var userSearchTimeout = null;
 // jquery to listen to user-search-bar input field
+$("#user-search-bar").on("input", function () {
+  if ($(this).val() === "") {
+    $("#search-results").html("");
+    $("#search-results").css("padding", "0");
+  }
+});
 $("#user-search-bar").on("keyup", function () {
   if (userSearchTimeout) {
     clearTimeout(userSearchTimeout);
@@ -227,7 +233,6 @@ $("#user-search-bar").on("keyup", function () {
     return;
   }
   userSearchTimeout = setTimeout(() => {
-    console.log("test");
     searchUser($(this), "keyUp");
     userSearchTimeout = null;
   }, 600);
@@ -253,14 +258,14 @@ function searchUser(input, type) {
 
 `;
   let searchValue = null;
-  if (type == "keyUp") {
+  if (type === "keyUp") {
     searchValue = $(input).val();
   } else {
     searchValue = $("#user-search-bar").val();
   }
-  if (searchValue != "") {
+  if (searchValue !== "") {
     $.ajax({
-      url: "/users/search?search=" + searchValue,
+      url: `/users/search?search=${searchValue}`,
       type: "GET",
       success: function (data) {
         // clear the search results

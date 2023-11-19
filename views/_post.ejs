@@ -152,9 +152,46 @@
       <div
         id="share-<%= post._id %>"
         class="share-options animate__animated animate__faster"
-        style=" top: <%= post.video ? '-88px' : '-41px'  %> "
+        style=" top: <%= post.video ? '-93px' : '-45px'  %> "
       >
-        <div class="sharethis-inline-share-buttons"></div>
+        <button
+          class="button fb"
+          data-sharer="facebook"
+          data-title="Checkout this post from <%= post.user.name %>"
+          data-hashtags="awesome, viral, cool"
+          data-url="https://sanam.social/posts/post/<%= post._id %>"
+        >
+          <i class="fa-brands fa-facebook-f"></i>
+        </button>
+        <button
+          class="button whatsapp"
+          data-sharer="whatsapp"
+          data-title="Checkout this post from <%= post.user.name %>"
+          data-url="https://sanam.social/posts/post/<%= post._id %>"
+          data-hashtags="awesome, viral, cool"
+        >
+          <i class="fa-brands fa-whatsapp"></i>
+        </button>
+        <!-- <button
+          class="button"
+          data-sharer="twitter"
+          data-title="Checkout this post from <%= post.user.name %>"
+          data-hashtags="awesome, sharer.js"
+          data-url="https://sanam.social/posts/post/<%= post._id %>"
+                    data-hashtags="awesome, viral, cool"
+
+        >
+          <i class="fa-brands fa-x-twitter"></i>
+        </button> -->
+        <button
+          class="button in"
+          data-sharer="linkedin"
+          data-title="Checkout this post from <%= post.user.name %>"
+          data-url="https://sanam.social/posts/post/<%= post._id %>"
+          data-hashtags="awesome, viral, cool"
+        >
+          <i class="fa-brands fa-linkedin-in"></i>
+        </button>
         <button onclick="copyUrl('<%= post._id %>')" class="copy-url-button">
           <i class="fa-solid fa-copy"></i>
         </button>
@@ -329,8 +366,9 @@
           position: "center", // `left`, `center` or `right`
           stopOnFocus: true, // Prevents dismissing of toast on hover
           style: {
-            background: "#0057D2",
+            background: "#000000",
             borderRadius: "10px",
+            border: "1px solid rgba(231, 231, 231, 0.233)",
           },
           onClick: function () {}, // Callback after click
         }).showToast();
@@ -348,9 +386,9 @@
           position: "center", // `left`, `center` or `right`
           stopOnFocus: true, // Prevents dismissing of toast on hover
           style: {
-            background: "#D20A0A",
+            background: "#000000",
             borderRadius: "10px",
-            color: "white",
+            border: "1px solid rgba(231, 231, 231, 0.233)",
           },
           onClick: function () {}, // Callback after click
         }).showToast();
@@ -374,6 +412,7 @@
       shareOptions.addClass("animate__fadeIn");
     }
   });
+
   // function toggleShareOptions(postId) {}
   function copyUrl(postId) {
     // Get the text field
@@ -394,11 +433,12 @@
         "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
 
       gravity: "top", // `top` or `bottom`
-      position: "right", // `left`, `center` or `right`
+      position: "center", // `left`, `center` or `right`
       stopOnFocus: true, // Prevents dismissing of toast on hover
       style: {
-        background: "#0057D2",
+        background: "#000000",
         borderRadius: "10px",
+        border: "1px solid rgba(231, 231, 231, 0.233)",
       },
       onClick: function () {}, // Callback after click
     }).showToast();

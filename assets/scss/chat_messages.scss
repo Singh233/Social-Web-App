@@ -499,14 +499,14 @@ $button-color-ligth-blue: #4db1ff;
   }
 }
 
-@media screen and (max-width: "500px") {
+@media screen and (max-width: "600px") {
   .remove {
     display: none;
   }
   .user-messages {
     height: 100%;
     width: 100vw;
-    z-index: 7;
+    z-index: 9999999;
     border-radius: 0;
     margin: 0;
 

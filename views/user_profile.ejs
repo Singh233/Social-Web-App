@@ -188,9 +188,13 @@
       <div id="user-posts-list" class="post-list">
         <% for (let post of user_posts) { %>
         <a href="/posts/post/<%= post._id %>" class="post-img">
-          <% if(post.imgPath != undefined) { %>
+          <% if(!post.isImg && post.video) { %>
+          <div class="video-post">
+            <i class="fa-solid fa-circle-play"></i>
+          </div>
+          <% } else if(post.isImg && post.imgPath) { %>
           <img src="<%= post.imgPath %>" />
-          <% } else { %>
+          <% } else if (post.isImg) { %>
           <img src="<%= assetPath('img/1782188.jpeg') %>" />
           <% } %>
         </a>
@@ -199,13 +203,17 @@
 
       <div id="saved-posts-list" class="post-list remove">
         <% for (let post of savedPosts) { %>
-        <div onclick="showNotification()" class="post-img">
-          <% if(post.imgPath != undefined) { %>
+        <a href="/posts/post/<%= post._id %>" class="post-img">
+          <% if(!post.isImg && post.video) { %>
+          <div class="video-post">
+            <i class="fa-solid fa-circle-play"></i>
+          </div>
+          <% } else if(post.isImg && post.imgPath) { %>
           <img src="<%= post.imgPath %>" />
-          <% } else { %>
+          <% } else if (post.isImg) { %>
           <img src="<%= assetPath('img/1782188.jpeg') %>" />
           <% } %>
-        </div>
+        </a>
         <% } %>
       </div>
 
@@ -285,8 +293,11 @@
       position: "center", // `left`, `center` or `right`
       stopOnFocus: true, // Prevents dismissing of toast on hover
       style: {
-        background: "#0057D2",
-        borderRadius: "10px",
+        style: {
+          background: "#000000",
+          borderRadius: "10px",
+          border: "1px solid rgba(231, 231, 231, 0.233)",
+        },
       },
       onClick: function () {}, // Callback after click
     }).showToast();

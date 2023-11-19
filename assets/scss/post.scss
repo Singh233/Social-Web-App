@@ -91,6 +91,85 @@ $text-color-gray: #d0d0d0;
   }
 }
 
+.post-options-menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  top: 74px;
+  left: 0;
+  // background-color: rgba(0, 0, 0, 0.49);
+  border-radius: 15px;
+  padding: 10px;
+  z-index: 999999;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.693);
+  border-radius: 30px;
+  border: 1px solid rgba(231, 231, 231, 0.233);
+  // border-top: none;
+  // border-right: none;
+  // border-left: none;
+  transform: translateY(-100px);
+
+  transition: all 0.3s ease-in-out;
+
+  svg {
+    margin-right: 5px;
+    path {
+      fill: white;
+    }
+  }
+
+  .option1 {
+    margin: 10px;
+
+    a {
+      text-decoration: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        color: $button-hover-color;
+      }
+    }
+  }
+
+  .option2 {
+    margin: 10px;
+    color: $button-color-red;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+
+    a {
+      text-decoration: none;
+      color: $button-color-red;
+    }
+  }
+
+  .cancel-button {
+    width: 100%;
+    margin: 10px;
+    padding: 10px;
+    background-color: $button-color-blue;
+    border-radius: 20px;
+    color: white;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+
+    &:hover {
+      background-color: lighten($color: $button-color-blue, $amount: 10%);
+    }
+  }
+}
+
 .display-posts {
   align-self: center;
   max-width: 600px;
@@ -111,85 +190,6 @@ $text-color-gray: #d0d0d0;
 
   position: relative;
   z-index: 99999;
-
-  .post-options-menu {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 74px;
-    left: 0;
-    // background-color: rgba(0, 0, 0, 0.49);
-    border-radius: 15px;
-    padding: 10px;
-    z-index: 999;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    background: rgba(0, 0, 0, 0.693);
-    border-radius: 30px;
-    border: 1px solid rgba(231, 231, 231, 0.233);
-    // border-top: none;
-    // border-right: none;
-    // border-left: none;
-    transform: translateY(-100px);
-
-    transition: all 0.3s ease-in-out;
-
-    svg {
-      margin-right: 5px;
-      path {
-        fill: white;
-      }
-    }
-
-    .option1 {
-      margin: 10px;
-
-      a {
-        text-decoration: none;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        &:hover {
-          color: $button-hover-color;
-        }
-      }
-    }
-
-    .option2 {
-      margin: 10px;
-      color: $button-color-red;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-
-      a {
-        text-decoration: none;
-        color: $button-color-red;
-      }
-    }
-
-    .cancel-button {
-      width: 100%;
-      margin: 10px;
-      padding: 10px;
-      background-color: $button-color-blue;
-      border-radius: 20px;
-      color: white;
-      border: none;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease-out;
-
-      &:hover {
-        background-color: lighten($color: $button-color-blue, $amount: 10%);
-      }
-    }
-  }
 
   .animate-down {
     transform: translateY(0px);
@@ -378,22 +378,52 @@ $text-color-gray: #d0d0d0;
         backdrop-filter: blur(35px);
         -webkit-backdrop-filter: blur(35px);
         border-radius: 10px;
-        .copy-url-button {
+        button {
           margin: 5px;
           background-color: #212121;
-          padding: 5px 10px;
+          padding: 7px 10px;
           outline: none;
           border: none;
           color: white;
-          border-radius: 5px;
+          border-radius: 8px;
           border: 1px solid #212121;
           transition: all 0.2s ease-out;
           cursor: pointer;
+          font-size: 1rem;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          i {
+            font-size: 1.2rem;
+          }
 
           &:hover {
             border: 1px solid rgba(255, 255, 255, 0.857);
-            transform: translateY(-2px);
+
+            // transform: translateY(-2px);
           }
+        }
+
+        .whatsapp {
+          background-color: #23d366;
+          border: 1px solid #23d366;
+        }
+
+        .fb {
+          background-color: #0765ff;
+          border: 1px solid #0765ff;
+        }
+
+        .in {
+          background-color: #0b63c4;
+          border: 1px solid #0b63c4;
+        }
+
+        .x {
+          background-color: black;
+          border: 1px solid black;
         }
       }
     }
@@ -652,6 +682,10 @@ $text-color-gray: #d0d0d0;
     background-color: rgba(0, 0, 0, 0.631);
     border-bottom: 1px solid rgba(231, 231, 231, 0.233);
   }
+  .post-options-menu {
+    top: 68px;
+    border-radius: 0 0 30px 30px;
+  }
   .display-posts {
     max-width: 100vw;
     border: none;
@@ -661,11 +695,6 @@ $text-color-gray: #d0d0d0;
     padding-bottom: 20px;
     margin: 0;
     margin-bottom: 100px;
-
-    .post-options-menu {
-      top: 68px;
-      border-radius: 0 0 30px 30px;
-    }
 
     .post-img {
       border-radius: 0;

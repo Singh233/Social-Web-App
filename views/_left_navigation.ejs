@@ -238,7 +238,8 @@
     window.location.href.includes("home") ||
     window.location.href.includes("users/profile") ||
     window.location.href.includes("search") ||
-    window.location.href.includes("upload")
+    window.location.href.includes("upload") ||
+    window.location.href.includes("post")
   ) {
     // remove background image from left navigation
     let leftNav = document.querySelector(".left-navigation-container");
@@ -258,7 +259,10 @@
         logoutButton.style.display = "none";
       }
     } else {
-      if (window.location.href.includes("users/profile")) {
+      if (
+        window.location.href.includes("users/profile") ||
+        window.location.href.includes("post")
+      ) {
         messageIcon.style.display = "none";
         logoutButton.style.display = "block";
       }
@@ -280,7 +284,10 @@
           messageIcon.style.display = "none";
         }
       } else {
-        if (window.location.href.includes("users/profile")) {
+        if (
+          window.location.href.includes("users/profile") ||
+          window.location.href.includes("post")
+        ) {
           let messageIcon = document.querySelector(".message-toggle-button");
           messageIcon.style.display = "none";
         }

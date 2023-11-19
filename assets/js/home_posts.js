@@ -310,9 +310,48 @@ let newPostDom = function (post) {
                         <div
                           id="share-${post._id}"
                           class="share-options animate__animated animate__faster"
-                          style=" top: ${post.video ? "-88px" : "-41px"} "
+                          style=" top: ${post.video ? "-88px" : "-45px"} "
                         >
-                          <div class="sharethis-inline-share-buttons"></div>
+                          <button
+                            class="button fb"
+                            data-sharer="facebook"
+                            data-title="Checkout this post from ${
+                              post.user.name
+                            }"
+                            data-hashtags="awesome, viral, cool"
+                            data-url="https://sanam.social/posts/post/${
+                              post._id
+                            }"
+                          >
+                            <i class="fa-brands fa-facebook-f"></i>
+                          </button>
+                          <button
+                            class="button whatsapp"
+                            data-sharer="whatsapp"
+                            data-title="Checkout this post from ${
+                              post.user.name
+                            }"
+                            data-url="https://sanam.social/posts/post/${
+                              post._id
+                            }"
+                            data-hashtags="awesome, viral, cool"
+                          >
+                            <i class="fa-brands fa-whatsapp"></i>
+                          </button>
+                          <button
+                            class="button in"
+                            data-sharer="linkedin"
+                            data-title="Checkout this post from ${
+                              post.user.name
+                            }"
+                            data-url="https://sanam.social/posts/post/${
+                              post._id
+                            }"
+                            data-hashtags="awesome, viral, cool"
+                          >
+                            <i class="fa-brands fa-linkedin-in"></i>
+                          </button>
+  
                           <button onclick="copyUrl('${
                             post._id
                           }')" class="copy-url-button">
@@ -546,9 +585,47 @@ let renderPostDom = function (post, isLiked, isSaved) {
                         <div
                           id="share-${post._id}"
                           class="share-options animate__animated animate__faster"
-                          style=" top: ${post.video ? "-88px" : "-41px"} "
+                          style=" top: ${post.video ? "-88px" : "-45px"} "
                         >
-                          <div class="sharethis-inline-share-buttons"></div>
+                          <button
+                            class="button fb"
+                            data-sharer="facebook"
+                            data-title="Checkout this post from ${
+                              post.user.name
+                            }"
+                            data-hashtags="awesome, viral, cool"
+                            data-url="https://sanam.social/posts/post/${
+                              post._id
+                            }"
+                          >
+                            <i class="fa-brands fa-facebook-f"></i>
+                          </button>
+                          <button
+                            class="button whatsapp"
+                            data-sharer="whatsapp"
+                            data-title="Checkout this post from ${
+                              post.user.name
+                            }"
+                            data-url="https://sanam.social/posts/post/${
+                              post._id
+                            }"
+                            data-hashtags="awesome, viral, cool"
+                          >
+                            <i class="fa-brands fa-whatsapp"></i>
+                          </button>
+                          <button
+                            class="button in"
+                            data-sharer="linkedin"
+                            data-title="Checkout this post from ${
+                              post.user.name
+                            }"
+                            data-url="https://sanam.social/posts/post/${
+                              post._id
+                            }"
+                            data-hashtags="awesome, viral, cool"
+                          >
+                            <i class="fa-brands fa-linkedin-in"></i>
+                          </button>
                           <button onclick="copyUrl('${
                             post._id
                           }')" class="copy-url-button">
@@ -834,6 +911,7 @@ $("#new-post-form").submit(function (e) {
           // console.log(data.data.post)
           const newPost = newPostDom(data.data.post);
           $("#posts-list-container").prepend(newPost);
+          window.Sharer.init();
           deletePost($(".delete-post-button", newPost));
 
           new PostComments(data.data.post._id);
@@ -1023,6 +1101,8 @@ const showNotification = (message, type, duration, icon) => {
           : "#000000",
       borderRadius: "10px",
       color: "white",
+
+      border: "1px solid rgba(231, 231, 231, 0.233)",
       // borderColor: "linear-gradient(-45deg, #ff3c007b 0%, #0400ff7c 69%)"
     },
     onClick: function () {}, // Callback after click
@@ -1106,6 +1186,7 @@ window.onscroll = (event) => {
 
           const newPost = renderPostDom(post, flag, isSaved);
           $("#posts-list-container").append(newPost);
+          window.Sharer.init();
           deletePost($(" .delete-post-button", newPost));
 
           new PostComments(post._id);

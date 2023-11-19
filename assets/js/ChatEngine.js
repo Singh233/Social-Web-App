@@ -920,9 +920,9 @@ class ChatEngine {
           position: "center", // `left`, `center` or `right`
           stopOnFocus: true, // Prevents dismissing of toast on hover
           style: {
-            background: "#D20A0A",
+            background: "#000000",
             borderRadius: "10px",
-            color: "white",
+            border: "1px solid rgba(231, 231, 231, 0.233)",
           },
           onClick: function () {}, // Callback after click
         }).showToast();
@@ -943,8 +943,9 @@ class ChatEngine {
           position: "center", // `left`, `center` or `right`
           stopOnFocus: true, // Prevents dismissing of toast on hover
           style: {
-            background: "#202020",
+            background: "#000000",
             borderRadius: "10px",
+            border: "1px solid rgba(231, 231, 231, 0.233)",
           },
           onClick: function () {}, // Callback after click
         }).showToast();
@@ -2114,7 +2115,9 @@ class CallEngine extends ChatEngine {
         background: type === "error" ? "#000000" : "#000000",
         borderRadius: "10px",
         color: "white",
+        border: "1px solid rgba(231, 231, 231, 0.233)",
       },
+
       onClick: function () {}, // Callback after click
     }).showToast();
   }
