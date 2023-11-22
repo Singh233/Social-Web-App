@@ -17,7 +17,8 @@ passport.use(
         request.flash("error", "Invalid Username/Password");
         return done(null, false);
       }
-
+      // Include the returnTo URL in the user object
+      user.returnTo = request.session.returnTo;
       return done(null, user);
     }
   )
@@ -41,6 +42,8 @@ passport.deserializeUser(function (id, done) {
 
 passport.checkAuthentication = function (request, response, next) {
   // if the user is signed in, then pass on the request to the next function(controlelr's action)
+  request.session.returnTo = request.originalUrl;
+
   if (request.isAuthenticated()) {
     return next();
   }

@@ -174,7 +174,11 @@ module.exports.create = async function (request, response) {
 module.exports.createSession = function (request, response) {
   request.flash("success", "Logged in Successfully");
 
-  return response.redirect("/home");
+  // Retrieve the intended URL from the session
+  const returnTo = request.user.returnTo || "/home";
+
+  // Redirect the user to the intended URL
+  response.redirect(returnTo);
 };
 
 module.exports.destroySession = function (request, response) {

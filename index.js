@@ -175,6 +175,26 @@ if (!isApiRequest) {
 // use express router
 app.use("/", require("./routes"));
 
+// Catch-all route for undefined routes
+app.use(function (req, res, next) {
+  // Create a 404 Not Found error
+  const err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
+
+// Error-handling middleware
+app.use(function (err, req, res, next) {
+  // Handle the error in a way that suits your application
+  if (err.status === 404) {
+    res.redirect("/home"); // Redirect to the home page for 404 errors
+  } else {
+    // Handle other errors
+    res.status(err.status || 500);
+    res.send("Internal Server Error");
+  }
+});
+
 app.listen(port, function (error) {
   if (error) {
     console.log("Error: ", error);

@@ -7,6 +7,7 @@ const { getIo, getActiveUsers } = require("../config/chat_sockets");
 const Video = require("../models/video");
 const Post = require("../models/post");
 const env = require("../config/environment");
+const { videoProcessed } = require("../mailers/video_encoding_mailer");
 
 const clearLocalFiles = (outputFileName) => {
   const directoryPath = `${env.videoEncodingOutputPath}${outputFileName}`;
@@ -82,6 +83,12 @@ queue.process("videoEncoders", async (job, done) => {
     await deleteFile("users_videos_bucket", videoUrl, false);
     const outputFileName = `transcoded_${uniquePrefix}`;
     clearLocalFiles(outputFileName);
+    // send email
+    videoProcessed(
+      "Video is Processed!",
+      `<h3>Your video is processed! 🎉</h3> <br> Checkout here - https://sanam.social/posts/post/${post._id}`,
+      post.user.email
+    );
 
     try {
       const activeUsers = getActiveUsers();
@@ -111,6 +118,17 @@ queue.process("videoEncoders", async (job, done) => {
     try {
       await Post.findByIdAndDelete(post._id);
     } catch (error) {}
+    videoProcessed(
+      "Video processing failed! 🧐",
+      `<h3>You can try again! 🎉</h3> <br> https://sanam.social`,
+      post.user.email
+    );
   }
+  done();
+});
+
+queue.process("video-encoding-emails", function (job, done) {
+  console.log("Emails worker is processing a job", job.data);
+
   done();
 });
