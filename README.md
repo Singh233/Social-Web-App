@@ -34,6 +34,8 @@ https://github.com/Singh233/Social-Media-API
     - Video uploads 🎥
     - Comment on Post 💬
     - Like Post ❤️
+    - Like comment ♥️
+    - Share Post ✉️
     - Follow/Unfollow Users 👀
     - Save Post 🔖
 - User profile ⭐️
