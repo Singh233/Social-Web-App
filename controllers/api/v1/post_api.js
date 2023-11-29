@@ -356,3 +356,50 @@ module.exports.getPosts = async (request, response) => {
     return handleResponse(response, 500, "Server error!", { error }, false);
   }
 };
+
+// get single post
+module.exports.getSinglePost = async function (request, response) {
+  try {
+    // verify params
+    const { value, error } = Joi.object({
+      postId: Joi.string().required().invalid("undefined"),
+    }).validate(request.params);
+
+    if (error) {
+      return handleResponse(response, 404, "Invalid fields!", { error }, false);
+    }
+
+    let isSaved = false;
+    if (request.user) {
+      request.user.savedPosts.forEach((post) => {
+        if (post._id.toString() === value.postId) {
+          isSaved = true;
+        }
+      });
+    }
+
+    const post = await Post.findById(value.postId)
+      .populate("user likes video")
+      .populate({
+        path: "comments",
+        options: {
+          sort: {
+            createdAt: -1,
+          },
+        },
+        populate: {
+          path: "user likes",
+        },
+      });
+    return handleResponse(
+      response,
+      200,
+      "Single post",
+      { post, isSaved },
+      true
+    );
+  } catch (error) {
+    console.log(error);
+    return handleResponse(response, 500, "Server error!", { error }, false);
+  }
+};
