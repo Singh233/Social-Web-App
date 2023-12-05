@@ -86,7 +86,7 @@ queue.process("videoEncoders", async (job, done) => {
     // send email
     videoProcessed(
       "Video is Processed!",
-      `<h3>Your video is processed! 🎉</h3> <br> Checkout here - https://sanam.social/posts/post/${post._id}`,
+      `<h3>Your video is processed! 🎉</h3> <br> Checkout here - https://chillsanam.social/posts/post/${post._id}`,
       post.user.email
     );
 
@@ -120,7 +120,7 @@ queue.process("videoEncoders", async (job, done) => {
     } catch (error) {}
     videoProcessed(
       "Video processing failed! 🧐",
-      `<h3>You can try again! 🎉</h3> <br> https://sanam.social`,
+      `<h3>You can try again! 🎉</h3> <br> https://chillsanam.social`,
       post.user.email
     );
   }
