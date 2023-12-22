@@ -109,19 +109,23 @@ https://github.com/Singh233/Social-Media-API
   git clone https://github.com/Singh233/Social-Web-App.git
 ```
 
-- Pull the docker-setup branch
-
-```bash
-  git pull docker-setup
-```
-
 - Go to the project directory
 
 ```bash
   cd Social-Web-App
 ```
 
+- Pull the docker-setup branch
+
+```bash
+  git pull origin docker-setup
+```
+
+
 - (NOTE) Add .env and SSL (certificate and key) files to project
+```bash
+  Social-Web-App/ssl/
+```
 - Run command
 
 ```bash
