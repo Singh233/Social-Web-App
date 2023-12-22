@@ -1,212 +1,246 @@
-$button-color-blue: #0057D2; 
-$button-hover-color: #D1EFFF;
-$button-color-red: #D20A0A; 
-$text-color-gray: #d0d0d0; 
-$button-color-gray: #212121; 
-
-
+$button-color-blue: #0057d2;
+$button-hover-color: #d1efff;
+$button-color-red: #d20a0a;
+$text-color-gray: #d0d0d0;
+$button-color-gray: #212121;
 
 .user-sign-in {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 90%;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 999;
+  width: 100vw;
+  align-items: center;
+
+  .welcome-div {
+    margin: 20px;
     display: flex;
     flex-direction: column;
+
+    align-items: center;
+
+    img {
+      display: none;
+      border-radius: 50%;
+      height: 70px;
+      width: 70px;
+      object-fit: cover;
+    }
+
+    p {
+      margin-top: 5px;
+      display: flex;
+      flex-direction: column;
+      font-size: 2rem;
+      font-family: cursive;
+      font-weight: 700;
+      span {
+        position: relative;
+        font: 400 50px/72px Delicious Handrawn, sans-serif;
+        width: -moz-max-content;
+        width: max-content;
+        background: linear-gradient(
+          80.18deg,
+          #d1ccdd,
+          #c893e1 25%,
+          #eb47a7 50%,
+          #f94a73 75%,
+          #fb7a53
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+        background-size: cover;
+      }
+    }
+    p {
+      position: relative;
+      font: 400 50px/72px Delicious Handrawn, sans-serif;
+      width: -moz-max-content;
+      width: max-content;
+      background: linear-gradient(
+        80.18deg,
+        #d1ccdd,
+        #c893e1 25%,
+        #eb47a7 50%,
+        #f94a73 75%,
+        #fb7a53
+      );
+      background-clip: text;
+      -webkit-background-clip: text;
+      -moz-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -moz-text-fill-color: transparent;
+      background-size: cover;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    input {
+      min-width: 300px;
+    }
+
+    .input-with-icon {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background-color: $button-color-gray;
+      border-radius: 10px;
+      margin: 7px;
+      color: white;
+      border: none;
+      position: relative;
+
+      i {
+        margin-left: 5px;
+        font-size: 1.2rem;
+      }
+    }
+
+    #toggle-password-signin {
+      position: absolute;
+      right: 12px;
+      cursor: pointer;
+      transition: 0.3s all ease-in-out;
+    }
+
+    #email-input,
+    #pass-input {
+      font-size: 1rem;
+      margin-left: 15px;
+      width: 90%;
+      background-color: $button-color-gray;
+      border-radius: 10px;
+
+      color: white;
+      border: none;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:-webkit-autofill {
+        -webkit-text-fill-color: white !important;
+        transition: background-color 5000s ease-in-out 0s;
+        font-size: 1rem;
+      }
+    }
+
+    #submit-button {
+      margin: 5px;
+      margin-top: 8px;
+      padding: 10px;
+      background-color: $button-color-blue;
+      color: white;
+      font-size: 1rem;
+      border-radius: 15px;
+      border: none;
+      font-weight: 500;
+      text-decoration: none;
+      background: linear-gradient(
+        130deg,
+        rgba(18, 119, 243, 1) 0%,
+        rgba(11, 73, 149, 1) 97%
+      );
+      cursor: pointer;
+    }
+  }
+
+  .option-text {
+    color: $text-color-gray;
+    margin: 10px;
+    align-self: center;
+    font-size: 0.9rem;
+
+    a {
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 700;
+      color: $button-color-blue;
+    }
+  }
+
+  .auth-options {
+    display: flex;
     justify-content: center;
-    height: 90%;
+    margin: 10px;
 
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin-left: 30%;
-    z-index: 999;
-
-    .welcome-div {
-        margin: 20px;
-        display: flex;
-        flex-direction: column;
-
-        align-items: center;
-
-        
-        
-        img {
-            display: none;
-            border-radius: 50%;
-            height: 70px;
-            width: 70px;
-            object-fit: cover;
-        }
-
-        p {
-            margin-top: 5px;
-            display: flex;
-            flex-direction: column;
-            font-size: 2rem;
-            font-family:cursive;
-            font-weight: 700;
-            span {
-                font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-                margin-top: -4px;
-                font-size: 2.5rem;
-                font-weight: 600;
-            }
-        }
+    #google-auth,
+    #fb-auth,
+    #git-auth {
+      font-size: 1.3rem;
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: $button-color-gray;
+      border-radius: 15px;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
     }
 
-
-    form {
-        display: flex;
-        flex-direction: column;
-
-        .input-with-icon {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            background-color: $button-color-gray;
-            border-radius: 10px;
-            margin: 7px;
-            color: white;
-            border: none;
-            
-
-            i {
-                margin-left: 5px;
-                font-size: 1.2rem;
-            }
-
-
-            
-
-        
-
-            
-        }
-
-        #toggle-password {
-            cursor: pointer;
-            transition: 0.3s all ease-in-out;
-        }
-        
-
-        #email-input, #pass-input {
-            font-size: 1rem;
-            margin-left: 15px;
-            width: 90%;
-            background-color: $button-color-gray;
-            border-radius: 10px;
-            
-            color: white;
-            border: none;
-
-            &:focus {
-                outline: none;
-            }
-
-            &:-webkit-autofill {
-                -webkit-text-fill-color: white !important;
-                transition: background-color 5000s ease-in-out 0s;
-                font-size: 1rem;
-            }
-
-            
-
-        }
-
-        #submit-button {
-            margin: 5px;
-            margin-top: 8px;
-            padding: 10px;
-            background-color: $button-color-blue;
-            color: white;
-            font-size: 1rem;
-            border-radius: 15px;
-            border: none;
-            font-weight: 500;
-            text-decoration: none;
-            background: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba(11,73,149,1) 97%);
-            cursor: pointer;
-        }
+    #google-auth {
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      background: $button-color-blue;
+      font-size: 1rem;
+      font-weight: 500;
+      img {
+        height: 28px;
+        width: 28px;
+        margin-right: 5px;
+        background-color: white;
+        border-radius: 50%;
+        padding: 2px;
+      }
     }
 
-
-    .option-text {
-        color: $text-color-gray;
-        margin: 10px;
-        align-self: center;
-        font-size: 0.9rem;
-
-        a {
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 700;
-            color: $button-color-blue
-
-
-        }
+    #fb-auth {
+      background: rgb(18, 119, 243);
+      background: linear-gradient(
+        130deg,
+        rgba(18, 119, 243, 1) 0%,
+        rgba(11, 73, 149, 1) 97%
+      );
     }
-
-    .auth-options {
-        display: flex;
-        justify-content: center;
-        margin: 10px;
-
-        #google-auth, #fb-auth, #git-auth {
-            font-size: 1.3rem;
-            margin: 5px;
-            padding: 10px 20px;
-            background-color: $button-color-gray;
-            border-radius: 15px;
-            color: white;
-            text-decoration: none;
-            cursor: pointer;
-
-        }
-
-        #google-auth {
-            padding: 5px 15px;
-            display: flex;
-            align-items: center;
-            background: white;
-            img {
-                height: 28px;
-                width: 28px;
-            }
-        }
-
-        #fb-auth {
-            background: rgb(18,119,243);
-            background: linear-gradient(130deg, rgba(18,119,243,1) 0%, rgba(11,73,149,1) 97%);
-        }
-    }
+  }
 }
 
 .remove {
-    display: none;
+  display: none;
 }
 
+@media screen and (max-width: "600px") {
+  .user-sign-in {
+    max-width: 88vw;
+    margin-left: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    overflow: hidden !important;
+    position: fixed;
+    margin-top: 80px;
 
-
-
-
-
-@media screen and (max-width: "480px") {
-
-    
-
-    .user-sign-in {
-        max-width: 88vw;
-        margin-left: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-        overflow: hidden !important;
-        position: fixed;
-        margin-top: 80px;
-
-        .welcome-div {
-            p {
-                span {
-                    font-size: 2.3rem;
-                }
-            }
+    .welcome-div {
+      p {
+        span {
+          // font-size: 2.3rem;
         }
+      }
     }
+
+    input {
+      min-width: 70vw !important;
+    }
+  }
 }

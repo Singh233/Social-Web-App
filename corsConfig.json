@@ -1,0 +1,14 @@
+[
+  {
+    "origin": [
+      "http://localhost:8000",
+      "https://chillsanam.social",
+      "http://localhost:5173",
+      "https://react.chillsanam.social",
+      "http://react.chillsanam.social"
+    ],
+    "method": ["GET"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
+]

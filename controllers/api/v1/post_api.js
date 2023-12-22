@@ -1,15 +1,30 @@
 const fs = require("fs");
 const path = require("path");
 const Joi = require("joi");
+const { v4: uuidv4 } = require("uuid");
 
 const Post = require("../../../models/post");
 const Comment = require("../../../models/comment");
 const Like = require("../../../models/like");
-const { generateThumbnail, uploadImage, deleteFile } = require("../../../helper/imageUpload");
+const queue = require("../../../config/kue");
+const {
+  generateThumbnail,
+  uploadImage,
+  deleteFile,
+  uploadVideo,
+  deleteFiles,
+} = require("../../../helper/googleCloudStore");
+const Video = require("../../../models/video");
 
 const fieldsValidator = Joi.object({
-  content: Joi.string().required(),
+  caption: Joi.string().required(),
 });
+const generateUniquePrefix = () => {
+  const timestamp = Date.now();
+  const randomSuffix = uuidv4().split("-")[0]; // Extract a portion of the UUID
+  const uniquePrefix = `${timestamp}-${randomSuffix}`;
+  return uniquePrefix;
+};
 
 // helper function to handle the response
 const handleResponse = (res, status, message, data, success) => {
@@ -21,12 +36,104 @@ const handleResponse = (res, status, message, data, success) => {
   return res.status(status).json(response);
 };
 
+const imgUploadPost = async (request, response, file) => {
+  let imageUrl = null;
+  try {
+    imageUrl = await uploadImage("users_posts_bucket", file);
+  } catch (error) {
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading file!",
+    });
+  }
+
+  // generate thumbnail
+  let thumbnailUrl = null;
+
+  try {
+    thumbnailUrl = await generateThumbnail(
+      "users_posts_bucket",
+      file,
+      imageUrl
+    );
+  } catch (error) {
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading file!",
+    });
+  }
+
+  // this is saving the path of the uploaded file into the field in the user
+  const newPost = await Post.create({
+    caption: request.body.caption,
+    user: request.user._id,
+    imgPath: imageUrl,
+    thumbnail: thumbnailUrl,
+    isImg: true,
+  });
+
+  // populate the user of newPost
+  await newPost.populate("user");
+
+  return newPost;
+};
+
+const videoUploadPost = async (request, response, file) => {
+  let videoUrl = null;
+  const uniquePrefix = generateUniquePrefix(); // Generate unique prefix
+  const fileName = `${uniquePrefix}-${file.originalname.replace(/ /g, "_")}`; // Append prefix to file name
+  try {
+    // Upload the original video to GCS
+    videoUrl = await uploadVideo("users_videos_bucket", file, fileName); // Implement uploadVideo function to upload the video to GCS.
+  } catch (error) {
+    console.log(error);
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading video!",
+    });
+  }
+
+  // Create a new Post document
+  const newPost = await Post.create({
+    isImg: false,
+    thumbnail: "",
+    video: null,
+    caption: request.body.caption,
+    user: request.user._id,
+    comments: [],
+    likes: [],
+    savedBy: [],
+  });
+
+  // Populate the user field of the newPost
+  await newPost.populate("user");
+
+  const data = {
+    videoUrl,
+    uniquePrefix,
+    userId: request.user.id,
+    post: newPost,
+    reqBody: request.body,
+  };
+
+  // parallel job to
+  queue.create("videoEncoders", data).save(function (error) {
+    if (error) {
+      console.log(error);
+    }
+  });
+
+  return newPost;
+};
+
 module.exports.index = async function (request, response) {
   const posts = await Post.find({})
     .limit(5)
     .sort("-createdAt")
-    .populate("user")
-    .populate("likes")
+    .populate("user likes video")
     .populate({
       path: "comments",
       populate: {
@@ -61,40 +168,13 @@ module.exports.createPost = async function (request, response) {
       });
     }
 
-    let imageUrl = null;
-    try {
-      imageUrl = await uploadImage("users_posts_bucket", file);
-    } catch (err) {
-      return response.status(401).json({
-        data: {},
-        success: false,
-        message: "Error in uploading file!",
-      });
+    let newPost = null;
+
+    if (file.mimetype === "video/mp4" || file.mimetype === "video/quicktime") {
+      newPost = await videoUploadPost(request, response, file);
+    } else {
+      newPost = await imgUploadPost(request, response, file);
     }
-
-    // generate thumbnail
-    let thumbnailUrl = null;
-
-    try {
-      thumbnailUrl = await generateThumbnail(
-        "users_posts_bucket",
-        file,
-        imageUrl
-      );
-    } catch (err) {
-      return handleResponse(response, 400, "Error uploading file", {}, false);
-    }
-
-    // this is saving the path of the uploaded file into the field in the user
-    const newPost = await Post.create({
-      content: request.body.content,
-      user: request.user._id,
-      myfile: imageUrl,
-      thumbnail: thumbnailUrl,
-    });
-
-    // populate the user of newPost
-    await newPost.populate("user");
 
     return handleResponse(
       response,
@@ -139,13 +219,22 @@ module.exports.destroy = async function (request, response) {
     await Comment.deleteMany({ post: request.params.id });
 
     // delete the file from cloud storage
-    if (post.myfile) {
-      await deleteFile("users_posts_bucket", post.myfile, false);
+    if (post.imgPath) {
+      await deleteFile("users_posts_bucket", post.imgPath, false);
     }
 
     // delete the thumbnail from cloud storage
     if (post.thumbnail) {
       await deleteFile("users_posts_bucket", post.thumbnail, true);
+    }
+
+    if (!post.isImg) {
+      const video = await Video.findByIdAndRemove(post.video);
+      await Promise.all(
+        video.qualities.map(async (quality) => {
+          await deleteFiles("users_videos_bucket", quality.videoPath);
+        })
+      );
     }
 
     return handleResponse(
@@ -249,7 +338,7 @@ module.exports.getPosts = async (request, response) => {
       .sort("-createdAt")
       .skip(offset)
       .limit(limit)
-      .populate("user likes")
+      .populate("user likes video")
       .populate({
         path: "comments",
         options: {
@@ -264,6 +353,53 @@ module.exports.getPosts = async (request, response) => {
 
     return handleResponse(response, 200, "All posts", { posts }, true);
   } catch (error) {
+    return handleResponse(response, 500, "Server error!", { error }, false);
+  }
+};
+
+// get single post
+module.exports.getSinglePost = async function (request, response) {
+  try {
+    // verify params
+    const { value, error } = Joi.object({
+      postId: Joi.string().required().invalid("undefined"),
+    }).validate(request.params);
+
+    if (error) {
+      return handleResponse(response, 404, "Invalid fields!", { error }, false);
+    }
+
+    let isSaved = false;
+    if (request.user) {
+      request.user.savedPosts.forEach((post) => {
+        if (post._id.toString() === value.postId) {
+          isSaved = true;
+        }
+      });
+    }
+
+    const post = await Post.findById(value.postId)
+      .populate("user likes video")
+      .populate({
+        path: "comments",
+        options: {
+          sort: {
+            createdAt: -1,
+          },
+        },
+        populate: {
+          path: "user likes",
+        },
+      });
+    return handleResponse(
+      response,
+      200,
+      "Single post",
+      { post, isSaved },
+      true
+    );
+  } catch (error) {
+    console.log(error);
     return handleResponse(response, 500, "Server error!", { error }, false);
   }
 };

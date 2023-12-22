@@ -12,6 +12,9 @@ $text-color-gray: #d0d0d0;
   -webkit-backdrop-filter: blur(6px);
   border-radius: 30px;
   border: 1px solid rgba(231, 231, 231, 0.233);
+  border-left: none;
+  border-right: none;
+  background-color: black;
 
   margin-top: 15px;
 
@@ -40,12 +43,22 @@ $text-color-gray: #d0d0d0;
 
     transition: all 0.3s ease-in-out;
 
+    svg {
+      margin-right: 5px;
+      path {
+        fill: white;
+      }
+    }
+
     .option1 {
       margin: 10px;
 
       a {
         text-decoration: none;
         color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:hover {
           color: $button-hover-color;
@@ -57,6 +70,8 @@ $text-color-gray: #d0d0d0;
       margin: 10px;
       color: $button-color-red;
       font-size: 1.1rem;
+      display: flex;
+      align-items: center;
 
       a {
         text-decoration: none;
@@ -74,6 +89,12 @@ $text-color-gray: #d0d0d0;
       border: none;
       font-size: 1.1rem;
       font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease-out;
+
+      &:hover {
+        background-color: lighten($color: $button-color-blue, $amount: 10%);
+      }
     }
   }
 
@@ -135,8 +156,25 @@ $text-color-gray: #d0d0d0;
     display: flex;
     align-items: center;
     justify-content: center;
-    max-height: 444px !important;
+    min-height: 450px !important;
+    max-height: 700px !important;
     overflow: hidden !important;
+
+    .video-js.vjs-mobile-ui
+      .vjs-touch-overlay
+      .vjs-play-control
+      .vjs-icon-placeholder {
+      position: absolute;
+      top: 40%;
+      left: 20%;
+      transform: translate(-40%, -40%);
+      font-size: 25px; /* Adjust the font size to make it bigger */
+      margin: auto;
+
+      &::before {
+        background-color: rgba(255, 255, 255, 0.613);
+      }
+    }
 
     .blur-load::before {
       content: "";
@@ -146,8 +184,6 @@ $text-color-gray: #d0d0d0;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
-
-
 
     @keyframes pulse {
       0% {
@@ -164,6 +200,7 @@ $text-color-gray: #d0d0d0;
       position: relative;
       background-size: cover;
       background-position: center;
+      max-height: 450px;
 
       img {
         opacity: 0;
@@ -177,8 +214,8 @@ $text-color-gray: #d0d0d0;
     }
 
     .loaded::before {
-        content: none;
-        animation: none;
+      content: none;
+      animation: none;
     }
 
     img {
@@ -189,7 +226,6 @@ $text-color-gray: #d0d0d0;
       aspect-ratio: 1 / 1;
       object-position: center;
       object-fit: cover;
-
     }
   }
 
@@ -226,6 +262,12 @@ $text-color-gray: #d0d0d0;
             font-size: 1.2rem;
           }
 
+          svg {
+            path {
+              fill: white;
+            }
+          }
+
           span {
             margin-left: 7px;
             color: rgb(158, 158, 158);
@@ -248,9 +290,83 @@ $text-color-gray: #d0d0d0;
       .right {
         justify-self: flex-end;
         cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        width: fit-content;
+        color: white;
+        padding: 8px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(231, 231, 231, 0.233);
+        margin-left: 12px;
 
         i {
           font-size: 1.2rem;
+        }
+      }
+      .share-options {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        width: fit-content;
+        color: white;
+        padding: 7px 10px;
+        position: absolute;
+        left: 0px;
+        top: -46px;
+        background: rgba(0, 0, 0, 0.396);
+        width: 100%;
+        padding: 0px;
+        backdrop-filter: blur(35px);
+        -webkit-backdrop-filter: blur(35px);
+        border-radius: 10px 10px 0 0;
+        button {
+          margin: 5px;
+          background-color: #212121;
+          padding: 7px 10px;
+          outline: none;
+          border: none;
+          color: white;
+          border-radius: 8px;
+          border: 1px solid #212121;
+          transition: all 0.2s ease-out;
+          cursor: pointer;
+          font-size: 1rem;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          i {
+            font-size: 1.2rem;
+          }
+
+          &:hover {
+            border: 1px solid rgba(255, 255, 255, 0.857);
+
+            // transform: translateY(-2px);
+          }
+        }
+
+        .whatsapp {
+          background-color: #23d366;
+          border: 1px solid #23d366;
+        }
+
+        .fb {
+          background-color: #0765ff;
+          border: 1px solid #0765ff;
+        }
+
+        .in {
+          background-color: #0b63c4;
+          border: 1px solid #0b63c4;
+        }
+
+        .x {
+          background-color: black;
+          border: 1px solid black;
         }
       }
     }
@@ -275,6 +391,19 @@ $text-color-gray: #d0d0d0;
 
     .time {
       padding-left: 20px;
+      display: flex;
+      align-items: center;
+      margin-top: 2px;
+
+      svg {
+        height: 19px;
+        width: 19px;
+        margin-right: 5px;
+
+        path {
+          fill: gray;
+        }
+      }
 
       p {
         font-size: 0.8rem;
@@ -400,6 +529,27 @@ $text-color-gray: #d0d0d0;
           font-size: 1rem;
           font-weight: 500;
           color: $button-color-blue;
+          background-color: #0f73ff;
+          outline: none;
+          border: none;
+          cursor: pointer;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          padding: 5px;
+          transition: all 0.2s ease-out;
+
+          svg {
+            height: 26px;
+            width: 26px;
+            path {
+              fill: white;
+            }
+          }
+
+          &:hover {
+            background-color: lighten($color: #0f73ff, $amount: 10%);
+          }
         }
       }
     }
@@ -410,7 +560,55 @@ $text-color-gray: #d0d0d0;
   color: $button-color-red;
 }
 
-@media screen and (max-width: "500px") {
+.loader,
+.comment-add-loader {
+  display: none;
+  margin-right: 5px;
+  border: 4px solid $button-color-red;
+  border-left-color: transparent;
+  border-radius: 50%;
+}
+
+.loader,
+.comment-add-loader {
+  border: 4px solid $button-color-red;
+  border-left-color: transparent;
+  width: 25px;
+  height: 25px;
+}
+
+.loader,
+.comment-add-loader {
+  border: 4px solid $button-color-red;
+  border-left-color: transparent;
+  width: 25px;
+  height: 25px;
+  animation: spin89345 1s linear infinite;
+}
+
+.comment-add-loader {
+  border-color: white;
+  border-left-color: transparent;
+  margin-right: 0;
+}
+
+@keyframes spin89345 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: "600px") {
+  .vjs-control-bar .vjs-play-control {
+    display: none;
+  }
+  .vjs-picture-in-picture-control {
+    display: none !important;
+  }
   .display-posts {
     max-width: 100vw;
     border: none;
@@ -433,12 +631,15 @@ $text-color-gray: #d0d0d0;
     }
 
     .post-footer {
-
       backdrop-filter: blur(35px);
       -webkit-backdrop-filter: blur(35px);
 
       .post-options {
         max-width: 100vw;
+        .share-options {
+          border-radius: 0px;
+          background: rgba(0, 0, 0, 0.571);
+        }
       }
 
       #comments-list-container {

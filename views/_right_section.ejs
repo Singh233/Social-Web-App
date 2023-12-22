@@ -4,11 +4,11 @@
       <i class="fa-solid fa-user-group"></i> Friends
       <span><%= followingCount %></span>
     </h4>
-    <% if (locals.user != undefined && friends != undefined) {%>
+    <% if (locals.user != undefined && friends != undefined) { %>
 
     <div class="list">
-      <% for(friend of friends) { %> <% if (friend.status !== 'accepted') {
-      continue; } %>
+      <% let noFriends = true; %> <% for(friend of friends) { %> <% if
+      (friend.status !== 'accepted') {continue; } %> <% noFriends = false; %>
       <div class="user">
         <% if(friend.avatar != undefined) { %>
         <img src="<%= friend.avatar %>" alt="" />
@@ -22,38 +22,12 @@
           <a href="/users/profile/<%= friend._id%>"><%= friend.name %></a>
         </p>
       </div>
-      <% } %> <% if (friends.length == 0) { %>
-      <p class="no-friends">You have no friends yet</p>
+      <% } %> <% if (noFriends) { %>
+      <p class="no-friends">You don't have any friends!</p>
       <% } %>
     </div>
 
     <% } %>
-  </section>
-
-  <section id="other-users">
-    <h4>
-      <i class="fa-solid fa-earth-americas"></i> Explore
-      <span><%= all_users.length - 1 %></span>
-    </h4>
-
-    <div class="list">
-      <% for(u of all_users) {%> <% if (u.id == locals.user.id) { continue; } %>
-      <div class="user">
-        <% if(u.avatar != undefined) { %>
-        <img src="<%= u.avatar %>" alt="" />
-        <% } else { %>
-        <img
-          id="logo-placeholder"
-          src="<%= assetPath('img/dummy-profile.jpeg') %>"
-        />
-        <% } %>
-        <p>
-          <a href="/users/profile/<%= u.id%>"><%= u.name %></a>
-        </p>
-      </div>
-
-      <% } %>
-    </div>
   </section>
 </div>
 
@@ -61,7 +35,9 @@
   // add resize event listener
   window.addEventListener("resize", function () {
     if (window.innerWidth > 1400) {
-      $(".right-section-container").removeClass("animate__slideInRight animate__slideOutRight");
+      $(".right-section-container").removeClass(
+        "animate__slideInRight animate__slideOutRight"
+      );
     }
   });
 </script>

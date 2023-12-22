@@ -1,5 +1,10 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-extraneous-dependencies */
+const Joi = require("joi");
+
+const { v4: uuidv4 } = require("uuid");
 const Post = require("../models/post");
+const queue = require("../config/kue");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
 const User = require("../models/user");
@@ -7,7 +12,111 @@ const {
   uploadImage,
   generateThumbnail,
   deleteFile,
-} = require("../helper/imageUpload");
+  uploadVideo,
+  deleteFiles,
+} = require("../helper/googleCloudStore");
+const videoEncoderWorker = require("../workers/video_encoding_worker");
+const Video = require("../models/video");
+
+const generateUniquePrefix = () => {
+  const timestamp = Date.now();
+  const randomSuffix = uuidv4().split("-")[0]; // Extract a portion of the UUID
+  const uniquePrefix = `${timestamp}-${randomSuffix}`;
+  return uniquePrefix;
+};
+
+const imgUploadPost = async (request, response, file) => {
+  let imageUrl = null;
+  try {
+    imageUrl = await uploadImage("users_posts_bucket", file);
+  } catch (error) {
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading file!",
+    });
+  }
+
+  // generate thumbnail
+  let thumbnailUrl = null;
+
+  try {
+    thumbnailUrl = await generateThumbnail(
+      "users_posts_bucket",
+      file,
+      imageUrl
+    );
+  } catch (error) {
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading file!",
+    });
+  }
+
+  // this is saving the path of the uploaded file into the field in the user
+  const newPost = await Post.create({
+    caption: request.body.caption,
+    user: request.user._id,
+    imgPath: imageUrl,
+    thumbnail: thumbnailUrl,
+    isImg: true,
+  });
+
+  // populate the user of newPost
+  await newPost.populate("user");
+
+  return newPost;
+};
+
+const videoUploadPost = async (request, response, file) => {
+  let videoUrl = null;
+  const uniquePrefix = generateUniquePrefix(); // Generate unique prefix
+  const fileName = `${uniquePrefix}-${file.originalname.replace(/ /g, "_")}`; // Append prefix to file name
+  try {
+    // Upload the original video to GCS
+    videoUrl = await uploadVideo("users_videos_bucket", file, fileName); // Implement uploadVideo function to upload the video to GCS.
+  } catch (error) {
+    console.log(error);
+    return response.status(401).json({
+      data: {},
+      success: false,
+      message: "Error in uploading video!",
+    });
+  }
+
+  // Create a new Post document
+  const newPost = await Post.create({
+    isImg: false,
+    thumbnail: "",
+    video: null,
+    caption: request.body.caption,
+    user: request.user._id,
+    comments: [],
+    likes: [],
+    savedBy: [],
+  });
+
+  // Populate the user field of the newPost
+  await newPost.populate("user");
+
+  const data = {
+    videoUrl,
+    uniquePrefix,
+    userId: request.user.id,
+    post: newPost,
+    reqBody: request.body,
+  };
+
+  // parallel job to
+  queue.create("videoEncoders", data).save(function (error) {
+    if (error) {
+      console.log(error);
+    }
+  });
+
+  return newPost;
+};
 
 // eslint-disable-next-line consistent-return
 module.exports.createPost = async function (request, response) {
@@ -24,45 +133,13 @@ module.exports.createPost = async function (request, response) {
         message: "File not found!",
       });
     }
+    let newPost = null;
 
-    let imageUrl = null;
-    try {
-      imageUrl = await uploadImage("users_posts_bucket", file);
-    } catch (error) {
-      return response.status(401).json({
-        data: {},
-        success: false,
-        message: "Error in uploading file!",
-      });
+    if (file.mimetype === "video/mp4" || file.mimetype === "video/quicktime") {
+      newPost = await videoUploadPost(request, response, file);
+    } else {
+      newPost = await imgUploadPost(request, response, file);
     }
-
-    // generate thumbnail
-    let thumbnailUrl = null;
-
-    try {
-      thumbnailUrl = await generateThumbnail(
-        "users_posts_bucket",
-        file,
-        imageUrl
-      );
-    } catch (error) {
-      return response.status(401).json({
-        data: {},
-        success: false,
-        message: "Error in uploading file!",
-      });
-    }
-
-    // this is saving the path of the uploaded file into the field in the user
-    const newPost = await Post.create({
-      content: request.body.content,
-      user: request.user._id,
-      myfile: imageUrl,
-      thumbnail: thumbnailUrl,
-    });
-
-    // populate the user of newPost
-    await newPost.populate("user");
 
     if (request.xhr) {
       // the request is an AJAX request return the response in JSON format
@@ -79,6 +156,7 @@ module.exports.createPost = async function (request, response) {
     request.flash("success", "Post published!");
     return response.redirect("/");
   } catch (error) {
+    console.log(error);
     request.flash("error", "Error creating post");
     return response.redirect("back");
   }
@@ -103,13 +181,22 @@ module.exports.destroy = async function (request, response) {
     });
 
     // delete the file from cloud storage
-    if (post.myfile) {
-      await deleteFile("users_posts_bucket", post.myfile, false);
+    if (post.imgPath) {
+      await deleteFile("users_posts_bucket", post.imgPath, false);
     }
 
     // delete the thumbnail from cloud storage
     if (post.thumbnail) {
       await deleteFile("users_posts_bucket", post.thumbnail, true);
+    }
+
+    if (!post.isImg) {
+      const video = await Video.findByIdAndRemove(post.video);
+      await Promise.all(
+        video.qualities.map(async (quality) => {
+          await deleteFiles("users_videos_bucket", quality.videoPath);
+        })
+      );
     }
 
     return response.status(200).json({
@@ -120,7 +207,7 @@ module.exports.destroy = async function (request, response) {
       message: "Post deleted!",
     });
   } catch (error) {
-    request.flash("error", "Unauthorized");
+    console.log(error);
     return response.status(401).send("Unauthorized");
   }
 };
@@ -174,5 +261,52 @@ module.exports.unsavePost = async function (request, response) {
   } catch (error) {
     request.flash("error", "Unauthorized");
     return response.status(401).send("Unauthorized");
+  }
+};
+
+// View post page
+module.exports.viewSinglePost = async function (request, response) {
+  try {
+    // verify params
+    const { value, error } = Joi.object({
+      postId: Joi.string().required(),
+    }).validate(request.params);
+
+    if (error) {
+      request.flash("error", "Invalid request!");
+      return response.redirect("back");
+    }
+
+    let isSaved = false;
+    if (request.user) {
+      request.user.savedPosts.forEach((post) => {
+        if (post._id.toString() === value.postId) {
+          isSaved = true;
+        }
+      });
+    }
+
+    const post = await Post.findById(value.postId)
+      .populate("user likes video")
+      .populate({
+        path: "comments",
+        options: {
+          sort: {
+            createdAt: -1,
+          },
+        },
+        populate: {
+          path: "user likes",
+        },
+      });
+    return response.render("post.ejs", {
+      post,
+      isSaved,
+      title: "Post",
+    });
+  } catch (error) {
+    console.log(error);
+    request.flash("error", "Internal server error");
+    return response.redirect("back");
   }
 };

@@ -1,24 +1,43 @@
 <% if (locals.user){ %>
 
-<div id="chat-box" class="user-chat-box remove-box animate__animated">
-  <div
-    class="animate__animated animate__faster chat-overlay chat-overlay-z-index"
-  >
+<div id="chat-box" class="user-chat-box animate__animated">
+  <div class="animate__animated animate__faster chat-overlay">
     <i
       onclick="toggleChatWindow()"
       class="fa-solid fa-comments comment-icon"
     ></i>
-    <p>Chat with friends</p>
+
+    <p>Messages</p>
     <i onclick="toggleChatWindow()" class="fa-solid fa-chevron-up"></i>
   </div>
 
   <div class="friends">
     <div class="header">
-      <i
+      <!-- <i
         onclick="toggleChatWindow()"
         class="fa-solid fa-comments comment-icon"
-      ></i>
-      <p>Chat with friends</p>
+      ></i> -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+        id="dialog"
+        onclick="toggleChatWindow()"
+      >
+        <path
+          fill="#111"
+          d="M22 8.5C22 4.91015 19.0899 2 15.5 2C13.4171 2 11.5631 2.9823 10.3735 4.50721C15.4471 4.70336 19.5 8.87838 19.5 14C19.5 14.1103 19.4981 14.2202 19.4944 14.3296L19.8267 14.4185C20.793 14.677 21.677 13.793 21.4185 12.8267L21.2911 12.3506C21.1882 11.9661 21.2501 11.5598 21.4155 11.1977C21.7908 10.376 22 9.46242 22 8.5Z"
+        ></path>
+        <path
+          fill="#111"
+          fill-rule="evenodd"
+          d="M18 14C18 18.4183 14.4183 22 10 22C8.76449 22 7.5944 21.7199 6.54976 21.2198C6.19071 21.0479 5.78393 20.9876 5.39939 21.0904L4.17335 21.4185C3.20701 21.677 2.32295 20.793 2.58151 19.8267L2.90955 18.6006C3.01245 18.2161 2.95209 17.8093 2.7802 17.4502C2.28008 16.4056 2 15.2355 2 14C2 9.58172 5.58172 6 10 6C14.4183 6 18 9.58172 18 14ZM6.5 15C7.05228 15 7.5 14.5523 7.5 14C7.5 13.4477 7.05228 13 6.5 13C5.94772 13 5.5 13.4477 5.5 14C5.5 14.5523 5.94772 15 6.5 15ZM10 15C10.5523 15 11 14.5523 11 14C11 13.4477 10.5523 13 10 13C9.44772 13 9 13.4477 9 14C9 14.5523 9.44772 15 10 15ZM13.5 15C14.0523 15 14.5 14.5523 14.5 14C14.5 13.4477 14.0523 13 13.5 13C12.9477 13 12.5 13.4477 12.5 14C12.5 14.5523 12.9477 15 13.5 15Z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+      <p>Messages</p>
       <i onclick="toggleChatWindow()" class="fa-solid fa-chevron-down"></i>
     </div>
     <p class="update-msg">🎉 New features coming soon!</p>
@@ -27,7 +46,24 @@
         id="global-chat-btn"
         onclick="toggleChatMessages('','','','', 'global')"
       >
-        <i class="fa-solid fa-earth-americas"></i>
+        <!-- <i class="fa-solid fa-earth-americas"></i> -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          id="planet"
+        >
+          <path
+            fill="#111"
+            d="M19.9922 11.643C20.2746 11.3899 20.5379 11.1389 20.7806 10.8912C21.5345 10.1218 22.1234 9.35067 22.4527 8.62306C22.7767 7.90702 22.9112 7.07875 22.4649 6.36546C22.0451 5.69443 21.2797 5.40411 20.5094 5.30066C19.7184 5.19444 18.7593 5.25995 17.7124 5.45331L16.8241 5.61757C15.4829 4.60229 13.8118 4 12 4C7.58172 4 4 7.58172 4 12C4 12.0867 4.00138 12.173 4.00411 12.259L3.47686 12.8522C2.63744 13.6693 1.97963 14.4875 1.60462 15.2551C1.23859 16.0043 1.06423 16.882 1.53503 17.6345C1.96779 18.3262 2.76731 18.614 3.56745 18.709C4.39197 18.807 5.39463 18.7249 6.49015 18.5079C6.70545 18.4652 6.92586 18.417 7.15091 18.3634C6.66714 17.9942 6.22672 17.5711 5.83861 17.103C4.98624 17.2488 4.27918 17.283 3.74441 17.2195C3.1117 17.1443 2.87948 16.9553 2.80665 16.8389C2.74418 16.7391 2.67513 16.481 2.95236 15.9136C3.19339 15.4203 3.64038 14.822 4.29375 14.1555C4.59947 15.2508 5.13243 16.2513 5.83861 17.103C5.95588 17.083 6.0759 17.0608 6.1986 17.0365C8.21962 16.636 10.8118 15.685 13.4782 14.2644C16.1438 12.8443 18.3267 11.2515 19.7062 9.84443C19.4005 8.74914 18.8675 7.74864 18.1614 6.89695C19.0459 6.74568 19.7713 6.715 20.3097 6.78731C20.9042 6.86715 21.1231 7.04882 21.1933 7.16105C21.2526 7.25586 21.3187 7.4905 21.0861 8.00467C20.8587 8.50726 20.4027 9.13359 19.7092 9.84143L19.7062 9.84443C19.867 10.4204 19.9649 11.0225 19.9922 11.643Z"
+          ></path>
+          <path
+            fill="#111"
+            d="M12 20C16.4183 20 20 16.4183 20 12C20 11.8804 19.9974 11.7614 19.9922 11.643C18.5107 12.9704 16.5025 14.3528 14.1835 15.5883C11.6919 16.9158 9.22452 17.8695 7.15091 18.3634C8.49628 19.3902 10.1769 20 12 20Z"
+          ></path>
+        </svg>
         Global Chat
       </button>
       <p>or</p>
@@ -88,15 +124,7 @@
         ></i>
 
         <% if (friend.chatRoom.lastMessage.message) { %>
-        <p id="last-message-time-<%= friend._id %>" class="time">
-          <% const timeString = new
-          Date(friend.chatRoom.lastMessage.timestamp).toLocaleTimeString("en-US",
-          { hour12: true }).toString(); const [hours, minutes, seconds] =
-          timeString.split(":"); const [second, ampm] = seconds.split(' '); %>
-          <%= moment(friend.chatRoom.lastMessage.timestamp).calendar(null, {
-          sameDay: 'LT', nextDay: '[Tomorrow]', nextWeek: 'dddd', lastDay:
-          '[Yesterday]', lastWeek: 'dddd', sameElse: 'DD/MM/YYYY' }); %>
-        </p>
+        <p id="last-message-time-<%= friend._id %>" class="time">-</p>
         <% }%>
       </li>
       <% } %> <% if (friends.length === 0) { %>
@@ -115,7 +143,32 @@
   </div>
 </div>
 <%- include('_chat_messages_global') -%> <%- include('_chat_messages_private')
--%> <% } %>
+-%>
+<script>
+  if (window.innerWidth < 600) {
+    $("#chat-box").addClass("remove-box");
+  }
+  <% for(friend of friends) { if (!friend.chatRoom.lastMessage.timestamp) continue; %>
+  var timeString = new Date("<%= friend.chatRoom.lastMessage.timestamp %>")
+    .toLocaleTimeString("en-US", { hour12: true })
+    .toString();
+  var [hours, minutes, seconds] = timeString.split(":");
+  var [second, ampm] = seconds.split(" ");
+  var time = moment("<%= friend.chatRoom.lastMessage.timestamp %>").calendar(
+    null,
+    {
+      sameDay: "LT",
+      nextDay: "[Tomorrow]",
+      nextWeek: "dddd",
+      lastDay: "[Yesterday]",
+      lastWeek: "dddd",
+      sameElse: "DD/MM/YYYY",
+    }
+  );
+  $("#last-message-time-<%= friend._id %>").text(time);
+  <% } %>
+</script>
+<% } %>
 
 <script>
    let previousId = "";

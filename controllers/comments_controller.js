@@ -3,6 +3,7 @@ const Comment = require("../models/comment");
 const Post = require("../models/post");
 const queue = require("../config/kue");
 const Like = require("../models/like");
+const commentEmailWorker = require("../workers/comment_email_worker");
 
 module.exports.create = async function (request, response) {
   try {
@@ -22,11 +23,11 @@ module.exports.create = async function (request, response) {
     comment = await comment.populate("user", "name email avatar comments");
 
     // parallel job to send email for comment creation to the comment creator
-    queue.create("emails", comment).save(function (error) {
-      if (error) {
-        request.flash("error", "Error in creating a queue");
-      }
-    });
+    // queue.create("emails", comment).save(function (error) {
+    //   if (error) {
+    //     request.flash("error", "Error in creating a queue");
+    //   }
+    // });
 
     // if the request is AJAX request then return the JSON response
     if (request.xhr) {

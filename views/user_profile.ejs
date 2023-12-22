@@ -1,203 +1,346 @@
-<link rel="stylesheet" href="<%= assetPath('css/user_profile.css') %>">
+<link rel="stylesheet" href="<%= assetPath('css/user_profile.css') %>" />
 
+<!-- <canvas class="profile-confetti-canvas"> </canvas> -->
 
 <div id="profile-container">
-    <div class="profile-design">
-
-        <div class="header">
-            <a href="/"><i class="fa-solid fa-arrow-left-long"></i> Home</a>
-        </div>
-
-        <div class="content">
-            <div class="user-info">
-                <% if(profile_user.avatar != undefined) { %> 
-                    <img src="<%= profile_user.avatar %>" alt="">
-                <% } else { %> 
-                    <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>">
-                <% } %> 
-
-                <p id="user-name"><%= profile_user.name %></p>
-                <p class="user-email"> <%= profile_user.email %></p>
-
-            </div>
-
-            <p id="about-user">
-                Hi, this is sample about 😃
-            </p>
-
-            
-            <div class="profile-actions">
-                <% let followers = 0; let following = 0; %>
-                <% if (locals.user.id == profile_user.id) { %>
-                    <a class="edit-profile" href="/users/profile/edit/<%= locals.user.id%>">Edit profile</a>
-                <% } else { %>
-                    
-                    <% if (friends != undefined) { %>
-                        <% let flag = false; %>
-                            <% for (friend of friends) { %>
-                                <% if (user.id == friend.to_user || user.id == friend.from_user && friend.status === 'accepted') {  flag = true;%>
-                                    <p class="follow-button" data-from="<%= user.id %>" data-to="<%= profile_user.id %>" onclick="toggleFollow(event)">Unfollow</p>
-                                <% } if (flag) break; %>
-                            <% } %>
-                            <% if (!flag) { %>
-                                <p onclick="toggleFollow(event)" data-from="<%= user.id %>" data-to="<%= profile_user.id %>" class="follow-button">Follow</p>
-                            <% } %>
-                    <% } else { %>
-                        <p class="follow-button" data-from="<%= user.id %>" data-to="<%= profile_user.id %>" onclick="toggleFollow(event)">Follow</p>
-                    <% } %>
-
-                    <a class="message-button" href="#">Message</a>
-
-                    
-                <% } %>
-            </div>
-
-            <div class="stats">
-                <div class="posts">
-                    <p class="count"><%= user_posts.length %></p>
-                    <p>Posts</p>
-                </div>
-
-                <div class="followers">
-                    <p id="followers-count" class="count"><%= followersCount %></p>
-                    <p>Followers</p>
-                </div>
-
-                <div class="following">
-                    <p id="following-count" class="count"><%= followingCount %></p>
-                    <p>Following</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="profile-posts">
-            <div class="posts-and-saved-header">
-                <p id="user-posts-header" class="active"><i class="fa-solid fa-border-all"></i> Posts </p>
-                <% if (locals.user.id == profile_user.id) { %>
-                    <div class="vertical-border"></div>
-                    <p id="posts-saved-header" class=""><i class="fa-solid fa-bookmark"></i> Saved <%= savedPosts.length %> </p>
-                <% } %>
-                
-            </div>
-
-            <div id="user-posts-list" class="post-list">
-                <% for (let post of user_posts) { %> 
-                    <div onclick="showNotification()" class="post-img">
-                        <% if(post.myfile != undefined) { %> 
-                            <img src="<%= post.myfile %>">
-                        <% } else { %>
-                            <img src="<%= assetPath('img/1782188.jpeg') %>">
-                        <% } %>
-                    </div>
-                <% } %>
-
-                
-            </div>
-
-            <div id="saved-posts-list" class="post-list remove">
-                <% for (let post of savedPosts) { %> 
-                    <div onclick="showNotification()" class="post-img">
-                        <% if(post.myfile != undefined) { %> 
-                            <img src="<%= post.myfile %>">
-                        <% } else { %>
-                            <img src="<%= assetPath('img/1782188.jpeg') %>">
-                        <% } %>
-                    </div>
-                <% } %>
-
-                
-            </div>
-
-            <!-- If post length is 0 -->
-            <% if (user_posts.length == 0 && locals.user.id == profile_user.id) { %>
-                <div class="user-no-posts">
-                    <p>You have no posts yet</p>
-                    <a href="/home">Add post</a>
-                </div>
-            <% } else if (user_posts.length == 0) { %>
-                <div class="user-no-posts">
-                    <p><%= profile_user.name %> has no posts yet</p>
-                </div>
-            <% } %>
-
-            <!-- If saved post length is 0 -->
-            <% if (savedPosts.length == 0 && locals.user.id == profile_user.id) { %>
-                <div class="saved-no-posts remove">
-                    <p>You have no saved posts yet</p>
-                </div>
-            <% } %>
-        </div>
+  <div class="profile-design">
+    <div class="header">
+      <a href="/">
+        <!-- <i class="fa-solid fa-arrow-left-long"></i> -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          id="square-arrow-left"
+        >
+          <path
+            fill="#111"
+            fill-rule="evenodd"
+            d="M20.5355 3.46447C19.0711 2 16.714 2 12 2C7.28595 2 4.92893 2 3.46447 3.46447C2 4.92893 2 7.28595 2 12C2 16.714 2 19.0711 3.46447 20.5355C4.92893 22 7.28595 22 12 22C16.714 22 19.0711 22 20.5355 20.5355C22 19.0711 22 16.714 22 12C22 7.28595 22 4.92893 20.5355 3.46447ZM16.75 12C16.75 12.4142 16.4142 12.75 16 12.75H9.81066L11.5303 14.4697C11.8232 14.7626 11.8232 15.2374 11.5303 15.5303C11.2374 15.8232 10.7626 15.8232 10.4697 15.5303L7.46967 12.5303C7.32902 12.3897 7.25 12.1989 7.25 12C7.25 11.8011 7.32902 11.6103 7.46967 11.4697L10.4697 8.46967C10.7626 8.17678 11.2374 8.17678 11.5303 8.46967C11.8232 8.76256 11.8232 9.23744 11.5303 9.53033L9.81066 11.25H16C16.4142 11.25 16.75 11.5858 16.75 12Z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        Home
+      </a>
     </div>
 
-    <% if (user.id == profile_user.id) { %>
-    <!-- If user matches then show the form -->
-   
-    <% } else { %>
-        <!-- else show only the profile info -->
-        
-    <% } %>
+    <button onclick="showConfetti()" class="platform-rank-button">
+      <span
+        ><%= locals.user.id === profile_user.id ? 'Your' :
+        profile_user.name.split(' ')[0] + "'s" %> platform rank
+      </span>
+      <p>
+        <!-- <i class="fa-solid fa-cloud"></i> -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          id="planet"
+        >
+          <path
+            fill="#111"
+            d="M21.7753 14.1178C21.9225 13.4352 22 12.7266 22 12C22 10.8786 21.8154 9.80031 21.475 8.79386L20.9481 8.75609L20.947 8.75601L20.9374 8.75547C20.9272 8.75492 20.91 8.75409 20.886 8.75324C20.838 8.75154 20.7629 8.74981 20.6632 8.75024C20.4637 8.7511 20.1661 8.76065 19.7895 8.79648C19.0358 8.8682 17.9699 9.04483 16.7431 9.46539C16.4799 9.55561 16.1798 9.71783 15.785 9.95108C15.7058 9.99786 15.623 10.0474 15.537 10.0988C15.2148 10.2915 14.8462 10.5119 14.449 10.7194C13.419 11.2576 12.1263 11.7501 10.437 11.7501C8.01897 11.7501 6.03049 10.9464 4.65621 10.1537C3.96776 9.75653 3.4274 9.35876 3.05652 9.05778C2.87086 8.90711 2.727 8.78015 2.62761 8.68888C2.60946 8.67221 2.59278 8.65673 2.5776 8.6425C2.20363 9.69192 2 10.8222 2 12C2 12.4304 2.02719 12.8544 2.07994 13.2705L2.46407 13.2512L2.46666 13.2511L2.47465 13.2507L2.50174 13.2496C2.52466 13.2488 2.55722 13.2477 2.59884 13.2467C2.68207 13.2447 2.80162 13.243 2.95282 13.2439C3.25506 13.2457 3.68485 13.2577 4.20473 13.2984C5.24158 13.3796 6.65156 13.5759 8.1282 14.0405C8.57883 14.1823 9.02704 14.4139 9.45523 14.646C9.5548 14.7 9.65396 14.7544 9.75352 14.809C10.0999 14.9991 10.4512 15.1917 10.8405 15.3785C11.8204 15.8483 12.9851 16.2502 14.5092 16.2502C15.8918 16.2502 17.1709 15.9058 18.3115 15.4842C18.8824 15.2733 19.4099 15.0464 19.9021 14.8347L19.9204 14.8268C20.3949 14.6227 20.8566 14.4241 21.2628 14.2887L21.7753 14.1178Z"
+          ></path>
+          <path
+            fill="#111"
+            d="M21.2059 15.9119C20.9923 15.9989 20.7567 16.1 20.4948 16.2127L20.4846 16.217C19.9984 16.4262 19.4401 16.6663 18.8315 16.8912 17.6047 17.3446 16.1384 17.7502 14.5092 17.7502 12.696 17.7502 11.3065 17.2655 10.1919 16.731 9.7617 16.5247 9.36355 16.3062 9.01266 16.1136 8.91846 16.0619 8.82737 16.0119 8.74028 15.9647 8.31089 15.7319 7.97612 15.5652 7.67802 15.4714 6.34031 15.0505 5.04875 14.8691 4.08765 14.7938 3.60854 14.7563 3.21525 14.7454 2.94414 14.7439 2.80868 14.7431 2.704 14.7446 2.63466 14.7463 2.6 14.7471 2.57419 14.748 2.55782 14.7486L2.54041 14.7493 2.5376 14.7494 2.3849 14.7571C3.58185 18.9391 7.43347 22 12 22 16.1347 22 19.6832 19.4907 21.2059 15.9119zM2.70961 8.293C2.78144 8.22238 2.8744 8.13105 2.99471 8.01296L2.70961 8.293C2.70965 8.2929 2.70956 8.29311 2.70961 8.293zM3.23689 7.17868L3.53408 7.48144 3.53723 7.48459 3.55596 7.50294C3.57392 7.52036 3.60277 7.54786 3.64215 7.58403 3.72096 7.6564 3.84172 7.76321 4.00173 7.89306 4.3222 8.15313 4.79739 8.50343 5.40573 8.85435 6.62502 9.55771 8.35513 10.2501 10.437 10.2501 11.8107 10.2501 12.8622 9.85611 13.7543 9.38998 14.1094 9.20444 14.4292 9.01331 14.7468 8.82347 14.8384 8.76869 14.9299 8.71401 15.022 8.6596 15.4142 8.42789 15.8327 8.1918 16.2567 8.04645 17.6128 7.58156 18.7969 7.38416 19.6474 7.30323 20.073 7.26273 20.4161 7.25129 20.6567 7.25025 20.7105 7.25002 20.7592 7.25031 20.8025 7.2509 19.112 4.12408 15.8041 2 12 2 8.2253 2 4.93908 4.09141 3.23689 7.17868zM21.0228 7.68307L21 8.00617C21.0092 7.87789 21.0165 7.77104 21.0228 7.68307 21.0229 7.68327 21.0227 7.68287 21.0228 7.68307z"
+          ></path>
+        </svg>
+        <%= profile_user.platformRank %>
+      </p>
 
-    <% if (locals.user){ %>
-        <%- include('_bottom_nav_bar_sm') -%>
-    <% } %>
+      <span class="hashtag animate__animated animate__fadeIn"
+        >#sanamKbewafa</span
+      >
+    </button>
 
-    
+    <div class="content">
+      <div class="user-info">
+        <% if(profile_user.avatar != undefined) { %>
+        <img src="<%= profile_user.avatar %>" alt="" />
+        <% } else { %>
+        <img
+          id="logo-placeholder"
+          src="<%= assetPath('img/dummy-profile.jpeg') %>"
+        />
+        <% } %>
+
+        <p id="user-name"><%= profile_user.name %></p>
+        <p class="user-email"><%= profile_user.email %></p>
+      </div>
+
+      <p id="about-user">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          id="calendar-minimalistic"
+        >
+          <path
+            fill="#111"
+            d="M22 14V12C22 11.161 22 10.4153 21.9871 9.75H2.0129C2 10.4153 2 11.161 2 12V14C2 17.7712 2 19.6569 3.17157 20.8284 4.34315 22 6.22876 22 10 22H14C17.7712 22 19.6569 22 20.8284 20.8284 22 19.6569 22 17.7712 22 14zM7.75 2.5C7.75 2.08579 7.41421 1.75 7 1.75 6.58579 1.75 6.25 2.08579 6.25 2.5V4.07926C4.81067 4.19451 3.86577 4.47737 3.17157 5.17157 2.47737 5.86577 2.19451 6.81067 2.07926 8.25H21.9207C21.8055 6.81067 21.5226 5.86577 20.8284 5.17157 20.1342 4.47737 19.1893 4.19451 17.75 4.07926V2.5C17.75 2.08579 17.4142 1.75 17 1.75 16.5858 1.75 16.25 2.08579 16.25 2.5V4.0129C15.5847 4 14.839 4 14 4H10C9.16097 4 8.41527 4 7.75 4.0129V2.5z"
+          ></path>
+        </svg>
+        Joined in <%= new Date(profile_user.createdAt).toLocaleString('default',
+        {month: 'long'}) %> <%= new Date(profile_user.createdAt).getFullYear()
+        %>
+      </p>
+
+      <div class="profile-actions">
+        <% let followers = 0; let following = 0; %> <% if (locals.user.id ==
+        profile_user.id) { %>
+        <a class="edit-profile" href="/users/profile/edit/<%= locals.user.id%>"
+          >Edit profile</a
+        >
+        <% } else { %> <% if (friends != undefined) { %> <% let flag = false; %>
+        <% for (friend of friends) { %> <% if (user.id == friend.to_user ||
+        user.id == friend.from_user && friend.status === 'accepted') { flag =
+        true;%>
+        <p
+          class="follow-button"
+          data-from="<%= user.id %>"
+          data-to="<%= profile_user.id %>"
+          onclick="toggleFollow(event)"
+        >
+          Unfollow
+        </p>
+        <% } if (flag) break; %> <% } %> <% if (!flag) { %>
+        <p
+          onclick="toggleFollow(event)"
+          data-from="<%= user.id %>"
+          data-to="<%= profile_user.id %>"
+          class="follow-button"
+        >
+          Follow
+        </p>
+        <% } %> <% } else { %>
+        <p
+          class="follow-button"
+          data-from="<%= user.id %>"
+          data-to="<%= profile_user.id %>"
+          onclick="toggleFollow(event)"
+        >
+          Follow
+        </p>
+        <% } %>
+
+        <a class="message-button" href="#">Message</a>
+
+        <% } %>
+      </div>
+
+      <div class="stats">
+        <div class="posts">
+          <p class="count"><%= user_posts.length %></p>
+          <p>Posts</p>
+        </div>
+
+        <div class="followers">
+          <p id="followers-count" class="count"><%= followersCount %></p>
+          <p>Followers</p>
+        </div>
+
+        <div class="following">
+          <p id="following-count" class="count"><%= followingCount %></p>
+          <p>Following</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-posts">
+      <div class="posts-and-saved-header">
+        <p id="user-posts-header" class="active">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+            id="library"
+          >
+            <path
+              fill="#111"
+              d="M8.50989 2.00001H15.49C15.7225 1.99995 15.9007 1.99991 16.0565 2.01515 17.1643 2.12352 18.0711 2.78958 18.4556 3.68678H5.54428C5.92879 2.78958 6.83555 2.12352 7.94337 2.01515 8.09917 1.99991 8.27741 1.99995 8.50989 2.00001zM6.31052 4.72312C4.91989 4.72312 3.77963 5.56287 3.3991 6.67691 3.39117 6.70013 3.38356 6.72348 3.37629 6.74693 3.77444 6.62636 4.18881 6.54759 4.60827 6.49382 5.68865 6.35531 7.05399 6.35538 8.64002 6.35547L8.75846 6.35547 15.5321 6.35547C17.1181 6.35538 18.4835 6.35531 19.5639 6.49382 19.9833 6.54759 20.3977 6.62636 20.7958 6.74693 20.7886 6.72348 20.781 6.70013 20.773 6.67691 20.3925 5.56287 19.2522 4.72312 17.8616 4.72312H6.31052z"
+            ></path>
+            <path
+              fill="#111"
+              fill-rule="evenodd"
+              d="M8.67239 7.54204H15.3276C18.7024 7.54204 20.3898 7.54204 21.3377 8.52887C22.2855 9.5157 22.0625 11.0403 21.6165 14.0896L21.1935 16.9811C20.8437 19.3724 20.6689 20.568 19.7717 21.284C18.8745 22 17.5512 22 14.9046 22H9.09536C6.44881 22 5.12553 22 4.22834 21.284C3.33115 20.568 3.15626 19.3724 2.80648 16.9811L2.38351 14.0896C1.93748 11.0403 1.71447 9.5157 2.66232 8.52887C3.61017 7.54204 5.29758 7.54204 8.67239 7.54204ZM8 18.0001C8 17.5859 8.3731 17.2501 8.83333 17.2501H15.1667C15.6269 17.2501 16 17.5859 16 18.0001C16 18.4144 15.6269 18.7502 15.1667 18.7502H8.83333C8.3731 18.7502 8 18.4144 8 18.0001Z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          Posts
+        </p>
+        <% if (locals.user.id == profile_user.id) { %>
+        <div class="vertical-border"></div>
+        <p id="posts-saved-header" class="">
+          <i class="fa-solid fa-bookmark"></i> Saved <%= savedPosts.length %>
+        </p>
+        <% } %>
+      </div>
+
+      <div id="user-posts-list" class="post-list">
+        <% for (let post of user_posts) { %>
+        <a href="/posts/post/<%= post._id %>" class="post-img">
+          <% if(!post.isImg && post.video) { %>
+          <div class="video-post">
+            <i class="fa-solid fa-circle-play"></i>
+          </div>
+          <% } else if(post.isImg && post.imgPath) { %>
+          <img src="<%= post.imgPath %>" />
+          <% } else if (post.isImg) { %>
+          <img src="<%= assetPath('img/1782188.jpeg') %>" />
+          <% } %>
+        </a>
+        <% } %>
+      </div>
+
+      <div id="saved-posts-list" class="post-list remove">
+        <% for (let post of savedPosts) { %>
+        <a href="/posts/post/<%= post._id %>" class="post-img">
+          <% if(!post.isImg && post.video) { %>
+          <div class="video-post">
+            <i class="fa-solid fa-circle-play"></i>
+          </div>
+          <% } else if(post.isImg && post.imgPath) { %>
+          <img src="<%= post.imgPath %>" />
+          <% } else if (post.isImg) { %>
+          <img src="<%= assetPath('img/1782188.jpeg') %>" />
+          <% } %>
+        </a>
+        <% } %>
+      </div>
+
+      <!-- If post length is 0 -->
+      <% if (user_posts.length == 0 && locals.user.id == profile_user.id) { %>
+      <div class="user-no-posts">
+        <p>You have no posts yet</p>
+        <a href="/home">Add post</a>
+      </div>
+      <% } else if (user_posts.length == 0) { %>
+      <div class="user-no-posts">
+        <p><%= profile_user.name %> has no posts yet</p>
+      </div>
+      <% } %>
+
+      <!-- If saved post length is 0 -->
+      <% if (savedPosts.length == 0 && locals.user.id == profile_user.id) { %>
+      <div class="saved-no-posts remove">
+        <p>You have no saved posts yet</p>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <% if (user.id == profile_user.id) { %>
+  <!-- If user matches then show the form -->
+
+  <% } else { %>
+  <!-- else show only the profile info -->
+
+  <% } %> <% if (locals.user){ %> <%- include('_bottom_nav_bar_sm') -%> <% } %>
 </div>
 
 <script>
-    // handle the active class on posts saved header and show the respective posts
-    const postsSavedHeader = document.querySelector('.posts-and-saved-header');
-    const userPostsList = document.querySelector('#user-posts-list');
-    const savedPostsList = document.querySelector('#saved-posts-list');
+  // handle the active class on posts saved header and show the respective posts
+  const postsSavedHeader = document.querySelector(".posts-and-saved-header");
+  const userPostsList = document.querySelector("#user-posts-list");
+  const savedPostsList = document.querySelector("#saved-posts-list");
 
-    const userPostsHeader = postsSavedHeader.children[0];
-    const savedPostsHeader = postsSavedHeader.children[2];
+  const userPostsHeader = postsSavedHeader.children[0];
+  const savedPostsHeader = postsSavedHeader.children[2];
 
-    if (savedPostsHeader) {
-        userPostsHeader.addEventListener('click', (e) => {
-            userPostsHeader.classList.add('active');
-            postsSavedHeader.children[2].classList.remove('active');
-            userPostsList.classList.remove('remove');
-            savedPostsList.classList.add('remove');
-            userPostsList.classList.add('animate__animated', 'animate__fadeIn')
-            $('.user-no-posts').removeClass('remove');
-            $('.saved-no-posts').addClass('remove');
-        })
+  if (savedPostsHeader) {
+    userPostsHeader.addEventListener("click", (e) => {
+      userPostsHeader.classList.add("active");
+      postsSavedHeader.children[2].classList.remove("active");
+      userPostsList.classList.remove("remove");
+      savedPostsList.classList.add("remove");
+      userPostsList.classList.add("animate__animated", "animate__fadeIn");
+      $(".user-no-posts").removeClass("remove");
+      $(".saved-no-posts").addClass("remove");
+    });
 
-        savedPostsHeader.addEventListener('click', (e) => {
-            savedPostsHeader.classList.add('active');
-            postsSavedHeader.children[0].classList.remove('active');
-            savedPostsList.classList.remove('remove');
-            userPostsList.classList.add('remove');
-            savedPostsList.classList.add('animate__animated', 'animate__fadeIn')
-            $('.user-no-posts').addClass('remove');
-            $('.saved-no-posts').removeClass('remove');
-        })
+    savedPostsHeader.addEventListener("click", (e) => {
+      savedPostsHeader.classList.add("active");
+      postsSavedHeader.children[0].classList.remove("active");
+      savedPostsList.classList.remove("remove");
+      userPostsList.classList.add("remove");
+      savedPostsList.classList.add("animate__animated", "animate__fadeIn");
+      $(".user-no-posts").addClass("remove");
+      $(".saved-no-posts").removeClass("remove");
+    });
+  }
+
+  function showNotification() {
+    // show work in progress notification
+    Toastify({
+      text: "Update coming soon!",
+      duration: 2000,
+      destination: "",
+      newWindow: true,
+      close: true,
+      avatar:
+        "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        style: {
+          background: "#000000",
+          borderRadius: "10px",
+          border: "1px solid rgba(231, 231, 231, 0.233)",
+        },
+      },
+      onClick: function () {}, // Callback after click
+    }).showToast();
+  }
+
+  $("#user-profile-img").css({ border: "2px solid white" });
+</script>
+
+<script>
+  const myConfetti = confetti.create(null, {
+    resize: true,
+    useWorker: true,
+  });
+  let confettiTimeout = null;
+
+  function showConfetti() {
+    let x = 0.57;
+    let y = 0.25;
+    let spread = 160;
+    if (window.innerWidth < 550) {
+      x = 0.5;
+      y = 0.3;
+      spread = 75;
     }
+    myConfetti({
+      particleCount: 100,
+      spread: spread,
+      // any other options from the global
+      // confetti function
+      origin: { x: x, y: y },
+    });
 
-    function showNotification() {
-        // show work in progress notification
-        Toastify({
-          text: 'Update coming soon!',
-          duration: 2000,
-          destination: "",
-          newWindow: true,
-          close: true,
-          avatar:
-            "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
-
-          gravity: "top", // `top` or `bottom`
-          position: "center", // `left`, `center` or `right`
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-          style: {
-            background: "#0057D2",
-            borderRadius: "10px",
-          },
-          onClick: function () {}, // Callback after click
-        }).showToast();
+    if (confettiTimeout) {
+      clearTimeout(confettiTimeout);
     }
+    $(".hashtag").removeClass("animate__fadeOut");
+    confettiTimeout = setTimeout(() => {
+      $(".hashtag").addClass("animate__fadeOut");
+    }, 1500);
+  }
+
+  showConfetti();
 </script>
 
 <script src="<%= assetPath('js/home_posts.js') %>"></script>
 <script src="<%= assetPath('js/user_profile.js') %>"></script>
-

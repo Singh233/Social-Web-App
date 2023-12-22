@@ -2,6 +2,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-undef */
+
 class ChatEngine {
   constructor(chatBoxId, userId, userEmail, userName, userProfile, host) {
     this.chatBox = $(`#${chatBoxId}`);
@@ -490,6 +491,135 @@ class ChatEngine {
       scrollToBottom();
     });
 
+    // Listen for video encoding completion
+    self.socket.on("video-encoding-complete", (data) => {
+      // Handle the completion event here
+      // console.log("Video encoding job completed:", data.jobId);
+      localStorage.removeItem("video-processing-progress");
+      $(".progress-percentage").text("Completed!");
+      myConfetti({
+        particleCount: 100,
+        spread: 80,
+        angle: 60,
+        origin: { x: 0 },
+      });
+
+      myConfetti({
+        particleCount: 100,
+        spread: 80,
+        angle: 120,
+        origin: { x: 1 },
+      });
+      gsap.to($("#video-upload-status-container"), {
+        opacity: 0,
+        duration: 0.7,
+        delay: 1,
+        onComplete: () => {
+          // Optional: You can hide or remove the element after the animation
+          $("#video-upload-status-container").css({
+            display: "none",
+            opacity: 1,
+          });
+        },
+      });
+      if (window.innerWidth < 600)
+        gsap.from($(".post-upload-form-sm"), {
+          opacity: 0,
+          duration: 0.5,
+          delay: 1.7,
+          onStart: () => {
+            $(".post-upload-form-sm").css({ display: "flex" });
+          },
+        });
+      self.displayNotification("Video is processed!", "success", 2000, null);
+      setTimeout(() => {
+        const newPost = newPostDom(data.post);
+        $("#posts-list-container").prepend(newPost);
+        deletePost($(".delete-post-button", newPost));
+
+        new PostComments(data.post._id);
+        // enable the functionality of the toggle liek button on the new post
+        new ToggleLike($(" .toggle-like-button", newPost));
+        videojs(`video-${data.post.video._id}`, {
+          playsinline: true,
+        });
+        refreshVideoPlayback();
+      }, 1500);
+    });
+
+    self.socket.on("video-encoding-failed", (data) => {
+      // Handle the completion event here
+      // console.log("Video encoding job completed:", data.jobId);
+      localStorage.removeItem("video-processing-progress");
+      $(".progress-percentage").text("Failed!");
+      gsap.to($("#video-upload-status-container"), {
+        opacity: 0,
+        duration: 0.7,
+        delay: 1,
+        onComplete: () => {
+          // Optional: You can hide or remove the element after the animation
+          $("#video-upload-status-container").css({
+            display: "none",
+            opacity: 1,
+          });
+        },
+      });
+      if (window.innerWidth < 600)
+        gsap.from($(".post-upload-form-sm"), {
+          opacity: 0,
+          duration: 0.5,
+          delay: 1.7,
+          onStart: () => {
+            $(".post-upload-form-sm").css({ display: "flex" });
+          },
+        });
+      self.displayNotification("Video processing failed!", "error", 2000, null);
+    });
+
+    // Listen for video progress
+    self.socket.on("video-progress", (data) => {
+      // Handle the completion event here
+      // console.log("Progress:", data.progress);
+      const videoUploadStatusContainer = $("#video-upload-status-container");
+      const lsData = {
+        progress: data.progress,
+        title: data.videoTitle,
+      };
+      localStorage.setItem("video-processing-progress", JSON.stringify(lsData));
+
+      if (data.progress === 100) {
+        $(".progress-percentage").text("Almost done!");
+      } else {
+        $(".progress-percentage").text(`${data.progress}%`);
+      }
+      if (videoUploadStatusContainer.css("display") === "none") {
+        gsap.from(videoUploadStatusContainer, {
+          opacity: 0,
+          duration: 0.5,
+          onStart: () => {
+            videoUploadStatusContainer.css({ display: "flex" });
+          },
+        });
+
+        videoUploadStatusContainer
+          .find(".header .heading span")
+          .text("Processing Video");
+
+        videoUploadStatusContainer
+          .find(".header .file-name")
+          .text(lsData.title.substring(0, 15));
+      }
+      $(".video-upload-progress").LineProgressbar({
+        percentage: data.progress,
+        fillBackgroundColor: "#0156D1",
+        backgroundColor: "#00000000",
+        height: "15px",
+        radius: "10px",
+        ShowProgressCount: false,
+      });
+      // You can update the UI or display a notification to the user
+    });
+
     // listen to incoming notifications(message from other users)
     self.socket.on("receive_notification", function (data) {
       // add message to friend chatroom
@@ -790,9 +920,9 @@ class ChatEngine {
           position: "center", // `left`, `center` or `right`
           stopOnFocus: true, // Prevents dismissing of toast on hover
           style: {
-            background: "#D20A0A",
+            background: "#000000",
             borderRadius: "10px",
-            color: "white",
+            border: "1px solid rgba(231, 231, 231, 0.233)",
           },
           onClick: function () {}, // Callback after click
         }).showToast();
@@ -813,8 +943,9 @@ class ChatEngine {
           position: "center", // `left`, `center` or `right`
           stopOnFocus: true, // Prevents dismissing of toast on hover
           style: {
-            background: "#202020",
+            background: "#000000",
             borderRadius: "10px",
+            border: "1px solid rgba(231, 231, 231, 0.233)",
           },
           onClick: function () {}, // Callback after click
         }).showToast();
@@ -849,7 +980,7 @@ class CallEngine extends ChatEngine {
     // dom elements for video
     this.myVideo = document.querySelector(".caller-video");
     this.receiverVideo = document.querySelector(".receiver-video");
-    this.myVideo.muted = true;
+    if (this.myVideo) this.myVideo.muted = true;
 
     this.peers = {};
     this.toUser = null;
@@ -1991,46 +2122,31 @@ class CallEngine extends ChatEngine {
         icon =
           "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9";
       }
-
-      Toastify({
-        text: "<%= flash.error %>",
-        duration: duration,
-        destination: "",
-        newWindow: true,
-        close: true,
-        avatar: icon,
-        gravity: "top", // `top` or `bottom`
-        position: "center", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "#D20A0A",
-          borderRadius: "10px",
-          color: "white",
-        },
-        onClick: function () {}, // Callback after click
-      }).showToast();
     } else if (type === "success") {
       if (!icon) {
         icon =
           "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d";
       }
-      Toastify({
-        text: message,
-        duration: duration,
-        destination: "",
-        newWindow: true,
-        close: true,
-        avatar: icon,
-
-        gravity: "top", // `top` or `bottom`
-        position: "center", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "#202020",
-          borderRadius: "10px",
-        },
-        onClick: function () {}, // Callback after click
-      }).showToast();
     }
+
+    Toastify({
+      text: message,
+      duration: duration,
+      destination: "",
+      newWindow: true,
+      close: true,
+      avatar: icon,
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: type === "error" ? "#000000" : "#000000",
+        borderRadius: "10px",
+        color: "white",
+        border: "1px solid rgba(231, 231, 231, 0.233)",
+      },
+
+      onClick: function () {}, // Callback after click
+    }).showToast();
   }
 }

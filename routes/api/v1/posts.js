@@ -34,4 +34,10 @@ router.post(
   postsApi.unsavePost
 );
 
+router.get(
+  "/post/:postId",
+  passport.authenticate("jwt", { session: false }),
+  postsApi.getSinglePost
+);
+
 module.exports = router;

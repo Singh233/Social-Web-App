@@ -1,8 +1,8 @@
+const picker = new EmojiButton({
+  theme: "dark",
+  autoHide: true,
+});
 function emojiClicked(e, id) {
-  const picker = new EmojiButton({
-    theme: "dark",
-  });
-
   picker.togglePicker(e.target);
 
   picker.on("emoji", (emoji) => {

@@ -489,18 +489,24 @@ $button-color-ligth-blue: #4db1ff;
       &:hover {
         background-color: #1664d1;
       }
+
+      svg {
+        path {
+          fill: white;
+        }
+      }
     }
   }
 }
 
-@media screen and (max-width: "500px") {
+@media screen and (max-width: "600px") {
   .remove {
     display: none;
   }
   .user-messages {
     height: 100%;
     width: 100vw;
-    z-index: 7;
+    z-index: 9999999;
     border-radius: 0;
     margin: 0;
 
@@ -525,7 +531,7 @@ $button-color-ligth-blue: #4db1ff;
       .chat-message-input {
         border-radius: 25px;
         margin: 10px;
-        height: auto;
+        height: 46px;
         font-size: 0.95rem;
         margin-right: 0px;
         background-color: rgba(32, 32, 32, 0.9);
@@ -533,11 +539,20 @@ $button-color-ligth-blue: #4db1ff;
 
       .send-message {
         border-radius: 50%;
-        margin: 9px;
+        margin: 10px;
         height: auto;
         width: auto;
-        padding: 5px 18px;
-        font-size: 1.2rem;
+
+        display: flex;
+        align-items: center;
+
+        svg {
+          height: 26px;
+          width: 26px;
+          path {
+            fill: white;
+          }
+        }
       }
     }
   }

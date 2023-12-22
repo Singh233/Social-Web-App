@@ -1,3 +1,4 @@
+<% if (!post.isImg && !post.video) { %> <% } else { %>
 <div id="post-<%= post._id %>" class="display-posts">
   <div
     id="bottom-menu-options-<%= post._id %>"
@@ -12,13 +13,30 @@
 
     <div class="option1">
       <a href="/users/profile/<%= post.user.id %>">
-        <i class="fa-solid fa-user"></i> Go to profile</a
+        <!-- <i class="fa-solid fa-user"></i> -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          id="profile"
+        >
+          <path
+            fill="#200E32"
+            d="M5.84846399,13.5498221 C7.28813318,13.433801 8.73442297,13.433801 10.1740922,13.5498221 C10.9580697,13.5955225 11.7383286,13.6935941 12.5099314,13.8434164 C14.1796238,14.1814947 15.2696821,14.7330961 15.73685,15.6227758 C16.0877167,16.317132 16.0877167,17.1437221 15.73685,17.8380783 C15.2696821,18.727758 14.2228801,19.3149466 12.4926289,19.6174377 C11.7216312,19.7729078 10.9411975,19.873974 10.1567896,19.9199288 C9.43008411,20 8.70337858,20 7.96802179,20 L6.64437958,20 C6.36753937,19.9644128 6.09935043,19.9466192 5.83981274,19.9466192 C5.05537891,19.9062698 4.27476595,19.8081536 3.50397353,19.6530249 C1.83428106,19.3327402 0.744222763,18.7633452 0.277054922,17.8736655 C0.0967111971,17.5290284 0.00163408158,17.144037 0.000104217816,16.752669 C-0.00354430942,16.3589158 0.0886574605,15.9704652 0.268403665,15.6227758 C0.72692025,14.7330961 1.81697855,14.1548043 3.50397353,13.8434164 C4.27816255,13.6914539 5.06143714,13.5933665 5.84846399,13.5498221 Z M8.00262682,-1.16351373e-13 C10.9028467,-1.16351373e-13 13.2539394,2.41782168 13.2539394,5.40035587 C13.2539394,8.38289006 10.9028467,10.8007117 8.00262682,10.8007117 C5.10240696,10.8007117 2.75131423,8.38289006 2.75131423,5.40035587 C2.75131423,2.41782168 5.10240696,-1.16351373e-13 8.00262682,-1.16351373e-13 Z"
+            transform="translate(4 2)"
+          ></path>
+        </svg>
+        Go to profile</a
       >
     </div>
-    <% if(locals.user && locals.user.id == post.user.id) { %>
+    <% if(locals.user && locals.user.id === post.user.id) { %>
     <div class="option2">
-      <a class="delete-post-button" href="/posts/destroy/<%= post._id %>"
-        ><i class="fa-solid fa-trash"></i> Delete</a
+      <div class="loader"></div>
+      <a class="delete-post-button" href="/posts/destroy/<%= post._id %>">
+        <i class="fa-solid fa-trash"></i>
+
+        Delete</a
       >
     </div>
     <% } %>
@@ -45,14 +63,28 @@
       ></i>
     </div>
   </div>
-
   <div class="post-img">
-    <% if(post.myfile) { %>
+    <% if(post.isImg) { %> <% if(post.imgPath) { %>
     <div class="blur-load" style="background-image: url(<%= post.thumbnail %>)">
-      <img src="<%= post.myfile %>" loading="lazy" />
+      <img src="<%= post.imgPath %>" loading="lazy" />
     </div>
     <% } else { %>
     <img src="<%= assetPath('img/1782188.jpeg') %>" />
+    <% } %> <% } else if (post.video) { %>
+    <!-- <img src="<%= assetPath('img/1782188.jpeg') %>" /> -->
+    <video
+      id="video-<%= post.video._id %>"
+      class="video-js vjs-theme-forest"
+      controls
+      preload="auto"
+      width="640"
+      height="640"
+    >
+      <source
+        src="https://storage.googleapis.com/users_videos_bucket/<%= post.video.qualities[post.video.qualities.findIndex(ele => ele.quality === 'high')].videoPath %>/high.m3u8"
+        type="application/x-mpegURL"
+      />
+    </video>
     <% } %>
   </div>
 
@@ -80,21 +112,105 @@
         </a>
         <% } %>
 
-        <a href="#">
-          <i class="fa-regular fa-comment"></i
-          ><span><%= post.comments.length %></span>
+        <a>
+          <!-- <i class="fa-regular fa-comment"></i> -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+            id="chat-round-line"
+          >
+            <path
+              fill="#111"
+              fill-rule="evenodd"
+              d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22ZM8 13.25C7.58579 13.25 7.25 13.5858 7.25 14C7.25 14.4142 7.58579 14.75 8 14.75H13.5C13.9142 14.75 14.25 14.4142 14.25 14C14.25 13.5858 13.9142 13.25 13.5 13.25H8ZM7.25 10.5C7.25 10.0858 7.58579 9.75 8 9.75H16C16.4142 9.75 16.75 10.0858 16.75 10.5C16.75 10.9142 16.4142 11.25 16 11.25H8C7.58579 11.25 7.25 10.9142 7.25 10.5Z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          <span><%= post.comments.length %></span>
         </a>
-        <a class="share-button" href="#">
-          <i style="font-size: 1.1rem" class="fa-regular fa-paper-plane"></i>
+        <a id="share-button-<%= post._id %>" class="share-button">
+          <!-- <i style="font-size: 1.1rem" class="fa-regular fa-paper-plane"></i> -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+            id="forward"
+          >
+            <path
+              fill="#111"
+              d="M13.9548 5.18341L18.9327 9.60815C19.8632 10.4353 20.3285 10.8489 20.5 11.3373C20.6506 11.7662 20.6506 12.2335 20.5 12.6624C20.3285 13.1508 19.8632 13.5644 18.9327 14.3916L13.9548 18.8163C13.5325 19.1917 13.3214 19.3794 13.142 19.3861C12.9862 19.3919 12.8366 19.3247 12.7375 19.2044C12.6233 19.0659 12.6233 18.7834 12.6233 18.2184V15.4284C10.1952 15.4284 7.63068 16.2083 5.75807 17.5926C4.78317 18.3133 4.29571 18.6737 4.11005 18.6595C3.92907 18.6456 3.81422 18.575 3.72032 18.4196C3.62399 18.2603 3.70907 17.7624 3.87924 16.7666C4.98421 10.3004 9.43419 8.57129 12.6233 8.57129V5.78134C12.6233 5.21632 12.6233 4.93381 12.7375 4.79531C12.8366 4.67498 12.9862 4.6078 13.142 4.61363C13.3214 4.62034 13.5325 4.80803 13.9548 5.18341Z"
+            ></path>
+          </svg>
         </a>
       </div>
+      <!-- ShareThis BEGIN -->
+      <div
+        id="share-<%= post._id %>"
+        class="share-options animate__animated animate__faster"
+        style=" top: <%= post.video ? '-93px' : '-45px'  %> "
+      >
+        <button
+          class="button fb"
+          data-sharer="facebook"
+          data-title="Checkout this post from <%= post.user.name %>"
+          data-hashtags="awesome, viral, cool"
+          data-url="https://chillsanam.social/posts/post/<%= post._id %>"
+        >
+          <i class="fa-brands fa-facebook-f"></i>
+        </button>
+        <button
+          class="button whatsapp"
+          data-sharer="whatsapp"
+          data-title="Checkout this post from <%= post.user.name %>"
+          data-url="https://chillsanam.social/posts/post/<%= post._id %>"
+          data-hashtags="awesome, viral, cool"
+        >
+          <i class="fa-brands fa-whatsapp"></i>
+        </button>
+        <!-- <button
+          class="button"
+          data-sharer="twitter"
+          data-title="Checkout this post from <%= post.user.name %>"
+          data-hashtags="awesome, sharer.js"
+          data-url="https://chillsanam.social/posts/post/<%= post._id %>"
+                    data-hashtags="awesome, viral, cool"
 
+        >
+          <i class="fa-brands fa-x-twitter"></i>
+        </button> -->
+        <button
+          class="button in"
+          data-sharer="linkedin"
+          data-title="Checkout this post from <%= post.user.name %>"
+          data-url="https://chillsanam.social/posts/post/<%= post._id %>"
+          data-hashtags="awesome, viral, cool"
+        >
+          <i class="fa-brands fa-linkedin-in"></i>
+        </button>
+        <button onclick="copyUrl('<%= post._id %>')" class="copy-url-button">
+          <i class="fa-solid fa-copy"></i>
+        </button>
+      </div>
+      <!-- ShareThis END -->
       <% if (isSaved) { %>
-      <div onclick="toggleSavePost('<%= post._id %>', 'unsave')" class="right">
+      <div
+        id="save-post"
+        onclick="toggleSavePost('<%= post._id %>', 'unsave')"
+        class="right"
+      >
         <i id="icon-<%= post._id %>" class="fa-solid fa-bookmark"></i>
       </div>
       <% } else { %>
-      <div onclick="toggleSavePost('<%= post._id %>', 'save')" class="right">
+      <div
+        id="unsave-post"
+        onclick="toggleSavePost('<%= post._id %>', 'save')"
+        class="right"
+      >
         <i id="icon-<%= post._id %>" class="fa-regular fa-bookmark"></i>
       </div>
       <% } %>
@@ -103,18 +219,33 @@
     <div class="post-caption">
       <p class="post-user-name">
         <%= post.user.name %> -
-        <span class="post-user-content"><%= post.content %></span>
+        <span class="post-user-content"><%= post.caption %></span>
       </p>
     </div>
 
     <div class="time">
-      <p><%= moment(post.createdAt).fromNow() %></p>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+        id="history"
+      >
+        <path
+          fill="#111"
+          fill-rule="evenodd"
+          d="M11.25 2C11.25 1.58579 11.5858 1.25 12 1.25 17.9371 1.25 22.75 6.06294 22.75 12 22.75 17.9371 17.9371 22.75 12 22.75 6.06294 22.75 1.25 17.9371 1.25 12 1.25 11.5858 1.58579 11.25 2 11.25 2.41421 11.25 2.75 11.5858 2.75 12 2.75 17.1086 6.89137 21.25 12 21.25 17.1086 21.25 21.25 17.1086 21.25 12 21.25 6.89137 17.1086 2.75 12 2.75 11.5858 2.75 11.25 2.41421 11.25 2zM12 8.25C12.4142 8.25 12.75 8.58579 12.75 9V12.25H16C16.4142 12.25 16.75 12.5858 16.75 13 16.75 13.4142 16.4142 13.75 16 13.75H12C11.5858 13.75 11.25 13.4142 11.25 13V9C11.25 8.58579 11.5858 8.25 12 8.25zM9.09958 2.39754C9.24874 2.78396 9.05641 3.21814 8.66999 3.36731 8.52855 3.42191 8.38879 3.47988 8.2508 3.54114 7.87221 3.70921 7.42906 3.53856 7.261 3.15997 7.09293 2.78139 7.26358 2.33824 7.64217 2.17017 7.80267 2.09892 7.96526 2.03147 8.1298 1.96795 8.51623 1.81878 8.95041 2.01112 9.09958 2.39754zM5.6477 4.24026C5.93337 4.54021 5.92178 5.01495 5.62183 5.30061 5.51216 5.40506 5.40505 5.51216 5.30061 5.62183 5.01495 5.92178 4.54021 5.93337 4.24026 5.6477 3.94031 5.36204 3.92873 4.88731 4.21439 4.58736 4.33566 4.46003 4.46002 4.33566 4.58736 4.21439 4.88731 3.92873 5.36204 3.94031 5.6477 4.24026zM3.15997 7.261C3.53856 7.42907 3.70921 7.87222 3.54114 8.2508 3.47988 8.38879 3.42191 8.52855 3.36731 8.66999 3.21814 9.05641 2.78396 9.24874 2.39754 9.09958 2.01112 8.95041 1.81878 8.51623 1.96795 8.12981 2.03147 7.96526 2.09892 7.80267 2.17017 7.64217 2.33824 7.26358 2.78139 7.09293 3.15997 7.261z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+      <p id="post-creation-moment-<%= post._id %>">-</p>
     </div>
 
     <div id="comments-list-container" class="post-comments-list">
       <ul id="post-comments-<%= post._id %>">
         <% for (let comment of post.comments) { %> <%- include('_comment',
-        {comment: comment, moment}) %> <% } %>
+        {comment: comment}) %> <% } %>
       </ul>
     </div>
     <div class="post-comments">
@@ -137,11 +268,179 @@
           required
         />
         <input type="hidden" name="postId" value="<%= post._id %>" />
-        <input class="submit-button" type="submit" value="Post" />
+        <!-- <input class="submit-button" type="submit" value="Post" /> -->
+
+        <button class="submit-button" type="submit">
+          <div class="comment-add-loader"></div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+            id="plain"
+            class="comment-add-button"
+          >
+            <path
+              fill="#111"
+              d="M18.6357 15.6701L20.3521 10.5208C21.8516 6.02242 22.6013 3.77322 21.414 2.58595C20.2268 1.39869 17.9776 2.14842 13.4792 3.64788L8.32987 5.36432C4.69923 6.57453 2.88392 7.17964 2.36806 8.06698C1.87731 8.91112 1.87731 9.95369 2.36806 10.7978C2.88392 11.6852 4.69923 12.2903 8.32987 13.5005C8.77981 13.6505 9.28601 13.5434 9.62294 13.2096L15.1286 7.75495C15.4383 7.44808 15.9382 7.45041 16.245 7.76015C16.5519 8.06989 16.5496 8.56975 16.2398 8.87662L10.8231 14.2432C10.4518 14.6111 10.3342 15.1742 10.4995 15.6701C11.7097 19.3007 12.3148 21.1161 13.2022 21.6319C14.0463 22.1227 15.0889 22.1227 15.933 21.6319C16.8204 21.1161 17.4255 19.3008 18.6357 15.6701Z"
+            ></path>
+          </svg>
+        </button>
       </form>
       <% } %>
     </div>
   </div>
 </div>
+<% } %>
 
-<script></script>
+<script>
+  $("#post-creation-moment-<%= post._id %>").text(
+    moment("<%= post.createdAt %>").fromNow()
+  );
+</script>
+
+<script>
+  $(document).ready(function () {
+
+    <% if (!post.isImg && post.video) { %>
+      videojs("video-<%= post.video._id %>", {
+        playsinline: true
+      });
+    <% } else if (!post.isImg && !post.video && post.user.id === locals.user.id) { %>
+      $("#video-upload-status-container").css({display: "flex"});
+      var progress = JSON.parse(localStorage.getItem("video-processing-progress")).progress;
+      var title = JSON.parse(localStorage.getItem("video-processing-progress")).title;
+      $(".progress-percentage").text(`${progress ?? 0}%`);
+      $("#video-upload-status-container")
+          .find(".header .heading span")
+          .text("Processing Video");
+      $("#video-upload-status-container")
+        .find(".header .file-name")
+        .text(title.substring(0, 15));
+
+      $(".progress-percentage").text(`${progress ?? 0}%`);
+      $(".video-upload-progress")?.LineProgressbar({
+        percentage: progress ?? 0,
+        fillBackgroundColor: "#0156D1",
+        backgroundColor: "#00000000",
+        height: "15px",
+        radius: "10px",
+        ShowProgressCount: false,
+      });
+
+    <% } %>
+  });
+</script>
+
+<script>
+  // function to save posts
+  function toggleSavePost(postId, type) {
+    // check if the icon is solid or regular
+    let icon = $(`#icon-${postId}`).hasClass("fa-solid");
+    const saveButton = $(`#icon-${postId}`);
+
+    if (icon) {
+      type = "unsave";
+      saveButton.toggleClass("fa-solid fa-regular");
+    } else {
+      type = "save";
+      saveButton.toggleClass("fa-regular fa-solid");
+    }
+
+    // make ajax call to save post
+    $.ajax({
+      type: "post",
+      url: `/posts/${type}/${postId}`,
+      success: function (data) {
+        Toastify({
+          text: data.data.success,
+          duration: 2000,
+          destination: "",
+          newWindow: true,
+          close: true,
+          avatar:
+            "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+
+          gravity: "top", // `top` or `bottom`
+          position: "center", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "#000000",
+            borderRadius: "10px",
+            border: "1px solid rgba(231, 231, 231, 0.233)",
+          },
+          onClick: function () {}, // Callback after click
+        }).showToast();
+      },
+      error: function (error) {
+        Toastify({
+          text: "Something went wrong!",
+          duration: 2000,
+          destination: "",
+          newWindow: true,
+          close: true,
+          avatar:
+            "https://cdn-icons-png.flaticon.com/512/1160/1160303.png?w=1480&t=st=1680445542~exp=1680446142~hmac=c9f4eeb27a966c0a92628d64cc93b6d47b8b8d4d2834ba1930357bf0bf47c1e9",
+          gravity: "top", // `top` or `bottom`
+          position: "center", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "#000000",
+            borderRadius: "10px",
+            border: "1px solid rgba(231, 231, 231, 0.233)",
+          },
+          onClick: function () {}, // Callback after click
+        }).showToast();
+      },
+    });
+  }
+</script>
+
+<script>
+  $("#share-button-<%= post._id %>").on("click", () => {
+    const shareOptions = $("#share-<%= post._id %>");
+    if (shareOptions.css("display") === "flex") {
+      shareOptions.removeClass("animate__fadeIn");
+      shareOptions.addClass("animate__fadeOut");
+      setTimeout(() => {
+        shareOptions.css({ display: "none" });
+      }, 500);
+    } else {
+      shareOptions.css({ display: "flex" });
+      shareOptions.removeClass("animate__fadeOut");
+      shareOptions.addClass("animate__fadeIn");
+    }
+  });
+
+  // function toggleShareOptions(postId) {}
+  function copyUrl(postId) {
+    // Get the text field
+    var url = window.location.href.includes("home")
+      ? window.location.href.split("home")[0] + "posts/post/" + postId
+      : window.location.href;
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(url);
+
+    // Alert the copied text
+    Toastify({
+      text: "Link copied",
+      duration: 2000,
+      destination: "",
+      newWindow: true,
+      close: true,
+      avatar:
+        "https://cdn-icons-png.flaticon.com/512/845/845646.png?w=1480&t=st=1680445326~exp=1680445926~hmac=0cb88a0841456c7c4b22ff6c8b911a3acb1e1278095990a5368ab134203fb03d",
+
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "#000000",
+        borderRadius: "10px",
+        border: "1px solid rgba(231, 231, 231, 0.233)",
+      },
+      onClick: function () {}, // Callback after click
+    }).showToast();
+  }
+</script>

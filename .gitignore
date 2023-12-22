@@ -9,3 +9,5 @@ googleCloudKey.json
 
 .env
 .DS_Store
+
+.corsConfig.json

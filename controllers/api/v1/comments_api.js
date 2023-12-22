@@ -54,7 +54,7 @@ module.exports.create = async function (request, response) {
 
     // for sending email to the user who commented on the post
     try {
-      queue.create("emails", comment).save();
+      // queue.create("emails", comment).save();
     } catch (exceptionError) {
       /* empty */
     }

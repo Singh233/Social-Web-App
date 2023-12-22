@@ -20,6 +20,8 @@ class PostComments {
     this.newCommentForm.submit(function (e) {
       e.preventDefault();
       let self = this;
+      $(self).find(".comment-add-loader").css({ display: "flex" });
+      $(self).find(".comment-add-button").css({ display: "none" });
 
       $.ajax({
         type: "post",
@@ -33,6 +35,8 @@ class PostComments {
           //enable the functionality of the toggle liek button on the new post
           new ToggleLike($(" .toggle-like-button", newComment));
           self.reset();
+          $(self).find(".comment-add-loader").css({ display: "none" });
+          $(self).find(".comment-add-button").css({ display: "flex" });
         },
         error: function (error) {
           // console.log(error.responseText);
@@ -51,11 +55,16 @@ class PostComments {
   deleteComment(deleteLink) {
     $(deleteLink).click(function (e) {
       e.preventDefault();
+      $(this).text("deleting...");
       $.ajax({
         type: "get",
         url: $(deleteLink).prop("href"),
         success: function (data) {
-          $(`#comment-${data.comment_id}`).remove();
+          $(`#comment-${data.comment_id}`).removeClass("animate__fadeIn");
+          $(`#comment-${data.comment_id}`).addClass("animate__fadeOut");
+          setTimeout(() => {
+            $(`#comment-${data.comment_id}`).remove();
+          }, 500);
 
           Toastify({
             text: "Comment removed!",
@@ -70,8 +79,9 @@ class PostComments {
             position: "center", // `left`, `center` or `right`
             stopOnFocus: true, // Prevents dismissing of toast on hover
             style: {
-              background: "#0057D2",
+              background: "#000000",
               borderRadius: "10px",
+              border: "1px solid rgba(231, 231, 231, 0.233)",
             },
             onClick: function () {}, // Callback after click
           }).showToast();
@@ -90,9 +100,9 @@ class PostComments {
             position: "center", // `left`, `center` or `right`
             stopOnFocus: true, // Prevents dismissing of toast on hover
             style: {
-              background: "#D20A0A",
+              background: "#000000",
               borderRadius: "10px",
-              color: "white",
+              border: "1px solid rgba(231, 231, 231, 0.233)",
             },
             onClick: function () {}, // Callback after click
           }).showToast();

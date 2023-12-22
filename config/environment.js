@@ -2,6 +2,8 @@
 const development = {
   name: "development",
   asset_path: "./assets",
+  ffmpegPath: process.env.FFMPEG_PATH,
+  videoEncodingOutputPath: process.env.VIDEO_ENCODE_OUTPUT_PATH,
   session_cookie_key: "blahsomething",
   db: process.env.CODIEAL_DEVELOPMENT_DB,
   smtp: {
@@ -60,6 +62,8 @@ const development = {
 const production = {
   name: "production",
   asset_path: process.env.CODEIAL_ASSET_PATH,
+  ffmpegPath: process.env.FFMPEG_PATH,
+  videoEncodingOutputPath: process.env.VIDEO_ENCODE_OUTPUT_PATH,
   session_cookie_key: process.env.CODEIAL_SESSION_KEY,
   db: process.env.CODIEAL_PRODUCTION_DB,
   smtp: {
@@ -74,11 +78,11 @@ const production = {
   },
   google_clientID: process.env.CODEIAL_GOOGLE_CLIENT_ID,
   google_clientSecret: process.env.CODEIAL_GOOGLE_CLIENT_SECRET,
-  google_callbackURL: "https://sanam.social/users/auth/google/callback",
+  google_callbackURL: "https://chillsanam.social/users/auth/google/callback",
   jwt_secret: process.env.CODEIAL_JWT_SECRET,
   certificate: process.env.CODEIAL_CERTIFICATE,
   key: process.env.CODEIAL_CERTIFICATE_KEY,
-  websocket_host: `https://sanam.social`,
+  websocket_host: `https://chillsanam.social`,
   peer: {
     config: {
       iceServers: [
@@ -114,4 +118,4 @@ const production = {
   // }
 };
 
-module.exports = production;
+module.exports = development;

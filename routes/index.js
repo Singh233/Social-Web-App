@@ -20,4 +20,10 @@ router.use("/call", require("./call"));
 
 router.use("/api", require("./api"));
 
+// Catch-all route for undefined routes
+// router.get("*", function (req, res) {
+//   // Redirect to the home page or handle the situation as needed
+//   res.redirect("/home");
+// });
+
 module.exports = router;

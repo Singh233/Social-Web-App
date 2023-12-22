@@ -7,6 +7,7 @@ const AVATAR_PATH = path.join("/uploads/users/avatars");
 // Creating Schema
 const usersSchema = new mongoose.Schema(
   {
+    platformRank: { type: Number },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
     name: { type: String, required: true },

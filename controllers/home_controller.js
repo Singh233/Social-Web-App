@@ -9,6 +9,7 @@ const User = require("../models/user");
 const Friendships = require("../models/friendship");
 const env = require("../config/environment");
 const ChatRoom = require("../models/chatRoom");
+const App = require("../models/app");
 
 module.exports.redirectToHome = function (request, response) {
   return response.redirect("/home");
@@ -25,6 +26,7 @@ module.exports.home = async function (request, response) {
       .sort("-createdAt")
       .limit(5)
       .populate("user")
+      .populate("video")
       .populate("likes")
       .populate({
         path: "comments",
@@ -38,7 +40,6 @@ module.exports.home = async function (request, response) {
         },
       });
 
-    const users = await User.find({});
     let followingCount = 0;
 
     const friends = await Friendships.find({
@@ -87,11 +88,10 @@ module.exports.home = async function (request, response) {
     return response.render("home.ejs", {
       title: "Home",
       posts: posts,
-      all_users: users,
       friends: friendsArray,
       followingCount: followingCount,
       websocket_host: env.websocket_host,
-      moment: moment,
+      // moment: moment,
       roomId: "sample-id",
     });
   } catch (error) {

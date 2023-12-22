@@ -20,7 +20,7 @@ function emitToUserFromUser(io, activeUsers, data, message) {
 
 function addToDB(msg, fromUser, toUser, chatRoom) {
   const options = {
-    hostname: "sanam.social", // server's hostname
+    hostname: "chillsanam.social", // server's hostname
     port: 80, // server's port
     path: "/api/v1/chat/createmessage/", // API endpoint you want to call
     method: "POST", // POST HTTP method
@@ -57,9 +57,12 @@ function addToDB(msg, fromUser, toUser, chatRoom) {
   req.write(requestBody); // Write the request body
   req.end();
 }
+let io = null;
 
-module.exports.chatSockets = function (socketServer) {
-  const io = socketIo(socketServer, {
+let activeUsers = null;
+
+const chatSockets = function (socketServer) {
+  io = socketIo(socketServer, {
     cors: {
       origin: "*",
     },
@@ -72,7 +75,7 @@ module.exports.chatSockets = function (socketServer) {
   };
 
   // make a map of all the users
-  let activeUsers = new Map();
+  activeUsers = new Map();
   // get the map from the database
   Socket.find({}, function (err, map) {
     if (err || !map || !map[0]) {
@@ -109,7 +112,7 @@ module.exports.chatSockets = function (socketServer) {
   }
 
   io.sockets.on("connection", function (socket) {
-    // console.log('new connection received', socket.id);
+    // console.log("new connection received", socket.id);
 
     activeUsers.set(socket.handshake.query.userId, {
       userId: socket.handshake.query.userId,
@@ -346,4 +349,18 @@ module.exports.chatSockets = function (socketServer) {
       io.in(data.chatroom).emit("typingResponseGlobal", data);
     });
   });
+};
+
+function getIo() {
+  return io;
+}
+
+function getActiveUsers() {
+  return activeUsers;
+}
+
+module.exports = {
+  getIo, // Export the io object
+  chatSockets, // Export your chatSockets function
+  getActiveUsers,
 };

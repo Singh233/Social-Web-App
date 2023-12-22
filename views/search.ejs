@@ -1,25 +1,53 @@
-
-
-
 <div class="search-page-container">
-
-    <div class="search-header">
-        <a href="/"><i class="fa-solid fa-arrow-left"></i> </a>
-        <div id="search-form-mobile">
-            <input type="hidden" id="search-user-id-mobile" name="id" value="<%= locals.user._id %>">
-            <input type="search" name="search" id="user-search-bar-mobile" placeholder="Search here...">
-            <p id="cancel-search-mobile" class="cancel-button">Cancel</p>
-        </div>
+  <div class="search-header">
+    <a href="/"><i class="fa-solid fa-arrow-left"></i> </a>
+    <div id="search-form-mobile">
+      <input
+        type="hidden"
+        id="search-user-id-mobile"
+        name="id"
+        value="<%= locals.user._id %>"
+      />
+      <input
+        type="search"
+        name="search"
+        id="user-search-bar-mobile"
+        placeholder="Search here..."
+      />
+      <p id="cancel-search-mobile" class="cancel-button">Cancel</p>
     </div>
+  </div>
 
-    <div id="search-results-mobile">
-        <p class="info">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            Search for people
-        </p>
-    </div>
-    
-    <% if (locals.user){ %>
-        <%- include('_bottom_nav_bar_sm') -%>
-    <% } %>
+  <div id="search-results-mobile">
+    <p class="info">
+      <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        id="search"
+      >
+        <g
+          fill="none"
+          fill-rule="evenodd"
+          stroke="#200E32"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          transform="translate(2 2)"
+        >
+          <circle cx="9.767" cy="9.767" r="8.989"></circle>
+          <line x1="16.018" x2="19.542" y1="16.485" y2="20"></line>
+        </g>
+      </svg>
+      Search for people
+    </p>
+  </div>
+
+  <% if (locals.user){ %> <%- include('_bottom_nav_bar_sm') -%> <% } %>
 </div>
+
+<script>
+  $("#sm-nav-search-icon").addClass("active");
+</script>

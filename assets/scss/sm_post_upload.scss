@@ -12,15 +12,21 @@ $button-color-gray: #212121;
   display: none;
 }
 
-@media screen and (max-width: "480px") {
+@media screen and (max-width: "600px") {
   .post-upload-container {
-    margin-top: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     min-width: 100vw;
+    height: 100svh;
     padding: 5px;
-
+    padding: 60px 5px;
+    overflow-x: hidden !important;
+    overflow-y: auto;
+    padding-top: 200px;
+    padding-top: 200px;
+    position: relative;
     .upload-header {
       position: fixed;
       top: 0;
@@ -38,6 +44,18 @@ $button-color-gray: #212121;
         margin-left: 20px;
         color: white;
         font-weight: 600;
+
+        display: flex;
+        align-items: center;
+
+        svg {
+          fill: white;
+          margin-right: 5px;
+
+          path {
+            fill: white;
+          }
+        }
       }
 
       img {
@@ -46,6 +64,7 @@ $button-color-gray: #212121;
         border-radius: 50%;
         object-fit: cover;
         margin-right: 20px;
+        margin-top: 7px;
       }
     }
 
@@ -98,7 +117,6 @@ $button-color-gray: #212121;
         background-color: #101010;
         // border: 1px solid rgba(231, 231, 231, 0.233);
         border-radius: 12px;
-
       }
       .filepond--credits {
         display: none;
@@ -135,7 +153,27 @@ $button-color-gray: #212121;
         color: white;
         border: none;
         font-size: 1.1rem;
-        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        font-weight: 600;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          background-color: lighten($color: $button-color-blue, $amount: 20%);
+        }
+
+        svg {
+          height: 27px;
+          width: 27px;
+          margin-right: 5px;
+
+          path {
+            fill: white;
+          }
+        }
       }
     }
   }
