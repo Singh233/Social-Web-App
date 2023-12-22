@@ -118,4 +118,4 @@ const production = {
   // }
 };
 
-module.exports = development;
+module.exports = production;

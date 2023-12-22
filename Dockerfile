@@ -8,7 +8,7 @@ RUN npm install
 
 RUN npm uninstall sharp
 
-RUN npm install --platform=linux --arch=x64 sharp
+RUN npm install --platform=linux --arch=x64 sharp@0.32.4
 
 COPY . .
 
