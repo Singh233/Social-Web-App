@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-inner-declarations */
 /* eslint-disable no-new */
@@ -186,9 +187,6 @@ let newPostDom = function (post) {
   return $(`<div id="post-${
     post._id
   }" class="display-posts animate__animated animate__fadeIn">
-                
-
-
                 <div id="bottom-menu-options-${
                   post._id
                 }" class="post-options-menu animate__animated remove">
@@ -215,8 +213,16 @@ let newPostDom = function (post) {
                 
 
                 <div class="post-header">
-                    <img src="${post.user.avatar}" id="user-profile-img">
-                    <p>${post.user.name}</p>
+                <a href="/users/profile/${post.user._id}">
+                    
+                  <img src="${
+                    post.user.avatar !== undefined
+                      ? post.user.avatar
+                      : assetPath("img/dummy-profile.jpeg")
+                  }" id="user-profile-img" />
+                  
+                </a>
+                <a href="/users/profile/${post.user._id}"> ${post.user.name}</a>
                     <div id="post-menu-options">
                         <i onclick="toggleMenuOptions('${
                           post._id
@@ -408,13 +414,15 @@ let newPostDom = function (post) {
                             <form id="post-${
                               post._id
                             }-comments-form" action="/comments/create" method="POST">
-                                <i  class="fa-regular fa-face-smile emoji-button"></i>
-                                <input id="input-add-comment-${
-                                  post._id
-                                } class="input-add-comment" type="text" name="content" placeholder="add a comment..." required>
-                                <input type="hidden" name="postId" value="${
-                                  post._id
-                                }" >
+                              <i onclick="emojiClicked(event, '${
+                                post._id
+                              }')" class="fa-regular fa-face-smile emoji-button"></i>
+                              <input id="input-add-comment-${
+                                post._id
+                              }" class="input-add-comment" type="text" name="content" placeholder="add a comment..." required>
+                              <input type="hidden" name="postId" value="${
+                                post._id
+                              }" >
                                 <button class="submit-button" type="submit">
                                   <div class="comment-add-loader"></div>
 
@@ -486,13 +494,23 @@ let renderPostDom = function (post, isLiked, isSaved) {
                 
 
                 <div class="post-header">
-                    <img src="${post.user.avatar}" id="user-profile-img">
-                    <p>${post.user.name}</p>
-                    <div id="post-menu-options">
-                        <i onclick="toggleMenuOptions('${
-                          post._id
-                        }')" class="fa-solid fa-ellipsis-vertical"></i>
-                    </div>
+                  <a href="/users/profile/${post.user._id}">
+                    
+                    <img src="${
+                      post.user.avatar !== undefined
+                        ? post.user.avatar
+                        : assetPath("img/dummy-profile.jpeg")
+                    }" id="user-profile-img" />
+                    
+                  </a>
+                  <a href="/users/profile/${post.user._id}"> ${
+    post.user.name
+  }</a>
+                  <div id="post-menu-options">
+                      <i onclick="toggleMenuOptions('${
+                        post._id
+                      }')" class="fa-solid fa-ellipsis-vertical"></i>
+                  </div>
                     
                 </div>
 
@@ -1235,3 +1253,10 @@ window.onscroll = (event) => {
     });
   }
 };
+
+function handleCommentClick(id) {
+  const input = document.getElementById(id);
+  if (input) {
+    input.focus();
+  }
+}

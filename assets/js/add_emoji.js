@@ -2,10 +2,13 @@ const picker = new EmojiButton({
   theme: "dark",
   autoHide: true,
 });
+let commentInputBoxId = null;
+
 function emojiClicked(e, id) {
   picker.togglePicker(e.target);
-
-  picker.on("emoji", (emoji) => {
-    document.querySelector(`#input-add-comment-${id}`).value += emoji;
-  });
+  commentInputBoxId = id;
 }
+picker.on("emoji", (emoji) => {
+  document.getElementById(`input-add-comment-${commentInputBoxId}`).value +=
+    emoji;
+});

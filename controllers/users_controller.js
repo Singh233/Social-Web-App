@@ -9,7 +9,13 @@ const ChatRoom = require("../models/chatRoom");
 const App = require("../models/app");
 
 module.exports.profile = async function (request, response) {
-  const user = await User.findById(request.params.id);
+  let user = null;
+  try {
+    user = await User.findById(request.params.id);
+  } catch (e) {
+    request.flash("error", "User not found");
+    return response.redirect("back");
+  }
 
   if (!user) {
     request.flash("error", "User not found");

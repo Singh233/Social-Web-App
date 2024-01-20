@@ -305,8 +305,7 @@ module.exports.viewSinglePost = async function (request, response) {
       title: "Post",
     });
   } catch (error) {
-    console.log(error);
-    request.flash("error", "Internal server error");
+    request.flash("error", "Post does not exists!");
     return response.redirect("back");
   }
 };

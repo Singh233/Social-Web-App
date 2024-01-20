@@ -187,11 +187,8 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
   // Handle the error in a way that suits your application
   if (err.status === 404) {
+    // req.flash("error", "Page does not exists!");
     res.redirect("/home"); // Redirect to the home page for 404 errors
-  } else {
-    // Handle other errors
-    res.status(err.status || 500);
-    res.send("Internal Server Error");
   }
 });
 
