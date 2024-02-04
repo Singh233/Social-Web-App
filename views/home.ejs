@@ -66,12 +66,17 @@
 
     <div class="new-post-header">
       <% if(locals.user.avatar != undefined) { %>
-      <img src="<%= locals.user.avatar %>" alt="" />
+      <a href="/users/profile/<%= locals.user._id %>">
+        <img src="<%= locals.user.avatar %>" alt="" />
+      </a>
       <% } else { %>
-      <img
-        id="logo-placeholder"
-        src="<%= assetPath('img/dummy-profile.jpeg') %>"
-      />
+      <a href="/users/profile/<%= locals.user._id %>">
+        <img
+          id="logo-placeholder"
+          src="<%= assetPath('img/dummy-profile.jpeg') %>"
+        />
+      </a>
+
       <% } %>
       <p class="user-greet">
         Hey <%= locals.user.name.split(' ')[0] %>, post something new!

@@ -1,9 +1,4 @@
-<form
-  id="edit-profile-form"
-  action="/users/update/<%= profile_user.id %>"
-  enctype="multipart/form-data"
-  method="post"
->
+<form id="edit-profile-form" enctype="multipart/form-data" method="post">
   <div class="header">
     <a href="/users/profile/<%= profile_user.id %>">
       <!-- <i class="fa-solid fa-arrow-left-long"></i> -->
@@ -27,9 +22,9 @@
   </div>
 
   <% if(profile_user.avatar != undefined) { %>
-  <img src="<%= profile_user.avatar %>" alt="" />
+  <img id="user-avatar" src="<%= profile_user.avatar %>" alt="" />
   <% } else { %>
-  <img id="logo-placeholder" src="<%= assetPath('img/dummy-profile.jpeg') %>" />
+  <img id="user-avatar" src="<%= assetPath('img/dummy-profile.jpeg') %>" />
   <% } %>
 
   <input
@@ -40,6 +35,15 @@
     id="profile-file"
     placeholder="Profile Picture"
   />
+  <input
+    id="local_user_id"
+    type="hidden"
+    name="id"
+    placeholder="Your id"
+    value="<%= locals.user._id %>"
+  />
+
+  <div class="g-signin2" data-onsuccess="onSignIn"></div>
 
   <div class="container">
     <label style="margin-left: 6px" for="name-input">Name</label>
@@ -58,9 +62,9 @@
     <label style="margin-left: 6px" for="email-input">Email</label>
     <div class="input-with-icon">
       <i class="fa-solid fa-envelope"></i>
-
       <input
         id="email-input"
+        disabled
         type="email"
         name="email"
         placeholder="Your email"
@@ -69,7 +73,9 @@
       />
     </div>
 
-    <button id="submit-button" type="submit">Update</button>
+    <button id="profile-update-button" class="submit-button" type="submit">
+      Update
+    </button>
   </div>
 </form>
 
@@ -96,3 +102,5 @@
 </div>
 
 <script src="<%= assetPath('js/home_posts.js') %>"></script>
+
+<script src="<%= assetPath('js/user_edit_profile.js') %>"></script>

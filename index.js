@@ -186,10 +186,7 @@ app.use(function (req, res, next) {
 // Error-handling middleware
 app.use(function (err, req, res, next) {
   // Handle the error in a way that suits your application
-  if (err.status === 404) {
-    // req.flash("error", "Page does not exists!");
-    res.redirect("/home"); // Redirect to the home page for 404 errors
-  }
+  res.redirect("/home"); // Redirect to the home page for 404 errors
 });
 
 app.listen(port, function (error) {

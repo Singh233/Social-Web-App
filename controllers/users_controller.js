@@ -88,38 +88,43 @@ module.exports.editProfile = async function (request, response) {
 module.exports.update = async function (request, response) {
   try {
     if (request.user.id !== request.params.id) {
-      request.flash("error", "Unauthorized");
-      return response.redirect("back");
+      return response.status(401).send("Unauthorized");
     }
-
     const { file } = request;
     const user = await User.findById(request.params.id);
 
     user.name = request.body.name;
-    user.email = request.body.email;
 
     let imageUrl = null;
-    try {
-      imageUrl = await uploadImage("sanam_users_avatar", file);
-      // check and delete the previous avatar of user
-      if (user.avatar) {
-        await deleteFile("sanam_users_avatar", user.avatar);
+    if (file) {
+      try {
+        imageUrl = await uploadImage("sanam_users_avatar", file);
+        // check and delete the previous avatar of user
+        if (user.avatar) {
+          await deleteFile("sanam_users_avatar", user.avatar);
+        }
+      } catch (error) {
+        console.log(error);
+        return response.status(401).send("Something went wrong!");
       }
-    } catch (error) {
-      console.log(error);
-    }
 
-    if (imageUrl) {
       // this is saving the path of the uploaded file into the field in the user
       user.avatar = imageUrl;
     }
-    user.save();
 
-    request.flash("success", "Successfully updated profile!");
-    return response.redirect("back");
+    await user.save();
+
+    return response.status(200).json({
+      data: {
+        user: user,
+        success: "Successfully updated profile!",
+      },
+      success: true,
+      message: "Successfully updated profile!",
+    });
   } catch (error) {
-    request.flash("error", "Something went wrong!");
-    return response.status(401).send("Unauthorized");
+    console.log(error);
+    return response.status(500).send("Internal Server Error!");
   }
 };
 

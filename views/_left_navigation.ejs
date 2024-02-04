@@ -199,14 +199,14 @@
 
     <div class="user-container">
       <% if(user.avatar != undefined) { %>
-      <img src="<%= user.avatar %>" alt="" />
+      <img id="user-nav-profile-img" src="<%= user.avatar %>" alt="" />
       <% } else { %>
       <img
-        id="logo-placeholder"
+        id="user-nav-profile-img"
         src="<%= assetPath('img/dummy-profile.jpeg') %>"
       />
       <% } %>
-      <p class="user-name"><%= user.name.substring(0, 14) %></p>
+      <p id="user-nav-name" class="user-name"><%= user.name.substring(0, 14) %></p>
       <i class="fa-solid fa-chevron-up"></i>
     </div>
   </div>
