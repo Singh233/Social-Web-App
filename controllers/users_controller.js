@@ -1,12 +1,23 @@
 /* eslint-disable node/no-unsupported-features/es-syntax */
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-undef */
+const Joi = require("joi");
 const User = require("../models/user");
 const Friendships = require("../models/friendship");
 const Post = require("../models/post");
 const { deleteFile, uploadImage } = require("../helper/googleCloudStore");
 const ChatRoom = require("../models/chatRoom");
 const App = require("../models/app");
+
+// helper function to handle the response
+const handleResponse = (res, status, message, data, success) => {
+  const response = {
+    message,
+    data,
+    success,
+  };
+  return res.status(status).json(response);
+};
 
 module.exports.profile = async function (request, response) {
   let user = null;
@@ -100,7 +111,11 @@ module.exports.update = async function (request, response) {
       try {
         imageUrl = await uploadImage("sanam_users_avatar", file);
         // check and delete the previous avatar of user
-        if (user.avatar) {
+        if (
+          user.avatar &&
+          user.googleProfile &&
+          user.avatar !== user.googleProfile
+        ) {
           await deleteFile("sanam_users_avatar", user.avatar);
         }
       } catch (error) {
@@ -217,4 +232,33 @@ module.exports.search = async function (request, response) {
     message: "List of users",
     users,
   });
+};
+
+// controller for syncing google user profile
+module.exports.syncGoogleProfile = async function (req, res) {
+  try {
+    const { value, error } = Joi.object({
+      userId: Joi.string().required(),
+    }).validate(req.params);
+
+    if (error) {
+      return handleResponse(res, 401, "Unauthorized", { error }, false);
+    }
+
+    const { userId } = value;
+    const user = await User.findById(userId);
+
+    if (!user || !user.googleProfile) {
+      return handleResponse(res, 401, "Unauthorized", { error }, false);
+    }
+
+    // update avatar with google profile
+    user.avatar = user.googleProfile;
+    await user.save();
+
+    return handleResponse(res, 200, "Profile updated", { user }, true);
+  } catch (error) {
+    console.log(error);
+    return handleResponse(res, 500, "Internal server error!", { error }, false);
+  }
 };

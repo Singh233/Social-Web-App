@@ -35,6 +35,15 @@
     id="profile-file"
     placeholder="Profile Picture"
   />
+  <% if (profile_user.googleProfile) { %>
+  <span style="align-self: center; margin-bottom: 5px">or</span>
+  <a id="google-profile-sync" href="/users/syncProfile/<%= profile_user._id %>">
+    <img src="<%= assetPath('img/icons8-google-48.png') %>" alt="" />
+    <span> Sync with Google </span>
+    <div class="loader"></div>
+  </a>
+  <% } %>
+
   <input
     id="local_user_id"
     type="hidden"

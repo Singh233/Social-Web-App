@@ -22,8 +22,11 @@ passport.use(
       let user = await User.findOne({ email: profile.emails[0].value });
 
       if (user) {
+        // update to latest google profile
+        user.googleProfile = profile.photos[0].value;
         // Include the returnTo URL in the user object
         user.returnTo = request.session && request.session.returnTo;
+        await user.save();
         // if found set this user as req.user
         return done(null, user);
       }

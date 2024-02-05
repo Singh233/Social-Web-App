@@ -12,6 +12,7 @@ const usersSchema = new mongoose.Schema(
     password: { type: String, required: true, select: false },
     name: { type: String, required: true },
     avatar: { type: String },
+    googleProfile: { type: String },
     friendships: [
       {
         type: mongoose.Schema.Types.ObjectId,

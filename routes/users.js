@@ -33,6 +33,8 @@ router.post("/create", usersController.create);
 // route to search users
 router.get("/search", usersController.search);
 
+router.get("/syncProfile/:userId", usersController.syncGoogleProfile);
+
 // user passport as a middleware to authenticate
 router.post(
   "/create-session",

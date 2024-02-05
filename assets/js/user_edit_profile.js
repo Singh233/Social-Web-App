@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 
 let prevUsername = $("#name-input").val();
+let previousAvatar = $("#user-avatar").attr("src");
+
 $("#edit-profile-form").submit(function (e) {
   e.preventDefault();
   const form = document.querySelector("#edit-profile-form");
@@ -33,6 +35,7 @@ $("#edit-profile-form").submit(function (e) {
       showNotification(data.data.success, "success", 2000, null);
 
       prevUsername = user.name;
+      previousAvatar = user.avatar;
       // update image
       $("#user-avatar").attr("src", user.avatar);
       $("#user-nav-profile-img").attr("src", user.avatar);
@@ -65,6 +68,46 @@ $("#edit-profile-form").submit(function (e) {
       return xhr;
     },
     error: function (error) {
+      showNotification("Something went wrong!", "error", 2000, null);
+    },
+  });
+});
+
+$("#google-profile-sync").click(function (e) {
+  const self = this;
+  e.preventDefault();
+  $(self).find(".loader").css({ display: "flex" });
+  $(self).find("span").text("Syncing avatar");
+  const url = $(self).attr("href");
+
+  $.ajax({
+    type: "get",
+    url: url,
+    // contentType: false
+    success: function (data) {
+      const { user } = data.data;
+      // console.log(data.data);
+      showNotification(
+        previousAvatar === user.avatar
+          ? "Already Up to date!"
+          : "Successfully synced!",
+        "success",
+        2000,
+        null
+      );
+      previousAvatar = user.avatar;
+      $(self).find(".loader").css({ display: "none" });
+      $(self).find("span").text("Sync with Google");
+      prevUsername = user.name;
+      // update image
+      $("#user-avatar").attr("src", user.avatar);
+      $("#user-nav-profile-img").attr("src", user.avatar);
+      // remove the image preview of filepond
+      profilePond.removeFile();
+    },
+    error: function (error) {
+      $(self).find(".loader").css({ display: "none" });
+      $(self).find("span").text("Sync with Google");
       showNotification("Something went wrong!", "error", 2000, null);
     },
   });
