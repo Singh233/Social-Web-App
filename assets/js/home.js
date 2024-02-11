@@ -245,8 +245,8 @@ function searchUser(input, type) {
             ${
               user.avatar !== undefined
                 ? `<img src="${user.avatar}" alt="">`
-                : // : `<img id="logo-placeholder" src="img/dummy-profile.jpeg">`
-                  `<div class="no-avatar"><i class="fa-solid fa-user"></i></div>`
+                : `<img id="logo-placeholder" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png">`
+              // `<div class="no-avatar"><i class="fa-solid fa-user"></i></div>`
             }
         </a>
         <a href="/users/profile/${user._id}">
@@ -264,6 +264,10 @@ function searchUser(input, type) {
     searchValue = $("#user-search-bar").val();
   }
   if (searchValue !== "") {
+    $("#search-results").html(
+      '<p class="no-user-found animate__animated animate__fadeIn">Searching users...</p>'
+    );
+    // $("#search-results").css("padding", "10px");
     $.ajax({
       url: `/users/search?search=${searchValue}`,
       type: "GET",
@@ -320,8 +324,8 @@ function userSearchMobile(searchValue) {
             ${
               user.avatar != undefined
                 ? `<img src="${user.avatar}" alt="">`
-                : // : `<img id="logo-placeholder" src="img/dummy-profile.jpeg">`
-                  `<div class="no-avatar"><i class="fa-solid fa-user"></i></div>`
+                : `<img id="logo-placeholder" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png">`
+              // `<div class="no-avatar"><i class="fa-solid fa-user"></i></div>`
             }
         </a>
         <a href="/users/profile/${user._id}">
@@ -334,6 +338,10 @@ function userSearchMobile(searchValue) {
 `;
 
   if (searchValue !== "") {
+    $("#search-results-mobile").html(
+      '<p class="no-user-found animate__animated animate__fadeIn">Searching users...</p>'
+    );
+    // $("#search-results-mobile").css("padding", "10px");
     $.ajax({
       url: `/users/search?search=${searchValue}`,
       type: "GET",

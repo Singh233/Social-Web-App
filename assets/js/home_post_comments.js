@@ -29,6 +29,9 @@ class PostComments {
         data: $(self).serialize(), //this converts data in json objects
         success: function (data) {
           let newComment = pSelf.newCommentDom(data.data.comment);
+          $(`#post-comments-${postId}`)
+            .find(`#no-comments-${postId}`)
+            .css({ display: "none" });
           $(`#post-comments-${postId}`).prepend(newComment);
           pSelf.deleteComment($(" .delete-comment-button", newComment));
 
@@ -60,10 +63,16 @@ class PostComments {
         type: "get",
         url: $(deleteLink).prop("href"),
         success: function (data) {
+          const { post: postId } = data.data.comment;
           $(`#comment-${data.comment_id}`).removeClass("animate__fadeIn");
           $(`#comment-${data.comment_id}`).addClass("animate__fadeOut");
           setTimeout(() => {
             $(`#comment-${data.comment_id}`).remove();
+            if ($(`#post-comments-${postId}`).children().length <= 1) {
+              $(`#post-comments-${postId}`)
+                .find(`#no-comments-${postId}`)
+                .css({ display: "block" });
+            }
           }, 500);
 
           Toastify({

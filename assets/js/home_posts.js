@@ -218,7 +218,7 @@ let newPostDom = function (post) {
                   <img src="${
                     post.user.avatar !== undefined
                       ? post.user.avatar
-                      : assetPath("img/dummy-profile.jpeg")
+                      : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
                   }" id="user-profile-img" />
                   
                 </a>
@@ -279,7 +279,9 @@ let newPostDom = function (post) {
                         }&type=Post">
                             <i style="margin-left: 0px" class="fa-regular fa-heart "></i> <span>0</span>
                         </a>
-                        <a>
+                        <a onclick="handleCommentClick('input-add-comment-${
+                          post._id
+                        }')">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -499,7 +501,7 @@ let renderPostDom = function (post, isLiked, isSaved) {
                     <img src="${
                       post.user.avatar !== undefined
                         ? post.user.avatar
-                        : assetPath("img/dummy-profile.jpeg")
+                        : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
                     }" id="user-profile-img" />
                     
                   </a>
@@ -566,7 +568,9 @@ let renderPostDom = function (post, isLiked, isSaved) {
                             </a>`
                         }
 
-                        <a href="#">
+                        <a onclick="handleCommentClick('input-add-comment-${
+                          post._id
+                        }')">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"

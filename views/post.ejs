@@ -133,7 +133,7 @@
         </a>
         <% } %>
 
-        <a href="#">
+        <a onclick="handleCommentClick('input-add-comment-<%= post._id %>')">
           <!-- <i class="fa-regular fa-comment"></i> -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -267,6 +267,17 @@
       <ul id="post-comments-<%= post._id %>">
         <% for (let comment of post.comments) { %> <%- include('_comment',
         {comment: comment}) %> <% } %>
+        <p
+          id="no-comments-<%= post._id %>"
+          style="
+          <%= post.comments.length ? 'display: none;' : 'display: block;' %>
+            text-align: center;
+            margin-top: 50px;
+            color: gray;
+          "
+        >
+          No comments yet!
+        </p>
       </ul>
     </div>
   </div>

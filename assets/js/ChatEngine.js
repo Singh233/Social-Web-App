@@ -826,6 +826,7 @@ class ChatEngine {
     function addGlobalChatToDOM(data) {
       let newMessage = $("<li>");
       let profile = $("<img>");
+      console.log(data);
 
       newMessage.addClass("animate__animated  animate__fadeIn");
       let messageType = "other-message animate__animated  animate__fadeIn";
@@ -844,7 +845,7 @@ class ChatEngine {
                                 </span>
                                 <img src="${
                                   data.sender.avatar
-                                    ? data.sender.avatar
+                                    ? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
                                     : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
                                 }">
                             </div>`);
@@ -852,7 +853,7 @@ class ChatEngine {
         newMessage.append(`<div class="msg-content">
                                 <img src="${
                                   data.sender.avatar
-                                    ? data.sender.avatar
+                                    ? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
                                     : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
                                 }">
 
