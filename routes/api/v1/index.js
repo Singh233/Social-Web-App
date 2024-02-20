@@ -22,4 +22,9 @@ router.use(
   require("./friends")
 );
 
+// handle 404
+router.use((req, res, next) => {
+  res.status(404).json({ message: "404 Not found" });
+});
+
 module.exports = router;

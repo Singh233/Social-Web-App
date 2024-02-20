@@ -826,7 +826,7 @@ class ChatEngine {
     function addGlobalChatToDOM(data) {
       let newMessage = $("<li>");
       let profile = $("<img>");
-      console.log(data);
+      // console.log(data);
 
       newMessage.addClass("animate__animated  animate__fadeIn");
       let messageType = "other-message animate__animated  animate__fadeIn";

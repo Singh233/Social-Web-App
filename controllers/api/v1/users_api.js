@@ -1,7 +1,6 @@
 /* eslint-disable no-plusplus */
 const { OAuth2Client } = require("google-auth-library");
 const jwt = require("jsonwebtoken");
-const { use } = require("passport");
 const crypto = require("crypto");
 const Joi = require("joi");
 
@@ -10,6 +9,7 @@ const Post = require("../../../models/post");
 const Friendships = require("../../../models/friendship");
 const env = require("../../../config/environment");
 const ChatRoom = require("../../../models/chatRoom");
+const { uploadImage, deleteFile } = require("../../../helper/googleCloudStore");
 
 const CLIENT_ID = env.google_clientID;
 const client = new OAuth2Client(CLIENT_ID);
@@ -270,7 +270,6 @@ module.exports.fetchUserFriends = async function (request, response) {
       true
     );
   } catch (error) {
-    console.log(error);
     return handleResponse(response, 500, "Internal server error", {}, false);
   }
 };
@@ -292,4 +291,82 @@ module.exports.search = async function (request, response) {
   const users = await User.find({ name: regex });
 
   return handleResponse(response, 200, "Users found", { users: users }, true);
+};
+
+// a controller for updating user details (name, avatar)
+module.exports.update = async function (request, response) {
+  try {
+    if (!request.user) {
+      return handleResponse(response, 401, "Unauthorized", {}, false);
+    }
+    // validate the fields
+    const { value, error } = Joi.object({
+      name: Joi.string().min(1).max(100).required(),
+    }).validate(request.body);
+
+    if (error) {
+      return handleResponse(
+        response,
+        422,
+        error.details[0].message,
+        { error },
+        false
+      );
+    }
+    const {
+      file,
+      body: { name: newName },
+      user: { id: userId },
+    } = request;
+    const user = await User.findById(userId);
+
+    user.name = newName;
+
+    let imageUrl = null;
+    if (file) {
+      try {
+        imageUrl = await uploadImage("sanam_users_avatar", file);
+        // this is saving the path of the uploaded file into the field in the user
+        user.avatar = imageUrl;
+        // check and delete the previous avatar of user if it is not the same as the google profile
+        if (
+          user.avatar &&
+          user.googleProfile &&
+          user.avatar !== user.googleProfile
+        ) {
+          await deleteFile("sanam_users_avatar", user.avatar);
+        }
+      } catch (uploadError) {
+        // return nothing if the image upload fails
+      }
+    }
+
+    try {
+      await user.save();
+    } catch (dbError) {
+      return handleResponse(response, 500, "Failed to update user", {}, false);
+    }
+
+    return handleResponse(response, 200, "User updated", { user }, true);
+  } catch (error) {
+    return handleResponse(response, 500, "Internal server error", {}, false);
+  }
+};
+
+// controller for syncing google user profile
+module.exports.syncGoogleProfile = async function (req, res) {
+  try {
+    const { user } = req;
+    if (!user || !user.googleProfile) {
+      return handleResponse(res, 401, "Unauthorized", {}, false);
+    }
+
+    // update avatar with google profile
+    user.avatar = user.googleProfile;
+    await user.save();
+
+    return handleResponse(res, 200, "Profile synced", { user }, true);
+  } catch (error) {
+    return handleResponse(res, 500, "Internal server error!", { error }, false);
+  }
 };

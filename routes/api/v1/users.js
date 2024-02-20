@@ -28,4 +28,16 @@ router.get(
 
 router.post("/login/google", usersApi.createGoogleSession);
 
+router.post(
+  "/update",
+  passport.authenticate("jwt", { session: false }),
+  usersApi.update
+);
+
+router.get(
+  "/syncProfile",
+  passport.authenticate("jwt", { session: false }),
+  usersApi.syncGoogleProfile
+);
+
 module.exports = router;
