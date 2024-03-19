@@ -1,5 +1,9 @@
 <div id="comment-<%= comment._id %>" class="comment-display animate__animated">
+  <% if(comment.user.avatar != undefined) { %>
   <img src="<%= comment.user.avatar %>" id="user-profile-img" />
+  <% } else { %>
+  <img src="<%= assetPath('img/dummy-profile.jpeg') %>" id="user-profile-img" />
+  <% } %>
   <div class="middle-section">
     <div class="upper">
       <p class="comment-user-name"><%= comment.user.name %>&nbsp;&nbsp;</p>

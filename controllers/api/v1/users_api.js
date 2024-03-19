@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unsupported-features/es-syntax */
 /* eslint-disable no-plusplus */
 const { OAuth2Client } = require("google-auth-library");
 const jwt = require("jsonwebtoken");
@@ -10,6 +11,7 @@ const Friendships = require("../../../models/friendship");
 const env = require("../../../config/environment");
 const ChatRoom = require("../../../models/chatRoom");
 const { uploadImage, deleteFile } = require("../../../helper/googleCloudStore");
+const App = require("../../../models/app");
 
 const CLIENT_ID = env.google_clientID;
 const client = new OAuth2Client(CLIENT_ID);
@@ -137,7 +139,14 @@ module.exports.create = async function (request, response) {
     const user = await User.findOne({ email: request.body.email });
 
     if (!user) {
-      const newUser = await User.create(request.body);
+      const appData = await App.find({});
+      appData[0].totalUsers += 1;
+      await appData[0].save();
+
+      const newUser = await User.create({
+        ...request.body,
+        platformRank: appData[0].totalUsers,
+      });
 
       // expires in 11 days
       const expiresIn = 11 * 24 * 60 * 60 * 1000;
@@ -302,6 +311,7 @@ module.exports.update = async function (request, response) {
     // validate the fields
     const { value, error } = Joi.object({
       name: Joi.string().min(1).max(100).required(),
+      filepond: Joi.string().allow(null),
     }).validate(request.body);
 
     if (error) {
@@ -326,8 +336,6 @@ module.exports.update = async function (request, response) {
     if (file) {
       try {
         imageUrl = await uploadImage("sanam_users_avatar", file);
-        // this is saving the path of the uploaded file into the field in the user
-        user.avatar = imageUrl;
         // check and delete the previous avatar of user if it is not the same as the google profile
         if (
           user.avatar &&
@@ -339,6 +347,7 @@ module.exports.update = async function (request, response) {
       } catch (uploadError) {
         // return nothing if the image upload fails
       }
+      user.avatar = imageUrl;
     }
 
     try {
