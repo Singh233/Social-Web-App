@@ -10,7 +10,7 @@ In addition, the build process is streamlined with Gulp for fast and automated d
 
 ## 👀 Demo
 
-https://chillsanam.social 🚀
+https://social.chillsanam.com 🚀
 
 ## 🧑🏻‍💻 Tech Stack
 
@@ -121,11 +121,12 @@ https://github.com/Singh233/Social-Media-API
   git pull origin docker-setup
 ```
 
-
 - (NOTE) Add .env and SSL (certificate and key) files to project
+
 ```bash
   Social-Web-App/ssl/
 ```
+
 - Run command
 
 ```bash

@@ -327,7 +327,7 @@ let newPostDom = function (post) {
                               post.user.name
                             }"
                             data-hashtags="awesome, viral, cool"
-                            data-url="https://chillsanam.social/posts/post/${
+                            data-url="https://social.chillsanam.com/posts/post/${
                               post._id
                             }"
                           >
@@ -339,7 +339,7 @@ let newPostDom = function (post) {
                             data-title="Checkout this post from ${
                               post.user.name
                             }"
-                            data-url="https://chillsanam.social/posts/post/${
+                            data-url="https://social.chillsanam.com/posts/post/${
                               post._id
                             }"
                             data-hashtags="awesome, viral, cool"
@@ -352,7 +352,7 @@ let newPostDom = function (post) {
                             data-title="Checkout this post from ${
                               post.user.name
                             }"
-                            data-url="https://chillsanam.social/posts/post/${
+                            data-url="https://social.chillsanam.com/posts/post/${
                               post._id
                             }"
                             data-hashtags="awesome, viral, cool"
@@ -616,7 +616,7 @@ let renderPostDom = function (post, isLiked, isSaved) {
                               post.user.name
                             }"
                             data-hashtags="awesome, viral, cool"
-                            data-url="https://chillsanam.social/posts/post/${
+                            data-url="https://social.chillsanam.com/posts/post/${
                               post._id
                             }"
                           >
@@ -628,7 +628,7 @@ let renderPostDom = function (post, isLiked, isSaved) {
                             data-title="Checkout this post from ${
                               post.user.name
                             }"
-                            data-url="https://chillsanam.social/posts/post/${
+                            data-url="https://social.chillsanam.com/posts/post/${
                               post._id
                             }"
                             data-hashtags="awesome, viral, cool"
@@ -641,7 +641,7 @@ let renderPostDom = function (post, isLiked, isSaved) {
                             data-title="Checkout this post from ${
                               post.user.name
                             }"
-                            data-url="https://chillsanam.social/posts/post/${
+                            data-url="https://social.chillsanam.com/posts/post/${
                               post._id
                             }"
                             data-hashtags="awesome, viral, cool"

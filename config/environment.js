@@ -78,11 +78,12 @@ const production = {
   },
   google_clientID: process.env.CODEIAL_GOOGLE_CLIENT_ID,
   google_clientSecret: process.env.CODEIAL_GOOGLE_CLIENT_SECRET,
-  google_callbackURL: "https://chillsanam.social/users/auth/google/callback",
+  google_callbackURL:
+    "https://social.chillsanam.com/users/auth/google/callback",
   jwt_secret: process.env.CODEIAL_JWT_SECRET,
   certificate: process.env.CODEIAL_CERTIFICATE,
   key: process.env.CODEIAL_CERTIFICATE_KEY,
-  websocket_host: `https://chillsanam.social`,
+  websocket_host: `https://social.chillsanam.com`,
   peer: {
     config: {
       iceServers: [
@@ -118,4 +119,4 @@ const production = {
   // }
 };
 
-module.exports = development;
+module.exports = production;

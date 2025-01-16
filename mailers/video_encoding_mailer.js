@@ -4,7 +4,7 @@ const nodeMailer = require("../config/nodemailer");
 exports.videoProcessed = (subject, html, email) => {
   nodeMailer.transporter.sendMail(
     {
-      from: "info@chillsanam.social",
+      from: "info@chillsanam.com",
       to: email,
       subject: subject,
       html: html,

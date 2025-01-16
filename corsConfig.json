@@ -2,10 +2,10 @@
   {
     "origin": [
       "http://localhost:8000",
-      "https://chillsanam.social",
+      "https://social.chillsanam.com",
       "http://localhost:5173",
-      "https://react.chillsanam.social",
-      "http://react.chillsanam.social"
+      "https://react.chillsanam.com",
+      "http://react.chillsanam.com"
     ],
     "method": ["GET"],
     "responseHeader": ["Content-Type"],
