@@ -119,7 +119,7 @@ const production = {
   // }
 };
 
-console.log(development);
-console.log(production);
+console.log(process.env.NODE_ENV === "production" ? production : development);
 
-module.exports = development;
+module.exports =
+  process.env.NODE_ENV === "produciton" ? production : development;
