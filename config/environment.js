@@ -119,4 +119,7 @@ const production = {
   // }
 };
 
-module.exports = production;
+console.log(development);
+console.log(production);
+
+module.exports = development;

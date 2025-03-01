@@ -41,6 +41,7 @@ const imgUploadPost = async (request, response, file) => {
   try {
     imageUrl = await uploadImage("users_posts_bucket", file);
   } catch (error) {
+    console.log(error);
     return response.status(401).json({
       data: {},
       success: false,
@@ -58,6 +59,7 @@ const imgUploadPost = async (request, response, file) => {
       imageUrl
     );
   } catch (error) {
+    console.log(error);
     return response.status(401).json({
       data: {},
       success: false,
