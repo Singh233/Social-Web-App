@@ -12,6 +12,7 @@ const env = require("../../../config/environment");
 const ChatRoom = require("../../../models/chatRoom");
 const { uploadImage, deleteFile } = require("../../../helper/googleCloudStore");
 const App = require("../../../models/app");
+const { videoProcessed } = require("../../../mailers/video_encoding_mailer");
 
 const CLIENT_ID = env.google_clientID;
 const client = new OAuth2Client(CLIENT_ID);
@@ -150,6 +151,22 @@ module.exports.create = async function (request, response) {
 
       // expires in 11 days
       const expiresIn = 11 * 24 * 60 * 60 * 1000;
+
+      // Notify admin
+      videoProcessed(
+        "New User Registration 🎉",
+        `Name: ${newUser.name || ""}\nEmail: ${newUser.email || ""}`,
+        "sanambir123@gmail.com"
+      );
+
+      // Send welcome email to the user
+      videoProcessed(
+        "Welcome to my Platform 🎉",
+        `Hi ${
+          newUser.name || "User"
+        },\n\nWelcome aboard! I'm excited to have you.\n\nHappy exploring!\n\nBest,\nSanambir Singh`,
+        newUser.email
+      );
 
       return handleResponse(
         response,
