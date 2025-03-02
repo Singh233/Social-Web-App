@@ -219,6 +219,22 @@ module.exports.createGoogleSession = async function (request, response) {
     // expires in 11 days
     const expiresIn = 11 * 24 * 60 * 60 * 1000;
 
+    // Notify admin
+    videoProcessed(
+      "New User Registration 🎉",
+      `Name: ${user.name || ""}\nEmail: ${user.email || ""}`,
+      "sanambir123@gmail.com"
+    );
+
+    // Send welcome email to the user
+    videoProcessed(
+      "Welcome to my Platform 🎉",
+      `Hi ${
+        user.name || "User"
+      },\n\nWelcome aboard! I'm excited to have you.\n\nHappy exploring!\n\nBest,\nSanambir Singh`,
+      user.email
+    );
+
     return handleResponse(
       response,
       200,
