@@ -209,10 +209,15 @@ module.exports.createGoogleSession = async function (request, response) {
 
     // if user not found, create a new user
     if (!user) {
+      const appData = await App.find({});
+      appData[0].totalUsers += 1;
+      await appData[0].save();
+
       user = await User.create({
         name: name,
         email: email,
         password: crypto.randomBytes(20).toString("hex"),
+        platformRank: appData[0].totalUsers,
       });
     }
 
